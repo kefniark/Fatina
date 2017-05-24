@@ -1,0 +1,39 @@
+{
+	"compilerOptions": {
+		"outDir": "./build",
+		"typeRoots": [
+			"node_modules/@types"
+		],
+		"types": [
+			"node"
+		],
+		"lib": [
+			"es5", "dom"
+		],
+		"target": "es5",
+		"noImplicitAny": true,
+		"noEmit": false,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"allowSyntheticDefaultImports": true,
+		"importHelpers": false,
+		"noEmitHelpers": false,
+		"noEmitOnError": true,
+		"removeComments": true,
+		"preserveConstEnums": true,
+		"noUnusedLocals": false,
+		"strictNullChecks": true,
+		"sourceMap": true,
+		"pretty": true,
+		"moduleResolution": "node"
+	},
+	"include": [
+		"src/**/*",
+		"tests/**/*"
+	],
+	"exclude": [
+		"./node_modules",
+		"./build",
+		"./docs"
+	]
+}

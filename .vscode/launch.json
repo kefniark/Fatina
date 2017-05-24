@@ -1,0 +1,15 @@
+{
+	"version": "0.0.1",
+	"configurations": [
+		{
+			"name": "Launch Chrome against localhost, with sourcemaps",
+			"type": "chrome",
+			"request": "launch",
+			"url": "http://localhost:8000",
+			"sourceMaps": true,
+			"webRoot": "${workspaceRoot}",
+			"smartStep": true,
+			"disableNetworkCache": true
+		}
+	]
+}

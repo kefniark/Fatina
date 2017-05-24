@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	    <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Ftina Sample</title>
+
+        <script src="../build/ftina.min.js"></script>
+        <style>
+            .imgTest {
+                position: relative;
+            }
+
+            hr {
+                border-top: 1px dashed #8c8b8b;
+	            border-bottom: 1px dashed #fff;
+                margin-top: 25px !important;
+                clear: both;
+            }
+        </style>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+
+        <h1>Basic Features</h1>
+        <button class="btn btn-success" onclick="playAll()">PlayAll</button>
+
+        <h3>Linear tween</h3>
+        <img id="sample1" class="imgTest" src="Yuko_Blink_2.png"/>
+        <script>
+            function sample1() {
+                var elem = document.getElementById("sample1");
+
+                var obj = { x: 0, y: 0 };
+                ftina.Tween(obj, ['x'])
+                    .From({x: 0})
+                    .To({x: 500}, 2500)
+                    .OnStart(() => console.log("tween1 start"))
+                    .OnUpdate((dt, progress) => {
+                        elem.style.left = obj.x + "px";
+                    })
+                    .OnComplete(() => console.log("tween1 complete"))
+                    .Start();
+            }
+        </script>
+
+        <hr/>
+
+        <h3>Easing <small>(based on <a href="http://easings.net">easings.net</a>)</small></h3>
+        <img id="sample2" class="imgTest" src="Yuko_Blink_2.png"/>
+        <script>
+            function sample2() {
+                var elem2 = document.getElementById("sample2");
+
+                let obj2 = { x: 0, y: 0 };
+                ftina.Tween(obj2, ['x'])
+                    .To({x: 500}, 2500)
+                    .SetEasing(Math.floor(Math.random()*15))
+                    .OnStart(() => console.log("tween2 start"))
+                    .OnUpdate((dt, progress) => {
+                        elem2.style.left = obj2.x + "px";
+                    })
+                    .OnComplete(() => console.log("tween2 complete"))
+                    .Start();
+            }
+        </script>
+
+        <hr/>
+
+        <h3>Sequence <small>(Sequential &amp; Parallel)</small></h3>
+        <img id="sample3" class="imgTest" src="Yuko_Blink_2.png"/>
+        <script>
+            function sample3() {
+                var elem3 = document.getElementById("sample3");
+
+                let obj3 = { x: 0, y: 0, rotate:0 };
+                ftina.Sequence()
+                    .Append(ftina.Tween(obj3, ['x']).To({x: 500}, 1250).SetEasing(6))
+                    .AppendInterval(0.2)
+                    .Append(ftina.Tween(obj3, ['x']).To({x: 0}, 1250).SetEasing(6))
+                    .Join(ftina.Tween(obj3, ['rotate']).To({rotate: 360}, 1250).SetEasing(6))
+                    .OnUpdate(() => {
+                        elem3.style.left = obj3.x + "px";
+                        elem3.style.transform = "rotate(" + obj3.rotate + "deg)"
+                    })
+                    .OnStart(() => console.log("tween3 start"))
+                    .OnComplete(() => console.log("tween3 complete"))
+                    .Start();
+            }
+        </script>
+
+        <hr/>
+
+        <h3>Pause / Resume</h3>
+        <img id="sample4" class="imgTest" src="Yuko_Blink_2.png"/>
+        <script>
+            function sample4() {
+                var elem4 = document.getElementById("sample4");
+
+                let obj4 = { x: 0, y: 0, rotate:0 };
+                let sequence = ftina.Sequence()
+                    .Append(ftina.Tween(obj4, ['x']).To({x: 500}, 1250).SetEasing(6))
+                    .Append(ftina.Tween(obj4, ['x']).To({x: 0}, 1250).SetEasing(6))
+                    .Join(ftina.Tween(obj4, ['rotate']).To({rotate: 360}, 1250).SetEasing(6))
+                    .OnUpdate(() => {
+                        elem4.style.left = obj4.x + "px";
+                        elem4.style.transform = "rotate(" + obj4.rotate + "deg)"
+                    })
+                    .OnStart(() => console.log("tween4 start"))
+                    .OnComplete(() => console.log("tween4 complete"));
+                sequence.Start();
+
+                setTimeout(() => sequence.Pause(), 1250);
+                setTimeout(() => sequence.Resume(), 2000);
+            }
+        </script>
+
+        <hr/>
+
+        </div>
+        <script>
+            function playAll() {
+                sample1();
+                sample2();
+                sample3();
+                sample4();
+            }
+
+            (function() {
+                 setTimeout(() => playAll(), 500);
+            })();
+        </script>
+    </body>
+</html>
