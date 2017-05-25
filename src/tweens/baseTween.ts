@@ -1,5 +1,5 @@
 import { ITicker } from '../core/interfaces/ITicker';
-import { State } from '../core/enum/tweenState';
+import { State } from '../core/enum/state';
 
 export abstract class BaseTween {
 	public elapsed = 0;

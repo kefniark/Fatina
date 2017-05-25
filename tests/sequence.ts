@@ -131,7 +131,7 @@ test('Ftina -> Test Join', function (t: any) {
 	let complete = 0;
 	let sequence = new Sequence()
 		.SetParent(ticker)
-		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 1.5))
+		.Join(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 1.5))
 		.Prepend(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 2))
 		.Join(new Tween(obj, [ 'alpha' ]).To({ alpha: 0 }, 2).OnStart(() => {
 			let current = (sequence as Sequence).CurrentTween;
@@ -161,24 +161,31 @@ test('Ftina -> Sequence loop', function (t: any) {
 
 	let start = 0;
 	let step = 0;
+	let stepEnd = 0;
 	let complete = 0;
+	let sequenceCb = 0;
 	let sequence = new Sequence()
 		.SetParent(ticker)
+		.PrependInterval(1)
 		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 4))
 		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 4))
+		.AppendCallback(() => sequenceCb++)
 		.OnStart(() => start += 1)
 		.OnStepStart(() => step += 1)
+		.OnStepEnd(() => stepEnd += 1)
 		.OnComplete(() => complete += 1)
 		.SetLoop(3);
 
 	sequence.Start();
 
-	for (let i = 0; i < 50; i++) {
-		ticker.Tick(1);
+	for (let i = 0; i < 100; i++) {
+		ticker.Tick(0.5);
 	}
 
 	t.equal(1, start, 'check onStart was emitted once');
-	t.equal(6, step, 'check OnStepStart was emitted 2 x 3 times');
+	t.equal(12, step, 'check OnStepStart was emitted 2 x 3 times');
+	t.equal(12, stepEnd, 'check OnStepEnd was emitted 2 x 3 times');
+	t.equal(3, sequenceCb, 'check that an appended callback is called 3 times');
 	t.equal(1, complete, 'check OnComplete was emitted once');
 	t.end();
 });
@@ -187,10 +194,25 @@ test('Ftina -> Sequence of Sequence', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Sequence timescale', function (t: any) {
-	t.end();
-});
+test('Ftina -> Sequence timescale & kill', function (t: any) {
+	let ticker = new TweenManager();
+	let killed = 0;
+	let tween = new Tween({}, []).SetParent(ticker).To({}, 4).SetTimescale(0.5);
+	let sequence = tween.ToSequence().SetTimescale(0.5).OnKilled(() => killed++);
+	sequence.Start();
 
-test('Ftina -> Test Tween Kill', function (t: any) {
+	for (let i = 0; i < 6; i++) {
+		ticker.Tick(1);
+	}
+
+	t.equal(3, sequence.Elapsed, 'check the time of this sequence is 0.5');
+	t.equal(1.5, tween.Elapsed, 'check the time of the tween is 0.25');
+
+	sequence.Kill();
+
+	t.ok(sequence.IsKilled(), 'check the sequence is marked as killed');
+	t.ok(tween.IsKilled(), 'check the tween is marked as killed');
+	t.equal(1, killed, 'check the onKilled event is emitted');
+
 	t.end();
 });

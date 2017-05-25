@@ -358,3 +358,25 @@ test('Ftina -> Test Tween Kill', function (t: any) {
 
 	t.end();
 });
+
+test('Ftina -> Test Tween Kill', function (t: any) {
+	let ticker = new TweenManager();
+	let sequence = new Tween({}, []).To({}, 2).SetParent(ticker).ToSequence().PrependInterval(1).AppendInterval(1);
+
+	let start = 0;
+	let update = 0;
+	sequence.OnStepStart(() => start++);
+	sequence.OnUpdate(() => update++);
+	sequence.Start();
+
+	for (let i = 0; i < 10; i++) {
+		ticker.Tick(1);
+	}
+
+	t.equal(3, start, 'check that the sequence has 3 steps');
+	t.equal(4, update, 'check the duration');
+
+	t.throws(() => new Tween({}, []).To({}, 2).ToSequence().Start(), 'check that we cant use toSequence without ticker');
+
+	t.end();
+});
