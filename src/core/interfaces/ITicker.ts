@@ -1,6 +1,6 @@
-import { ITweenControl } from './ITweenControl';
+import { IControl } from './IControl';
 
-export interface ITicker extends ITweenControl {
+export interface ITicker extends IControl {
 	AddTickListener(cb: (dt: number) => void): void;
 	RemoveTickListener(cb: (dt: number) => void): void;
 }

@@ -1,5 +1,5 @@
 import { ITicker } from '../core/interfaces/ITicker';
-import { TweenState } from '../core/enum/tweenState';
+import { State } from '../core/enum/tweenState';
 
 export abstract class BaseTween {
 	public elapsed = 0;
@@ -15,13 +15,13 @@ export abstract class BaseTween {
 	}
 
 	protected parent: ITicker;
-	protected tickCallback: (dt: number) => void;
-	protected state: TweenState = TweenState.Idle;
+	protected tickCb: (dt: number) => void;
+	protected state: State = State.Idle;
 
-	private listenerStarted: {(): void}[] = [];
-	private listenerUpdated: {(dt: number, progress: number): void}[] = [];
-	private listenerKilled: {(): void}[] = [];
-	private listenerCompleted: {(): void}[] = [];
+	private eventStart: {(): void}[] = [];
+	private eventUpdate: {(dt: number, progress: number): void}[] = [];
+	private eventKill: {(): void}[] = [];
+	private eventComplete: {(): void}[] = [];
 	private firstStart = true;
 
 	protected abstract Validate(): void;
@@ -29,25 +29,25 @@ export abstract class BaseTween {
 
 	public SetParent(ticker: ITicker): void {
 		if (this.parent) {
-			this.parent.RemoveTickListener(this.tickCallback);
+			this.parent.RemoveTickListener(this.tickCb);
 		}
 		this.parent = ticker;
 	}
 
 	public IsRunning(): boolean {
-		return this.state === TweenState.Running;
+		return this.state === State.Run;
 	}
 
 	public IsCompleted(): boolean {
-		return this.state === TweenState.Finished;
+		return this.state === State.Finished;
 	}
 
 	public IsKilled(): boolean {
-		return this.state === TweenState.Killed;
+		return this.state === State.Killed;
 	}
 
 	public Start(): void {
-		if (this.state !== TweenState.Idle) {
+		if (this.state !== State.Idle) {
 			console.warn('cant start this tween, already in state', this.state);
 			return;
 		}
@@ -56,8 +56,8 @@ export abstract class BaseTween {
 			this.Validate();
 		}
 
-		this.state = TweenState.Running;
-		this.parent.AddTickListener(this.tickCallback);
+		this.state = State.Run;
+		this.parent.AddTickListener(this.tickCb);
 
 		if (this.firstStart) {
 			this.Started();
@@ -66,10 +66,10 @@ export abstract class BaseTween {
 	}
 
 	public Reset(resetloop?: boolean): void {
-		this.state = TweenState.Idle;
+		this.state = State.Idle;
 
 		if (this.parent) {
-			this.parent.RemoveTickListener(this.tickCallback);
+			this.parent.RemoveTickListener(this.tickCb);
 		}
 
 		if (resetloop === true) {
@@ -80,93 +80,95 @@ export abstract class BaseTween {
 	}
 
 	public Pause(): void {
-		if (this.state !== TweenState.Running) {
+		if (this.state !== State.Run) {
 			console.warn('cant pause this tween, already in state', this.state);
 			return;
 		}
 
-		this.state = TweenState.Paused;
+		this.state = State.Pause;
 		if (this.parent) {
-			this.parent.RemoveTickListener(this.tickCallback);
+			this.parent.RemoveTickListener(this.tickCb);
 		}
 	}
 
 	public Resume(): void {
-		if (this.state !== TweenState.Paused) {
+		if (this.state !== State.Pause) {
 			console.warn('cant resume this tween, already in state', this.state);
 			return;
 		}
 
-		this.state = TweenState.Running;
-		this.parent.AddTickListener(this.tickCallback);
+		this.state = State.Run;
+		this.parent.AddTickListener(this.tickCb);
 	}
 
 	public Kill(): void {
-		if (this.state === TweenState.Killed || this.state === TweenState.Finished) {
+		if (this.state === State.Killed || this.state === State.Finished) {
 			console.warn('cant kill this tween, already in state', this.state);
 			return;
 		}
 
 		if (this.parent) {
-			this.parent.RemoveTickListener(this.tickCallback);
+			this.parent.RemoveTickListener(this.tickCb);
 		}
-		this.state = TweenState.Killed
+
+		this.state = State.Killed
 		this.Killed();
 	}
 
 	protected Complete(): void {
-		if (this.state === TweenState.Killed || this.state === TweenState.Finished) {
+		if (this.state === State.Killed || this.state === State.Finished) {
 			console.warn('cant complete this tween, already in state', this.state);
 			return;
 		}
 
 		if (this.parent) {
-			this.parent.RemoveTickListener(this.tickCallback);
+			this.parent.RemoveTickListener(this.tickCb);
 		}
-		this.state = TweenState.Finished;
+
+		this.state = State.Finished;
 		this.Completed();
 	}
 
 	protected Started() {
-		for (let i = 0; i < this.listenerStarted.length; i++) {
-			this.listenerStarted[i]();
+		for (let i = 0; i < this.eventStart.length; i++) {
+			this.eventStart[i]();
 		}
-		this.listenerStarted = [];
+		this.eventStart = [];
 	}
 
 	protected Updated(dt: number, progress: number) {
-		for (let i = 0; i < this.listenerUpdated.length; i++) {
-			this.listenerUpdated[i](dt, progress);
+		for (let i = 0; i < this.eventUpdate.length; i++) {
+			this.eventUpdate[i](dt, progress);
 		}
 	}
 
 	protected Killed() {
-		for (let i = 0; i < this.listenerKilled.length; i++) {
-			this.listenerKilled[i]();
+		for (let i = 0; i < this.eventKill.length; i++) {
+			this.eventKill[i]();
 		}
-		this.listenerKilled = [];
+		this.eventKill = [];
 	}
 
 	protected Completed() {
-		for (let i = 0; i < this.listenerCompleted.length; i++) {
-			this.listenerCompleted[i]();
+		for (let i = 0; i < this.eventComplete.length; i++) {
+			this.eventComplete[i]();
 		}
-		this.listenerCompleted = [];
+		this.eventComplete = [];
 	}
 
 	public OnStart(cb: () => void): void {
-		this.listenerStarted.push(cb);
+		this.eventStart.push(cb);
 	}
 
 	public OnUpdate(cb: (dt: number, progress: number) => void): void {
-		this.listenerUpdated.push(cb);
+		this.eventUpdate.push(cb);
 	}
 
 	public OnKilled(cb: () => void): void {
-		this.listenerKilled.push(cb);
+		this.eventKill.push(cb);
 	}
 
 	public OnComplete(cb: () => void): void {
-		this.listenerCompleted.push(cb);
+		this.eventComplete.push(cb);
 	}
 }

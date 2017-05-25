@@ -1,4 +1,4 @@
-export interface ITweenControl {
+export interface IControl {
 	Elapsed: number;
 	Duration: number;
 

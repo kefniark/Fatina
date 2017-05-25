@@ -1,11 +1,10 @@
 import { BaseTween } from './baseTween';
-import { ITweenPlayable } from '../core/interfaces/ITweenPlayable';
+import { IPlayable } from '../core/interfaces/IPlayable';
 
-export class PlayableCallback extends BaseTween implements ITweenPlayable {
-
+export class Callback extends BaseTween implements IPlayable {
 	constructor(cb: () => void) {
 		super();
-		this.tickCallback = (dt: number) => {
+		this.tickCb = (dt: number) => {
 			this.elapsed += dt;
 			this.duration = 0;
 

@@ -1,49 +1,58 @@
-import { Tweener } from './tweens/tweener';
-import { Sequence as seq } from './tweens/sequence';
-import { ITweener } from './core/interfaces/ITweener';
-import { ITweenSequence } from './core/interfaces/ITweenSequence';
-import { TweenManager } from './tweenManager';
-
-// window within a browser, global within node
-let root: any;
-if (typeof(window) !== 'undefined') {
-	root = window;
-} else if (typeof(global) !== 'undefined') {
-	root = global;
-} else {
-	root = this;
-}
-
-// Method to trigger automatic updates
-let requestAnimFrame = (function(){
-	return root.requestAnimationFrame ||
-		root.webkitRequestAnimationFrame ||
-		root.mozRequestAnimationFrame ||
-		root.oRequestAnimationFrame ||
-		root.msRequestAnimationFrame ||
-		function(callback: any){
-			root.setTimeout(callback, 1000 / 60);
-		};
-})();
+import { Tween as tween } from './tweens/tween';
+import { Sequence as sequence } from './tweens/sequence';
+import { Ticker as ticker } from './ticker';
+import { ITween } from './core/interfaces/ITween';
+import { ISequence } from './core/interfaces/ISequence';
+import { AutoTick } from './autoTick';
+import { ITicker } from './core/interfaces/ITicker';
 
 // Update Loop (auto tick)
-let manager = new TweenManager();
-let time = 0;
+let tickerManager: ITicker | undefined;
+let autoTicker: AutoTick | undefined;
+let initialized = false;
 
-function update(timestamp: number) {
-	requestAnimationFrame(update);
-	let dt = timestamp - time;
-	manager.Tick(dt);
-	time = timestamp;
+export function Init(disableAutoTick?: boolean): any {
+	if (!tickerManager) {
+		tickerManager = new ticker();
+	}
+
+	if (!disableAutoTick) {
+		autoTicker = new AutoTick((dt: number) => this.manager.Tick(dt));
+		autoTicker.Start();
+	}
+
+	initialized = true;
 }
 
-requestAnimFrame(update);
+export function Deinit() {
+	if (autoTicker) {
+		autoTicker.Stop();
+		autoTicker = undefined;
+	}
+
+	if (tickerManager) {
+		tickerManager.Kill();
+		tickerManager = undefined;
+	}
+
+	initialized = false;
+}
+
+export function Ticker2(): ITicker | undefined {
+	return tickerManager;
+}
 
 // Helpers
-export function Tween(obj: any, properties: string[]): ITweener {
-	return new Tweener(obj, properties).SetParent(manager);
+export function Tween22(obj: any, properties: string[]): ITween {
+	if (!initialized) {
+		Init();
+	}
+	return new tween(obj, properties).SetParent(tickerManager as ITicker);
 }
 
-export function Sequence(): ITweenSequence {
-	return new seq().SetParent(manager);
+export function Sequence2(): ISequence {
+	if (!initialized) {
+		Init();
+	}
+	return new sequence().SetParent(tickerManager as ITicker);
 }

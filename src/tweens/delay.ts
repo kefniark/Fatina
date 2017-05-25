@@ -1,12 +1,12 @@
 import { BaseTween } from './baseTween';
-import { ITweenPlayable } from '../core/interfaces/ITweenPlayable';
+import { IPlayable } from '../core/interfaces/IPlayable';
 
-export class PlayableDelay extends BaseTween implements ITweenPlayable {
+export class Delay extends BaseTween implements IPlayable {
 
 	constructor(duration: number) {
 		super();
 		this.duration = duration;
-		this.tickCallback = (dt: number) => {
+		this.tickCb = (dt: number) => {
 			this.elapsed += dt;
 
 			let progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);

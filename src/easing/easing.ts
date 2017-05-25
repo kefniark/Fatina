@@ -5,12 +5,8 @@ import { EasingType } from '../core/enum/easingType';
  *
  * Mostly based on http://easings.net/
  */
-
-// Math constants (for readability)
 let PI = Math.PI;
 let PI_OVER_TWO = Math.PI / 2;
-// let TWO_PI      = Math.PI * 2;
-// let EXP         = 2.718281828;
 
 let easingByType: ((t: number, args?: any) => number)[] = [];
 let easingByName: { [id: string]: (t: number, args?: any) => number } = {};

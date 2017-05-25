@@ -1,6 +1,6 @@
-import { ITweenControl } from './ITweenControl';
+import { IControl } from './IControl';
 
-export interface ITweenPlayable extends ITweenControl {
+export interface IPlayable extends IControl {
 	OnStart(cb: () => void): void;
 	OnUpdate(cb: (dt: number, progress: number) => void): void;
 	OnKilled(cb: () => void): void;

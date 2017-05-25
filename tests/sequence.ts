@@ -1,6 +1,6 @@
 import * as test from 'tape';
 import { Sequence } from '../src/tweens/sequence';
-import { Tweener } from '../src/tweens/tweener';
+import { Tween } from '../src/tweens/tween';
 import { TweenManager } from '../src/tweenManager';
 
 test('Ftina -> Create a basic Sequence', function (t: any) {
@@ -21,11 +21,11 @@ test('Ftina -> Create a basic Sequence', function (t: any) {
 		.PrependCallback(() => {})
 		.AppendInterval(1)
 		.AppendCallback(() => cb++)
-		.Append(new Tweener(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 2))
+		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 2))
 		.AppendCallback(() => cb++)
 		.AppendInterval(1)
 		.AppendCallback(() => cb++)
-		.Append(new Tweener(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 2))
+		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 2))
 		.AppendCallback(() => cb++)
 		.OnStart(() => {
 			if (update > 0 || stepStart > 0 || complete > 0) {
@@ -82,8 +82,8 @@ test('Ftina -> Test Lagging Tick', function (t: any) {
 	let complete = 0;
 	let sequence = new Sequence()
 		.SetParent(ticker)
-		.Append(new Tweener(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 5))
-		.Append(new Tweener(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 5))
+		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 5))
+		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 5))
 		.OnComplete(() => complete++)
 
 	sequence.Start();
@@ -103,12 +103,12 @@ test('Ftina -> Test Prepend', function (t: any) {
 	let complete = 0;
 	let sequence = new Sequence()
 		.SetParent(ticker)
-		.Append(new Tweener(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 2).OnComplete(() => {
+		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 2).OnComplete(() => {
 			if (first) {
 				t.fail('append tween should be executed second');
 			}
 		}))
-		.Prepend(new Tweener(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 2).OnComplete(() => {
+		.Prepend(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 2).OnComplete(() => {
 			if (!first) {
 				t.fail('prepend tween should be executed first');
 			}
@@ -131,15 +131,15 @@ test('Ftina -> Test Join', function (t: any) {
 	let complete = 0;
 	let sequence = new Sequence()
 		.SetParent(ticker)
-		.Append(new Tweener(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 1.5))
-		.Prepend(new Tweener(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 2))
-		.Join(new Tweener(obj, [ 'alpha' ]).To({ alpha: 0 }, 2).OnStart(() => {
+		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 1.5))
+		.Prepend(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 2))
+		.Join(new Tween(obj, [ 'alpha' ]).To({ alpha: 0 }, 2).OnStart(() => {
 			let current = (sequence as Sequence).CurrentTween;
 			if (current) {
 				t.equal(2, current.length, 'check 2 tween are running at the same time');
 			}
 		}))
-		.Append(new Tweener(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 2))
+		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 2))
 		.OnUpdate((dt) => duration += dt)
 		.OnComplete(() => complete++)
 
@@ -164,8 +164,8 @@ test('Ftina -> Sequence loop', function (t: any) {
 	let complete = 0;
 	let sequence = new Sequence()
 		.SetParent(ticker)
-		.Append(new Tweener(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 4))
-		.Append(new Tweener(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 4))
+		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 4))
+		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 4))
 		.OnStart(() => start += 1)
 		.OnStepStart(() => step += 1)
 		.OnComplete(() => complete += 1)
@@ -191,6 +191,6 @@ test('Ftina -> Sequence timescale', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Test Tweener Kill', function (t: any) {
+test('Ftina -> Test Tween Kill', function (t: any) {
 	t.end();
 });

@@ -1,26 +1,26 @@
 import { BaseTween } from './baseTween';
 import { ITicker } from '../core/interfaces/ITicker';
-import { ITweenSequence } from '../core/interfaces/ITweenSequence';
-import { ITweener } from '../core/interfaces/ITweener';
-import { ITweenPlayable } from '../core/interfaces/ITweenPlayable';
-import { PlayableCallback } from './playableCallback';
-import { PlayableDelay } from './playableDelay';
+import { ISequence } from '../core/interfaces/ISequence';
+import { ITween } from '../core/interfaces/ITween';
+import { IPlayable } from '../core/interfaces/IPlayable';
+import { Callback } from './callback';
+import { Delay } from './delay';
 
-export class Sequence extends BaseTween implements ITweenSequence, ITicker {
-	private listenerTick: {(dt: number): void}[] = [];
-	private listenerStepStart: {(tween: ITweener | ITweenPlayable): void}[] = [];
-	private listenerStepEnd: {(tween: ITweener | ITweenPlayable): void}[] = [];
-	private tweens: ((ITweener | ITweenPlayable)[])[] = [];
-	private currentTween: (ITweener | ITweenPlayable)[] | undefined;
+export class Sequence extends BaseTween implements ISequence, ITicker {
+	private eventTick: {(dt: number): void}[] = [];
+	private eventStepStart: {(tween: ITween | IPlayable): void}[] = [];
+	private eventStepEnd: {(tween: ITween | IPlayable): void}[] = [];
+	private tweens: ((ITween | IPlayable)[])[] = [];
+	private currentTween: (ITween | IPlayable)[] | undefined;
 	private sequenceIndex = 0;
 
-	public get CurrentTween(): (ITweener | ITweenPlayable)[] | undefined {
+	public get CurrentTween(): (ITween | IPlayable)[] | undefined {
 		return this.currentTween;
 	}
 
 	constructor() {
 		super();
-		this.tickCallback = (dt: number) => {
+		this.tickCb = (dt: number) => {
 			let localDt = dt * this.timescale;
 			this.elapsed += localDt;
 			this.Tick(localDt);
@@ -39,19 +39,19 @@ export class Sequence extends BaseTween implements ITweenSequence, ITicker {
 		}
 	}
 
-	public SetParent(ticker: ITicker): ITweenSequence {
+	public SetParent(ticker: ITicker): ISequence {
 		super.SetParent(ticker);
 		return this;
 	}
 
 	public AddTickListener(cb: (dt: number) => void): void {
-		this.listenerTick.unshift(cb);
+		this.eventTick.unshift(cb);
 	}
 
 	public RemoveTickListener(cb: (dt: number) => void): void {
-		let index = this.listenerTick.indexOf(cb);
+		let index = this.eventTick.indexOf(cb);
 		if (index !== -1) {
-			this.listenerTick.splice(index, 1);
+			this.eventTick.splice(index, 1);
 		}
 	}
 
@@ -63,15 +63,15 @@ export class Sequence extends BaseTween implements ITweenSequence, ITicker {
 				for (let tween of this.currentTween) {
 					tween.Start();
 				}
-				for (let i = 0; i < this.listenerStepStart.length; i++) {
-					this.listenerStepStart[i](this.currentTween[0]);
+				for (let i = 0; i < this.eventStepStart.length; i++) {
+					this.eventStepStart[i](this.currentTween[0]);
 				}
 			}
 		}
 
 		// Tick every listener
-		for (let i = this.listenerTick.length - 1; i >= 0; i--) {
-			this.listenerTick[i](dt);
+		for (let i = this.eventTick.length - 1; i >= 0; i--) {
+			this.eventTick[i](dt);
 		}
 
 		// Dont emit update event for remains dt
@@ -88,8 +88,8 @@ export class Sequence extends BaseTween implements ITweenSequence, ITicker {
 			let first = this.currentTween[0];
 			let remainsDt = first.Elapsed - first.Duration;
 
-			for (let i = 0; i < this.listenerStepEnd.length; i++) {
-				this.listenerStepEnd[i](this.currentTween[0]);
+			for (let i = 0; i < this.eventStepEnd.length; i++) {
+				this.eventStepEnd[i](this.currentTween[0]);
 			}
 			this.currentTween = undefined;
 			this.sequenceIndex++;
@@ -112,47 +112,59 @@ export class Sequence extends BaseTween implements ITweenSequence, ITicker {
 		}
 	}
 
-	public Append(tween: ITweener): ITweenSequence {
+	public Append(tween: ITween): ISequence {
 		tween.SetParent(this);
 		this.tweens.push([tween]);
 		return this;
 	}
 
-	public AppendCallback(cb: () => void): ITweenSequence {
-		let playable = new PlayableCallback(cb);
+	public AppendCallback(cb: () => void): ISequence {
+		let playable = new Callback(cb);
 		playable.SetParent(this);
 		this.tweens.push([playable]);
 		return this;
 	}
 
-	public AppendInterval(duration: number): ITweenSequence {
-		let playable = new PlayableDelay(duration);
+	public AppendInterval(duration: number): ISequence {
+		let playable = new Delay(duration);
 		playable.SetParent(this);
 		this.tweens.push([playable]);
 		return this;
 	}
 
-	public Prepend(tween: ITweener): ITweenSequence {
+	public Prepend(tween: ITween): ISequence {
 		tween.SetParent(this);
 		this.tweens.unshift([tween]);
 		return this;
 	}
 
-	public PrependCallback(cb: () => void): ITweenSequence {
-		let playable = new PlayableCallback(cb);
+	public PrependCallback(cb: () => void): ISequence {
+		let playable = new Callback(cb);
 		playable.SetParent(this);
 		this.tweens.unshift([playable]);
 		return this;
 	}
 
-	public PrependInterval(duration: number): ITweenSequence {
-		let playable = new PlayableDelay(duration);
+	public PrependInterval(duration: number): ISequence {
+		let playable = new Delay(duration);
 		playable.SetParent(this);
 		this.tweens.unshift([playable]);
 		return this;
 	}
 
-	public Join(tween: ITweener): ITweenSequence {
+	public Kill(): void {
+		super.Kill();
+		for (let tweenArray of this.tweens) {
+			for (let tween of tweenArray) {
+				if (tween.IsKilled() || tween.IsCompleted()) {
+					continue;
+				}
+				tween.Kill();
+			}
+		}
+	}
+
+	public Join(tween: ITween): ISequence {
 		if (this.tweens.length === 0) {
 			return this.Append(tween);
 		}
@@ -161,43 +173,43 @@ export class Sequence extends BaseTween implements ITweenSequence, ITicker {
 		return this;
 	}
 
-	public SetTimescale(scale: number): ITweenSequence {
+	public SetTimescale(scale: number): ISequence {
 		this.timescale = scale;
 		return this;
 	}
 
-	public SetLoop(loop: number): ITweenSequence {
+	public SetLoop(loop: number): ISequence {
 		this.loop = Math.round(loop);
 		return this;
 	}
 
-	public OnStart(cb: () => void): ITweenSequence {
+	public OnStart(cb: () => void): ISequence {
 		super.OnStart(cb);
 		return this;
 	}
 
-	public OnUpdate(cb: (dt: number, progress: number) => void): ITweenSequence {
+	public OnUpdate(cb: (dt: number, progress: number) => void): ISequence {
 		super.OnUpdate(cb);
 		return this;
 	}
 
-	public OnKilled(cb: () => void): ITweenSequence {
+	public OnKilled(cb: () => void): ISequence {
 		super.OnKilled(cb);
 		return this;
 	}
 
-	public OnComplete(cb: () => void): ITweenSequence {
+	public OnComplete(cb: () => void): ISequence {
 		super.OnComplete(cb);
 		return this;
 	}
 
-	public OnStepStart(cb: (index: ITweener | ITweenPlayable) => void): ITweenSequence {
-		this.listenerStepStart.push(cb);
+	public OnStepStart(cb: (index: ITween | IPlayable) => void): ISequence {
+		this.eventStepStart.push(cb);
 		return this;
 	}
 
-	public OnStepEnd(cb: (index: ITweener | ITweenPlayable) => void): ITweenSequence {
-		this.listenerStepEnd.push(cb);
+	public OnStepEnd(cb: (index: ITween | IPlayable) => void): ISequence {
+		this.eventStepEnd.push(cb);
 		return this;
 	}
 }
