@@ -1,6 +1,8 @@
 import { ITicker } from './core/interfaces/ITicker';
 
 export class TweenManager implements ITicker {
+	private timescale = 1;
+
 	private listenerTick: { (dt: number): void }[] = [];
 
 	AddTickListener(cb: (dt: number) => void): void {
@@ -15,8 +17,9 @@ export class TweenManager implements ITicker {
 	}
 
 	public Tick(dt: number) {
+		let localDt = dt * this.timescale;
 		for (let i = this.listenerTick.length - 1; i >= 0; i--) {
-			this.listenerTick[i](dt);
+			this.listenerTick[i](localDt);
 		}
 	}
 
@@ -45,6 +48,18 @@ export class TweenManager implements ITicker {
 	}
 
 	Kill(): void {
+		throw new Error('Method not implemented.');
+	}
+
+	Reset(): void {
+		throw new Error('Method not implemented.');
+	}
+
+	IsRunning(): boolean {
+		throw new Error('Method not implemented.');
+	}
+
+	IsKilled(): boolean {
 		throw new Error('Method not implemented.');
 	}
 }

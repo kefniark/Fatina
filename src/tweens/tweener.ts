@@ -3,7 +3,7 @@ import { BaseTween } from './baseTween';
 import { ITweener } from '../core/interfaces/ITweener';
 import { ITicker } from '../core/interfaces/ITicker';
 import { EasingType } from '../core/enum/easingType';
-import { Linear, InQuad, OutQuad, InOutQuad, InCubic, OutCubic, InOutCubic, InQuart, OutQuart, InOutQuart, InSine, OutSine, InOutSine, InCirc, OutCirc, InOutCirc } from '../easing/easing';
+import { easeNames, easeTypes } from '../easing/easing';
 
 export class Tweener extends BaseTween implements ITweener {
 	private object: any;
@@ -11,8 +11,7 @@ export class Tweener extends BaseTween implements ITweener {
 	private from: any;
 	private to: any;
 
-	private relative: boolean;
-	private loop: number;
+	private relative = false;
 	private ease: (t: number, args?: any) => number;
 
 	constructor(object: any, properties: string[]) {
@@ -22,13 +21,20 @@ export class Tweener extends BaseTween implements ITweener {
 		this.properties = properties;
 
 		this.tickCallback = (dt: number) => {
-			this.elapsed += dt;
+			let localDt = dt * this.timescale;
+			this.elapsed += localDt;
 
 			let progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
-			this.Update(dt, progress);
+			this.Update(localDt, progress);
 
 			if (this.elapsed >= this.duration) {
-				this.Complete();
+				this.loop--;
+				if (this.loop === 0) {
+					this.Complete();
+				} else {
+					this.Reset();
+					this.Start();
+				}
 			}
 		};
 	}
@@ -51,7 +57,7 @@ export class Tweener extends BaseTween implements ITweener {
 
 		// Easing
 		if (!this.ease) {
-			this.ease = Linear;
+			this.ease = easeTypes[EasingType.Linear];
 		}
 
 		// From
@@ -70,6 +76,16 @@ export class Tweener extends BaseTween implements ITweener {
 		if (this.relative) {
 			for (let prop of this.properties) {
 				this.to[prop] = this.object[prop] + this.to[prop];
+			}
+		}
+	}
+
+	protected LoopInit() {
+		this.elapsed = 0;
+
+		if (this.from) {
+			for (let prop of this.properties) {
+				this.object[prop] = this.from[prop];
 			}
 		}
 	}
@@ -99,7 +115,7 @@ export class Tweener extends BaseTween implements ITweener {
 	}
 
 	public SetLoop(loop: number): ITweener {
-		this.loop = loop;
+		this.loop = Math.round(loop);
 		return this;
 	}
 
@@ -108,61 +124,27 @@ export class Tweener extends BaseTween implements ITweener {
 		return this;
 	}
 
+	public SetTimescale(scale: number): ITweener {
+		this.timescale = scale;
+		return this;
+	}
+
 	private Easing(type: EasingType | string, args: any): (t: number) => number {
-		switch (type) {
-			case EasingType.Linear:
-			case 'linear':
-				return Linear;
-			case EasingType.InQuad:
-			case 'inQuad':
-				return InQuad;
-			case EasingType.OutQuad:
-			case 'outQuad':
-				return OutQuad;
-			case EasingType.InOutQuad:
-			case 'inOutQuad':
-				return InOutQuad;
-			case EasingType.InCubic:
-			case 'inCubic':
-				return InCubic;
-			case EasingType.OutCubic:
-			case 'outCubic':
-				return OutCubic;
-			case EasingType.InOutCubic:
-			case 'inOutCubic':
-				return InOutCubic;
-			case EasingType.InQuart:
-			case 'inQuart':
-				return InQuart;
-			case EasingType.OutQuart:
-			case 'outQuart':
-				return OutQuart;
-			case EasingType.InOutQuart:
-			case 'inOutQuart':
-				return InOutQuart;
-			case EasingType.InSine:
-			case 'inSine':
-				return InSine;
-			case EasingType.OutSine:
-			case 'outSine':
-				return OutSine;
-			case EasingType.InOutSine:
-			case 'inOutSine':
-				return InOutSine;
-			case EasingType.InCirc:
-			case 'inCirc':
-				return InCirc;
-			case EasingType.OutCirc:
-			case 'outCirc':
-				return OutCirc;
-			case EasingType.InOutCirc:
-			case 'inOutCirc':
-				return InOutCirc;
-			default:
-				console.warn('unknown ease method', type, args);
+		let name = type as string;
+		let isNumber = !isNaN(parseFloat(name));
+
+		if (isNumber) {
+			let index = parseInt(name, 10);
+			if (index in easeTypes) {
+				return easeTypes[index];
+			}
 		}
 
-		return Linear;
+		if (name in easeNames) {
+			return easeNames[name];
+		}
+
+		throw new Error('Unknown ease method ' + type);
 	}
 
 	public SetEasing(type: EasingType | string, args: any): ITweener {

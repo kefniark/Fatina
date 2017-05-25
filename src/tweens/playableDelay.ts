@@ -19,4 +19,7 @@ export class PlayableDelay extends BaseTween implements ITweenPlayable {
 	}
 
 	protected Validate() {}
+	protected LoopInit() {
+		this.elapsed = 0;
+	}
 }

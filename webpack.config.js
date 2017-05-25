@@ -26,7 +26,7 @@ module.exports = {
 	},
 	plugins: [],
 	devServer: {
-		contentBase: [path.join(__dirname, 'build'), path.join(__dirname)],
+		contentBase: [path.join(__dirname, 'samples'), path.join(__dirname, 'build'), path.join(__dirname)],
 		compress: true,
 		port: 8000
 	}

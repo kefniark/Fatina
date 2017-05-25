@@ -25,6 +25,7 @@
 		"strictNullChecks": true,
 		"sourceMap": true,
 		"pretty": true,
+		"declaration": false,
 		"moduleResolution": "node"
 	},
 	"include": [

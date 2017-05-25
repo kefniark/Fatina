@@ -31,10 +31,10 @@ let manager = new TweenManager();
 let time = 0;
 
 function update(timestamp: number) {
+	requestAnimationFrame(update);
 	let dt = timestamp - time;
 	manager.Tick(dt);
 	time = timestamp;
-	requestAnimationFrame(update);
 }
 
 requestAnimFrame(update);

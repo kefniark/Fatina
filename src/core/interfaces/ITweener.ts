@@ -10,6 +10,7 @@ export interface ITweener extends ITweenControl {
 	SetLoop(loop: number): ITweener;
 	SetRelative(relative: boolean): ITweener;
 	SetEasing(type: EasingType | string, args?: any): ITweener;
+	SetTimescale(scale: number): ITweener;
 
 	OnStart(cb: () => void): ITweener;
 	OnUpdate(cb: (dt: number, progress: number) => void): ITweener;

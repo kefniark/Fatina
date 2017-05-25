@@ -17,6 +17,8 @@ test('Ftina -> Create a basic Sequence', function (t: any) {
 
 	let sequence = new Sequence()
 		.SetParent(ticker)
+		.PrependInterval(1)
+		.PrependCallback(() => {})
 		.AppendInterval(1)
 		.AppendCallback(() => cb++)
 		.Append(new Tweener(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 2))
@@ -64,8 +66,8 @@ test('Ftina -> Create a basic Sequence', function (t: any) {
 	}
 
 	t.equal(1, start, 'check OnStart was trigger once');
-	t.equal(8, stepStart, 'check OnStepStart was trigger the right amount of time');
-	t.equal(8, stepEnd, 'check OnStepEnd was trigger the right amount of time');
+	t.equal(10, stepStart, 'check OnStepStart was trigger the right amount of time');
+	t.equal(10, stepEnd, 'check OnStepEnd was trigger the right amount of time');
 	// t.equal(6, duration, 'check OnUpdate was trigger the right amount of time');
 	t.equal(1, complete, 'check OnComplete was trigger once');
 	t.equal(4, cb, 'check AppendCallback was the right amount of time');
@@ -153,10 +155,42 @@ test('Ftina -> Test Join', function (t: any) {
 	t.end();
 });
 
+test('Ftina -> Sequence loop', function (t: any) {
+	let ticker = new TweenManager();
+	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+
+	let start = 0;
+	let step = 0;
+	let complete = 0;
+	let sequence = new Sequence()
+		.SetParent(ticker)
+		.Append(new Tweener(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 4))
+		.Append(new Tweener(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 4))
+		.OnStart(() => start += 1)
+		.OnStepStart(() => step += 1)
+		.OnComplete(() => complete += 1)
+		.SetLoop(3);
+
+	sequence.Start();
+
+	for (let i = 0; i < 50; i++) {
+		ticker.Tick(1);
+	}
+
+	t.equal(1, start, 'check onStart was emitted once');
+	t.equal(6, step, 'check OnStepStart was emitted 2 x 3 times');
+	t.equal(1, complete, 'check OnComplete was emitted once');
+	t.end();
+});
+
 test('Ftina -> Sequence of Sequence', function (t: any) {
 	t.end();
 });
 
 test('Ftina -> Sequence timescale', function (t: any) {
+	t.end();
+});
+
+test('Ftina -> Test Tweener Kill', function (t: any) {
 	t.end();
 });

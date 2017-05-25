@@ -21,12 +21,22 @@ export class Sequence extends BaseTween implements ITweenSequence, ITicker {
 	constructor() {
 		super();
 		this.tickCallback = (dt: number) => {
-			this.elapsed += dt;
-			this.Tick(dt);
+			let localDt = dt * this.timescale;
+			this.elapsed += localDt;
+			this.Tick(localDt);
 		};
 	}
 
 	protected Validate() {
+	}
+
+	protected LoopInit() {
+		this.sequenceIndex = 0;
+		for (let tweenArray of this.tweens) {
+			for (let tween of tweenArray) {
+				(tween as BaseTween).Reset(true);
+			}
+		}
 	}
 
 	public SetParent(ticker: ITicker): ITweenSequence {
@@ -48,7 +58,7 @@ export class Sequence extends BaseTween implements ITweenSequence, ITicker {
 	private Tick(dt: number, remains?: boolean) {
 		// If no current tween, take the first one and start it
 		if (!this.currentTween) {
-			this.currentTween = this.tweens.shift();
+			this.currentTween = this.tweens[this.sequenceIndex];
 			if (this.currentTween) {
 				for (let tween of this.currentTween) {
 					tween.Start();
@@ -84,15 +94,21 @@ export class Sequence extends BaseTween implements ITweenSequence, ITicker {
 			this.currentTween = undefined;
 			this.sequenceIndex++;
 
-			if (remainsDt > 0.1) {
+			if (remainsDt > 0.01) {
 				this.Tick(remainsDt, true);
+				return;
 			}
 		}
 
 		// Complete
-		if (!this.currentTween && this.tweens.length === 0) {
-			this.Complete();
-			return;
+		if (!this.currentTween && this.tweens.length === this.sequenceIndex) {
+			this.loop--;
+			if (this.loop === 0) {
+				this.Complete();
+			} else {
+				this.Reset();
+				this.Start();
+			}
 		}
 	}
 
@@ -137,8 +153,21 @@ export class Sequence extends BaseTween implements ITweenSequence, ITicker {
 	}
 
 	public Join(tween: ITweener): ITweenSequence {
+		if (this.tweens.length === 0) {
+			return this.Append(tween);
+		}
 		tween.SetParent(this);
 		this.tweens[this.tweens.length - 1].push(tween);
+		return this;
+	}
+
+	public SetTimescale(scale: number): ITweenSequence {
+		this.timescale = scale;
+		return this;
+	}
+
+	public SetLoop(loop: number): ITweenSequence {
+		this.loop = Math.round(loop);
 		return this;
 	}
 

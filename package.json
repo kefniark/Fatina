@@ -27,7 +27,7 @@
     "test:unittest": "ts-node node_modules/tape/bin/tape ./tests/**/*.ts | tspec",
     "docs": "npm run typedoc -- --options typedoc.json ./src/",
     "typedoc": "typedoc",
-    "coverage": "nyc --reporter=html --reporter=text npm run test:unittest"
+    "coverage": "nyc --all --reporter=html --reporter=text npm run test:unittest"
   },
   "devDependencies": {
     "@types/node": "7.0.18",

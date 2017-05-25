@@ -5,7 +5,6 @@ export class PlayableCallback extends BaseTween implements ITweenPlayable {
 
 	constructor(cb: () => void) {
 		super();
-
 		this.tickCallback = (dt: number) => {
 			this.elapsed += dt;
 			this.duration = 0;
@@ -18,4 +17,7 @@ export class PlayableCallback extends BaseTween implements ITweenPlayable {
 	}
 
 	protected Validate() {}
+	protected LoopInit() {
+		this.elapsed = 0;
+	}
 }
