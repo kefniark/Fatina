@@ -38,47 +38,47 @@ export class Ticker implements ITicker {
 		this.elapsed += localDt;
 	}
 
-	IsCompleted(): boolean {
+	public IsCompleted(): boolean {
 		return this.state === State.Finished;
 	}
 
-	IsRunning(): boolean {
+	public IsRunning(): boolean {
 		return this.state === State.Run;
 	}
 
-	IsKilled(): boolean {
+	public IsKilled(): boolean {
 		return this.state === State.Killed;
 	}
 
-	Start(): void {
+	public Start(): void {
 		if (this.state !== State.Idle) {
 			return;
 		}
 		this.state = State.Run;
 	}
 
-	Pause(): void {
+	public Pause(): void {
 		if (this.state !== State.Run) {
 			return;
 		}
 		this.state = State.Pause;
 	}
 
-	Resume(): void {
+	public Resume(): void {
 		if (this.state !== State.Pause) {
 			return;
 		}
 		this.state = State.Run;
 	}
 
-	Kill(): void {
+	public Kill(): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
 			return;
 		}
 		this.state = State.Killed;
 	}
 
-	Reset(): void {
+	public Reset(): void {
 		this.state = State.Idle;
 	}
 }

@@ -1,14 +1,16 @@
 import * as test from 'tape';
 import { Tween } from '../src/tweens/tween';
-import { TweenManager } from '../src/tweenManager';
 import { ITween } from '../src/core/interfaces/ITween';
+import { Ticker } from '../src/ticker';
 
 test('Ftina -> Get tween data', function (t: any) {
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 	let properties = [ 'x', 'y' ];
 	let dest = { x: 44, y: 44 };
 
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
+
 	let tween = new Tween(obj, properties)
 		.To(dest, 10)
 		.SetParent(ticker);
@@ -37,7 +39,9 @@ test('Ftina -> Create a basic tween', function (t: any) {
 	let properties = [ 'x', 'y' ];
 	let dest = { x: 44, y: 44 };
 
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
+
 	let tween = new Tween(obj, properties)
 		.To(dest, 10)
 		.SetParent(ticker);
@@ -69,7 +73,8 @@ test('Ftina -> Test Tween From property', function (t: any) {
 
 	let startx = 0;
 	let starty = 0;
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
 	new Tween(obj, properties)
 		.From({x: 1, y: 2})
 		.To(dest, 5)
@@ -96,7 +101,10 @@ test('Ftina -> Test Tween Relative property', function (t: any) {
 
 	let startx = 0;
 	let starty = 0;
-	let ticker = new TweenManager();
+
+	let ticker = new Ticker();
+	ticker.Start();
+
 	new Tween(obj, properties)
 		.SetRelative(true)
 		.To(dest, 5)
@@ -121,7 +129,9 @@ test('Ftina -> Test Tween with a undefined object', function (t: any) {
 	let properties = [ 'x', 'y' ];
 	let dest = { x: 44, y: 44 };
 
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
+
 	let tween = new Tween(obj, properties)
 		.To(dest, 5)
 		.SetParent(ticker);
@@ -135,7 +145,9 @@ test('Ftina -> Test Tween with a undefined property', function (t: any) {
 	let properties = [ 'tuna' ];
 	let dest = { tuna: 44 };
 
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
+
 	let tween = new Tween(obj, properties)
 		.To(dest, 5)
 		.SetParent(ticker);
@@ -147,7 +159,8 @@ test('Ftina -> Test Tween with a undefined property', function (t: any) {
 test('Ftina -> Test mix of concurrent running and paused tween', function (t: any) {
 	let properties = [ 'x', 'y' ];
 	let dest = { x: 44, y: 44 };
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
 
 	let started = 0;
 	let updated = 0;
@@ -213,7 +226,9 @@ test('Ftina -> Test Tween loop', function (t: any) {
 	let complete = 0;
 	let elapsed = 0;
 
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
+
 	let tween = new Tween(obj, properties)
 		.From({ x: 0 })
 		.To({ x: 44 }, 5)
@@ -244,7 +259,9 @@ test('Ftina -> Test Tween infinite loop', function (t: any) {
 	let complete = 0;
 	let elapsed = 0;
 
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
+
 	let tween = new Tween(obj, properties)
 		.From({ x: 0 })
 		.To({ x: 44 }, 10)
@@ -277,7 +294,9 @@ test('Ftina -> Test Tween timescale', function (t: any) {
 	let elapsed = 0;
 	let update = 0;
 
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
+
 	let tween = new Tween(obj, properties)
 		.From({ x: 0 })
 		.To({ x: 44 }, 5)
@@ -312,7 +331,8 @@ test('Ftina -> Test Tween without parent', function (t: any) {
 });
 
 test('Ftina -> Test Tween without to', function (t: any) {
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
 	let complete = false;
 	let tween = new Tween({}, []).SetParent(ticker).OnComplete(() => complete = true);
 
@@ -324,7 +344,8 @@ test('Ftina -> Test Tween without to', function (t: any) {
 });
 
 test('Ftina -> Test Tween Easing', function (t: any) {
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
 	t.doesNotThrow(() => new Tween({}, []).To({}, 5).SetParent(ticker).SetEasing(2).Start(), 'easing by type');
 	t.doesNotThrow(() => new Tween({}, []).To({}, 5).SetParent(ticker).SetEasing('inOutQuad').Start(), 'easing by name');
 	t.throws(() => new Tween({}, []).To({}, 5).SetParent(ticker).SetEasing('tuna').Start(), 'easing which doesnt exist');
@@ -335,7 +356,8 @@ test('Ftina -> Test Tween Kill', function (t: any) {
 	let complete = 0;
 	let killed = 0;
 
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
 	let tween = new Tween({ x: 22 }, [ 'x' ])
 		.To({ x: 44 }, 5)
 		.SetParent(ticker)
@@ -360,7 +382,8 @@ test('Ftina -> Test Tween Kill', function (t: any) {
 });
 
 test('Ftina -> Test Tween Kill', function (t: any) {
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
 	let sequence = new Tween({}, []).To({}, 2).SetParent(ticker).ToSequence().PrependInterval(1).AppendInterval(1);
 
 	let start = 0;

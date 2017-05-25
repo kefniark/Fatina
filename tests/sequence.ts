@@ -1,10 +1,11 @@
 import * as test from 'tape';
 import { Sequence } from '../src/tweens/sequence';
 import { Tween } from '../src/tweens/tween';
-import { TweenManager } from '../src/tweenManager';
+import { Ticker } from '../src/ticker';
 
 test('Ftina -> Create a basic Sequence', function (t: any) {
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 
 	let start = 0;
@@ -76,7 +77,8 @@ test('Ftina -> Create a basic Sequence', function (t: any) {
 });
 
 test('Ftina -> Test Lagging Tick', function (t: any) {
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 
 	let complete = 0;
@@ -96,7 +98,8 @@ test('Ftina -> Test Lagging Tick', function (t: any) {
 });
 
 test('Ftina -> Test Prepend', function (t: any) {
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 
 	let first = true;
@@ -125,7 +128,8 @@ test('Ftina -> Test Prepend', function (t: any) {
 });
 
 test('Ftina -> Test Join', function (t: any) {
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 	let duration = 0;
 	let complete = 0;
@@ -156,7 +160,8 @@ test('Ftina -> Test Join', function (t: any) {
 });
 
 test('Ftina -> Sequence loop', function (t: any) {
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 
 	let start = 0;
@@ -195,7 +200,9 @@ test('Ftina -> Sequence of Sequence', function (t: any) {
 });
 
 test('Ftina -> Sequence timescale & kill', function (t: any) {
-	let ticker = new TweenManager();
+	let ticker = new Ticker();
+	ticker.Start();
+
 	let killed = 0;
 	let tween = new Tween({}, []).SetParent(ticker).To({}, 4).SetTimescale(0.5);
 	let sequence = tween.ToSequence().SetTimescale(0.5).OnKilled(() => killed++);
