@@ -27,11 +27,11 @@ let lastFrame: any;
 let time = 0;
 
 function updateLoop(timestamp: number) {
+	let dt = timestamp - time;
 	if (tickerManager) {
-		let dt = timestamp - time;
 		tickerManager.Tick(dt);
-		time = timestamp;
 	}
+	time = timestamp;
 	lastFrame = requestFrame(updateLoop);
 }
 
@@ -50,6 +50,14 @@ export function Init(disableAutoTick?: boolean): any {
 	}
 
 	initialized = true;
+}
+
+export function Update(timestamp: number): any {
+	if (!initialized || !tickerManager) {
+		return;
+	}
+
+	tickerManager.Tick(timestamp);
 }
 
 export function Deinit() {

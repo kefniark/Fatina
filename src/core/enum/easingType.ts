@@ -14,5 +14,20 @@ export enum EasingType {
 	InOutSine,
 	InCirc,
 	OutCirc,
-	InOutCirc
+	InOutCirc,
+	InQuint,
+	OutQuint,
+	InOutQuint,
+	InExponential,
+	OutExponential,
+	InOutExponential,
+	InElastic,
+	OutElastic,
+	InOutElastic,
+	InBack,
+	OutBack,
+	InOutBack,
+	InBounce,
+	OutBounce,
+	InOutBounce
 }

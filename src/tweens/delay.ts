@@ -2,7 +2,6 @@ import { BaseTween } from './baseTween';
 import { IPlayable } from '../core/interfaces/IPlayable';
 
 export class Delay extends BaseTween implements IPlayable {
-
 	constructor(duration: number) {
 		super();
 		this.duration = duration;
