@@ -1,11 +1,14 @@
 import { ITicker } from '../core/interfaces/ITicker';
 import { State } from '../core/enum/state';
+import { TweenType } from '../core/enum/tweenType';
 
 export abstract class BaseTween {
 	public elapsed = 0;
 	public duration = 0;
 	public timescale = 1;
 	protected loop = 1;
+
+	public abstract get Type(): TweenType;
 
 	public get Elapsed() {
 		return this.elapsed;
@@ -77,6 +80,16 @@ export abstract class BaseTween {
 		}
 
 		this.LoopInit();
+	}
+
+	public ResetAndStart(resetloop?: boolean) {
+		if (resetloop === true) {
+			this.loop = 1;
+		}
+
+		this.LoopInit();
+
+		this.state = State.Run;
 	}
 
 	public Pause(): void {

@@ -1,7 +1,12 @@
 import { ITicker } from './core/interfaces/ITicker';
 import { State } from './core/enum/state';
+import { TweenType } from './core/enum/tweenType';
 
 export class Ticker implements ITicker {
+	public get Type() {
+		return TweenType.Ticker;
+	}
+
 	private state = State.Idle;
 	private timescale = 1;
 	private elapsed = 0;

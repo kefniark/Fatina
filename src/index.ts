@@ -1,9 +1,9 @@
-import { Tween as tween } from './tweens/tween';
 import { Sequence as sequence } from './tweens/sequence';
 import { Ticker as ticker } from './ticker';
 import { ITween } from './core/interfaces/ITween';
 import { ISequence } from './core/interfaces/ISequence';
 import { ITicker } from './core/interfaces/ITicker';
+import { Pooling } from './pooling';
 
 /**
  * Class used to auto-tick based on the browser requestAnimationFrame
@@ -18,6 +18,7 @@ import { ITicker } from './core/interfaces/ITicker';
 
 // Update Loop (auto tick)
 let tickerManager: ticker | undefined;
+let pooling: Pooling;
 let initialized = false;
 
 // Request frame
@@ -48,6 +49,8 @@ export function Init(disableAutoTick?: boolean): any {
 	if (!disableAutoTick) {
 		lastFrame = requestFrame(updateLoop);
 	}
+
+	pooling = new Pooling(2500);
 
 	initialized = true;
 }
@@ -82,7 +85,11 @@ export function Tween(obj: any, properties: string[]): ITween {
 	if (!initialized) {
 		Init();
 	}
-	return new tween(obj, properties).SetParent(tickerManager as ITicker);
+
+	let tween = pooling.PopTween();
+	tween.Init(obj, properties);
+	tween.SetParent(tickerManager as ITicker);
+	return tween;
 }
 
 export function Sequence(): ISequence {

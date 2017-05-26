@@ -6,8 +6,13 @@ import { EasingType } from '../core/enum/easingType';
 import { easeNames, easeTypes } from '../easing/easing';
 import { Sequence } from './sequence';
 import { ISequence } from '../core/interfaces/ISequence';
+import { TweenType } from '../core/enum/tweenType';
 
 export class Tween extends BaseTween implements ITween {
+	public get Type() {
+		return TweenType.Tween;
+	}
+
 	private object: any;
 	private properties: string[];
 	private from: any;
@@ -34,11 +39,15 @@ export class Tween extends BaseTween implements ITween {
 				if (this.loop === 0) {
 					this.Complete();
 				} else {
-					this.Reset();
-					this.Start();
+					this.ResetAndStart();
 				}
 			}
 		};
+	}
+
+	public Init(object: any, properties: string[]) {
+		this.object = object;
+		this.properties = properties;
 	}
 
 	protected Validate() {

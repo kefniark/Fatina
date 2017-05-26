@@ -5,8 +5,13 @@ import { ITween } from '../core/interfaces/ITween';
 import { IPlayable } from '../core/interfaces/IPlayable';
 import { Callback } from './callback';
 import { Delay } from './delay';
+import { TweenType } from '../core/enum/tweenType';
 
 export class Sequence extends BaseTween implements ISequence, ITicker {
+	public get Type() {
+		return TweenType.Sequence;
+	}
+
 	private eventTick: {(dt: number): void}[] = [];
 	private eventStepStart: {(tween: ITween | IPlayable): void}[] = [];
 	private eventStepEnd: {(tween: ITween | IPlayable): void}[] = [];
@@ -106,8 +111,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker {
 			if (this.loop === 0) {
 				this.Complete();
 			} else {
-				this.Reset();
-				this.Start();
+				this.ResetAndStart();
 			}
 		}
 	}
