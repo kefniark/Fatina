@@ -1,5 +1,4 @@
 .idea/
-build/
 docs/
 .nyc_output/
 coverage/

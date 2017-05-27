@@ -1,14 +1,12 @@
 {
-  "name": "ftina",
+  "name": "fatina",
   "description": "Small & Light tweening library for web / games",
   "version": "0.0.1",
-  "homepage": "",
-  "private": true,
+  "homepage": "https://kefniark.github.io/Fatina/",
   "license": "MIT",
   "author": {
     "name": "Kevin destrem",
-    "email": "kef1@free.fr",
-    "url": "https://blog.ganbaranai.fr"
+    "email": "kef1@free.fr"
   },
   "scripts": {
     "all": "npm run deps && npm run build && npm run dev",

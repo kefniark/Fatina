@@ -1,6 +1,7 @@
 # Ftina
 Small & Light tweening library for web / games
 
+Documentation and Samples: [Here](https://kefniark.github.io/Fatina/)
 ## Description
 A comprehensive and easy to use animation library for Typescript/Javascript
 
