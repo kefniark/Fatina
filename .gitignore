@@ -4,6 +4,7 @@ docs/
 .nyc_output/
 coverage/
 node_modules/
+public/
 
 .DS_Store
 npm-debug.log
