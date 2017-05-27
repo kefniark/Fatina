@@ -2,64 +2,64 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>/samples/generic/</loc>
+    <loc>https://kefniark.github.io/Fatina/samples/generic/</loc>
     <lastmod>2017-05-21T13:06:37+09:00</lastmod>
   </url>
   
   <url>
-    <loc>/basics/benchmark/</loc>
+    <loc>https://kefniark.github.io/Fatina/basics/benchmark/</loc>
     <lastmod>2017-05-21T13:06:37+09:00</lastmod>
   </url>
   
   <url>
-    <loc>/samples/dom/</loc>
+    <loc>https://kefniark.github.io/Fatina/samples/dom/</loc>
     <lastmod>2017-05-21T13:06:37+09:00</lastmod>
   </url>
   
   <url>
-    <loc>/basics/api/</loc>
+    <loc>https://kefniark.github.io/Fatina/basics/api/</loc>
     <lastmod>2017-05-21T13:06:37+09:00</lastmod>
   </url>
   
   <url>
-    <loc>/samples/pixi/</loc>
+    <loc>https://kefniark.github.io/Fatina/samples/pixi/</loc>
     <lastmod>2017-05-21T13:06:37+09:00</lastmod>
   </url>
   
   <url>
-    <loc>/samples/threejs/</loc>
+    <loc>https://kefniark.github.io/Fatina/samples/threejs/</loc>
     <lastmod>2017-05-21T13:06:37+09:00</lastmod>
   </url>
   
   <url>
-    <loc>/</loc>
+    <loc>https://kefniark.github.io/Fatina/</loc>
     <lastmod>2017-05-21T13:06:37+09:00</lastmod>
   </url>
   
   <url>
-    <loc>/basics/download/</loc>
+    <loc>https://kefniark.github.io/Fatina/basics/download/</loc>
     <lastmod>2017-05-21T13:06:37+09:00</lastmod>
   </url>
   
   <url>
-    <loc>/basics/</loc>
-    <lastmod>2017-05-21T13:06:37+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/samples/</loc>
+    <loc>https://kefniark.github.io/Fatina/basics/</loc>
     <lastmod>2017-05-21T13:06:37+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/</loc>
+    <loc>https://kefniark.github.io/Fatina/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://kefniark.github.io/Fatina/samples/</loc>
+    <lastmod>2017-05-21T13:06:37+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://kefniark.github.io/Fatina/tags/</loc>
     <priority>0</priority>
   </url>
   

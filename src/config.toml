@@ -1,3 +1,4 @@
+baseUrl = "https://kefniark.github.io/Fatina/"
 defaultContentLanguage = "en"
 defaultContentLanguageInSubdir= true
 theme = "beautifulhugo"

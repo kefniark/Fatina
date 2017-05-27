@@ -2,47 +2,47 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Samples on Fatina</title>
-    <link>/samples/</link>
+    <link>https://kefniark.github.io/Fatina/samples/</link>
     <description>Recent content in Samples on Fatina</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Sun, 21 May 2017 13:06:37 +0900</lastBuildDate>
     
-	<atom:link href="/samples/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://kefniark.github.io/Fatina/samples/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Generic Tweens</title>
-      <link>/samples/generic/</link>
+      <link>https://kefniark.github.io/Fatina/samples/generic/</link>
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
-      <guid>/samples/generic/</guid>
+      <guid>https://kefniark.github.io/Fatina/samples/generic/</guid>
       <description>Lorem Ipsum</description>
     </item>
     
     <item>
       <title>DOM / CSS Tweening</title>
-      <link>/samples/dom/</link>
+      <link>https://kefniark.github.io/Fatina/samples/dom/</link>
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
-      <guid>/samples/dom/</guid>
+      <guid>https://kefniark.github.io/Fatina/samples/dom/</guid>
       <description>Lorem Ipsum</description>
     </item>
     
     <item>
       <title>Pixi.js Tweening</title>
-      <link>/samples/pixi/</link>
+      <link>https://kefniark.github.io/Fatina/samples/pixi/</link>
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
-      <guid>/samples/pixi/</guid>
+      <guid>https://kefniark.github.io/Fatina/samples/pixi/</guid>
       <description>Lorem Ipsum</description>
     </item>
     
     <item>
       <title>Three.js Tweening</title>
-      <link>/samples/threejs/</link>
+      <link>https://kefniark.github.io/Fatina/samples/threejs/</link>
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
-      <guid>/samples/threejs/</guid>
+      <guid>https://kefniark.github.io/Fatina/samples/threejs/</guid>
       <description>Lorem Ipsum</description>
     </item>
     
