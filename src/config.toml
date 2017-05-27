@@ -7,13 +7,13 @@ theme = "beautifulhugo"
     title = "Fatina"
     languageName = "English"
 
-    [Languages.fr]
-    title = "Fatina"
-    languageName = "Francais"
+    #[Languages.fr]
+    #title = "Fatina"
+    #languageName = "Francais"
 
-    [Languages.jp]
-    title = "Fatina"
-    languageName = "日本語"
+    #[Languages.jp]
+    #title = "Fatina"
+    #languageName = "日本語"
 
 [Author]
   name = "Kevin Destrem"

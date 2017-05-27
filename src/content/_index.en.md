@@ -17,6 +17,7 @@ The main inspiration is the C# library [DOTween](http://dotween.demigiant.com/)
 ## Fatina Features
 
 * **Logical and easy to use API** : An API made to boost efficiency, intuitiveness and ease of use.
+* **Lightweight** no extra dependencies and a minified file < 25KB
 * **Speed and efficiency** : Not only very fast, but also very efficient: everything is cached and reused to avoid useless GC allocations.
 * **Open source & Easy to read**
 * **Safe mode** : Activate the optional safe mode and let DOTween take care of unexpected occurrences, like a tween's target being destroyed while playing.

@@ -1,23 +1,66 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-	
-	<sitemap>
-	   	<loc>jp/sitemap.xml</loc>
-		
-	   	<lastmod>2017-05-21T13:06:37+09:00</lastmod>
-		
-	</sitemap>
-	
-	<sitemap>
-	   	<loc>en/sitemap.xml</loc>
-		
-	   	<lastmod>2017-05-21T13:06:37+09:00</lastmod>
-		
-	</sitemap>
-	
-	<sitemap>
-	   	<loc>fr/sitemap.xml</loc>
-		
-	</sitemap>
-	
-</sitemapindex>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>/samples/generic/</loc>
+    <lastmod>2017-05-21T13:06:37+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/basics/benchmark/</loc>
+    <lastmod>2017-05-21T13:06:37+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/samples/dom/</loc>
+    <lastmod>2017-05-21T13:06:37+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/basics/api/</loc>
+    <lastmod>2017-05-21T13:06:37+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/samples/pixi/</loc>
+    <lastmod>2017-05-21T13:06:37+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/samples/threejs/</loc>
+    <lastmod>2017-05-21T13:06:37+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2017-05-21T13:06:37+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/basics/download/</loc>
+    <lastmod>2017-05-21T13:06:37+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/basics/</loc>
+    <lastmod>2017-05-21T13:06:37+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/samples/</loc>
+    <lastmod>2017-05-21T13:06:37+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+</urlset>

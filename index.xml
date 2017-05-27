@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Fatina</title>
+    <link>/</link>
+    <description>Recent content on Fatina</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sun, 21 May 2017 13:06:37 +0900</lastBuildDate>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Generic Tweens</title>
+      <link>/samples/generic/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>/samples/generic/</guid>
+      <description>Lorem Ipsum</description>
+    </item>
+    
+    <item>
+      <title>Benchmark</title>
+      <link>/basics/benchmark/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>/basics/benchmark/</guid>
+      <description>Lorem Ipsum</description>
+    </item>
+    
+    <item>
+      <title>DOM / CSS Tweening</title>
+      <link>/samples/dom/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>/samples/dom/</guid>
+      <description>Lorem Ipsum</description>
+    </item>
+    
+    <item>
+      <title>Fatina API</title>
+      <link>/basics/api/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>/basics/api/</guid>
+      <description>Lorem Ipsum</description>
+    </item>
+    
+    <item>
+      <title>Pixi.js Tweening</title>
+      <link>/samples/pixi/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>/samples/pixi/</guid>
+      <description>Lorem Ipsum</description>
+    </item>
+    
+    <item>
+      <title>Three.js Tweening</title>
+      <link>/samples/threejs/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>/samples/threejs/</guid>
+      <description>Lorem Ipsum</description>
+    </item>
+    
+    <item>
+      <title>Getting Started</title>
+      <link>/basics/download/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>/basics/download/</guid>
+      <description>Installation Download the library and include it in your code:
+&amp;lt;script src=&amp;quot;js/Fatina.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;  You can also reference a CDN-hosted version in your code, thanks to cdnjs. For example:
+&amp;lt;script src=&amp;quot;...&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;  More advanced users might want to&amp;hellip; Use npm npm install Fatina  Then include the Fatina module with the standard node.js require:
+var Fatina = require(&#39;Fatina&#39;);  And you can use Tween.js as in all other samples :</description>
+    </item>
+    
+  </channel>
+</rss>
