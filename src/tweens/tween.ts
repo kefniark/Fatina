@@ -114,6 +114,23 @@ export class Tween extends BaseTween implements ITween {
 		return this;
 	}
 
+	public Cleanup() {
+		if (!this.parent) {
+			return;
+		}
+		this.parent.Clean([this]);
+	}
+
+	public Default() {
+		super.Default();
+		this.object = undefined;
+		this.properties = [];
+		this.from = undefined;
+		this.to = undefined;
+		this.relative = false;
+		this.ease = easeTypes[0];
+	}
+
 	public From(from: any): ITween {
 		this.from = from;
 		return this;

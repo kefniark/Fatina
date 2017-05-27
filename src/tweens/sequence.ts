@@ -6,6 +6,7 @@ import { IPlayable } from '../core/interfaces/IPlayable';
 import { Callback } from './callback';
 import { Delay } from './delay';
 import { TweenType } from '../core/enum/tweenType';
+import { State } from '../core/enum/state';
 
 export class Sequence extends BaseTween implements ISequence, ITicker {
 	public get Type() {
@@ -18,6 +19,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker {
 	private tweens: ((ITween | IPlayable)[])[] = [];
 	private currentTween: (ITween | IPlayable)[] | undefined;
 	private sequenceIndex = 0;
+	private cleanTweens: (ITween | ISequence)[] = [];
 
 	public get CurrentTween(): (ITween | IPlayable)[] | undefined {
 		return this.currentTween;
@@ -157,7 +159,10 @@ export class Sequence extends BaseTween implements ISequence, ITicker {
 	}
 
 	public Kill(): void {
-		super.Kill();
+		if (this.state === State.Killed || this.state === State.Finished) {
+			console.warn('cant kill this tween, already in state', this.state);
+			return;
+		}
 		for (let tweenArray of this.tweens) {
 			for (let tween of tweenArray) {
 				if (tween.IsKilled() || tween.IsCompleted()) {
@@ -166,6 +171,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker {
 				tween.Kill();
 			}
 		}
+		super.Kill();
 	}
 
 	public Join(tween: ITween): ISequence {
@@ -185,6 +191,20 @@ export class Sequence extends BaseTween implements ISequence, ITicker {
 	public SetLoop(loop: number): ISequence {
 		this.loop = Math.round(loop);
 		return this;
+	}
+
+	public Cleanup() {
+		if (!this.parent) {
+			return;
+		}
+		this.cleanTweens.push(this);
+		this.parent.Clean(this.cleanTweens);
+	}
+
+	public Clean(data: (ITween | ISequence)[]) {
+		for (let i = 0; i < data.length; i++) {
+			this.cleanTweens.push(data[i]);
+		}
 	}
 
 	public OnStart(cb: () => void): ISequence {

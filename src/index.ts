@@ -4,6 +4,7 @@ import { ITween } from './core/interfaces/ITween';
 import { ISequence } from './core/interfaces/ISequence';
 import { ITicker } from './core/interfaces/ITicker';
 import { Pooling } from './pooling';
+import { TweenType } from './core/enum/tweenType';
 
 /**
  * Class used to auto-tick based on the browser requestAnimationFrame
@@ -29,9 +30,7 @@ let time = 0;
 
 function updateLoop(timestamp: number) {
 	let dt = timestamp - time;
-	if (tickerManager) {
-		tickerManager.Tick(dt);
-	}
+	this.Update(dt);
 	time = timestamp;
 	lastFrame = requestFrame(updateLoop);
 }
@@ -50,7 +49,7 @@ export function Init(disableAutoTick?: boolean): any {
 		lastFrame = requestFrame(updateLoop);
 	}
 
-	pooling = new Pooling(2500);
+	pooling = new Pooling(500);
 
 	initialized = true;
 }
@@ -60,7 +59,14 @@ export function Update(timestamp: number): any {
 		return;
 	}
 
+	let toClean = tickerManager.GetCleanTweens();
 	tickerManager.Tick(timestamp);
+
+	for (let clean of toClean) {
+		if (clean.Type === TweenType.Tween) {
+			pooling.PushTween(clean as ITween);
+		}
+	}
 }
 
 export function Deinit() {
