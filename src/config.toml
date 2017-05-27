@@ -1,0 +1,91 @@
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir= true
+theme = "beautifulhugo"
+
+[Languages]
+    [Languages.en]
+    title = "Fatina"
+    languageName = "English"
+
+    [Languages.fr]
+    title = "Fatina"
+    languageName = "Francais"
+
+    [Languages.jp]
+    title = "Fatina"
+    languageName = "日本語"
+
+[Author]
+  name = "Kevin Destrem"
+  github = "kefniark/ftina"
+  twitter = "kefniark"
+
+[params]
+  subtitle = "Simple and Fast Tweening library for Typescript/Javascript"
+  logo = "img/avatar-icon.png"
+  favicon = "img/favicon.ico"
+  commit = false
+  rss = false
+  comments = true
+
+  # Prefix URL to edit current page. Useful to give opportunity to people to create merge request for your doc.
+  # See the config.toml file from this documentation site to have an example.
+  editURL = ""
+
+  # Description of the site, will be used in meta information
+  description = ""
+
+  # Shows a checkmark for visited pages on the menu. Default to false
+  showVisitedLinks = false
+
+  # Activate search. Don't forget to generate the JSON index file (go check get started page)
+  search = false
+
+  enableLandingPage = true
+
+  landingPageRedirectUrl = "intro"
+
+[[menu.main]]
+    name = "Getting Started"
+    url = "basics/download/"
+    weight = 1
+
+[[menu.main]]
+    identifier = "samples"
+    name = "Samples"
+    url = "samples/generic/"
+    weight = 2
+
+[[menu.main]]
+    parent = "samples"
+    name = "Generic"
+    url = "samples/generic/"
+    weight = 1
+
+[[menu.main]]
+    parent = "samples"
+    name = "DOM / CSS"
+    url = "samples/dom/"
+    weight = 2
+
+[[menu.main]]
+    parent = "samples"
+    name = "pixi.js"
+    url = "samples/pixi/"
+    weight = 3
+
+[[menu.main]]
+    parent = "samples"
+    name = "three.js"
+    url = "samples/threejs/"
+    weight = 4
+
+[[menu.main]]
+    name = "API"
+    url = "basics/api/"
+    weight = 3
+
+[[menu.main]]
+    name = "Benchmark"
+    url = "basics/benchmark/"
+    weight = 3

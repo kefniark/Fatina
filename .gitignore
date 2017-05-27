@@ -1,0 +1,6 @@
+.idea/
+node_modules/
+src/public/
+
+.DS_Store
+npm-debug.log

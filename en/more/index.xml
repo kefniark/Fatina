@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>More on SPEAR.js</title>
+    <link>/en/more/</link>
+    <description>Recent content in More on SPEAR.js</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sun, 21 May 2017 13:05:07 +0900</lastBuildDate>
+    
+	<atom:link href="/en/more/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>News</title>
+      <link>/en/more/news/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>/en/more/news/</guid>
+      <description>Lorem Ipsum
+English</description>
+    </item>
+    
+    <item>
+      <title>Roadmap</title>
+      <link>/en/more/roadmap/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>/en/more/roadmap/</guid>
+      <description>Lorem Ipsum
+English</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>/en/more/about/</link>
+      <pubDate>Sun, 21 May 2017 12:52:31 +0900</pubDate>
+      
+      <guid>/en/more/about/</guid>
+      <description>Lorem Ipsum
+English</description>
+    </item>
+    
+  </channel>
+</rss>

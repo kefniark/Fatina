@@ -1,0 +1,16 @@
+{
+  "name": "fatina-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "build": "hugo --destination ..",
+    "create": "hugo new",
+    "serve": "hugo server -ws"
+  },
+  "devDependencies": {
+    "hugo-bin": "^0.7.0"
+  }
+}

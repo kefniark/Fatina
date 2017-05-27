@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Samples on Fatina</title>
+    <link>/en/samples/</link>
+    <description>Recent content in Samples on Fatina</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sun, 21 May 2017 13:06:37 +0900</lastBuildDate>
+    
+	<atom:link href="/en/samples/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Generic Tweens</title>
+      <link>/en/samples/generic/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>/en/samples/generic/</guid>
+      <description>Lorem Ipsum</description>
+    </item>
+    
+    <item>
+      <title>DOM / CSS Tweening</title>
+      <link>/en/samples/dom/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>/en/samples/dom/</guid>
+      <description>Lorem Ipsum</description>
+    </item>
+    
+    <item>
+      <title>Pixi.js Tweening</title>
+      <link>/en/samples/pixi/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>/en/samples/pixi/</guid>
+      <description>Lorem Ipsum</description>
+    </item>
+    
+    <item>
+      <title>Three.js Tweening</title>
+      <link>/en/samples/threejs/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>/en/samples/threejs/</guid>
+      <description>Lorem Ipsum</description>
+    </item>
+    
+  </channel>
+</rss>

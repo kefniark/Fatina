@@ -1,0 +1,37 @@
+#top-image {
+    padding-bottom: 10%;
+}
+@media (max-width: 750px)
+#top-image, #archive-image-wrap {
+    padding-bottom: 200px !important;
+}
+
+#top-image, #archive-image-wrap {
+    width: 100%;
+    height: 0;
+    position: relative;
+    padding-bottom: 10%;
+    background: #000;
+    /*margin-top: 42px;*/
+}
+
+#top-image iframe, #archive-image-wrap iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+iframe {
+    border: 0;
+}
+
+iframe {
+    border-image-source: initial;
+    border-image-slice: initial;
+    border-image-width: initial;
+    border-image-outset: initial;
+    border-image-repeat: initial;
+    border-width: 0px;
+    border-style: inset;
+    border-color: initial;
+}
