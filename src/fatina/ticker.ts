@@ -1,6 +1,8 @@
 import { ITicker } from './core/interfaces/ITicker';
 import { State } from './core/enum/state';
 import { TweenType } from './core/enum/tweenType';
+import { ITween } from './core/interfaces/ITween';
+import { ISequence } from './core/interfaces/ISequence';
 
 export class Ticker implements ITicker {
 	public get Type() {
@@ -11,6 +13,13 @@ export class Ticker implements ITicker {
 	private timescale = 1;
 	private elapsed = 0;
 	private eventTick: { (dt: number): void }[] = [];
+	private cleanTweens: (ITween | ISequence)[] = [];
+
+	public GetCleanTweens(): (ITween | ISequence)[] {
+		let val = this.cleanTweens;
+		this.cleanTweens = [];
+		return val;
+	}
 
 	public get Elapsed(): number {
 		return this.elapsed;
@@ -85,5 +94,11 @@ export class Ticker implements ITicker {
 
 	public Reset(): void {
 		this.state = State.Idle;
+	}
+
+	public Clean(data: (ITween | ISequence)[]): void {
+		for (let obj of data) {
+			this.cleanTweens.push(obj);
+		}
 	}
 }

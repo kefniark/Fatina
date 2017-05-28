@@ -4,6 +4,7 @@ import { ITween } from './core/interfaces/ITween';
 import { ISequence } from './core/interfaces/ISequence';
 import { ITicker } from './core/interfaces/ITicker';
 import { Pooling } from './pooling';
+import { TweenType } from './core/enum/tweenType';
 
 let requestFrame: any = window.requestAnimationFrame || (window as any).mozRequestAnimationFrame || window.webkitRequestAnimationFrame || (window as any).msRequestAnimationFrame;
 let cancelFrame = window.cancelAnimationFrame || (window as any).mozCancelAnimationFrame;
@@ -35,7 +36,8 @@ export function Init(disableAutoTick?: boolean): boolean {
 		lastFrame = requestFrame(updateLoop);
 	}
 
-	pooling = new Pooling(2500);
+	pooling = new Pooling(2000);
+
 	initialized = true;
 	return true;
 }
@@ -58,7 +60,17 @@ export function Update(timestamp: number): any {
 		return;
 	}
 
+	let toClean = tickerManager.GetCleanTweens();
+
 	tickerManager.Tick(timestamp);
+
+	for (let clean of toClean) {
+		if (clean.Type === TweenType.Tween) {
+			pooling.PushTween(clean as ITween);
+		} else if (clean.Type === TweenType.Sequence) {
+			pooling.PushSequence(clean as ISequence);
+		}
+	}
 }
 
 export function Tween(obj: any, properties: string[]): ITween {

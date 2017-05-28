@@ -4,6 +4,7 @@ import { ITicker } from './ITicker';
 import { ISequence } from './ISequence';
 
 export interface ITween extends IControl {
+	Default(): void;
 	Init(object: any, properties: string[]): void;
 	From(from: any): ITween;
 	To(to: any, duration: number): ITween;

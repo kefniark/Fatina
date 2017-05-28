@@ -1,10 +1,17 @@
 
 
     private tweens;
+    private sequences;
+    private created;
+    private poped;
+    private pushed;
     constructor(size: number);
     private CreateTween();
     PopTween(): ITween;
     PushTween(tween: ITween): void;
+    private CreateSequence();
+    PopSequence(): ISequence;
+    PushSequence(sequence: ISequence): void;
 }
 
     readonly Type: TweenType;
@@ -12,6 +19,8 @@
     private timescale;
     private elapsed;
     private eventTick;
+    private cleanTweens;
+    GetCleanTweens(): (ITween | ISequence)[];
     readonly Elapsed: number;
     readonly Duration: number;
     AddTickListener(cb: (dt: number) => void): void;
@@ -25,6 +34,7 @@
     Resume(): void;
     Kill(): void;
     Reset(): void;
+    Clean(data: (ITween | ISequence)[]): void;
 }
 
     Linear = 0,
@@ -94,9 +104,7 @@
     OnComplete(cb: () => void): void;
 }
 
-    InitModule(fatina: any): IPlugin;
-}
-
+    Default(): void;
     SetParent(ticker: ITicker): ISequence;
     SetTimescale(scale: number): ISequence;
     SetLoop(loop: number): ISequence;
@@ -117,8 +125,10 @@
 
     AddTickListener(cb: (dt: number) => void): void;
     RemoveTickListener(cb: (dt: number) => void): void;
+    Clean(data: (ITween | ISequence)[]): void;
 }
 
+    Default(): void;
     Init(object: any, properties: string[]): void;
     From(from: any): ITween;
     To(to: any, duration: number): ITween;
@@ -164,6 +174,8 @@
     Pause(): void;
     Resume(): void;
     Kill(): void;
+    protected abstract Cleanup(): void;
+    Default(): void;
     protected Complete(): void;
     protected Started(): void;
     protected Updated(dt: number, progress: number): void;
@@ -179,12 +191,14 @@
     constructor(cb: () => void);
     protected Validate(): void;
     protected LoopInit(): void;
+    protected Cleanup(): void;
 }
 
     readonly Type: TweenType;
     constructor(duration: number);
     protected Validate(): void;
     protected LoopInit(): void;
+    protected Cleanup(): void;
 }
 
     readonly Type: TweenType;
@@ -194,6 +208,7 @@
     private tweens;
     private currentTween;
     private sequenceIndex;
+    private cleanTweens;
     readonly CurrentTween: (ITween | IPlayable)[] | undefined;
     constructor();
     protected Validate(): void;
@@ -212,6 +227,9 @@
     Join(tween: ITween): ISequence;
     SetTimescale(scale: number): ISequence;
     SetLoop(loop: number): ISequence;
+    Default(): void;
+    Cleanup(): void;
+    Clean(data: (ITween | ISequence)[]): void;
     OnStart(cb: () => void): ISequence;
     OnUpdate(cb: (dt: number, progress: number) => void): ISequence;
     OnKilled(cb: () => void): ISequence;
@@ -233,6 +251,8 @@
     protected LoopInit(): void;
     private Update(dt, progress);
     SetParent(ticker: ITicker): ITween;
+    Cleanup(): void;
+    Default(): void;
     From(from: any): ITween;
     To(to: any, duration: number): ITween;
     SetLoop(loop: number): ITween;

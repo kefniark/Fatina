@@ -126,6 +126,22 @@ export abstract class BaseTween {
 
 		this.state = State.Killed
 		this.Killed();
+		this.Cleanup();
+	}
+
+	protected abstract Cleanup(): void;
+
+	public Default() {
+		this.elapsed = 0;
+		this.duration = 0;
+		this.timescale = 1;
+		this.loop = 1;
+		this.eventStart = [];
+		this.eventUpdate = [];
+		this.eventKill = [];
+		this.eventComplete = [];
+		this.firstStart = true;
+		this.state = State.Idle;
 	}
 
 	protected Complete(): void {
@@ -140,6 +156,7 @@ export abstract class BaseTween {
 
 		this.state = State.Finished;
 		this.Completed();
+		this.Cleanup();
 	}
 
 	protected Started() {

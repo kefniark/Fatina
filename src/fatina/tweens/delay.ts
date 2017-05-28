@@ -26,4 +26,6 @@ export class Delay extends BaseTween implements IPlayable {
 	protected LoopInit() {
 		this.elapsed = 0;
 	}
+
+	protected Cleanup(): void {}
 }

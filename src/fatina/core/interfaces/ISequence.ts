@@ -4,6 +4,7 @@ import { ITween } from './ITween';
 import { IPlayable } from './IPlayable';
 
 export interface ISequence extends IControl {
+	Default(): void;
 	SetParent(ticker: ITicker): ISequence;
 	SetTimescale(scale: number): ISequence;
 	SetLoop(loop: number): ISequence;
