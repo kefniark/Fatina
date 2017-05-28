@@ -12,7 +12,7 @@
   "scripts": {
     "all": "npm run deps && npm run build && npm run dev",
     "deps": "npm install .",
-    "build": "rimraf build && webpack",
+    "build": "rimraf lib && rimraf build && webpack",
     "dev": "webpack-dev-server",
     "clean": "run-s clean:build clean:modules clean:coverage",
     "clean:build": "shx rm -rf build lib",

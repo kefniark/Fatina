@@ -9,9 +9,7 @@ const optimizeJsPlugin = require("optimize-js-plugin");
 module.exports = {
 	entry: {
 		'fatina': './src/fatina/index.ts',
-		'fatina.min': './src/fatina/index.ts',
-		'fatina-css': './src/plugins/css/index.ts',
-		'fatina-css.min': './src/plugins/css/index.ts',
+		'fatina.min': './src/fatina/index.ts'
 	},
 	output: {
 		path: './build',

@@ -59,24 +59,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	var sequence_1 = __webpack_require__(1);
 	var ticker_1 = __webpack_require__(7);
 	var pooling_1 = __webpack_require__(8);
+	var requestFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+	var cancelFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+	function updateLoop(timestamp) {
+	    var dt = timestamp - time;
+	    Update(dt);
+	    time = timestamp;
+	    lastFrame = requestFrame(function () { return updateLoop; });
+	}
 	var tickerManager;
 	var pooling;
 	var initialized = false;
-	var requestFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-	var cancelFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 	var lastFrame;
 	var time = 0;
-	function updateLoop(timestamp) {
-	    var dt = timestamp - time;
-	    if (tickerManager) {
-	        tickerManager.Tick(dt);
-	    }
-	    time = timestamp;
-	    lastFrame = requestFrame(updateLoop);
-	}
 	function Init(disableAutoTick) {
 	    if (initialized) {
-	        return;
+	        return false;
 	    }
 	    if (!tickerManager) {
 	        tickerManager = new ticker_1.Ticker();
@@ -87,8 +85,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    pooling = new pooling_1.Pooling(2500);
 	    initialized = true;
+	    return true;
 	}
 	exports.Init = Init;
+	function Destroy() {
+	    if (tickerManager) {
+	        tickerManager.Kill();
+	        tickerManager = undefined;
+	    }
+	    if (lastFrame) {
+	        cancelFrame(lastFrame);
+	    }
+	    initialized = false;
+	}
+	exports.Destroy = Destroy;
 	function Update(timestamp) {
 	    if (!initialized || !tickerManager) {
 	        return;
@@ -96,21 +106,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    tickerManager.Tick(timestamp);
 	}
 	exports.Update = Update;
-	function Deinit() {
-	    if (lastFrame) {
-	        cancelFrame(lastFrame);
-	    }
-	    if (tickerManager) {
-	        tickerManager.Kill();
-	        tickerManager = undefined;
-	    }
-	    initialized = false;
-	}
-	exports.Deinit = Deinit;
-	function Ticker() {
-	    return tickerManager;
-	}
-	exports.Ticker = Ticker;
 	function Tween(obj, properties) {
 	    if (!initialized) {
 	        Init();

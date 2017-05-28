@@ -94,6 +94,9 @@
     OnComplete(cb: () => void): void;
 }
 
+    InitModule(fatina: any): IPlugin;
+}
+
     SetParent(ticker: ITicker): ISequence;
     SetTimescale(scale: number): ISequence;
     SetLoop(loop: number): ISequence;
@@ -243,8 +246,6 @@
     OnKilled(cb: () => void): ITween;
     OnComplete(cb: () => void): ITween;
 }
-
-
 
 
 

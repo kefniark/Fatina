@@ -5,40 +5,25 @@ import { ISequence } from './core/interfaces/ISequence';
 import { ITicker } from './core/interfaces/ITicker';
 import { Pooling } from './pooling';
 
-/**
- * Class used to auto-tick based on the browser requestAnimationFrame
- *
- * Based on API from mozilla :
- *  - https://developer.mozilla.org/fr/docs/Web/API/Window/requestAnimationFrame
- *  - https://developer.mozilla.org/fr/docs/Web/API/Window/cancelAnimationFrame
- *
- * @export
- * @class AutoTick
- */
-
-// Update Loop (auto tick)
-let tickerManager: ticker | undefined;
-let pooling: Pooling;
-let initialized = false;
-
-// Request frame
 let requestFrame: any = window.requestAnimationFrame || (window as any).mozRequestAnimationFrame || window.webkitRequestAnimationFrame || (window as any).msRequestAnimationFrame;
 let cancelFrame = window.cancelAnimationFrame || (window as any).mozCancelAnimationFrame;
-let lastFrame: any;
-let time = 0;
 
 function updateLoop(timestamp: number) {
 	let dt = timestamp - time;
-	if (tickerManager) {
-		tickerManager.Tick(dt);
-	}
+	Update(dt);
 	time = timestamp;
-	lastFrame = requestFrame(updateLoop);
+	lastFrame = requestFrame(() => updateLoop);
 }
 
-export function Init(disableAutoTick?: boolean): any {
+let tickerManager: ticker | undefined;
+let pooling: Pooling;
+let initialized = false;
+let lastFrame: any;
+let time = 0;
+
+export function Init(disableAutoTick?: boolean): boolean {
 	if (initialized) {
-		return;
+		return false;
 	}
 
 	if (!tickerManager) {
@@ -51,8 +36,21 @@ export function Init(disableAutoTick?: boolean): any {
 	}
 
 	pooling = new Pooling(2500);
-
 	initialized = true;
+	return true;
+}
+
+export function Destroy() {
+	if (tickerManager) {
+		tickerManager.Kill();
+		tickerManager = undefined;
+	}
+
+	if (lastFrame) {
+		cancelFrame(lastFrame);
+	}
+
+	initialized = false;
 }
 
 export function Update(timestamp: number): any {
@@ -61,24 +59,6 @@ export function Update(timestamp: number): any {
 	}
 
 	tickerManager.Tick(timestamp);
-}
-
-export function Deinit() {
-	if (lastFrame) {
-		cancelFrame(lastFrame);
-	}
-
-	if (tickerManager) {
-		tickerManager.Kill();
-		tickerManager = undefined;
-	}
-
-	initialized = false;
-}
-
-// Helpers
-export function Ticker(): ITicker | undefined {
-	return tickerManager;
 }
 
 export function Tween(obj: any, properties: string[]): ITween {
