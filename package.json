@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "homepage": "https://kefniark.github.io/Fatina/",
   "license": "MIT",
+  "types": "build/fatina.d.ts",
   "author": {
     "name": "Kevin destrem",
     "email": "kef1@free.fr"
@@ -11,12 +12,10 @@
   "scripts": {
     "all": "npm run deps && npm run build && npm run dev",
     "deps": "npm install .",
-    "build": "npm run build:dev && npm run build:min",
-    "build:dev": "webpack",
-    "build:min": "webpack -p",
+    "build": "rimraf build && webpack",
     "dev": "webpack-dev-server",
     "clean": "run-s clean:build clean:modules clean:coverage",
-    "clean:build": "rimraf \"./build\"",
+    "clean:build": "shx rm -rf build lib",
     "clean:modules": "rimraf \"./node_modules\"",
     "clean:docs": "rimraf \"./docs\"",
     "clean:coverage": "rimraf \"./coverage\"",
@@ -30,11 +29,13 @@
   "devDependencies": {
     "@types/node": "7.0.18",
     "@types/tape": "^4.2.29",
+    "dtsbundler-webpack-plugin": "1.0.0",
     "npm-run-all": "4.0.2",
     "nyc": "10.3.2",
     "optimize-js-plugin": "0.0.4",
     "raw-loader": "0.5.1",
     "rimraf": "2.6.1",
+    "shx": "0.2.2",
     "tap-spec": "4.1.1",
     "tape": "^4.6.3",
     "ts-loader": "^2.0.3",

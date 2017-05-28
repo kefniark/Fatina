@@ -1,9 +1,9 @@
 import * as test from 'tape';
-import { Tween } from '../src/tweens/tween';
-import { ITween } from '../src/core/interfaces/ITween';
-import { Ticker } from '../src/ticker';
+import { Tween } from '../src/fatina/tweens/tween';
+import { ITween } from '../src/fatina/core/interfaces/ITween';
+import { Ticker } from '../src/fatina/ticker';
 
-test('Ftina -> Get tween data', function (t: any) {
+test('Fatina -> Get tween data', function (t: any) {
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 	let properties = [ 'x', 'y' ];
 	let dest = { x: 44, y: 44 };
@@ -34,7 +34,7 @@ test('Ftina -> Get tween data', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Create a basic tween', function (t: any) {
+test('Fatina -> Create a basic tween', function (t: any) {
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 	let properties = [ 'x', 'y' ];
 	let dest = { x: 44, y: 44 };
@@ -66,7 +66,7 @@ test('Ftina -> Create a basic tween', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Test Tween From property', function (t: any) {
+test('Fatina -> Test Tween From property', function (t: any) {
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 	let properties = [ 'x', 'y' ];
 	let dest = { x: 44, y: 44 };
@@ -94,7 +94,7 @@ test('Ftina -> Test Tween From property', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Test Tween Relative property', function (t: any) {
+test('Fatina -> Test Tween Relative property', function (t: any) {
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 	let properties = [ 'x', 'y' ];
 	let dest = { x: 44, y: 44 };
@@ -124,7 +124,7 @@ test('Ftina -> Test Tween Relative property', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Test Tween with a undefined object', function (t: any) {
+test('Fatina -> Test Tween with a undefined object', function (t: any) {
 	let obj: any = undefined;
 	let properties = [ 'x', 'y' ];
 	let dest = { x: 44, y: 44 };
@@ -140,7 +140,7 @@ test('Ftina -> Test Tween with a undefined object', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Test Tween with a undefined property', function (t: any) {
+test('Fatina -> Test Tween with a undefined property', function (t: any) {
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 	let properties = [ 'tuna' ];
 	let dest = { tuna: 44 };
@@ -156,7 +156,7 @@ test('Ftina -> Test Tween with a undefined property', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Test mix of concurrent running and paused tween', function (t: any) {
+test('Fatina -> Test mix of concurrent running and paused tween', function (t: any) {
 	let properties = [ 'x', 'y' ];
 	let dest = { x: 44, y: 44 };
 	let ticker = new Ticker();
@@ -218,7 +218,7 @@ test('Ftina -> Test mix of concurrent running and paused tween', function (t: an
 	t.end();
 });
 
-test('Ftina -> Test Tween loop', function (t: any) {
+test('Fatina -> Test Tween loop', function (t: any) {
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 	let properties = [ 'x' ];
 
@@ -251,7 +251,7 @@ test('Ftina -> Test Tween loop', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Test Tween infinite loop', function (t: any) {
+test('Fatina -> Test Tween infinite loop', function (t: any) {
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 	let properties = [ 'x' ];
 
@@ -285,7 +285,7 @@ test('Ftina -> Test Tween infinite loop', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Test Tween timescale', function (t: any) {
+test('Fatina -> Test Tween timescale', function (t: any) {
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 	let properties = [ 'x' ];
 
@@ -323,14 +323,14 @@ test('Ftina -> Test Tween timescale', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Test Tween without parent', function (t: any) {
+test('Fatina -> Test Tween without parent', function (t: any) {
 	let tween = new Tween({}, []).To({}, 5);
 
 	t.throws(() => tween.Start(), 'Check Start explode');
 	t.end();
 });
 
-test('Ftina -> Test Tween without to', function (t: any) {
+test('Fatina -> Test Tween without to', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();
 	let complete = false;
@@ -343,7 +343,7 @@ test('Ftina -> Test Tween without to', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Test Tween Easing', function (t: any) {
+test('Fatina -> Test Tween Easing', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();
 	t.doesNotThrow(() => new Tween({}, []).To({}, 5).SetParent(ticker).SetEasing(2).Start(), 'easing by type');
@@ -352,7 +352,7 @@ test('Ftina -> Test Tween Easing', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Test Tween Kill', function (t: any) {
+test('Fatina -> Test Tween Kill', function (t: any) {
 	let complete = 0;
 	let killed = 0;
 
@@ -381,7 +381,7 @@ test('Ftina -> Test Tween Kill', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Test Tween Kill', function (t: any) {
+test('Fatina -> Test Tween Kill', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();
 	let sequence = new Tween({}, []).To({}, 2).SetParent(ticker).ToSequence().PrependInterval(1).AppendInterval(1);

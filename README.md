@@ -1,4 +1,4 @@
-# Ftina
+# Fatina
 Small & Light tweening library for web / games
 
 Documentation and Samples: [Here](https://kefniark.github.io/Fatina/)

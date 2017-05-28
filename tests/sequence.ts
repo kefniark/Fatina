@@ -1,9 +1,9 @@
 import * as test from 'tape';
-import { Sequence } from '../src/tweens/sequence';
-import { Tween } from '../src/tweens/tween';
-import { Ticker } from '../src/ticker';
+import { Sequence } from '../src/fatina/tweens/sequence';
+import { Tween } from '../src/fatina/tweens/tween';
+import { Ticker } from '../src/fatina/ticker';
 
-test('Ftina -> Create a basic Sequence', function (t: any) {
+test('Fatina -> Create a basic Sequence', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
@@ -76,7 +76,7 @@ test('Ftina -> Create a basic Sequence', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Test Lagging Tick', function (t: any) {
+test('Fatina -> Test Lagging Tick', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
@@ -97,7 +97,7 @@ test('Ftina -> Test Lagging Tick', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Test Prepend', function (t: any) {
+test('Fatina -> Test Prepend', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
@@ -127,7 +127,7 @@ test('Ftina -> Test Prepend', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Test Join', function (t: any) {
+test('Fatina -> Test Join', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
@@ -159,7 +159,7 @@ test('Ftina -> Test Join', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Sequence loop', function (t: any) {
+test('Fatina -> Sequence loop', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
@@ -195,11 +195,11 @@ test('Ftina -> Sequence loop', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Sequence of Sequence', function (t: any) {
+test('Fatina -> Sequence of Sequence', function (t: any) {
 	t.end();
 });
 
-test('Ftina -> Sequence timescale & kill', function (t: any) {
+test('Fatina -> Sequence timescale & kill', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();
 

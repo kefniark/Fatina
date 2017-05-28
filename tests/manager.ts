@@ -1,5 +1,5 @@
 import * as test from 'tape';
 
-test('Ftina -> Create a manager', function (t: any) {
+test('Fatina -> Create a manager', function (t: any) {
 	t.end();
 });

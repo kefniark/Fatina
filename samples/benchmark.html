@@ -20,7 +20,7 @@
         </style>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css">
 
-        <script src="../build/ftina.js"></script>
+        <script src="../build/fatina.js"></script>
         <script src="./tina.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
     </head>
@@ -363,11 +363,11 @@
 
             <script>
                 function Fatina() {
-                    return ftina.Tween({x:0}, ['x']).To({x:100}, 10).Start();
+                    return fatina.Tween({x:0}, ['x']).To({x:100}, 10).Start();
                 }
 
                 function FatinaAdvanced() {
-                    return ftina.Tween({x:0, y:0, z:0, a:0}, ['x', 'y', 'z', 'a'])
+                    return fatina.Tween({x:0, y:0, z:0, a:0}, ['x', 'y', 'z', 'a'])
                         .To({x:100, y:2, z:69, a:-71602}, Math.random() * 5 + 10)
                         .SetLoop(2)
                         .SetEasing('inOutQuad')
@@ -378,10 +378,10 @@
                 }
 
                 function FatinaSequence() {
-                    let sequence = ftina.Sequence();
-                    sequence.Append(ftina.Tween({x:0}, ['x']).To({x: 2}, 2));
+                    let sequence = fatina.Sequence();
+                    sequence.Append(fatina.Tween({x:0}, ['x']).To({x: 2}, 2));
                     sequence.AppendInterval(1);
-                    sequence.Append(ftina.Tween({x:0}, ['x']).To({x: 5}, 3));
+                    sequence.Append(fatina.Tween({x:0}, ['x']).To({x: 5}, 3));
                     sequence.Start();
                 }
             </script>
@@ -433,7 +433,7 @@
 
             <script>
                 // default fatina setup
-                ftina.Init(true);
+                fatina.Init(true);
 
                 // default tina setup
                 let tinaTimer = new TINA.Timer().useAsDefault();
@@ -459,7 +459,7 @@
 
                     // update them between test to let them clean old data
                     for (let i = 0; i < 20; i++) {
-                        ftina.Update(1);
+                        fatina.Update(1);
                         TINA.update();
                         TWEEN.update();
                     }
@@ -498,7 +498,7 @@
                             }
                         }
 
-                        ftina.Update(1);
+                        fatina.Update(1);
                         TINA.update();
                         TWEEN.update();
                     }

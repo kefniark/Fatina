@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"outDir": "./build",
+		"outDir": "./lib",
 		"typeRoots": [
 			"node_modules/@types"
 		],
@@ -8,8 +8,9 @@
 			"node"
 		],
 		"lib": [
-			"es5", "dom"
+			"es2015", "dom"
 		],
+		"module": "commonjs",
 		"target": "es5",
 		"noImplicitAny": true,
 		"noEmit": false,
@@ -25,8 +26,7 @@
 		"strictNullChecks": true,
 		"sourceMap": true,
 		"pretty": true,
-		"declaration": false,
-		"moduleResolution": "node"
+		"declaration": true
 	},
 	"include": [
 		"src/**/*",
