@@ -2,11 +2,11 @@
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define("fatina", [], factory);
+		define("Fatina", [], factory);
 	else if(typeof exports === 'object')
-		exports["fatina"] = factory();
+		exports["Fatina"] = factory();
 	else
-		root["fatina"] = factory();
+		root["Fatina"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache

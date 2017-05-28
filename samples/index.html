@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Fatina Sample</title>
 
-        <script src="../build/fatina.js"></script>
+        <script src="../build/fatina.min.js"></script>
         <style>
             .imgTest {
                 position: relative;
@@ -34,7 +34,7 @@
                     var elem = document.getElementById("sample1");
 
                     var obj = { x: 0, y: 0 };
-                    fatina.Tween(obj, ['x'])
+                    Fatina.Tween(obj, ['x'])
                         .From({x: 0})
                         .To({x: 500}, 2500)
                         .OnStart(() => console.log("tween1 start"))
@@ -55,7 +55,7 @@
                     var elem2 = document.getElementById("sample2");
 
                     var obj2 = { x: 0, y: 0 };
-                    fatina.Tween(obj2, ['x'])
+                    Fatina.Tween(obj2, ['x'])
                         .To({x: 500}, 2500)
                         .SetEasing(Math.floor(Math.random()*30))
                         .OnStart(() => console.log("tween2 start"))
@@ -76,11 +76,11 @@
                     var elem3 = document.getElementById("sample3");
 
                     var obj3 = { x: 0, y: 0, rotate:0 };
-                    fatina.Sequence()
-                        .Append(fatina.Tween(obj3, ['x']).To({x: 500}, 1250).SetEasing(6))
+                    Fatina.Sequence()
+                        .Append(Fatina.Tween(obj3, ['x']).To({x: 500}, 1250).SetEasing(6))
                         .AppendInterval(0.2)
-                        .Append(fatina.Tween(obj3, ['x']).To({x: 0}, 1250).SetEasing(6))
-                        .Join(fatina.Tween(obj3, ['rotate']).To({rotate: 360}, 1250).SetEasing(6))
+                        .Append(Fatina.Tween(obj3, ['x']).To({x: 0}, 1250).SetEasing(6))
+                        .Join(Fatina.Tween(obj3, ['rotate']).To({rotate: 360}, 1250).SetEasing(6))
                         .OnUpdate(() => {
                             elem3.style.left = obj3.x + "px";
                             elem3.style.transform = "rotate(" + obj3.rotate + "deg)"
@@ -100,10 +100,10 @@
                     var elem4 = document.getElementById("sample4");
 
                     var obj4 = { x: 0, y: 0, rotate:0 };
-                    var sequence = fatina.Sequence()
-                        .Append(fatina.Tween(obj4, ['x']).To({x: 500}, 1250).SetEasing(6))
-                        .Append(fatina.Tween(obj4, ['x']).To({x: 0}, 1250).SetEasing(6))
-                        .Join(fatina.Tween(obj4, ['rotate']).To({rotate: 360}, 1250).SetEasing(6))
+                    var sequence = Fatina.Sequence()
+                        .Append(Fatina.Tween(obj4, ['x']).To({x: 500}, 1250).SetEasing(6))
+                        .Append(Fatina.Tween(obj4, ['x']).To({x: 0}, 1250).SetEasing(6))
+                        .Join(Fatina.Tween(obj4, ['rotate']).To({rotate: 360}, 1250).SetEasing(6))
                         .OnUpdate(() => {
                             elem4.style.left = obj4.x + "px";
                             elem4.style.transform = "rotate(" + obj4.rotate + "deg)"
@@ -126,10 +126,10 @@
                     var elem5 = document.getElementById("sample5");
 
                     var obj5 = { x: 0, y: 0, rotate:0 };
-                    var sequence = fatina.Sequence()
-                        .Append(fatina.Tween(obj5, ['x']).To({x: 500}, 1250).SetEasing(6))
-                        .Append(fatina.Tween(obj5, ['x']).To({x: 0}, 1250).SetEasing(6))
-                        .Join(fatina.Tween(obj5, ['rotate']).To({rotate: 360}, 1250).SetEasing(6).SetTimescale(2))
+                    var sequence = Fatina.Sequence()
+                        .Append(Fatina.Tween(obj5, ['x']).To({x: 500}, 1250).SetEasing(6))
+                        .Append(Fatina.Tween(obj5, ['x']).To({x: 0}, 1250).SetEasing(6))
+                        .Join(Fatina.Tween(obj5, ['rotate']).To({rotate: 360}, 1250).SetEasing(6).SetTimescale(2))
                         .OnUpdate(() => {
                             elem5.style.left = obj5.x + "px";
                             elem5.style.transform = "rotate(" + obj5.rotate + "deg)"
@@ -151,7 +151,7 @@
                     var obj6 = { x: 0, y: 0, rotate:0 };
 
                     // Create moving tween (loop twice)
-                    fatina.Tween(obj6, ['x'])
+                    Fatina.Tween(obj6, ['x'])
                         .From({ x: 0 })
                         .To({x: 500}, 1250)
                         .SetLoop(2)
@@ -164,9 +164,9 @@
                         .Start();
 
                     // Create a sequence of infinite rotation
-                    fatina.Sequence()
+                    Fatina.Sequence()
                         .Join(
-                            fatina.Tween(obj6, ['rotate'])
+                            Fatina.Tween(obj6, ['rotate'])
                                 .From({rotate:0})
                                 .To({rotate: 360}, 550)
                         )
@@ -204,18 +204,18 @@
 
                         let currentSprite = spritePositions[spritePositions.length - 1];
                         // Create animation
-                        var sequence = fatina.Sequence().SetLoop(-1);
+                        var sequence = Fatina.Sequence().SetLoop(-1);
                         sequence.AppendInterval(Math.random() * 1000);
-                        sequence.Append(fatina.Tween(currentSprite, ['x', 'y']).To({ x: 280 + currentSprite.dx, y: 80 + currentSprite.dy}, 1400).SetEasing('inOutSine').SetTimescale(currentSprite.timescale));
-                        sequence.Append(fatina.Tween(currentSprite, ['x', 'y']).To({ x: 50 + currentSprite.dx, y: 250 + currentSprite.dy}, 1400).SetEasing('inOutQuad').SetTimescale(currentSprite.timescale));
-                        sequence.Append(fatina.Tween(currentSprite, ['x', 'y']).To({ x: 150 + currentSprite.dx, y: 0 + currentSprite.dy}, 1400).SetEasing('inOutSine').SetTimescale(currentSprite.timescale));
-                        sequence.Append(fatina.Tween(currentSprite, ['x', 'y']).To({ x: 250 + currentSprite.dx, y: 250 + currentSprite.dy}, 1400).SetEasing('inOutQuad').SetTimescale(currentSprite.timescale));
-                        sequence.Append(fatina.Tween(currentSprite, ['x', 'y']).To({ x: 20 + currentSprite.dx, y: 80 + currentSprite.dy}, 1400).SetEasing('inOutQuad').SetTimescale(currentSprite.timescale));
+                        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 280 + currentSprite.dx, y: 80 + currentSprite.dy}, 1400).SetEasing('inOutSine').SetTimescale(currentSprite.timescale));
+                        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 50 + currentSprite.dx, y: 250 + currentSprite.dy}, 1400).SetEasing('inOutQuad').SetTimescale(currentSprite.timescale));
+                        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 150 + currentSprite.dx, y: 0 + currentSprite.dy}, 1400).SetEasing('inOutSine').SetTimescale(currentSprite.timescale));
+                        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 250 + currentSprite.dx, y: 250 + currentSprite.dy}, 1400).SetEasing('inOutQuad').SetTimescale(currentSprite.timescale));
+                        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 20 + currentSprite.dx, y: 80 + currentSprite.dy}, 1400).SetEasing('inOutQuad').SetTimescale(currentSprite.timescale));
                         sequence.Start();
                     }
 
                     // Canvas Rendering Loop
-                    fatina.Tween({}, [])
+                    Fatina.Tween({}, [])
                         .SetLoop(-1)
                         .OnUpdate((dt) => {
                             context.clearRect(0, 0, canvas.width, canvas.height);

@@ -20,7 +20,7 @@
         </style>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css">
 
-        <script src="../build/fatina.js"></script>
+        <script src="../build/fatina.min.js"></script>
         <script src="./tina.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
     </head>
@@ -177,19 +177,19 @@
             <h3>Normal Tween</h3>
             <div class="row">
                 <div class="col-md-2">
-                    <button class="btn test" onclick="Test('Fatina Normal', 'fatina1', Fatina, 200, 100, 50);">50x 200 tweens</button>
+                    <button class="btn test" onclick="Test('Fatina Normal', 'fatina1', TestFatina, 200, 100, 50);">50x 200 tweens</button>
                     <div class="fatina1"></div>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn test" onclick="Test('Fatina Normal', 'fatina2', Fatina, 5000, 100, 10);">10x 5k tweens</button>
+                    <button class="btn test" onclick="Test('Fatina Normal', 'fatina2', TestFatina, 5000, 100, 10);">10x 5k tweens</button>
                     <div class="fatina2"></div>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn test" onclick="Test('Fatina Normal', 'fatina3', Fatina, 20000, 100, 5);">5x 20k tweens</button>
+                    <button class="btn test" onclick="Test('Fatina Normal', 'fatina3', TestFatina, 20000, 100, 5);">5x 20k tweens</button>
                     <div class="fatina3"></div>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn test" onclick="Test('Fatina Normal', 'fatina4', Fatina, 1000, 500, 100);">100x 1000 tweens</button>
+                    <button class="btn test" onclick="Test('Fatina Normal', 'fatina4', TestFatina, 1000, 500, 100);">100x 1000 tweens</button>
                     <div class="fatina4"></div>
                 </div>
             </div>
@@ -197,19 +197,19 @@
             <h3>Complicated Tween</h3>
             <div class="row">
                 <div class="col-md-2">
-                    <button class="btn test" onclick="Test('Fatina Advanced', 'fatina10', FatinaAdvanced, 200, 100, 50);">50x 200 tweens</button>
+                    <button class="btn test" onclick="Test('Fatina Advanced', 'fatina10', TestFatinaAdvanced, 200, 100, 50);">50x 200 tweens</button>
                     <div class="fatina10"></div>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn test" onclick="Test('Fatina Advanced', 'fatina11', FatinaAdvanced, 5000, 100, 10);">10x 5k tweens</button>
+                    <button class="btn test" onclick="Test('Fatina Advanced', 'fatina11', TestFatinaAdvanced, 5000, 100, 10);">10x 5k tweens</button>
                     <div class="fatina11"></div>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn test" onclick="Test('Fatina Advanced', 'fatina12', FatinaAdvanced, 20000, 100, 5);">5x 20k tweens</button>
+                    <button class="btn test" onclick="Test('Fatina Advanced', 'fatina12', TestFatinaAdvanced, 20000, 100, 5);">5x 20k tweens</button>
                     <div class="fatina12"></div>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn test" onclick="Test('Fatina Advanced', 'fatina13', FatinaAdvanced, 1000, 500, 200);">200x 1000 tweens</button>
+                    <button class="btn test" onclick="Test('Fatina Advanced', 'fatina13', TestFatinaAdvanced, 1000, 500, 200);">200x 1000 tweens</button>
                     <div class="fatina13"></div>
                 </div>
             </div>
@@ -217,19 +217,19 @@
             <h3>Sequence</h3>
             <div class="row">
                 <div class="col-md-2">
-                    <button class="btn test" onclick="Test('Fatina Sequence', 'fatina20', FatinaSequence, 200, 100, 50);">50x 200 tweens</button>
+                    <button class="btn test" onclick="Test('Fatina Sequence', 'fatina20', TestFatinaSequence, 200, 100, 50);">50x 200 tweens</button>
                     <div class="fatina20"></div>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn test" onclick="Test('Fatina Sequence', 'fatina21', FatinaSequence, 5000, 100, 10);">10x 5k tweens</button>
+                    <button class="btn test" onclick="Test('Fatina Sequence', 'fatina21', TestFatinaSequence, 5000, 100, 10);">10x 5k tweens</button>
                     <div class="fatina21"></div>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn test" onclick="Test('Fatina Sequence', 'fatina22', FatinaSequence, 20000, 100, 5);">5x 20k tweens</button>
+                    <button class="btn test" onclick="Test('Fatina Sequence', 'fatina22', TestFatinaSequence, 20000, 100, 5);">5x 20k tweens</button>
                     <div class="fatina22"></div>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn test" onclick="Test('Fatina Sequence', 'fatina23', FatinaSequence, 1000, 500, 200);">200x 1000 tweens</button>
+                    <button class="btn test" onclick="Test('Fatina Sequence', 'fatina23', TestFatinaSequence, 1000, 500, 200);">200x 1000 tweens</button>
                     <div class="fatina23"></div>
                 </div>
             </div>
@@ -362,12 +362,12 @@
             </div>
 
             <script>
-                function Fatina() {
-                    return fatina.Tween({x:0}, ['x']).To({x:100}, 10).Start();
+                function TestFatina() {
+                    return Fatina.Tween({x:0}, ['x']).To({x:100}, 10).Start();
                 }
 
-                function FatinaAdvanced() {
-                    return fatina.Tween({x:0, y:0, z:0, a:0}, ['x', 'y', 'z', 'a'])
+                function TestFatinaAdvanced() {
+                    return Fatina.Tween({x:0, y:0, z:0, a:0}, ['x', 'y', 'z', 'a'])
                         .To({x:100, y:2, z:69, a:-71602}, Math.random() * 5 + 10)
                         .SetLoop(2)
                         .SetEasing('inOutQuad')
@@ -377,11 +377,11 @@
                         .Start();
                 }
 
-                function FatinaSequence() {
-                    let sequence = fatina.Sequence();
-                    sequence.Append(fatina.Tween({x:0}, ['x']).To({x: 2}, 2));
+                function TestFatinaSequence() {
+                    let sequence = Fatina.Sequence();
+                    sequence.Append(Fatina.Tween({x:0}, ['x']).To({x: 2}, 2));
                     sequence.AppendInterval(1);
-                    sequence.Append(fatina.Tween({x:0}, ['x']).To({x: 5}, 3));
+                    sequence.Append(Fatina.Tween({x:0}, ['x']).To({x: 5}, 3));
                     sequence.Start();
                 }
             </script>
@@ -433,7 +433,7 @@
 
             <script>
                 // default fatina setup
-                fatina.Init(true);
+                Fatina.Init(true);
 
                 // default tina setup
                 let tinaTimer = new TINA.Timer().useAsDefault();
@@ -459,7 +459,7 @@
 
                     // update them between test to let them clean old data
                     for (let i = 0; i < 20; i++) {
-                        fatina.Update(1);
+                        Fatina.Update(1);
                         TINA.update();
                         TWEEN.update();
                     }
@@ -483,7 +483,9 @@
 
                     counter.innerHTML = Math.round(counterValue / 1000);
 
-                    for (let elem of document.getElementsByClassName(spanResult)) {
+                    let results = document.getElementsByClassName(spanResult);
+                    results = [].slice.call(results);
+                    for (let elem of results) {
                         elem.innerHTML =  average + 'ms.';
                     }
                 }
@@ -498,7 +500,7 @@
                             }
                         }
 
-                        fatina.Update(1);
+                        Fatina.Update(1);
                         TINA.update();
                         TWEEN.update();
                     }

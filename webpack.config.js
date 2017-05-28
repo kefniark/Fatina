@@ -16,7 +16,7 @@ module.exports = {
 	output: {
 		path: './build',
 		filename: '[name].js',
-		library: 'fatina',
+		library: 'Fatina',
 		libraryTarget: 'umd',
 		umdNamedDefine: true
 	},
