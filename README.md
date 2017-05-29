@@ -1,7 +1,5 @@
 ![Logo](logo.png)
 
-![Logo](logo.png)
-
 # Fatina
 Small & Light tweening library for web / games
 
