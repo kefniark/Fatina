@@ -1,36 +1,24 @@
-# SPEAR.JS - CONTRIBUTORS GUIDE
+# How to contribute
 
-## Requirement and Installation
-Node.js version 0.10 or up. We recommend that you use [NVM](https://github.com/creationix/nvm) for managing your Node.js versions.
+## Reporting issues
+1. Search for existing issues. Your question or bug may have already been answered or fixed (try not to duplicate issues).
+2. If possible, try to include a reference to a live example (such as JSFiddle).
 
+## How to build
+Install the required packages using:
 ```
 npm install
 ```
 
-## To test/try out examples
-Run a node server:
+Then build using:
 ```
-node server.js
+npm run build
 ```
-Then go to the address [http://localhost:3000/test/](http://localhost:3000/test/)
 
-## Test, Build & Documentation
-All those tasks are done automatically when committing/merging code.
-But they can be done manually when necessary:
-
-To test, run the command:
-```bash
+And test with
+```
 npm run test
 ```
 
-To build, run the command:
-```bash
-npm run build
-```
-The build will be output in build/trey.js and build/trey.min.js, respectively unminimified and minimified versions of TREY.js.
-
-To create the documentation, run the command:
-```bash
-npm run doc
-```
-You can view the generated document by opening the file ```docs/index.html```.
+## Important notice
+Do not forget to smile while contributing
