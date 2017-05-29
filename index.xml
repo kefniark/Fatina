@@ -16,7 +16,8 @@
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/samples/generic/</guid>
-      <description>Lorem Ipsum</description>
+      <description>.imgTest { position: relative; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html elements but you can tween almost any kind of object and data. PlayAll 
+Linear tween  function sample1() { var elem = document.getElementById(&#34;sample1&#34;); var obj = { x: 0, y: 0 }; Fatina.Tween(obj, [&#39;x&#39;]) .From({x: 0}) .To({x: 500}, 2500) .</description>
     </item>
     
     <item>
@@ -72,10 +73,18 @@ Fatina  Init(): void This method has to be called once to initialize fatina Paus
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/basics/download/</guid>
-      <description>Installation Download the library and include it in your code:
-&amp;lt;script src=&amp;quot;js/Fatina.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;  You can also reference a CDN-hosted version in your code, thanks to cdnjs. For example:
-&amp;lt;script src=&amp;quot;...&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;  More advanced users might want to&amp;hellip; Use npm npm install Fatina  Then include the Fatina module with the standard node.js require:
-var Fatina = require(&#39;Fatina&#39;);  And you can use Fatina as in all other samples :</description>
+      <description> Installation Download the library and include it in your code:
+&amp;lt;script src=&amp;quot;Fatina.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;   ``` ### More advanced users might want to... #### Use `npm` ```bash npm install Fatina ``` Then include the Fatina module with the standard node.js `require`: ```javascript var Fatina = require(&#39;Fatina&#39;); ``` And you can use Fatina as in all other samples : ```javascript var t = new Fatina.Tween( /* etc */ ); t.start(); ``` -- </description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://kefniark.github.io/Fatina/basics/about/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>https://kefniark.github.io/Fatina/basics/about/</guid>
+      <description> License MIT License A short and simple permissive license with conditions only requiring preservation of copyright and license notices. Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+Thanks to  Unity-chan because cute samples &amp;hellip;  Why this name ?  F* Tina: No comment &amp;hellip; Fat Tina: Because everyone know that typescript is heavy and slow Reference to Fatina from Tower of Druaga    </description>
     </item>
     
   </channel>

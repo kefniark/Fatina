@@ -8,9 +8,11 @@
   <title>Generic Tweens</title>
   <meta property="og:title" content="Generic Tweens" />
   <meta name="twitter:title" content="Generic Tweens" />
-  <meta name="description" content="Lorem Ipsum">
-  <meta property="og:description" content="Lorem Ipsum">
-  <meta name="twitter:description" content="Lorem Ipsum">
+  <meta name="description" content=".imgTest { position: relative; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html elements but you can tween almost any kind of object and data. PlayAll 
+Linear tween  function sample1() { var elem = document.getElementById(&#34;sample1&#34;); var obj = { x: 0, y: 0 }; Fatina.Tween(obj, [&#39;x&#39;]) .From({x: 0}) .To({x: 500}, 2500) .">
+  <meta property="og:description" content=".imgTest { position: relative; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html elements but you can tween almost any kind of object and data. PlayAll 
+Linear tween  function sample1() { var elem = document.getElementById(&#34;sample1&#34;); var obj = { x: 0, y: 0 }; Fatina.Tween(obj, [&#39;x&#39;]) .From({x: 0}) .To({x: 500}, 2500) .">
+  <meta name="twitter:description" content=".imgTest { position: relative; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html elements but …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -33,6 +35,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
   <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/pygment_highlights.css" />
   <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/highlight.min.css" />
+  <script type="text/javascript" src="https://kefniark.github.io/Fatina/fatina.min.js"></script>
 
 </head>
 
@@ -65,12 +68,6 @@
                 
                   <a href="/Fatina/samples/generic/">Generic</a>
                 
-                  <a href="/Fatina/samples/dom/">DOM / CSS</a>
-                
-                  <a href="/Fatina/samples/pixi/">pixi.js</a>
-                
-                  <a href="/Fatina/samples/threejs/">three.js</a>
-                
               </div>
             </li>
           
@@ -87,7 +84,11 @@
             </li>
           
         
-
+          
+            <li>
+              <a title="About" href="/Fatina/basics/about/">About</a>
+            </li>
+          
         
 
         
@@ -144,18 +145,409 @@
   <div class="row">
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
       <article role="main" class="blog-post">
-        <p>Lorem Ipsum</p>
+        <style>
+.imgTest {
+    position: relative;
+}
+
+hr {
+    border-top: 1px dashed #8c8b8b;
+    border-bottom: 1px dashed #fff;
+    margin-top: 25px !important;
+    clear: both;
+}
+</style>
+
+<p><p>
+The following example are moving html elements but you can tween almost any kind of object and data.
+</p>
+<div style="text-align:center">
+    <button class="btn btn-success" onclick="playAll()">PlayAll</button>
+</div></p>
+
+<h3>Linear tween</h3>
+
+<p><img id="sample1" class="imgTest" src="/Yuko_Blink_2.png"/>
+<script>
+    function sample1() {
+        var elem = document.getElementById("sample1");
+
+        var obj = { x: 0, y: 0 };
+        Fatina.Tween(obj, ['x'])
+            .From({x: 0})
+            .To({x: 500}, 2500)
+            .OnStart(() => console.log("tween1 start"))
+            .OnUpdate((dt, progress) => {
+                elem.style.left = obj.x + "px";
+            })
+            .OnComplete(() => console.log("tween1 complete"))
+            .Start();
+    }
+</script>
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    	<span>
+    	
+    	See Code
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">&amp;lt;img id=&amp;#34;sample1&amp;#34; class=&amp;#34;imgTest&amp;#34; src=&amp;#34;/Yuko_Blink_2.png&amp;#34;/&amp;gt;
+&amp;lt;script&amp;gt;
+    function sample1() {
+        var elem = document.getElementById(&amp;#34;sample1&amp;#34;);
+
+        var obj = { x: 0, y: 0 };
+        Fatina.Tween(obj, [&amp;#39;x&amp;#39;])
+            .From({x: 0})
+            .To({x: 500}, 2500)
+            .OnStart(() =&amp;gt; console.log(&amp;#34;tween1 start&amp;#34;))
+            .OnUpdate((dt, progress) =&amp;gt; {
+                elem.style.left = obj.x &amp;#43; &amp;#34;px&amp;#34;;
+            })
+            .OnComplete(() =&amp;gt; console.log(&amp;#34;tween1 complete&amp;#34;))
+            .Start();
+    }
+&amp;lt;/script&amp;gt;
+</code></pre>
+
+    </div>
+</div></p>
+
+<hr/>
+
+<h3>Easing <small>(based on <a href="http://easings.net">easings.net</a>)</small></h3>
+
+<p><img id="sample2" class="imgTest" src="/Yuko_Blink_2.png"/>
+<script>
+    function sample2() {
+        var elem2 = document.getElementById("sample2");
+
+        var obj2 = { x: 0, y: 0 };
+        Fatina.Tween(obj2, ['x'])
+            .To({x: 500}, 2500)
+            .SetEasing(Math.floor(Math.random()*30))
+            .OnStart(() => console.log("tween2 start"))
+            .OnUpdate((dt, progress) => {
+                elem2.style.left = obj2.x + "px";
+            })
+            .OnComplete(() => console.log("tween2 complete"))
+            .Start();
+    }
+</script>
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    	<span>
+    	
+    	See Code
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">&amp;lt;img id=&amp;#34;sample2&amp;#34; class=&amp;#34;imgTest&amp;#34; src=&amp;#34;/Yuko_Blink_2.png&amp;#34;/&amp;gt;
+&amp;lt;script&amp;gt;
+    function sample2() {
+        var elem2 = document.getElementById(&amp;#34;sample2&amp;#34;);
+
+        var obj2 = { x: 0, y: 0 };
+        Fatina.Tween(obj2, [&amp;#39;x&amp;#39;])
+            .To({x: 500}, 2500)
+            .SetEasing(Math.floor(Math.random()*30))
+            .OnStart(() =&amp;gt; console.log(&amp;#34;tween2 start&amp;#34;))
+            .OnUpdate((dt, progress) =&amp;gt; {
+                elem2.style.left = obj2.x &amp;#43; &amp;#34;px&amp;#34;;
+            })
+            .OnComplete(() =&amp;gt; console.log(&amp;#34;tween2 complete&amp;#34;))
+            .Start();
+    }
+&amp;lt;/script&amp;gt;
+</code></pre>
+
+    </div>
+</div>
+<hr/></p>
+
+<h3>Sequence <small>(Sequential &amp; Parallel)</small></h3>
+
+<p><img id="sample3" class="imgTest" src="/Yuko_Blink_2.png"/>
+<script>
+    function sample3() {
+        var elem3 = document.getElementById("sample3");
+
+        var obj3 = { x: 0, y: 0, rotate:0 };
+        Fatina.Sequence()
+            .Append(Fatina.Tween(obj3, ['x']).To({x: 500}, 1250).SetEasing(6))
+            .AppendInterval(0.2)
+            .Append(Fatina.Tween(obj3, ['x']).To({x: 0}, 1250).SetEasing(6))
+            .Join(Fatina.Tween(obj3, ['rotate']).To({rotate: 360}, 1250).SetEasing(6))
+            .OnUpdate(() => {
+                elem3.style.left = obj3.x + "px";
+                elem3.style.transform = "rotate(" + obj3.rotate + "deg)"
+            })
+            .OnStart(() => console.log("tween3 start"))
+            .OnComplete(() => console.log("tween3 complete"))
+            .Start();
+    }
+</script>
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    	<span>
+    	
+    	See Code
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">&amp;lt;img id=&amp;#34;sample3&amp;#34; class=&amp;#34;imgTest&amp;#34; src=&amp;#34;/Yuko_Blink_2.png&amp;#34;/&amp;gt;
+&amp;lt;script&amp;gt;
+    function sample3() {
+        var elem3 = document.getElementById(&amp;#34;sample3&amp;#34;);
+
+        var obj3 = { x: 0, y: 0, rotate:0 };
+        Fatina.Sequence()
+            .Append(Fatina.Tween(obj3, [&amp;#39;x&amp;#39;]).To({x: 500}, 1250).SetEasing(6))
+            .AppendInterval(0.2)
+            .Append(Fatina.Tween(obj3, [&amp;#39;x&amp;#39;]).To({x: 0}, 1250).SetEasing(6))
+            .Join(Fatina.Tween(obj3, [&amp;#39;rotate&amp;#39;]).To({rotate: 360}, 1250).SetEasing(6))
+            .OnUpdate(() =&amp;gt; {
+                elem3.style.left = obj3.x &amp;#43; &amp;#34;px&amp;#34;;
+                elem3.style.transform = &amp;#34;rotate(&amp;#34; &amp;#43; obj3.rotate &amp;#43; &amp;#34;deg)&amp;#34;
+            })
+            .OnStart(() =&amp;gt; console.log(&amp;#34;tween3 start&amp;#34;))
+            .OnComplete(() =&amp;gt; console.log(&amp;#34;tween3 complete&amp;#34;))
+            .Start();
+    }
+&amp;lt;/script&amp;gt;
+</code></pre>
+
+    </div>
+</div>
+<hr/></p>
+
+<p><h3>Pause / Resume</h3>
+<img id="sample4" class="imgTest" src="/Yuko_Blink_2.png"/>
+<script>
+    function sample4() {
+        var elem4 = document.getElementById("sample4");
+
+        var obj4 = { x: 0, y: 0, rotate:0 };
+        var sequence = Fatina.Sequence()
+            .Append(Fatina.Tween(obj4, ['x']).To({x: 500}, 1250).SetEasing(6))
+            .Append(Fatina.Tween(obj4, ['x']).To({x: 0}, 1250).SetEasing(6))
+            .Join(Fatina.Tween(obj4, ['rotate']).To({rotate: 360}, 1250).SetEasing(6))
+            .OnUpdate(() => {
+                elem4.style.left = obj4.x + "px";
+                elem4.style.transform = "rotate(" + obj4.rotate + "deg)"
+            })
+            .OnStart(() => console.log("tween4 start"))
+            .OnComplete(() => console.log("tween4 complete"));
+        sequence.Start();
+
+        setTimeout(() => sequence.Pause(), 1250);
+        setTimeout(() => sequence.Resume(), 2000);
+    }
+</script>
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    	<span>
+    	
+    	See Code
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">&amp;lt;img id=&amp;#34;sample4&amp;#34; class=&amp;#34;imgTest&amp;#34; src=&amp;#34;/Yuko_Blink_2.png&amp;#34;/&amp;gt;
+&amp;lt;script&amp;gt;
+    function sample4() {
+        var elem4 = document.getElementById(&amp;#34;sample4&amp;#34;);
+
+        var obj4 = { x: 0, y: 0, rotate:0 };
+        var sequence = Fatina.Sequence()
+            .Append(Fatina.Tween(obj4, [&amp;#39;x&amp;#39;]).To({x: 500}, 1250).SetEasing(6))
+            .Append(Fatina.Tween(obj4, [&amp;#39;x&amp;#39;]).To({x: 0}, 1250).SetEasing(6))
+            .Join(Fatina.Tween(obj4, [&amp;#39;rotate&amp;#39;]).To({rotate: 360}, 1250).SetEasing(6))
+            .OnUpdate(() =&amp;gt; {
+                elem4.style.left = obj4.x &amp;#43; &amp;#34;px&amp;#34;;
+                elem4.style.transform = &amp;#34;rotate(&amp;#34; &amp;#43; obj4.rotate &amp;#43; &amp;#34;deg)&amp;#34;
+            })
+            .OnStart(() =&amp;gt; console.log(&amp;#34;tween4 start&amp;#34;))
+            .OnComplete(() =&amp;gt; console.log(&amp;#34;tween4 complete&amp;#34;));
+        sequence.Start();
+
+        setTimeout(() =&amp;gt; sequence.Pause(), 1250);
+        setTimeout(() =&amp;gt; sequence.Resume(), 2000);
+    }
+&amp;lt;/script&amp;gt;
+</code></pre>
+
+    </div>
+</div>
+<hr/></p>
+
+<p><h3>Timescale <small>(on both sequence &amp; tween)</small></h3>
+<img id="sample5" class="imgTest" src="/Yuko_Blink_2.png"/>
+<script>
+    function sample5() {
+        var elem5 = document.getElementById("sample5");
+
+        var obj5 = { x: 0, y: 0, rotate:0 };
+        var sequence = Fatina.Sequence()
+            .Append(Fatina.Tween(obj5, ['x']).To({x: 500}, 1250).SetEasing(6))
+            .Append(Fatina.Tween(obj5, ['x']).To({x: 0}, 1250).SetEasing(6))
+            .Join(Fatina.Tween(obj5, ['rotate']).To({rotate: 360}, 1250).SetEasing(6).SetTimescale(2))
+            .OnUpdate(() => {
+                elem5.style.left = obj5.x + "px";
+                elem5.style.transform = "rotate(" + obj5.rotate + "deg)"
+            })
+            .SetTimescale(0.75)
+            .OnStart(() => console.log("tween5 start"))
+            .OnComplete(() => console.log("tween5 complete"));
+        sequence.Start();
+    }
+</script>
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    	<span>
+    	
+    	See Code
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">&amp;lt;img id=&amp;#34;sample5&amp;#34; class=&amp;#34;imgTest&amp;#34; src=&amp;#34;/Yuko_Blink_2.png&amp;#34;/&amp;gt;
+&amp;lt;script&amp;gt;
+    function sample5() {
+        var elem5 = document.getElementById(&amp;#34;sample5&amp;#34;);
+
+        var obj5 = { x: 0, y: 0, rotate:0 };
+        var sequence = Fatina.Sequence()
+            .Append(Fatina.Tween(obj5, [&amp;#39;x&amp;#39;]).To({x: 500}, 1250).SetEasing(6))
+            .Append(Fatina.Tween(obj5, [&amp;#39;x&amp;#39;]).To({x: 0}, 1250).SetEasing(6))
+            .Join(Fatina.Tween(obj5, [&amp;#39;rotate&amp;#39;]).To({rotate: 360}, 1250).SetEasing(6).SetTimescale(2))
+            .OnUpdate(() =&amp;gt; {
+                elem5.style.left = obj5.x &amp;#43; &amp;#34;px&amp;#34;;
+                elem5.style.transform = &amp;#34;rotate(&amp;#34; &amp;#43; obj5.rotate &amp;#43; &amp;#34;deg)&amp;#34;
+            })
+            .SetTimescale(0.75)
+            .OnStart(() =&amp;gt; console.log(&amp;#34;tween5 start&amp;#34;))
+            .OnComplete(() =&amp;gt; console.log(&amp;#34;tween5 complete&amp;#34;));
+        sequence.Start();
+    }
+&amp;lt;/script&amp;gt;
+</code></pre>
+
+    </div>
+</div>
+<hr/></p>
+
+<p><h3>Loop <small>(on both sequence &amp; tween)</small></h3>
+<img id="sample6" class="imgTest" src="/Yuko_Blink_2.png"/>
+<script>
+    function sample6() {
+        var elem6 = document.getElementById("sample6");
+        var obj6 = { x: 0, y: 0, rotate:0 };
+
+        // Create moving tween (loop twice)
+        Fatina.Tween(obj6, ['x'])
+            .From({ x: 0 })
+            .To({x: 500}, 1250)
+            .SetLoop(2)
+            .SetEasing('inOutQuad')
+            .OnStart(() => console.log("tween6 start"))
+            .OnUpdate((dt, progress) => {
+                elem6.style.left = obj6.x + "px";
+            })
+            .OnComplete(() => console.log("tween6 move complete"))
+            .Start();
+
+        // Create a sequence of infinite rotation
+        Fatina.Sequence()
+            .Join(
+                Fatina.Tween(obj6, ['rotate'])
+                    .From({rotate:0})
+                    .To({rotate: 360}, 550)
+            )
+            .OnUpdate(() => {
+                elem6.style.transform = "rotate(" + obj6.rotate + "deg)"
+            })
+            .SetLoop(-1)
+            .OnStart(() => console.log("tween6 rotation start"))
+            .OnComplete(() => console.log("tween6 rotation complete"))
+            .Start();
+    }
+</script>
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    	<span>
+    	
+    	See Code
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">&amp;lt;img id=&amp;#34;sample6&amp;#34; class=&amp;#34;imgTest&amp;#34; src=&amp;#34;/Yuko_Blink_2.png&amp;#34;/&amp;gt;
+&amp;lt;script&amp;gt;
+    function sample6() {
+        var elem6 = document.getElementById(&amp;#34;sample6&amp;#34;);
+        var obj6 = { x: 0, y: 0, rotate:0 };
+
+        // Create moving tween (loop twice)
+        Fatina.Tween(obj6, [&amp;#39;x&amp;#39;])
+            .From({ x: 0 })
+            .To({x: 500}, 1250)
+            .SetLoop(2)
+            .SetEasing(&amp;#39;inOutQuad&amp;#39;)
+            .OnStart(() =&amp;gt; console.log(&amp;#34;tween6 start&amp;#34;))
+            .OnUpdate((dt, progress) =&amp;gt; {
+                elem6.style.left = obj6.x &amp;#43; &amp;#34;px&amp;#34;;
+            })
+            .OnComplete(() =&amp;gt; console.log(&amp;#34;tween6 move complete&amp;#34;))
+            .Start();
+
+        // Create a sequence of infinite rotation
+        Fatina.Sequence()
+            .Join(
+                Fatina.Tween(obj6, [&amp;#39;rotate&amp;#39;])
+                    .From({rotate:0})
+                    .To({rotate: 360}, 550)
+            )
+            .OnUpdate(() =&amp;gt; {
+                elem6.style.transform = &amp;#34;rotate(&amp;#34; &amp;#43; obj6.rotate &amp;#43; &amp;#34;deg)&amp;#34;
+            })
+            .SetLoop(-1)
+            .OnStart(() =&amp;gt; console.log(&amp;#34;tween6 rotation start&amp;#34;))
+            .OnComplete(() =&amp;gt; console.log(&amp;#34;tween6 rotation complete&amp;#34;))
+            .Start();
+    }
+&amp;lt;/script&amp;gt;
+</code></pre>
+
+    </div>
+</div></p>
+
+<script>
+    function playAll() {
+        sample1();
+        sample2();
+        sample3();
+        sample4();
+        sample5();
+        sample6();
+    }
+
+    (function() {
+        setTimeout(() => playAll(), 500);
+    })();
+</script>
 
       </article>
-
-      <ul class="pager blog-pager">
-        
-          <li class="previous">
-            <a href="https://kefniark.github.io/Fatina/samples/dom/" data-toggle="tooltip" data-placement="top" title="DOM / CSS Tweening">&larr; Previous Post</a>
-          </li>
-        
-        
-      </ul>
 
       
         
@@ -172,7 +564,7 @@
         <ul class="list-inline text-center footer-links">
           
               <li>
-                <a href="https://github.com/kefniark/ftina" title="GitHub">
+                <a href="https://github.com/kefniark/fatina" title="GitHub">
                   <span class="fa-stack fa-lg">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-github fa-stack-1x fa-inverse"></i>
@@ -188,7 +580,10 @@
                 </a>
               </li>
           
+
+          
         </ul>
+
         <p class="credits copyright text-muted">
           Kevin Destrem
           &nbsp;&bull;&nbsp;

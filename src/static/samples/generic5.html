@@ -1,0 +1,20 @@
+<img id="sample5" class="imgTest" src="/Yuko_Blink_2.png"/>
+<script>
+    function sample5() {
+        var elem5 = document.getElementById("sample5");
+
+        var obj5 = { x: 0, y: 0, rotate:0 };
+        var sequence = Fatina.Sequence()
+            .Append(Fatina.Tween(obj5, ['x']).To({x: 500}, 1250).SetEasing(6))
+            .Append(Fatina.Tween(obj5, ['x']).To({x: 0}, 1250).SetEasing(6))
+            .Join(Fatina.Tween(obj5, ['rotate']).To({rotate: 360}, 1250).SetEasing(6).SetTimescale(2))
+            .OnUpdate(() => {
+                elem5.style.left = obj5.x + "px";
+                elem5.style.transform = "rotate(" + obj5.rotate + "deg)"
+            })
+            .SetTimescale(0.75)
+            .OnStart(() => console.log("tween5 start"))
+            .OnComplete(() => console.log("tween5 complete"));
+        sequence.Start();
+    }
+</script>

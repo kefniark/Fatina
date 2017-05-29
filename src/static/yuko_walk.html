@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="unity/yuko_walk.css">
+<img id="yuko1" class="sprite_unitychan_walk sprite-Unitychan_Walk_1"/>
+
+<script>
+    let elem = document.getElementById('yuko1');
+
+    // Switch the classname
+    Fatina.Tween({}, [])
+        .To({}, 1600)
+        .SetLoop(-1)
+        .OnUpdate((dt, progress) => {
+            let val = Math.round(progress * 13 + 1);
+            elem.className = 'sprite_unitychan_walk sprite-Unitychan_Walk_' + val;
+        })
+        .Start();
+</script>

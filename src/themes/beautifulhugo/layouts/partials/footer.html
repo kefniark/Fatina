@@ -25,7 +25,30 @@
             </a>
           </li>
           {{ end }}
+
+          {{ if .Site.IsMultiLingual }}
+            {{ if ge (len .Site.Languages) 3 }}
+            <li class="navlinks-container">
+                <div class="navlinks-children">
+                {{ range .Site.Languages }}
+                    {{ if not (eq .Lang $.Site.Language.Lang) }}
+                    <a href="/{{ .Lang }}" lang="{{ .Lang }}">{{ default .Lang .LanguageName }}</a>
+                    {{ end }}
+                {{ end }}
+                </div>
+            </li>
+            {{ else }}
+            <li>
+                {{ range .Site.Languages }}
+                {{ if not (eq .Lang $.Site.Language.Lang) }}
+                    <a href="/{{ .Lang }}" lang="{{ .Lang }}">{{ default .Lang .LanguageName }}</a>
+                {{ end }}
+                {{ end }}
+            </li>
+            {{ end }}
+        {{ end }}
         </ul>
+
         <p class="credits copyright text-muted">
           {{ .Site.Author.name }}
           &nbsp;&bull;&nbsp;

@@ -1,0 +1,35 @@
+<img id="sample6" class="imgTest" src="/Yuko_Blink_2.png"/>
+<script>
+    function sample6() {
+        var elem6 = document.getElementById("sample6");
+        var obj6 = { x: 0, y: 0, rotate:0 };
+
+        // Create moving tween (loop twice)
+        Fatina.Tween(obj6, ['x'])
+            .From({ x: 0 })
+            .To({x: 500}, 1250)
+            .SetLoop(2)
+            .SetEasing('inOutQuad')
+            .OnStart(() => console.log("tween6 start"))
+            .OnUpdate((dt, progress) => {
+                elem6.style.left = obj6.x + "px";
+            })
+            .OnComplete(() => console.log("tween6 move complete"))
+            .Start();
+
+        // Create a sequence of infinite rotation
+        Fatina.Sequence()
+            .Join(
+                Fatina.Tween(obj6, ['rotate'])
+                    .From({rotate:0})
+                    .To({rotate: 360}, 550)
+            )
+            .OnUpdate(() => {
+                elem6.style.transform = "rotate(" + obj6.rotate + "deg)"
+            })
+            .SetLoop(-1)
+            .OnStart(() => console.log("tween6 rotation start"))
+            .OnComplete(() => console.log("tween6 rotation complete"))
+            .Start();
+    }
+</script>

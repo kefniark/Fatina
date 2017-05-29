@@ -8,9 +8,9 @@
   <title>Fatina</title>
   <meta property="og:title" content="Fatina" />
   <meta name="twitter:title" content="Fatina" />
-  <meta name="description" content="Tweens A tween (from in-between) is a concept that allows you to change the values of the properties of an object in a smooth way. You just tell it which properties you want to change, which final values should they have when the tween finishes running, and how long should this take, and the tweening engine will take care of finding the intermediate values from the starting to the ending point.">
-  <meta property="og:description" content="Tweens A tween (from in-between) is a concept that allows you to change the values of the properties of an object in a smooth way. You just tell it which properties you want to change, which final values should they have when the tween finishes running, and how long should this take, and the tweening engine will take care of finding the intermediate values from the starting to the ending point.">
-  <meta name="twitter:description" content="Tweens A tween (from in-between) is a concept that allows you to change the values of the properties of an object in a smooth way. You just tell it which properties you want to change, which final …">
+  <meta name="description" content="Tween A tween (from in-between) is a concept that allows you to change the values of the properties of an object in a smooth way. You just tell it which properties you want to change, which final values should they have when the tween finishes running, and how long should this take, and the tweening engine will take care of finding the intermediate values from the starting to the ending point.">
+  <meta property="og:description" content="Tween A tween (from in-between) is a concept that allows you to change the values of the properties of an object in a smooth way. You just tell it which properties you want to change, which final values should they have when the tween finishes running, and how long should this take, and the tweening engine will take care of finding the intermediate values from the starting to the ending point.">
+  <meta name="twitter:description" content="Tween A tween (from in-between) is a concept that allows you to change the values of the properties of an object in a smooth way. You just tell it which properties you want to change, which final …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -33,6 +33,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
   <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/pygment_highlights.css" />
   <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/highlight.min.css" />
+  <script type="text/javascript" src="https://kefniark.github.io/Fatina/fatina.min.js"></script>
 
 </head>
 
@@ -65,12 +66,6 @@
                 
                   <a href="/Fatina/samples/generic/">Generic</a>
                 
-                  <a href="/Fatina/samples/dom/">DOM / CSS</a>
-                
-                  <a href="/Fatina/samples/pixi/">pixi.js</a>
-                
-                  <a href="/Fatina/samples/threejs/">three.js</a>
-                
               </div>
             </li>
           
@@ -87,7 +82,11 @@
             </li>
           
         
-
+          
+            <li>
+              <a title="About" href="/Fatina/basics/about/">About</a>
+            </li>
+          
         
 
         
@@ -152,7 +151,7 @@
           <div class="well">
             
 
-<h2 id="tweens">Tweens</h2>
+<h2 id="tween">Tween</h2>
 
 <p>A tween (from <a href="http://en.wikipedia.org/wiki/Inbetweening"><em>in-between</em></a>) is a concept that allows you to change the values of the properties of an object in a smooth way. You just tell it which properties you want to change, which final values should they have when the tween finishes running, and how long should this take, and the tweening engine will take care of finding the intermediate values from the starting to the ending point.</p>
 
@@ -161,6 +160,23 @@
 <p>Fatina is a new tweening library designed to be easy to use and easy to understand.
 The main inspiration is the C# library <a href="http://dotween.demigiant.com/">DOTween</a></p>
 
+<link rel="stylesheet" href="unity/yuko_walk.css">
+<img id="yuko1" class="sprite_unitychan_walk sprite-Unitychan_Walk_1"/>
+
+<script>
+    let elem = document.getElementById('yuko1');
+
+    // Switch the classname
+    Fatina.Tween({}, [])
+        .To({}, 1600)
+        .SetLoop(-1)
+        .OnUpdate((dt, progress) => {
+            let val = Math.round(progress * 13 + 1);
+            elem.className = 'sprite_unitychan_walk sprite-Unitychan_Walk_' + val;
+        })
+        .Start();
+</script>
+
 <h2 id="fatina-features">Fatina Features</h2>
 
 <ul>
@@ -168,9 +184,14 @@ The main inspiration is the C# library <a href="http://dotween.demigiant.com/">D
 <li><strong>Lightweight</strong> no extra dependencies and a minified file &lt; 25KB</li>
 <li><strong>Speed and efficiency</strong> : Not only very fast, but also very efficient: everything is cached and reused to avoid useless GC allocations.</li>
 <li><strong>Open source &amp; Easy to read</strong></li>
-<li><strong>Safe mode</strong> : Activate the optional safe mode and let DOTween take care of unexpected occurrences, like a tween&rsquo;s target being destroyed while playing.</li>
 <li><strong>Plugins</strong> : Fatina is built with an extensible architecture in mind, which allows you to create your own tween plugins as separate files.</li>
 </ul>
+
+<div style="text-align: center">
+    <a class="btn btn-primary" href="https://github.com/kefniark/Fatina/" target="_blank">Github</a>
+    <a class="btn btn-info" href="https://github.com/kefniark/Fatina/releases" target="_blank">Releases</a>
+    <a class="btn btn-success" href="https://github.com/kefniark/Fatina/issues" target="_blank">Issues</a>
+</div>
 
           </div>
         
@@ -192,7 +213,7 @@ The main inspiration is the C# library <a href="http://dotween.demigiant.com/">D
         <ul class="list-inline text-center footer-links">
           
               <li>
-                <a href="https://github.com/kefniark/ftina" title="GitHub">
+                <a href="https://github.com/kefniark/fatina" title="GitHub">
                   <span class="fa-stack fa-lg">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-github fa-stack-1x fa-inverse"></i>
@@ -208,7 +229,10 @@ The main inspiration is the C# library <a href="http://dotween.demigiant.com/">D
                 </a>
               </li>
           
+
+          
         </ul>
+
         <p class="credits copyright text-muted">
           Kevin Destrem
           &nbsp;&bull;&nbsp;

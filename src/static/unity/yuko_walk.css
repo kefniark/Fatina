@@ -1,0 +1,89 @@
+.sprite_unitychan_walk {
+    background-image: url(yuko_walk.png);
+    background-repeat: no-repeat;
+    display: block;
+}
+
+.sprite-Unitychan_Walk_1 {
+    width: 72px;
+    height: 72px;
+    background-position: -5px -5px;
+}
+
+.sprite-Unitychan_Walk_10 {
+    width: 72px;
+    height: 72px;
+    background-position: -87px -5px;
+}
+
+.sprite-Unitychan_Walk_11 {
+    width: 72px;
+    height: 72px;
+    background-position: -169px -5px;
+}
+
+.sprite-Unitychan_Walk_12 {
+    width: 72px;
+    height: 72px;
+    background-position: -5px -87px;
+}
+
+.sprite-Unitychan_Walk_13 {
+    width: 72px;
+    height: 72px;
+    background-position: -87px -87px;
+}
+
+.sprite-Unitychan_Walk_14 {
+    width: 72px;
+    height: 72px;
+    background-position: -169px -87px;
+}
+
+.sprite-Unitychan_Walk_2 {
+    width: 72px;
+    height: 72px;
+    background-position: -5px -169px;
+}
+
+.sprite-Unitychan_Walk_3 {
+    width: 72px;
+    height: 72px;
+    background-position: -87px -169px;
+}
+
+.sprite-Unitychan_Walk_4 {
+    width: 72px;
+    height: 72px;
+    background-position: -169px -169px;
+}
+
+.sprite-Unitychan_Walk_5 {
+    width: 72px;
+    height: 72px;
+    background-position: -251px -5px;
+}
+
+.sprite-Unitychan_Walk_6 {
+    width: 72px;
+    height: 72px;
+    background-position: -251px -87px;
+}
+
+.sprite-Unitychan_Walk_7 {
+    width: 72px;
+    height: 72px;
+    background-position: -251px -169px;
+}
+
+.sprite-Unitychan_Walk_8 {
+    width: 72px;
+    height: 72px;
+    background-position: -5px -251px;
+}
+
+.sprite-Unitychan_Walk_9 {
+    width: 72px;
+    height: 72px;
+    background-position: -87px -251px;
+}

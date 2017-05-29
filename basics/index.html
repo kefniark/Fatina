@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
   <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/pygment_highlights.css" />
   <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/highlight.min.css" />
+  <script type="text/javascript" src="https://kefniark.github.io/Fatina/fatina.min.js"></script>
 
 </head>
 
@@ -62,12 +63,6 @@
                 
                   <a href="/Fatina/samples/generic/">Generic</a>
                 
-                  <a href="/Fatina/samples/dom/">DOM / CSS</a>
-                
-                  <a href="/Fatina/samples/pixi/">pixi.js</a>
-                
-                  <a href="/Fatina/samples/threejs/">three.js</a>
-                
               </div>
             </li>
           
@@ -84,7 +79,11 @@
             </li>
           
         
-
+          
+            <li>
+              <a title="About" href="/Fatina/basics/about/">About</a>
+            </li>
+          
         
 
         
@@ -186,11 +185,90 @@ Fatina  Init(): void This method has to be called once to initialize fatina Paus
               </p>
               <div class="post-entry">
                 
-                  Installation Download the library and include it in your code:
-&lt;script src=&quot;js/Fatina.min.js&quot;&gt;&lt;/script&gt;  You can also reference a CDN-hosted version in your code, thanks to cdnjs. For example:
-&lt;script src=&quot;...&quot;&gt;&lt;/script&gt;  More advanced users might want to&hellip; Use npm npm install Fatina  Then include the Fatina module with the standard node.js require:
-var Fatina = require('Fatina');  And you can use Fatina as in all other samples :
-                  <a href="https://kefniark.github.io/Fatina/basics/download/" class="post-read-more">[Read More]</a>
+                  
+
+<h2 id="installation">Installation</h2>
+
+<p>Download the <a href="https://github.com/kefniark/Fatina/releases">library</a> and include it in your code:</p>
+
+<pre><code class="language-html">&lt;script src=&quot;Fatina.min.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+
+<!--
+You can also reference a CDN-hosted version in your code, thanks to cdnjs. For example:
+
+```html
+<script src="..."></script>
+```
+
+
+### More advanced users might want to...
+
+#### Use `npm`
+
+```bash
+npm install Fatina
+```
+
+Then include the Fatina module with the standard node.js `require`:
+
+```javascript
+var Fatina = require('Fatina');
+```
+
+And you can use Fatina as in all other samples :
+```javascript
+var t = new Fatina.Tween( /* etc */ );
+t.start();
+```
+-->
+
+                
+              </div>
+    
+              
+    
+            </article>
+          
+            <article class="post-preview">
+              <a href="https://kefniark.github.io/Fatina/basics/about/">
+                <h2 class="post-title">About</h2>
+    
+                
+              </a>
+    
+              <p class="post-meta">
+                Posted on May 21, 2017
+              </p>
+              <div class="post-entry">
+                
+                  
+
+<h2 id="license">License</h2>
+
+<p><a href="https://github.com/kefniark/Fatina/blob/master/LICENSE.md">MIT License</a>
+A short and simple permissive license with conditions only requiring preservation of copyright and license notices. Licensed works, modifications, and larger works may be distributed under different terms and without source code.</p>
+
+<h2 id="thanks-to">Thanks to</h2>
+
+<ul>
+<li><a href="http://unity-chan.com/">Unity-chan</a> because cute samples &hellip;</li>
+</ul>
+
+<h2 id="why-this-name">Why this name ?</h2>
+
+<ul>
+<li><strong>F* Tina</strong>: No comment &hellip;</li>
+<li><strong>Fat</strong> Tina: Because everyone know that typescript is heavy and slow</li>
+<li>Reference to <strong>Fatina</strong> from <a href="https://en.wikipedia.org/wiki/The_Tower_of_Druaga_(anime)">Tower of Druaga</a></li>
+</ul>
+
+
+<div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;">
+  <iframe src="//www.youtube.com/embed/Nu6A-hG5J5E" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" allowfullscreen frameborder="0"></iframe>
+ </div>
+
+
                 
               </div>
     
@@ -211,7 +289,7 @@ var Fatina = require('Fatina');  And you can use Fatina as in all other samples 
         <ul class="list-inline text-center footer-links">
           
               <li>
-                <a href="https://github.com/kefniark/ftina" title="GitHub">
+                <a href="https://github.com/kefniark/fatina" title="GitHub">
                   <span class="fa-stack fa-lg">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-github fa-stack-1x fa-inverse"></i>
@@ -227,7 +305,10 @@ var Fatina = require('Fatina');  And you can use Fatina as in all other samples 
                 </a>
               </li>
           
+
+          
         </ul>
+
         <p class="credits copyright text-muted">
           Kevin Destrem
           &nbsp;&bull;&nbsp;

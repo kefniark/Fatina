@@ -18,7 +18,7 @@ theme = "beautifulhugo"
 
 [Author]
   name = "Kevin Destrem"
-  github = "kefniark/ftina"
+  github = "kefniark/fatina"
   twitter = "kefniark"
 
 [params]
@@ -63,23 +63,23 @@ theme = "beautifulhugo"
     url = "samples/generic/"
     weight = 1
 
-[[menu.main]]
-    parent = "samples"
-    name = "DOM / CSS"
-    url = "samples/dom/"
-    weight = 2
+#[[menu.main]]
+#    parent = "samples"
+#   name = "DOM / CSS"
+#    url = "samples/dom/"
+#    weight = 2
 
-[[menu.main]]
-    parent = "samples"
-    name = "pixi.js"
-    url = "samples/pixi/"
-    weight = 3
+#[[menu.main]]
+#    parent = "samples"
+#    name = "pixi.js"
+#    url = "samples/pixi/"
+#    weight = 3
 
-[[menu.main]]
-    parent = "samples"
-    name = "three.js"
-    url = "samples/threejs/"
-    weight = 4
+#[[menu.main]]
+#    parent = "samples"
+#    name = "three.js"
+#    url = "samples/threejs/"
+#    weight = 4
 
 [[menu.main]]
     name = "API"
@@ -89,4 +89,9 @@ theme = "beautifulhugo"
 [[menu.main]]
     name = "Benchmark"
     url = "basics/benchmark/"
-    weight = 3
+    weight = 4
+
+[[menu.main]]
+    name = "About"
+    url = "basics/about/"
+    weight = 5

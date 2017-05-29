@@ -29,29 +29,6 @@
           {{ end }}
         {{ end }}
 
-        {{ if .Site.IsMultiLingual }}
-          {{ if ge (len .Site.Languages) 3 }}
-            <li class="navlinks-container">
-              <a class="navlinks-parent" href="javascript:void(0)">{{ i18n "languageSwitcherLabel" }}</a>
-              <div class="navlinks-children">
-                {{ range .Site.Languages }}
-                  {{ if not (eq .Lang $.Site.Language.Lang) }}
-                  <a href="/{{ .Lang }}" lang="{{ .Lang }}">{{ default .Lang .LanguageName }}</a>
-                  {{ end }}
-                {{ end }}
-              </div>
-            </li>
-          {{ else }}
-            <li>
-              {{ range .Site.Languages }}
-                {{ if not (eq .Lang $.Site.Language.Lang) }}
-                  <a href="/{{ .Lang }}" lang="{{ .Lang }}">{{ default .Lang .LanguageName }}</a>
-                {{ end }}
-              {{ end }}
-            </li>
-          {{ end }}
-        {{ end }}
-
         {{ if isset .Site.Params "gcse" }}
           <li>
             <a href="#modalSearch" data-toggle="modal" data-target="#modalSearch" style="outline: none;">

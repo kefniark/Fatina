@@ -8,16 +8,12 @@
   <title>Getting Started</title>
   <meta property="og:title" content="Getting Started" />
   <meta name="twitter:title" content="Getting Started" />
-  <meta name="description" content="Installation Download the library and include it in your code:
-&lt;script src=&quot;js/Fatina.min.js&quot;&gt;&lt;/script&gt;  You can also reference a CDN-hosted version in your code, thanks to cdnjs. For example:
-&lt;script src=&quot;...&quot;&gt;&lt;/script&gt;  More advanced users might want to&hellip; Use npm npm install Fatina  Then include the Fatina module with the standard node.js require:
-var Fatina = require(&#39;Fatina&#39;);  And you can use Fatina as in all other samples :">
-  <meta property="og:description" content="Installation Download the library and include it in your code:
-&lt;script src=&quot;js/Fatina.min.js&quot;&gt;&lt;/script&gt;  You can also reference a CDN-hosted version in your code, thanks to cdnjs. For example:
-&lt;script src=&quot;...&quot;&gt;&lt;/script&gt;  More advanced users might want to&hellip; Use npm npm install Fatina  Then include the Fatina module with the standard node.js require:
-var Fatina = require(&#39;Fatina&#39;);  And you can use Fatina as in all other samples :">
-  <meta name="twitter:description" content="Installation Download the library and include it in your code:
-&lt;script src=&quot;js/Fatina.min.js&quot;&gt;&lt;/script&gt;  You can also reference a CDN-hosted version in your code, thanks to …">
+  <meta name="description" content=" Installation Download the library and include it in your code:
+&lt;script src=&quot;Fatina.min.js&quot;&gt;&lt;/script&gt;   ``` ### More advanced users might want to... #### Use `npm` ```bash npm install Fatina ``` Then include the Fatina module with the standard node.js `require`: ```javascript var Fatina = require(&#39;Fatina&#39;); ``` And you can use Fatina as in all other samples : ```javascript var t = new Fatina.Tween( /* etc */ ); t.start(); ``` -- ">
+  <meta property="og:description" content=" Installation Download the library and include it in your code:
+&lt;script src=&quot;Fatina.min.js&quot;&gt;&lt;/script&gt;   ``` ### More advanced users might want to... #### Use `npm` ```bash npm install Fatina ``` Then include the Fatina module with the standard node.js `require`: ```javascript var Fatina = require(&#39;Fatina&#39;); ``` And you can use Fatina as in all other samples : ```javascript var t = new Fatina.Tween( /* etc */ ); t.start(); ``` -- ">
+  <meta name="twitter:description" content=" Installation Download the library and include it in your code:
+&lt;script src=&quot;Fatina.min.js&quot;&gt;&lt;/script&gt;   ``` ### More advanced users might want to... #### Use `npm` ```bash npm …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -40,6 +36,7 @@ var Fatina = require(&#39;Fatina&#39;);  And you can use Fatina as in all other 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
   <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/pygment_highlights.css" />
   <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/highlight.min.css" />
+  <script type="text/javascript" src="https://kefniark.github.io/Fatina/fatina.min.js"></script>
 
 </head>
 
@@ -72,12 +69,6 @@ var Fatina = require(&#39;Fatina&#39;);  And you can use Fatina as in all other 
                 
                   <a href="/Fatina/samples/generic/">Generic</a>
                 
-                  <a href="/Fatina/samples/dom/">DOM / CSS</a>
-                
-                  <a href="/Fatina/samples/pixi/">pixi.js</a>
-                
-                  <a href="/Fatina/samples/threejs/">three.js</a>
-                
               </div>
             </li>
           
@@ -94,7 +85,11 @@ var Fatina = require(&#39;Fatina&#39;);  And you can use Fatina as in all other 
             </li>
           
         
-
+          
+            <li>
+              <a title="About" href="/Fatina/basics/about/">About</a>
+            </li>
+          
         
 
         
@@ -155,44 +150,41 @@ var Fatina = require(&#39;Fatina&#39;);  And you can use Fatina as in all other 
 
 <h2 id="installation">Installation</h2>
 
-<p>Download the <a href="...">library</a> and include it in your code:</p>
+<p>Download the <a href="https://github.com/kefniark/Fatina/releases">library</a> and include it in your code:</p>
 
-<pre><code class="language-html">&lt;script src=&quot;js/Fatina.min.js&quot;&gt;&lt;/script&gt;
+<pre><code class="language-html">&lt;script src=&quot;Fatina.min.js&quot;&gt;&lt;/script&gt;
 </code></pre>
 
-<p>You can also reference a CDN-hosted version in your code, thanks to cdnjs. For example:</p>
+<!--
+You can also reference a CDN-hosted version in your code, thanks to cdnjs. For example:
 
-<pre><code class="language-html">&lt;script src=&quot;...&quot;&gt;&lt;/script&gt;
-</code></pre>
+```html
+<script src="..."></script>
+```
 
-<h3 id="more-advanced-users-might-want-to">More advanced users might want to&hellip;</h3>
 
-<h4 id="use-npm">Use <code>npm</code></h4>
+### More advanced users might want to...
 
-<pre><code class="language-bash">npm install Fatina
-</code></pre>
+#### Use `npm`
 
-<p>Then include the Fatina module with the standard node.js <code>require</code>:</p>
+```bash
+npm install Fatina
+```
 
-<pre><code class="language-javascript">var Fatina = require('Fatina');
-</code></pre>
+Then include the Fatina module with the standard node.js `require`:
 
-<p>And you can use Fatina as in all other samples :</p>
+```javascript
+var Fatina = require('Fatina');
+```
 
-<pre><code class="language-javascript">var t = new Fatina.Tween( /* etc */ );
+And you can use Fatina as in all other samples :
+```javascript
+var t = new Fatina.Tween( /* etc */ );
 t.start();
-</code></pre>
+```
+-->
 
       </article>
-
-      <ul class="pager blog-pager">
-        
-        
-          <li class="next">
-            <a href="https://kefniark.github.io/Fatina/basics/api/" data-toggle="tooltip" data-placement="top" title="Fatina API">Next Post &rarr;</a>
-          </li>
-        
-      </ul>
 
       
         
@@ -209,7 +201,7 @@ t.start();
         <ul class="list-inline text-center footer-links">
           
               <li>
-                <a href="https://github.com/kefniark/ftina" title="GitHub">
+                <a href="https://github.com/kefniark/fatina" title="GitHub">
                   <span class="fa-stack fa-lg">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-github fa-stack-1x fa-inverse"></i>
@@ -225,7 +217,10 @@ t.start();
                 </a>
               </li>
           
+
+          
         </ul>
+
         <p class="credits copyright text-muted">
           Kevin Destrem
           &nbsp;&bull;&nbsp;
