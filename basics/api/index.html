@@ -8,9 +8,14 @@
   <title>Fatina API</title>
   <meta property="og:title" content="Fatina API" />
   <meta name="twitter:title" content="Fatina API" />
-  <meta name="description" content="Lorem Ipsum">
-  <meta property="og:description" content="Lorem Ipsum">
-  <meta name="twitter:description" content="Lorem Ipsum">
+  <meta name="description" content="Welcome to the API list of Fatina. (Tween, Sequence, Easing)
+Fatina  Init(): void This method has to be called once to initialize fatina Pause() / Resume(): void Update(dt: number): void SetTimescale(scale: number): void Tween(obj, properties): Tween Sequence(): Sequence  See MoreFor normal usage
+// Initialize Fatina (need to do that only once) Fatina.Init(); // Create a tween to move an object during 250 ms.">
+  <meta property="og:description" content="Welcome to the API list of Fatina. (Tween, Sequence, Easing)
+Fatina  Init(): void This method has to be called once to initialize fatina Pause() / Resume(): void Update(dt: number): void SetTimescale(scale: number): void Tween(obj, properties): Tween Sequence(): Sequence  See MoreFor normal usage
+// Initialize Fatina (need to do that only once) Fatina.Init(); // Create a tween to move an object during 250 ms.">
+  <meta name="twitter:description" content="Welcome to the API list of Fatina. (Tween, Sequence, Easing)
+Fatina  Init(): void This method has to be called once to initialize fatina Pause() / Resume(): void Update(dt: number): void …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -144,7 +149,230 @@
   <div class="row">
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
       <article role="main" class="blog-post">
-        <p>Lorem Ipsum</p>
+        
+
+<p>Welcome to the API list of Fatina. (<a href="#tween">Tween</a>, <a href="#sequence">Sequence</a>, <a href="#easing">Easing</a>)</p>
+
+<h2 id="fatina">Fatina</h2>
+
+<ul>
+<li><strong>Init</strong>(): <code>void</code> This method has to be called once to initialize fatina</li>
+<li><strong>Pause</strong>() / <strong>Resume</strong>(): <code>void</code></li>
+<li><strong>Update</strong>(dt: number): <code>void</code></li>
+<li><strong>SetTimescale</strong>(scale: number): <code>void</code></li>
+<li><strong>Tween</strong>(obj, properties): <code>Tween</code></li>
+<li><strong>Sequence</strong>(): <code>Sequence</code></li>
+</ul>
+
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    	<span>
+    	
+    	See More
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+<p>For normal usage</p>
+
+<pre><code class="language-js">// Initialize Fatina (need to do that only once)
+Fatina.Init();
+
+// Create a tween to move an object during 250 ms.
+var obj = { x: 0, y: 0 };
+Fatina.Tween(obj, ['x', 'y']).To({ x: 42, y: 42 }, 250).Start();
+</code></pre>
+
+<p>If you want to update Fatina manually</p>
+
+<pre><code class="language-js">// Initialize Fatina (disable the auto-update)
+Fatina.Init(false);
+
+// Update manually with
+Fatine.Update(1);
+</code></pre>
+
+    </div>
+</div>
+
+<h2 id="tween">Tween</h2>
+
+<h3 id="properties">Properties</h3>
+
+<ul>
+<li><strong>Elapsed</strong>: <code>number</code> number of ms. elapsed for this tween <small>(affected by pause &amp; timescale)</small></li>
+<li><strong>Duration</strong>: <code>number</code> duration of this tween in ms.</li>
+<li><strong>IsRunning</strong>(): <code>boolean</code></li>
+<li><strong>IsCompleted</strong>(): <code>boolean</code></li>
+<li><strong>IsKilled</strong>(): <code>boolean</code></li>
+</ul>
+
+<h3 id="controls">Controls</h3>
+
+<ul>
+<li><strong>Start</strong>(): <code>Tween</code> By default new tween are not started. Don&rsquo;t forget to call <strong>.Start()</strong></li>
+<li><strong>Pause</strong>(): <code>void</code></li>
+<li><strong>Resume</strong>(): <code>void</code></li>
+<li><strong>Kill</strong>(): <code>void</code></li>
+</ul>
+
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    	<span>
+    	
+    	See More
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">// Create a tween
+let tween = Fatina.Tween({},[]).To({}, 100).Start();
+
+// Control this tween
+tween.Pause();
+tween.Resume();
+tween.Kill(); 
+</code></pre>
+
+    </div>
+</div>
+
+<h3 id="callbacks">Callbacks</h3>
+
+<ul>
+<li><strong>OnStart</strong>(cb: () =&gt; void): <code>Tween</code></li>
+<li><strong>OnUpdate</strong>(cb: (dt: number, progress: number) =&gt; void): <code>Tween</code></li>
+<li><strong>OnKilled</strong>(cb: () =&gt; void): <code>Tween</code></li>
+<li><strong>OnComplete</strong>(cb: () =&gt; void): <code>Tween</code></li>
+</ul>
+
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    	<span>
+    	
+    	See More
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">// Create a tween with few callbacks
+Fatina.Tween({},[])
+    .To({}, 100)
+    .OnStart(() =&gt; console.log('onStart'))
+    .OnUpdate((dt, progress) =&gt; console.log('onUpdate', dt, progress))
+    .OnComplete(() =&gt; console.log('onComplete'))
+    .Start();
+</code></pre>
+
+    </div>
+</div>
+
+<h3 id="methods">Methods</h3>
+
+<ul>
+<li><strong>From</strong>(from: any): Tween;</li>
+<li><strong>To</strong>(to: any, duration: number): Tween;</li>
+<li><strong>SetLoop</strong>(loop: number): Tween;</li>
+<li><strong>SetRelative</strong>(relative: boolean): Tween;</li>
+<li><strong>SetEasing</strong>(type: EasingType | string): Tween;</li>
+<li><strong>SetTimescale</strong>(scale: number): Tween;</li>
+<li><strong>ToSequence</strong>(): Sequence;</li>
+</ul>
+
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    	<span>
+    	
+    	See More
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js"></code></pre>
+
+    </div>
+</div>
+
+<h4 id="easing">Easing</h4>
+
+<p>The easing usable in <strong>Tween.SetEasing(</strong>&hellip;<strong>)</strong> are:
+<code>linear</code>,
+<code>inQuad</code>,
+<code>outQuad</code>,
+<code>inOutQuad</code>,
+<code>inCubic</code>,
+<code>outCubic</code>,
+<code>inOutCubic</code>,
+<code>inQuart</code>,
+<code>outQuart</code>,
+<code>inOutQuart</code>,
+<code>inSine</code>,
+<code>outSine</code>,
+<code>inOutSine</code>,
+<code>inCirc</code>,
+<code>outCirc</code>,
+<code>inOutCirc</code>,
+<code>inQuint</code>,
+<code>outQuint</code>,
+<code>inOutQuint</code>,
+<code>inExponential</code>,
+<code>outExponential</code>,
+<code>inOutExponential</code>,
+<code>inElastic</code>,
+<code>outElastic</code>,
+<code>inOutElastic</code>,
+<code>inBack</code>,
+<code>outBack</code>,
+<code>inOutBack</code>,
+<code>inBounce</code>,
+<code>outBounce</code>,
+<code>inOutBounce</code></p>
+
+<p>To see what they look like : <a href="http://easings.net">Easings.net</a></p>
+
+<h2 id="sequence">Sequence</h2>
+
+<h3 id="properties-1">Properties</h3>
+
+<h3 id="controls-1">Controls</h3>
+
+<h3 id="callbacks-1">Callbacks</h3>
+
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    	<span>
+    	
+    	See More
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js"></code></pre>
+
+    </div>
+</div>
+
+<h3 id="methods-1">Methods</h3>
+
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    	<span>
+    	
+    	See More
+    	
+    	</span>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js"></code></pre>
+
+    </div>
+</div>
 
       </article>
 

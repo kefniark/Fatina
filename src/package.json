@@ -8,7 +8,7 @@
   "scripts": {
     "build": "hugo --destination ..",
     "create": "hugo new",
-    "serve": "hugo server -ws"
+    "serve": "hugo server -w"
   },
   "devDependencies": {
     "hugo-bin": "^0.7.0"

@@ -34,7 +34,7 @@ Then include the Fatina module with the standard node.js `require`:
 var Fatina = require('Fatina');
 ```
 
-And you can use Tween.js as in all other samples :
+And you can use Fatina as in all other samples :
 ```javascript
 var t = new Fatina.Tween( /* etc */ );
 t.start();
