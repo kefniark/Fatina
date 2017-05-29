@@ -11,7 +11,7 @@ weight = 7
 Download the [library](https://github.com/kefniark/Fatina/releases) and include it in your code:
 
 ```html
-<script src="Fatina.min.js"></script>
+<script src="fatina.min.js"></script>
 ```
 <!--
 You can also reference a CDN-hosted version in your code, thanks to cdnjs. For example:
@@ -41,3 +41,5 @@ var t = new Fatina.Tween( /* etc */ );
 t.start();
 ```
 -->
+
+More coming soon ...

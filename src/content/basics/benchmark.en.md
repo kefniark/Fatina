@@ -6,4 +6,4 @@ weight = 2
 
 +++
 
-Lorem Ipsum
+Coming soon ...

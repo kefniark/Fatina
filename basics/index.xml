@@ -16,7 +16,7 @@
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/basics/benchmark/</guid>
-      <description>Lorem Ipsum</description>
+      <description>Coming soon &amp;hellip;</description>
     </item>
     
     <item>
@@ -36,8 +36,8 @@ Fatina  Init(): void This method has to be called once to initialize fatina Paus
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/basics/download/</guid>
-      <description> Installation Download the library and include it in your code:
-&amp;lt;script src=&amp;quot;Fatina.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;   ``` ### More advanced users might want to... #### Use `npm` ```bash npm install Fatina ``` Then include the Fatina module with the standard node.js `require`: ```javascript var Fatina = require(&#39;Fatina&#39;); ``` And you can use Fatina as in all other samples : ```javascript var t = new Fatina.Tween( /* etc */ ); t.start(); ``` -- </description>
+      <description>Installation Download the library and include it in your code:
+&amp;lt;script src=&amp;quot;fatina.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;   ``` ### More advanced users might want to... #### Use `npm` ```bash npm install Fatina ``` Then include the Fatina module with the standard node.js `require`: ```javascript var Fatina = require(&#39;Fatina&#39;); ``` And you can use Fatina as in all other samples : ```javascript var t = new Fatina.Tween( /* etc */ ); t.start(); ``` -- More coming soon &amp;hellip;</description>
     </item>
     
     <item>
