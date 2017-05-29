@@ -34,13 +34,20 @@ export class Sequence extends BaseTween implements ISequence, ITicker {
 		};
 	}
 
+	public Start(): ISequence {
+		super.Start();
+		return this;
+	}
+
 	protected Validate() {
 	}
 
 	protected LoopInit() {
 		this.sequenceIndex = 0;
-		for (let tweenArray of this.tweens) {
-			for (let tween of tweenArray) {
+		for (let i = 0; i < this.tweens.length; i++) {
+			let tweenArray = this.tweens[i];
+			for (let j = 0; j < tweenArray.length; j++) {
+				let tween = tweenArray[j];
 				(tween as BaseTween).Reset(true);
 			}
 		}
@@ -67,12 +74,12 @@ export class Sequence extends BaseTween implements ISequence, ITicker {
 		if (!this.currentTween) {
 			this.currentTween = this.tweens[this.sequenceIndex];
 			if (this.currentTween) {
-				for (let tween of this.currentTween) {
+				for (let i = 0; i < this.currentTween.length; i++) {
+					let tween = this.currentTween[i];
 					tween.Start();
 				}
-				for (let i = 0; i < this.eventStepStart.length; i++) {
-					this.eventStepStart[i](this.currentTween[0]);
-				}
+
+				this.StepStarted(this.currentTween[0]);
 			}
 		}
 
@@ -95,9 +102,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker {
 			let first = this.currentTween[0];
 			let remainsDt = first.Elapsed - first.Duration;
 
-			for (let i = 0; i < this.eventStepEnd.length; i++) {
-				this.eventStepEnd[i](this.currentTween[0]);
-			}
+			this.StepEnded(this.currentTween[0]);
 			this.currentTween = undefined;
 			this.sequenceIndex++;
 
@@ -114,6 +119,26 @@ export class Sequence extends BaseTween implements ISequence, ITicker {
 				this.Complete();
 			} else {
 				this.ResetAndStart();
+			}
+		}
+	}
+
+	private StepStarted(tween: (ITween | IPlayable)) {
+		for (let i = 0; i < this.eventStepStart.length; i++) {
+			try {
+				this.eventStepStart[i](tween);
+			} catch (e) {
+				console.warn(e);
+			}
+		}
+	}
+
+	private StepEnded(tween: (ITween | IPlayable)) {
+		for (let i = 0; i < this.eventStepEnd.length; i++) {
+			try {
+				this.eventStepEnd[i](tween);
+			} catch (e) {
+				console.warn(e);
 			}
 		}
 	}
@@ -163,8 +188,10 @@ export class Sequence extends BaseTween implements ISequence, ITicker {
 			console.warn('cant kill this tween, already in state', this.state);
 			return;
 		}
-		for (let tweenArray of this.tweens) {
-			for (let tween of tweenArray) {
+		for (let i = 0; i < this.tweens.length; i++) {
+			let tweenArray = this.tweens[i];
+			for (let j = 0; j < tweenArray.length; j++) {
+				let tween = tweenArray[j];
 				if (tween.IsKilled() || tween.IsCompleted()) {
 					continue;
 				}

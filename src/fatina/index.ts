@@ -6,21 +6,35 @@ import { ITicker } from './core/interfaces/ITicker';
 import { Pooling } from './pooling';
 import { TweenType } from './core/enum/tweenType';
 
-let requestFrame: any = window.requestAnimationFrame || (window as any).mozRequestAnimationFrame || window.webkitRequestAnimationFrame || (window as any).msRequestAnimationFrame;
-let cancelFrame = window.cancelAnimationFrame || (window as any).mozCancelAnimationFrame;
-
-function updateLoop(timestamp: number) {
-	let dt = timestamp - time;
-	Update(dt);
-	time = timestamp;
-	lastFrame = requestFrame(() => updateLoop);
+let requestFrame: any;
+let cancelFrame: any;
+if (typeof(window) !== 'undefined') {
+	requestFrame = window.requestAnimationFrame || (window as any).mozRequestAnimationFrame || window.webkitRequestAnimationFrame || (window as any).msRequestAnimationFrame;
+	cancelFrame = window.cancelAnimationFrame || (window as any).mozCancelAnimationFrame;
 }
 
-let tickerManager: ticker | undefined;
+function updateLoop(timestamp: number) {
+	let dt = timestamp - lastTime;
+	if (isFirstUpdate) {
+		dt = 1;
+		isFirstUpdate = false;
+	}
+	Update(dt);
+	lastTime = timestamp;
+	lastFrame = requestFrame(updateLoop);
+}
+
+let tickerManager: ticker;
 let pooling: Pooling;
 let initialized = false;
+let isFirstUpdate = true;
 let lastFrame: any;
-let time = 0;
+let lastTime = 0;
+
+export let time = 0;
+export function Elapsed() {
+	return tickerManager.Elapsed;
+}
 
 export function Init(disableAutoTick?: boolean): boolean {
 	if (initialized) {
@@ -32,20 +46,31 @@ export function Init(disableAutoTick?: boolean): boolean {
 		tickerManager.Start();
 	}
 
-	if (!disableAutoTick) {
+	if (typeof(window) !== 'undefined' && !disableAutoTick) {
 		lastFrame = requestFrame(updateLoop);
 	}
 
-	pooling = new Pooling(2000);
+	pooling = new Pooling(1000);
 
 	initialized = true;
 	return true;
 }
 
+export function SetTimescale(scale: number): void {
+	tickerManager.SetTimescale(scale);
+}
+
+export function Pause(): void {
+	tickerManager.Pause();
+}
+
+export function Resume(): void {
+	tickerManager.Resume();
+}
+
 export function Destroy() {
 	if (tickerManager) {
 		tickerManager.Kill();
-		tickerManager = undefined;
 	}
 
 	if (lastFrame) {
@@ -63,8 +88,10 @@ export function Update(timestamp: number): any {
 	let toClean = tickerManager.GetCleanTweens();
 
 	tickerManager.Tick(timestamp);
+	time += timestamp;
 
-	for (let clean of toClean) {
+	for (let i = 0; i < toClean.length; i++) {
+		let clean = toClean[i];
 		if (clean.Type === TweenType.Tween) {
 			pooling.PushTween(clean as ITween);
 		} else if (clean.Type === TweenType.Sequence) {

@@ -4,6 +4,7 @@ import { ISequence } from './core/interfaces/ISequence';
 import { Sequence } from './tweens/sequence';
 
 export class Pooling {
+	private targetSize: number;
 	private tweens: ITween[] = [];
 	private sequences: ISequence[] = [];
 	private created = 0;
@@ -11,6 +12,7 @@ export class Pooling {
 	private pushed = 0;
 
 	constructor(size: number) {
+		this.targetSize = size * 2;
 		for (let i = 0; i < size; i ++) {
 			this.CreateTween();
 		}
@@ -29,7 +31,6 @@ export class Pooling {
 			this.tweens.push(this.CreateTween());
 		}
 		this.poped ++;
-		// console.log('[Pooling] create:', this.created, ' | pop:', this.poped, ' | push:', this.pushed);
 		return this.tweens.pop() as ITween;
 	}
 
@@ -37,6 +38,11 @@ export class Pooling {
 		if (tween === undefined) {
 			return;
 		}
+
+		if (this.tweens.length > this.targetSize) {
+			return;
+		}
+
 		tween.Default();
 		this.pushed ++;
 		this.tweens.push(tween);
@@ -52,7 +58,6 @@ export class Pooling {
 			this.sequences.push(this.CreateSequence());
 		}
 		this.poped ++;
-		// console.log('[Pooling] create:', this.created, ' | pop:', this.poped, ' | push:', this.pushed);
 		return this.sequences.pop() as ISequence;
 	}
 
@@ -60,6 +65,11 @@ export class Pooling {
 		if (sequence === undefined) {
 			return;
 		}
+
+		if (this.tweens.length > this.targetSize) {
+			return;
+		}
+
 		sequence.Default();
 		this.pushed ++;
 		this.sequences.push(sequence);

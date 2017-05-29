@@ -3,8 +3,9 @@ import { State } from './core/enum/state';
 import { TweenType } from './core/enum/tweenType';
 import { ITween } from './core/interfaces/ITween';
 import { ISequence } from './core/interfaces/ISequence';
+import { EventList } from './core/eventList';
 
-export class Ticker implements ITicker {
+export class Ticker extends EventList implements ITicker {
 	public get Type() {
 		return TweenType.Ticker;
 	}
@@ -12,13 +13,18 @@ export class Ticker implements ITicker {
 	private state = State.Idle;
 	private timescale = 1;
 	private elapsed = 0;
-	private eventTick: { (dt: number): void }[] = [];
+	private eventToAdd: { (dt: number): void }[] = [];
+	private eventToRemove: { (dt: number): void }[] = [];
 	private cleanTweens: (ITween | ISequence)[] = [];
 
 	public GetCleanTweens(): (ITween | ISequence)[] {
 		let val = this.cleanTweens;
 		this.cleanTweens = [];
 		return val;
+	}
+
+	public SetTimescale(scale: number): void {
+		this.timescale = scale;
 	}
 
 	public get Elapsed(): number {
@@ -30,13 +36,26 @@ export class Ticker implements ITicker {
 	}
 
 	public AddTickListener(cb: (dt: number) => void): void {
-		this.eventTick.unshift(cb);
+		this.eventToAdd.push(cb);
 	}
 
 	public RemoveTickListener(cb: (dt: number) => void): void {
-		let index = this.eventTick.indexOf(cb);
-		if (index !== -1) {
-			this.eventTick.splice(index, 1);
+		this.eventToRemove.push(cb);
+	}
+
+	private UpdateListener() {
+		if (this.eventToAdd.length > 0) {
+			for (let i = 0; i < this.eventToAdd.length; i++) {
+				this.Add(this.eventToAdd[i]);
+			}
+			this.eventToAdd = [];
+		}
+
+		if (this.eventToRemove.length > 0) {
+			for (let i = 0; i < this.eventToRemove.length; i++) {
+				this.Remove(this.eventToRemove[i]);
+			}
+			this.eventToRemove = [];
 		}
 	}
 
@@ -45,11 +64,15 @@ export class Ticker implements ITicker {
 			return;
 		}
 
+		this.UpdateListener();
+
 		let localDt = dt * this.timescale;
-		for (let i = this.eventTick.length - 1; i >= 0; i--) {
-			this.eventTick[i](localDt);
+		for (let tick: any = this.first; tick; tick = tick.node_next) {
+			tick(localDt);
 		}
 		this.elapsed += localDt;
+
+		this.UpdateListener();
 	}
 
 	public IsCompleted(): boolean {
@@ -97,7 +120,8 @@ export class Ticker implements ITicker {
 	}
 
 	public Clean(data: (ITween | ISequence)[]): void {
-		for (let obj of data) {
+		for (let i = 0; i < data.length; i++) {
+			let obj = data[i];
 			this.cleanTweens.push(obj);
 		}
 	}

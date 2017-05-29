@@ -1,5 +1,6 @@
 
 
+    private targetSize;
     private tweens;
     private sequences;
     private created;
@@ -18,13 +19,16 @@
     private state;
     private timescale;
     private elapsed;
-    private eventTick;
+    private eventToAdd;
+    private eventToRemove;
     private cleanTweens;
     GetCleanTweens(): (ITween | ISequence)[];
+    SetTimescale(scale: number): void;
     readonly Elapsed: number;
     readonly Duration: number;
     AddTickListener(cb: (dt: number) => void): void;
     RemoveTickListener(cb: (dt: number) => void): void;
+    private UpdateListener();
     Tick(dt: number): void;
     IsCompleted(): boolean;
     IsRunning(): boolean;
@@ -35,6 +39,20 @@
     Kill(): void;
     Reset(): void;
     Clean(data: (ITween | ISequence)[]): void;
+}
+
+    first: INode | undefined;
+    last: INode | undefined;
+    length: number;
+    Add(obj: any): void;
+    Remove(obj: any): void;
+    Clear(): void;
+    private GetNode(obj, previous, next, list);
+}
+    node_valid: boolean;
+    node_previous: INode | undefined;
+    node_next: INode | undefined;
+    node_list: EventList;
 }
 
     Linear = 0,
@@ -105,6 +123,7 @@
 }
 
     Default(): void;
+    Start(): ISequence;
     SetParent(ticker: ITicker): ISequence;
     SetTimescale(scale: number): ISequence;
     SetLoop(loop: number): ISequence;
@@ -130,12 +149,13 @@
 
     Default(): void;
     Init(object: any, properties: string[]): void;
+    Start(): ITween;
     From(from: any): ITween;
     To(to: any, duration: number): ITween;
     SetParent(ticker: ITicker): ITween;
     SetLoop(loop: number): ITween;
     SetRelative(relative: boolean): ITween;
-    SetEasing(type: EasingType | string, args?: any): ITween;
+    SetEasing(type: EasingType | string): ITween;
     SetTimescale(scale: number): ITween;
     ToSequence(): ISequence;
     OnStart(cb: () => void): ITween;
@@ -211,12 +231,15 @@
     private cleanTweens;
     readonly CurrentTween: (ITween | IPlayable)[] | undefined;
     constructor();
+    Start(): ISequence;
     protected Validate(): void;
     protected LoopInit(): void;
     SetParent(ticker: ITicker): ISequence;
     AddTickListener(cb: (dt: number) => void): void;
     RemoveTickListener(cb: (dt: number) => void): void;
     private Tick(dt, remains?);
+    private StepStarted(tween);
+    private StepEnded(tween);
     Append(tween: ITween): ISequence;
     AppendCallback(cb: () => void): ISequence;
     AppendInterval(duration: number): ISequence;
@@ -247,6 +270,7 @@
     private ease;
     constructor(object: any, properties: string[]);
     Init(object: any, properties: string[]): void;
+    Start(): ITween;
     protected Validate(): void;
     protected LoopInit(): void;
     private Update(dt, progress);
@@ -259,8 +283,8 @@
     SetRelative(relative: boolean): ITween;
     SetTimescale(scale: number): ITween;
     ToSequence(): ISequence;
-    private Easing(type, args);
-    SetEasing(type: EasingType | string, args: any): ITween;
+    private Easing(type);
+    SetEasing(type: EasingType | string): ITween;
     OnStart(cb: () => void): ITween;
     OnUpdate(cb: (dt: number, progress: number) => void): ITween;
     OnKilled(cb: () => void): ITween;

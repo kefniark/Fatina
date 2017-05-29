@@ -161,27 +161,43 @@ export abstract class BaseTween {
 
 	protected Started() {
 		for (let i = 0; i < this.eventStart.length; i++) {
-			this.eventStart[i]();
+			try {
+				this.eventStart[i]();
+			} catch (e) {
+				console.warn(e);
+			}
 		}
 		this.eventStart = [];
 	}
 
 	protected Updated(dt: number, progress: number) {
 		for (let i = 0; i < this.eventUpdate.length; i++) {
-			this.eventUpdate[i](dt, progress);
+			try {
+				this.eventUpdate[i](dt, progress);
+			} catch (e) {
+				console.warn(e);
+			}
 		}
 	}
 
 	protected Killed() {
 		for (let i = 0; i < this.eventKill.length; i++) {
-			this.eventKill[i]();
+			try {
+				this.eventKill[i]();
+			} catch (e) {
+				console.warn(e);
+			}
 		}
 		this.eventKill = [];
 	}
 
 	protected Completed() {
 		for (let i = 0; i < this.eventComplete.length; i++) {
-			this.eventComplete[i]();
+			try {
+				this.eventComplete[i]();
+			} catch (e) {
+				console.warn(e);
+			}
 		}
 		this.eventComplete = [];
 	}

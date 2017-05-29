@@ -5,6 +5,7 @@ import { IPlayable } from './IPlayable';
 
 export interface ISequence extends IControl {
 	Default(): void;
+	Start(): ISequence;
 	SetParent(ticker: ITicker): ISequence;
 	SetTimescale(scale: number): ISequence;
 	SetLoop(loop: number): ISequence;

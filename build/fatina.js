@@ -58,21 +58,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var sequence_1 = __webpack_require__(1);
 	var ticker_1 = __webpack_require__(7);
-	var pooling_1 = __webpack_require__(8);
+	var pooling_1 = __webpack_require__(9);
 	var tweenType_1 = __webpack_require__(5);
-	var requestFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-	var cancelFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+	var requestFrame;
+	var cancelFrame;
+	if (typeof (window) !== 'undefined') {
+	    requestFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+	    cancelFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+	}
 	function updateLoop(timestamp) {
-	    var dt = timestamp - time;
+	    var dt = timestamp - lastTime;
+	    if (isFirstUpdate) {
+	        dt = 1;
+	        isFirstUpdate = false;
+	    }
 	    Update(dt);
-	    time = timestamp;
-	    lastFrame = requestFrame(function () { return updateLoop; });
+	    lastTime = timestamp;
+	    lastFrame = requestFrame(updateLoop);
 	}
 	var tickerManager;
 	var pooling;
 	var initialized = false;
+	var isFirstUpdate = true;
 	var lastFrame;
-	var time = 0;
+	var lastTime = 0;
+	exports.time = 0;
+	function Elapsed() {
+	    return tickerManager.Elapsed;
+	}
+	exports.Elapsed = Elapsed;
 	function Init(disableAutoTick) {
 	    if (initialized) {
 	        return false;
@@ -81,18 +95,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	        tickerManager = new ticker_1.Ticker();
 	        tickerManager.Start();
 	    }
-	    if (!disableAutoTick) {
+	    if (typeof (window) !== 'undefined' && !disableAutoTick) {
 	        lastFrame = requestFrame(updateLoop);
 	    }
-	    pooling = new pooling_1.Pooling(2000);
+	    pooling = new pooling_1.Pooling(1000);
 	    initialized = true;
 	    return true;
 	}
 	exports.Init = Init;
+	function SetTimescale(scale) {
+	    tickerManager.SetTimescale(scale);
+	}
+	exports.SetTimescale = SetTimescale;
+	function Pause() {
+	    tickerManager.Pause();
+	}
+	exports.Pause = Pause;
+	function Resume() {
+	    tickerManager.Resume();
+	}
+	exports.Resume = Resume;
 	function Destroy() {
 	    if (tickerManager) {
 	        tickerManager.Kill();
-	        tickerManager = undefined;
 	    }
 	    if (lastFrame) {
 	        cancelFrame(lastFrame);
@@ -106,8 +131,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    var toClean = tickerManager.GetCleanTweens();
 	    tickerManager.Tick(timestamp);
-	    for (var _i = 0, toClean_1 = toClean; _i < toClean_1.length; _i++) {
-	        var clean = toClean_1[_i];
+	    exports.time += timestamp;
+	    for (var i = 0; i < toClean.length; i++) {
+	        var clean = toClean[i];
 	        if (clean.Type === tweenType_1.TweenType.Tween) {
 	            pooling.PushTween(clean);
 	        }
@@ -188,14 +214,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        enumerable: true,
 	        configurable: true
 	    });
+	    Sequence.prototype.Start = function () {
+	        _super.prototype.Start.call(this);
+	        return this;
+	    };
 	    Sequence.prototype.Validate = function () {
 	    };
 	    Sequence.prototype.LoopInit = function () {
 	        this.sequenceIndex = 0;
-	        for (var _i = 0, _a = this.tweens; _i < _a.length; _i++) {
-	            var tweenArray = _a[_i];
-	            for (var _b = 0, tweenArray_1 = tweenArray; _b < tweenArray_1.length; _b++) {
-	                var tween = tweenArray_1[_b];
+	        for (var i = 0; i < this.tweens.length; i++) {
+	            var tweenArray = this.tweens[i];
+	            for (var j = 0; j < tweenArray.length; j++) {
+	                var tween = tweenArray[j];
 	                tween.Reset(true);
 	            }
 	        }
@@ -217,13 +247,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!this.currentTween) {
 	            this.currentTween = this.tweens[this.sequenceIndex];
 	            if (this.currentTween) {
-	                for (var _i = 0, _a = this.currentTween; _i < _a.length; _i++) {
-	                    var tween = _a[_i];
+	                for (var i = 0; i < this.currentTween.length; i++) {
+	                    var tween = this.currentTween[i];
 	                    tween.Start();
 	                }
-	                for (var i = 0; i < this.eventStepStart.length; i++) {
-	                    this.eventStepStart[i](this.currentTween[0]);
-	                }
+	                this.StepStarted(this.currentTween[0]);
 	            }
 	        }
 	        for (var i = this.eventTick.length - 1; i >= 0; i--) {
@@ -238,9 +266,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            var first = this.currentTween[0];
 	            var remainsDt = first.Elapsed - first.Duration;
-	            for (var i = 0; i < this.eventStepEnd.length; i++) {
-	                this.eventStepEnd[i](this.currentTween[0]);
-	            }
+	            this.StepEnded(this.currentTween[0]);
 	            this.currentTween = undefined;
 	            this.sequenceIndex++;
 	            if (remainsDt > 0.01) {
@@ -255,6 +281,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            else {
 	                this.ResetAndStart();
+	            }
+	        }
+	    };
+	    Sequence.prototype.StepStarted = function (tween) {
+	        for (var i = 0; i < this.eventStepStart.length; i++) {
+	            try {
+	                this.eventStepStart[i](tween);
+	            }
+	            catch (e) {
+	                console.warn(e);
+	            }
+	        }
+	    };
+	    Sequence.prototype.StepEnded = function (tween) {
+	        for (var i = 0; i < this.eventStepEnd.length; i++) {
+	            try {
+	                this.eventStepEnd[i](tween);
+	            }
+	            catch (e) {
+	                console.warn(e);
 	            }
 	        }
 	    };
@@ -297,10 +343,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            console.warn('cant kill this tween, already in state', this.state);
 	            return;
 	        }
-	        for (var _i = 0, _a = this.tweens; _i < _a.length; _i++) {
-	            var tweenArray = _a[_i];
-	            for (var _b = 0, tweenArray_2 = tweenArray; _b < tweenArray_2.length; _b++) {
-	                var tween = tweenArray_2[_b];
+	        for (var i = 0; i < this.tweens.length; i++) {
+	            var tweenArray = this.tweens[i];
+	            for (var j = 0; j < tweenArray.length; j++) {
+	                var tween = tweenArray[j];
 	                if (tween.IsKilled() || tween.IsCompleted()) {
 	                    continue;
 	                }
@@ -513,24 +559,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    BaseTween.prototype.Started = function () {
 	        for (var i = 0; i < this.eventStart.length; i++) {
-	            this.eventStart[i]();
+	            try {
+	                this.eventStart[i]();
+	            }
+	            catch (e) {
+	                console.warn(e);
+	            }
 	        }
 	        this.eventStart = [];
 	    };
 	    BaseTween.prototype.Updated = function (dt, progress) {
 	        for (var i = 0; i < this.eventUpdate.length; i++) {
-	            this.eventUpdate[i](dt, progress);
+	            try {
+	                this.eventUpdate[i](dt, progress);
+	            }
+	            catch (e) {
+	                console.warn(e);
+	            }
 	        }
 	    };
 	    BaseTween.prototype.Killed = function () {
 	        for (var i = 0; i < this.eventKill.length; i++) {
-	            this.eventKill[i]();
+	            try {
+	                this.eventKill[i]();
+	            }
+	            catch (e) {
+	                console.warn(e);
+	            }
 	        }
 	        this.eventKill = [];
 	    };
 	    BaseTween.prototype.Completed = function () {
 	        for (var i = 0; i < this.eventComplete.length; i++) {
-	            this.eventComplete[i]();
+	            try {
+	                this.eventComplete[i]();
+	            }
+	            catch (e) {
+	                console.warn(e);
+	            }
 	        }
 	        this.eventComplete = [];
 	    };
@@ -687,16 +753,31 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
+	var __extends = (this && this.__extends) || (function () {
+	    var extendStatics = Object.setPrototypeOf ||
+	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+	    return function (d, b) {
+	        extendStatics(d, b);
+	        function __() { this.constructor = d; }
+	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	    };
+	})();
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var state_1 = __webpack_require__(3);
 	var tweenType_1 = __webpack_require__(5);
-	var Ticker = (function () {
+	var eventList_1 = __webpack_require__(8);
+	var Ticker = (function (_super) {
+	    __extends(Ticker, _super);
 	    function Ticker() {
-	        this.state = state_1.State.Idle;
-	        this.timescale = 1;
-	        this.elapsed = 0;
-	        this.eventTick = [];
-	        this.cleanTweens = [];
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.state = state_1.State.Idle;
+	        _this.timescale = 1;
+	        _this.elapsed = 0;
+	        _this.eventToAdd = [];
+	        _this.eventToRemove = [];
+	        _this.cleanTweens = [];
+	        return _this;
 	    }
 	    Object.defineProperty(Ticker.prototype, "Type", {
 	        get: function () {
@@ -709,6 +790,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var val = this.cleanTweens;
 	        this.cleanTweens = [];
 	        return val;
+	    };
+	    Ticker.prototype.SetTimescale = function (scale) {
+	        this.timescale = scale;
 	    };
 	    Object.defineProperty(Ticker.prototype, "Elapsed", {
 	        get: function () {
@@ -725,23 +809,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	        configurable: true
 	    });
 	    Ticker.prototype.AddTickListener = function (cb) {
-	        this.eventTick.unshift(cb);
+	        this.eventToAdd.push(cb);
 	    };
 	    Ticker.prototype.RemoveTickListener = function (cb) {
-	        var index = this.eventTick.indexOf(cb);
-	        if (index !== -1) {
-	            this.eventTick.splice(index, 1);
+	        this.eventToRemove.push(cb);
+	    };
+	    Ticker.prototype.UpdateListener = function () {
+	        if (this.eventToAdd.length > 0) {
+	            for (var i = 0; i < this.eventToAdd.length; i++) {
+	                this.Add(this.eventToAdd[i]);
+	            }
+	            this.eventToAdd = [];
+	        }
+	        if (this.eventToRemove.length > 0) {
+	            for (var i = 0; i < this.eventToRemove.length; i++) {
+	                this.Remove(this.eventToRemove[i]);
+	            }
+	            this.eventToRemove = [];
 	        }
 	    };
 	    Ticker.prototype.Tick = function (dt) {
 	        if (this.state !== state_1.State.Run) {
 	            return;
 	        }
+	        this.UpdateListener();
 	        var localDt = dt * this.timescale;
-	        for (var i = this.eventTick.length - 1; i >= 0; i--) {
-	            this.eventTick[i](localDt);
+	        for (var tick = this.first; tick; tick = tick.node_next) {
+	            tick(localDt);
 	        }
 	        this.elapsed += localDt;
+	        this.UpdateListener();
 	    };
 	    Ticker.prototype.IsCompleted = function () {
 	        return this.state === state_1.State.Finished;
@@ -780,23 +877,101 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.state = state_1.State.Idle;
 	    };
 	    Ticker.prototype.Clean = function (data) {
-	        for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
-	            var obj = data_1[_i];
+	        for (var i = 0; i < data.length; i++) {
+	            var obj = data[i];
 	            this.cleanTweens.push(obj);
 	        }
 	    };
 	    return Ticker;
-	}());
+	}(eventList_1.EventList));
 	exports.Ticker = Ticker;
 
 
 /***/ }),
 /* 8 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var EventList = (function () {
+	    function EventList() {
+	        this.length = 0;
+	    }
+	    EventList.prototype.Add = function (obj) {
+	        var newNode = this.GetNode(obj, this.last, undefined, this);
+	        if (this.first === undefined) {
+	            this.first = newNode;
+	            this.last = newNode;
+	        }
+	        else if (this.last !== undefined) {
+	            this.last.node_next = newNode;
+	            this.last = newNode;
+	        }
+	        this.length += 1;
+	    };
+	    EventList.prototype.Remove = function (obj) {
+	        var node = obj;
+	        if (node === undefined) {
+	            console.log('Trying to remove an object which is not a node');
+	            return;
+	        }
+	        if (node.node_list !== this) {
+	            return;
+	        }
+	        if (node.node_next === undefined) {
+	            this.last = node.node_previous;
+	        }
+	        else {
+	            node.node_next.node_previous = node.node_previous;
+	        }
+	        if (node.node_previous === undefined) {
+	            this.first = node.node_next;
+	        }
+	        else {
+	            node.node_previous.node_next = node.node_next;
+	        }
+	        delete node.node_valid;
+	        delete node.node_previous;
+	        delete node.node_next;
+	        delete node.node_list;
+	        this.length -= 1;
+	    };
+	    EventList.prototype.Clear = function () {
+	        var node = this.first;
+	        while (node !== undefined) {
+	            var nextNode = node.node_next;
+	            delete node.node_valid;
+	            delete node.node_previous;
+	            delete node.node_next;
+	            delete node.node_list;
+	            node = nextNode;
+	        }
+	        this.first = undefined;
+	        this.last = undefined;
+	        this.length = 0;
+	    };
+	    EventList.prototype.GetNode = function (obj, previous, next, list) {
+	        var node = obj;
+	        if (!node.node_valid) {
+	            node.node_valid = true;
+	            node.node_previous = previous;
+	            node.node_next = next;
+	            node.node_list = list;
+	        }
+	        return node;
+	    };
+	    return EventList;
+	}());
+	exports.EventList = EventList;
+
+
+/***/ }),
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	Object.defineProperty(exports, "__esModule", { value: true });
-	var tween_1 = __webpack_require__(9);
+	var tween_1 = __webpack_require__(10);
 	var sequence_1 = __webpack_require__(1);
 	var Pooling = (function () {
 	    function Pooling(size) {
@@ -805,6 +980,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.created = 0;
 	        this.poped = 0;
 	        this.pushed = 0;
+	        this.targetSize = size * 2;
 	        for (var i = 0; i < size; i++) {
 	            this.CreateTween();
 	        }
@@ -827,6 +1003,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (tween === undefined) {
 	            return;
 	        }
+	        if (this.tweens.length > this.targetSize) {
+	            return;
+	        }
 	        tween.Default();
 	        this.pushed++;
 	        this.tweens.push(tween);
@@ -846,6 +1025,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (sequence === undefined) {
 	            return;
 	        }
+	        if (this.tweens.length > this.targetSize) {
+	            return;
+	        }
 	        sequence.Default();
 	        this.pushed++;
 	        this.sequences.push(sequence);
@@ -856,7 +1038,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -872,8 +1054,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var baseTween_1 = __webpack_require__(2);
-	var easingType_1 = __webpack_require__(10);
-	var easing_1 = __webpack_require__(11);
+	var easingType_1 = __webpack_require__(11);
+	var easing_1 = __webpack_require__(12);
 	var sequence_1 = __webpack_require__(1);
 	var tweenType_1 = __webpack_require__(5);
 	var Tween = (function (_super) {
@@ -911,12 +1093,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.object = object;
 	        this.properties = properties;
 	    };
+	    Tween.prototype.Start = function () {
+	        _super.prototype.Start.call(this);
+	        return this;
+	    };
 	    Tween.prototype.Validate = function () {
 	        if (!this.object) {
 	            throw new Error('Cant Tween a undefined object');
 	        }
-	        for (var _i = 0, _a = this.properties; _i < _a.length; _i++) {
-	            var prop = _a[_i];
+	        for (var i = 0; i < this.properties.length; i++) {
+	            var prop = this.properties[i];
 	            if (!(prop in this.object)) {
 	                throw new Error('Cant Tween an unknown property' + prop);
 	            }
@@ -929,20 +1115,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        if (!this.from) {
 	            this.from = {};
-	            for (var _b = 0, _c = this.properties; _b < _c.length; _b++) {
-	                var prop = _c[_b];
+	            for (var i = 0; i < this.properties.length; i++) {
+	                var prop = this.properties[i];
 	                this.from[prop] = this.object[prop];
 	            }
 	        }
 	        else {
-	            for (var _d = 0, _e = this.properties; _d < _e.length; _d++) {
-	                var prop = _e[_d];
+	            for (var i = 0; i < this.properties.length; i++) {
+	                var prop = this.properties[i];
 	                this.object[prop] = this.from[prop];
 	            }
 	        }
 	        if (this.relative) {
-	            for (var _f = 0, _g = this.properties; _f < _g.length; _f++) {
-	                var prop = _g[_f];
+	            for (var i = 0; i < this.properties.length; i++) {
+	                var prop = this.properties[i];
 	                this.to[prop] = this.object[prop] + this.to[prop];
 	            }
 	        }
@@ -950,16 +1136,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Tween.prototype.LoopInit = function () {
 	        this.elapsed = 0;
 	        if (this.from) {
-	            for (var _i = 0, _a = this.properties; _i < _a.length; _i++) {
-	                var prop = _a[_i];
+	            for (var i = 0; i < this.properties.length; i++) {
+	                var prop = this.properties[i];
 	                this.object[prop] = this.from[prop];
 	            }
 	        }
 	    };
 	    Tween.prototype.Update = function (dt, progress) {
 	        var val = this.ease(progress);
-	        for (var _i = 0, _a = this.properties; _i < _a.length; _i++) {
-	            var prop = _a[_i];
+	        for (var i = 0; i < this.properties.length; i++) {
+	            var prop = this.properties[i];
 	            this.object[prop] = this.from[prop] + (this.to[prop] - this.from[prop]) * val;
 	        }
 	        _super.prototype.Updated.call(this, dt, progress);
@@ -1010,7 +1196,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return new sequence_1.Sequence().SetParent(this.parent).Append(this);
 	    };
-	    Tween.prototype.Easing = function (type, args) {
+	    Tween.prototype.Easing = function (type) {
 	        var name = type;
 	        var isNumber = !isNaN(parseFloat(name));
 	        if (isNumber) {
@@ -1024,8 +1210,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        throw new Error('Unknown ease method ' + type);
 	    };
-	    Tween.prototype.SetEasing = function (type, args) {
-	        this.ease = this.Easing(type, args);
+	    Tween.prototype.SetEasing = function (type) {
+	        this.ease = this.Easing(type);
 	        return this;
 	    };
 	    Tween.prototype.OnStart = function (cb) {
@@ -1050,7 +1236,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -1092,12 +1278,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	Object.defineProperty(exports, "__esModule", { value: true });
-	var easingType_1 = __webpack_require__(10);
+	var easingType_1 = __webpack_require__(11);
 	var PI = Math.PI;
 	var PI_OVER_TWO = Math.PI / 2;
 	var BACK = 1.70158;

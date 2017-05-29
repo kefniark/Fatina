@@ -1,7 +1,7 @@
 import * as test from 'tape';
 import { easeNames, easeTypes } from '../src/fatina/easing/easing';
 
-test('Fatina -> Easing', function (t: any) {
+test('[Fatina.Easing]', function (t: any) {
 	for (let name in easeNames) {
 		if (!easeNames.hasOwnProperty(name)) {
 			continue;

@@ -3,7 +3,7 @@ import { Sequence } from '../src/fatina/tweens/sequence';
 import { Tween } from '../src/fatina/tweens/tween';
 import { Ticker } from '../src/fatina/ticker';
 
-test('Fatina -> Create a basic Sequence', function (t: any) {
+test('[Fatina.Sequence] Create a basic Sequence', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
@@ -76,7 +76,7 @@ test('Fatina -> Create a basic Sequence', function (t: any) {
 	t.end();
 });
 
-test('Fatina -> Test Lagging Tick', function (t: any) {
+test('[Fatina.Sequence] Test Lagging Tick', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
@@ -97,7 +97,7 @@ test('Fatina -> Test Lagging Tick', function (t: any) {
 	t.end();
 });
 
-test('Fatina -> Test Prepend', function (t: any) {
+test('[Fatina.Sequence] Test Prepend', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
@@ -127,7 +127,7 @@ test('Fatina -> Test Prepend', function (t: any) {
 	t.end();
 });
 
-test('Fatina -> Test Join', function (t: any) {
+test('[Fatina.Sequence] Test Join', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
@@ -159,7 +159,7 @@ test('Fatina -> Test Join', function (t: any) {
 	t.end();
 });
 
-test('Fatina -> Sequence loop', function (t: any) {
+test('[Fatina.Sequence] Sequence loop', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
@@ -195,11 +195,7 @@ test('Fatina -> Sequence loop', function (t: any) {
 	t.end();
 });
 
-test('Fatina -> Sequence of Sequence', function (t: any) {
-	t.end();
-});
-
-test('Fatina -> Sequence timescale & kill', function (t: any) {
+test('[Fatina.Sequence] Sequence timescale & kill', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();
 
@@ -221,5 +217,30 @@ test('Fatina -> Sequence timescale & kill', function (t: any) {
 	t.ok(tween.IsKilled(), 'check the tween is marked as killed');
 	t.equal(1, killed, 'check the onKilled event is emitted');
 
+	t.end();
+});
+
+test('[Fatina.Sequence] Test Sequence with broken callback', function (t: any) {
+	let ticker = new Ticker();
+	ticker.Start();
+
+	let obj = { x: 22 };
+	new Sequence()
+		.SetParent(ticker)
+		.Append(new Tween(obj, ['x']).SetParent(ticker).To({ x: 44}, 1))
+		.OnStepStart((step) => {
+			throw new Error('Test Random User Exception');
+		})
+		.OnStepEnd((step) => {
+			throw new Error('Test Random User Exception');
+		})
+		.Start();
+
+	ticker.Tick(2);
+	t.equal(44, obj.x, 'tween finished properly');
+	t.end();
+});
+
+test('[Fatina.Sequence] Sequence of Sequence', function (t: any) {
 	t.end();
 });

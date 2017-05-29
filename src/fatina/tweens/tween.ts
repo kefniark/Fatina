@@ -50,13 +50,19 @@ export class Tween extends BaseTween implements ITween {
 		this.properties = properties;
 	}
 
+	public Start(): ITween {
+		super.Start();
+		return this;
+	}
+
 	protected Validate() {
 		// Check object
 		if (!this.object) {
 			throw new Error('Cant Tween a undefined object');
 		}
 
-		for (let prop of this.properties) {
+		for (let i = 0; i < this.properties.length; i++) {
+			let prop = this.properties[i];
 			if (!(prop in this.object)) {
 				throw new Error('Cant Tween an unknown property' + prop);
 			}
@@ -74,18 +80,21 @@ export class Tween extends BaseTween implements ITween {
 		// From
 		if (!this.from) {
 			this.from = {};
-			for (let prop of this.properties) {
+			for (let i = 0; i < this.properties.length; i++) {
+				let prop = this.properties[i];
 				this.from[prop] = this.object[prop];
 			}
 		} else {
-			for (let prop of this.properties) {
+			for (let i = 0; i < this.properties.length; i++) {
+				let prop = this.properties[i];
 				this.object[prop] = this.from[prop];
 			}
 		}
 
 		// Relative
 		if (this.relative) {
-			for (let prop of this.properties) {
+			for (let i = 0; i < this.properties.length; i++) {
+				let prop = this.properties[i];
 				this.to[prop] = this.object[prop] + this.to[prop];
 			}
 		}
@@ -95,7 +104,8 @@ export class Tween extends BaseTween implements ITween {
 		this.elapsed = 0;
 
 		if (this.from) {
-			for (let prop of this.properties) {
+			for (let i = 0; i < this.properties.length; i++) {
+				let prop = this.properties[i];
 				this.object[prop] = this.from[prop];
 			}
 		}
@@ -103,7 +113,8 @@ export class Tween extends BaseTween implements ITween {
 
 	private Update(dt: number, progress: number) {
 		let val = this.ease(progress);
-		for (let prop of this.properties) {
+		for (let i = 0; i < this.properties.length; i++) {
+			let prop = this.properties[i];
 			this.object[prop] = this.from[prop] + (this.to[prop] - this.from[prop]) * val;
 		}
 		super.Updated(dt, progress);
@@ -164,7 +175,7 @@ export class Tween extends BaseTween implements ITween {
 		return new Sequence().SetParent(this.parent).Append(this);
 	}
 
-	private Easing(type: EasingType | string, args: any): (t: number) => number {
+	private Easing(type: EasingType | string): (t: number) => number {
 		let name = type as string;
 		let isNumber = !isNaN(parseFloat(name));
 
@@ -182,8 +193,8 @@ export class Tween extends BaseTween implements ITween {
 		throw new Error('Unknown ease method ' + type);
 	}
 
-	public SetEasing(type: EasingType | string, args: any): ITween {
-		this.ease = this.Easing(type, args)
+	public SetEasing(type: EasingType | string): ITween {
+		this.ease = this.Easing(type)
 		return this;
 	}
 
