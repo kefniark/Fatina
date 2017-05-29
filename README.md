@@ -3,9 +3,9 @@
 # Fatina
 Small & Light tweening library for web / games
 
-**Website**: [Here](https://kefniark.github.io/Fatina/)
-**API**: [Here](https://kefniark.github.io/Fatina/basics/api/)
-**Samples**: [Here](https://kefniark.github.io/Fatina/samples/generic/)
+* **Website**: [Here](https://kefniark.github.io/Fatina/)
+* **API**: [Here](https://kefniark.github.io/Fatina/basics/api/)
+* **Samples**: [Here](https://kefniark.github.io/Fatina/samples/generic/)
 
 ## Description
 A comprehensive and easy to use animation library for Typescript/Javascript
