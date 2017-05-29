@@ -16,7 +16,7 @@
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/samples/generic/</guid>
-      <description>.imgTest { position: relative; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html elements but you can tween almost any kind of object and data. PlayAll 
+      <description>.imgTest { position: relative; margin: 0; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html elements but you can tween almost any kind of object and data. PlayAll 
 Linear tween  function sample1() { var elem = document.getElementById(&#34;sample1&#34;); var obj = { x: 0, y: 0 }; Fatina.Tween(obj, [&#39;x&#39;]) .From({x: 0}) .To({x: 500}, 2500) .</description>
     </item>
     

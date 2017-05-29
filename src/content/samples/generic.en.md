@@ -9,6 +9,7 @@ weight = 1
 <style>
 .imgTest {
     position: relative;
+    margin: 0;
 }
 
 hr {
