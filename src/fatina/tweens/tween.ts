@@ -135,7 +135,7 @@ export class Tween extends BaseTween implements ITween {
 	public Default() {
 		super.Default();
 		this.object = undefined;
-		this.properties = [];
+		this.properties.length = 0;
 		this.from = undefined;
 		this.to = undefined;
 		this.relative = false;

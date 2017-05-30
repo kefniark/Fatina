@@ -136,10 +136,10 @@ export abstract class BaseTween {
 		this.duration = 0;
 		this.timescale = 1;
 		this.loop = 1;
-		this.eventStart = [];
-		this.eventUpdate = [];
-		this.eventKill = [];
-		this.eventComplete = [];
+		this.eventStart.length = 0;
+		this.eventUpdate.length = 0;
+		this.eventKill.length = 0;
+		this.eventComplete.length = 0;
 		this.firstStart = true;
 		this.state = State.Idle;
 	}
@@ -167,7 +167,7 @@ export abstract class BaseTween {
 				console.warn(e);
 			}
 		}
-		this.eventStart = [];
+		this.eventStart.length = 0;
 	}
 
 	protected Updated(dt: number, progress: number) {
@@ -188,7 +188,7 @@ export abstract class BaseTween {
 				console.warn(e);
 			}
 		}
-		this.eventKill = [];
+		this.eventKill.length = 0;
 	}
 
 	protected Completed() {
@@ -199,7 +199,7 @@ export abstract class BaseTween {
 				console.warn(e);
 			}
 		}
-		this.eventComplete = [];
+		this.eventComplete.length = 0;
 	}
 
 	public OnStart(cb: () => void): void {

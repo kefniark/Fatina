@@ -222,13 +222,13 @@ export class Sequence extends BaseTween implements ISequence, ITicker {
 
 	public Default() {
 		super.Default();
-		this.eventTick = [];
-		this.eventStepStart = [];
-		this.eventStepEnd = [];
-		this.tweens = [];
+		this.eventTick.length = 0;
+		this.eventStepStart.length = 0;
+		this.eventStepEnd.length = 0;
+		this.tweens.length = 0;
 		this.currentTween = undefined;
 		this.sequenceIndex = 0;
-		this.cleanTweens = [];
+		this.cleanTweens.length = 0;
 	}
 
 	public Cleanup() {

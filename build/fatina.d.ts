@@ -21,7 +21,9 @@
     private elapsed;
     private eventToAdd;
     private eventToRemove;
-    private cleanTweens;
+    private cleanUpdate;
+    private cleanTweens1;
+    private cleanTweens2;
     GetCleanTweens(): (ITween | ISequence)[];
     SetTimescale(scale: number): void;
     readonly Elapsed: number;
@@ -52,7 +54,7 @@
     node_valid: boolean;
     node_previous: INode | undefined;
     node_next: INode | undefined;
-    node_list: EventList;
+    node_list: EventList | undefined;
 }
 
     Linear = 0,

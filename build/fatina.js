@@ -373,13 +373,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    Sequence.prototype.Default = function () {
 	        _super.prototype.Default.call(this);
-	        this.eventTick = [];
-	        this.eventStepStart = [];
-	        this.eventStepEnd = [];
-	        this.tweens = [];
+	        this.eventTick.length = 0;
+	        this.eventStepStart.length = 0;
+	        this.eventStepEnd.length = 0;
+	        this.tweens.length = 0;
 	        this.currentTween = undefined;
 	        this.sequenceIndex = 0;
-	        this.cleanTweens = [];
+	        this.cleanTweens.length = 0;
 	    };
 	    Sequence.prototype.Cleanup = function () {
 	        if (!this.parent) {
@@ -538,10 +538,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.duration = 0;
 	        this.timescale = 1;
 	        this.loop = 1;
-	        this.eventStart = [];
-	        this.eventUpdate = [];
-	        this.eventKill = [];
-	        this.eventComplete = [];
+	        this.eventStart.length = 0;
+	        this.eventUpdate.length = 0;
+	        this.eventKill.length = 0;
+	        this.eventComplete.length = 0;
 	        this.firstStart = true;
 	        this.state = state_1.State.Idle;
 	    };
@@ -566,7 +566,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                console.warn(e);
 	            }
 	        }
-	        this.eventStart = [];
+	        this.eventStart.length = 0;
 	    };
 	    BaseTween.prototype.Updated = function (dt, progress) {
 	        for (var i = 0; i < this.eventUpdate.length; i++) {
@@ -587,7 +587,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                console.warn(e);
 	            }
 	        }
-	        this.eventKill = [];
+	        this.eventKill.length = 0;
 	    };
 	    BaseTween.prototype.Completed = function () {
 	        for (var i = 0; i < this.eventComplete.length; i++) {
@@ -598,7 +598,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                console.warn(e);
 	            }
 	        }
-	        this.eventComplete = [];
+	        this.eventComplete.length = 0;
 	    };
 	    BaseTween.prototype.OnStart = function (cb) {
 	        this.eventStart.push(cb);
@@ -776,7 +776,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.elapsed = 0;
 	        _this.eventToAdd = [];
 	        _this.eventToRemove = [];
-	        _this.cleanTweens = [];
+	        _this.cleanUpdate = 0;
+	        _this.cleanTweens1 = [];
+	        _this.cleanTweens2 = [];
 	        return _this;
 	    }
 	    Object.defineProperty(Ticker.prototype, "Type", {
@@ -787,9 +789,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        configurable: true
 	    });
 	    Ticker.prototype.GetCleanTweens = function () {
-	        var val = this.cleanTweens;
-	        this.cleanTweens = [];
-	        return val;
+	        if (this.cleanUpdate % 2 === 0) {
+	            this.cleanTweens2.length = 0;
+	            return this.cleanTweens1;
+	        }
+	        else {
+	            this.cleanTweens1.length = 0;
+	            return this.cleanTweens2;
+	        }
 	    };
 	    Ticker.prototype.SetTimescale = function (scale) {
 	        this.timescale = scale;
@@ -838,6 +845,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            tick(localDt);
 	        }
 	        this.elapsed += localDt;
+	        this.cleanUpdate += 1;
 	        this.UpdateListener();
 	    };
 	    Ticker.prototype.IsCompleted = function () {
@@ -879,7 +887,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Ticker.prototype.Clean = function (data) {
 	        for (var i = 0; i < data.length; i++) {
 	            var obj = data[i];
-	            this.cleanTweens.push(obj);
+	            if (this.cleanUpdate % 2 === 0) {
+	                this.cleanTweens2.push(obj);
+	            }
+	            else {
+	                this.cleanTweens1.push(obj);
+	            }
 	        }
 	    };
 	    return Ticker;
@@ -930,20 +943,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        else {
 	            node.node_previous.node_next = node.node_next;
 	        }
-	        delete node.node_valid;
-	        delete node.node_previous;
-	        delete node.node_next;
-	        delete node.node_list;
+	        node.node_valid = false;
+	        node.node_previous = undefined;
+	        node.node_next = undefined;
+	        node.node_list = undefined;
 	        this.length -= 1;
 	    };
 	    EventList.prototype.Clear = function () {
 	        var node = this.first;
 	        while (node !== undefined) {
 	            var nextNode = node.node_next;
-	            delete node.node_valid;
-	            delete node.node_previous;
-	            delete node.node_next;
-	            delete node.node_list;
+	            node.node_valid = false;
+	            node.node_previous = undefined;
+	            node.node_next = undefined;
+	            node.node_list = undefined;
 	            node = nextNode;
 	        }
 	        this.first = undefined;
@@ -1163,7 +1176,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Tween.prototype.Default = function () {
 	        _super.prototype.Default.call(this);
 	        this.object = undefined;
-	        this.properties = [];
+	        this.properties.length = 0;
 	        this.from = undefined;
 	        this.to = undefined;
 	        this.relative = false;

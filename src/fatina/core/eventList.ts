@@ -41,10 +41,10 @@ export abstract class EventList {
 		}
 
 		// Removing any existing reference from the node
-		delete node.node_valid;
-		delete node.node_previous;
-		delete node.node_next;
-		delete node.node_list;
+		node.node_valid = false;
+		node.node_previous = undefined;
+		node.node_next = undefined;
+		node.node_list = undefined;
 
 		// One less node in the list
 		this.length -= 1;
@@ -54,10 +54,10 @@ export abstract class EventList {
 		let node = this.first;
 		while (node !== undefined) {
 			let nextNode = node.node_next;
-			delete node.node_valid;
-			delete node.node_previous;
-			delete node.node_next;
-			delete node.node_list;
+			node.node_valid = false;
+			node.node_previous = undefined;
+			node.node_next = undefined;
+			node.node_list = undefined;
 			node = nextNode;
 		}
 
@@ -82,5 +82,5 @@ export interface INode {
 	node_valid: boolean;
 	node_previous: INode | undefined;
 	node_next: INode | undefined;
-	node_list: EventList;
+	node_list: EventList | undefined;
 }
