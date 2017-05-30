@@ -70,6 +70,12 @@
         
           
             <li>
+              <a title="Benchmark" href="/Fatina/basics/benchmark/">Benchmark</a>
+            </li>
+          
+        
+          
+            <li>
               <a title="About" href="/Fatina/basics/about/">About</a>
             </li>
           
@@ -130,8 +136,8 @@
               </p>
               <div class="post-entry">
                 
-                  <p>Coming soon &hellip;</p>
-
+                  Tween counter: ~0kRun AllWhat is happening here:Bellow, 4 scenario are tested over different configuration / libraries:1. Normal usage : 200 tween over 100 frames x 50 times2. Medium usage : 5000 tween over 100 frames x 10 times3. Heavy usage : 20000 tween over 100 frames x 5 times (to test many concurrent tween)4. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC)Each scenario run 5 times to have more accurate estimation.
+                  <a href="https://kefniark.github.io/Fatina/basics/benchmark/" class="post-read-more">[Read More]</a>
                 
               </div>
     
@@ -189,30 +195,25 @@ You can also reference a CDN-hosted version in your code, thanks to cdnjs. For e
 ```html
 <script src="..."></script>
 ```
-
-
-### More advanced users might want to...
-
-#### Use `npm`
-
-```bash
-npm install Fatina
-```
-
-Then include the Fatina module with the standard node.js `require`:
-
-```javascript
-var Fatina = require('Fatina');
-```
-
-And you can use Fatina as in all other samples :
-```javascript
-var t = new Fatina.Tween( /* etc */ );
-t.start();
-```
 -->
 
-<p>More coming soon &hellip;</p>
+<h3 id="more-advanced-users-might-want-to">More advanced users might want to&hellip;</h3>
+
+<h4 id="use-npm">Use <code>npm</code></h4>
+
+<pre><code class="language-bash">npm install Fatina
+</code></pre>
+
+<p>Then include the Fatina module with the standard node.js <code>require</code>:</p>
+
+<pre><code class="language-javascript">var Fatina = require('Fatina');
+</code></pre>
+
+<p>And you can use Fatina as in all other samples :</p>
+
+<pre><code class="language-javascript">var t = new Fatina.Tween( /* etc */ );
+t.start();
+</code></pre>
 
                 
               </div>

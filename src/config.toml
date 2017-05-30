@@ -86,10 +86,10 @@ theme = "beautifulhugo"
     url = "basics/api/"
     weight = 3
 
-#[[menu.main]]
-#    name = "Benchmark"
-#    url = "basics/benchmark/"
-#    weight = 4
+[[menu.main]]
+    name = "Benchmark"
+    url = "basics/benchmark/"
+    weight = 4
 
 [[menu.main]]
     name = "About"

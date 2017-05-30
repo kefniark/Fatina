@@ -1,0 +1,70 @@
+<p>
+    <div style="position: absolute; right: 5px;">
+        Tween counter: ~<small id="counter" style="font-weight: bold;">0</small>k
+    </div>
+
+    <button class="btn btn-success" onclick="RunAll();">Run All</button>
+</p>
+
+<div class="panel panel-default">
+    <div class="panel-heading">What is happening here:</div>
+    <div class="panel-body">
+        Bellow, 4 scenario are tested over different configuration / libraries:
+        <ul>
+            <li><b>1. Normal usage</b> : 200 tween over 100 frames x 50 times</li>
+            <li><b>2. Medium usage</b> : 5000 tween over 100 frames x 10 times</li>
+            <li><b>3. Heavy usage</b> : 20000 tween over 100 frames x 5 times (to test many concurrent tween)</li>
+            <li><b>4. Long duration usage</b> : 1000 tween over 500 frames x 100 times (to test long term usage and GC)</li>
+        </ul>
+        Each scenario run 5 times to have more accurate estimation.<br><br>
+
+        Those 4 libraries (Fatina, Tina.js, Tween.js and TweenJS) all perform well under normal usage. This page is creating millions of tweens, this is definitely not a normal usage ...<br/>
+        results are just here to get an estimation
+    </div>
+</div>
+
+<br/>
+
+<h3>Results:</h3>
+
+<h4>Normal tweens</h4>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th width="20%">#</th>
+            <th width="20%">Fatina</th>
+            <th width="20%">TINA.js</th>
+            <th width="20%">Tween.js</th>
+            <th width="20%">TweenJS</th>
+        </tr>
+        <tr>
+            <th>Scenario 1</th>
+            <td><div class="testresult fatina1"></div></td>
+            <td><div class="testresult tina1"></div></td>
+            <td><div class="testresult tween1"></div></td>
+            <td><div class="testresult tweenjs1"></div></td>
+        </tr>
+        <tr>
+            <th>Scenario 2</th>
+            <td><div class="testresult fatina2"></div></td>
+            <td><div class="testresult tina2"></div></td>
+            <td><div class="testresult tween2"></div></td>
+            <td><div class="testresult tweenjs2"></div></td>
+        </tr>
+        <tr>
+            <th>Scenario 3</th>
+            <td><div class="testresult fatina3"></div></td>
+            <td><div class="testresult tina3"></div></td>
+            <td><div class="testresult tween3"></div></td>
+            <td><div class="testresult tweenjs3"></div></td>
+        </tr>
+        <tr>
+            <th>Scenario 4</th>
+            <td><div class="testresult fatina4"></div></td>
+            <td><div class="testresult tina4"></div></td>
+            <td><div class="testresult tween4"></div></td>
+            <td><div class="testresult tweenjs4"></div></td>
+        </tr>
+    </table>
+</div>
+<small>* smaller is better</small>

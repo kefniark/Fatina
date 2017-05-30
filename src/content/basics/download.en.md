@@ -19,7 +19,7 @@ You can also reference a CDN-hosted version in your code, thanks to cdnjs. For e
 ```html
 <script src="..."></script>
 ```
-
+-->
 
 ### More advanced users might want to...
 
@@ -40,6 +40,3 @@ And you can use Fatina as in all other samples :
 var t = new Fatina.Tween( /* etc */ );
 t.start();
 ```
--->
-
-More coming soon ...

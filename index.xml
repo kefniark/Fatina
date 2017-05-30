@@ -17,7 +17,7 @@
       
       <guid>https://kefniark.github.io/Fatina/samples/generic/</guid>
       <description>.imgTest { position: relative; margin: 0; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html elements but you can tween almost any kind of object and data. PlayAll 
-Linear tween  function sample1() { var elem = document.getElementById(&#34;sample1&#34;); var obj = { x: 0, y: 0 }; Fatina.Tween(obj, [&#39;x&#39;]) .From({x: 0}) .To({x: 500}, 2500) .</description>
+Linear tween function sample1() {var elem = document.getElementById(&#34;sample1&#34;);var obj = { x: 0, y: 0 };Fatina.Tween(obj, [&#39;x&#39;]).From({x: 0}).To({x: 500}, 2500).</description>
     </item>
     
     <item>
@@ -26,7 +26,7 @@ Linear tween  function sample1() { var elem = document.getElementById(&#34;sampl
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/basics/benchmark/</guid>
-      <description>Coming soon &amp;hellip;</description>
+      <description>Tween counter: ~0kRun AllWhat is happening here:Bellow, 4 scenario are tested over different configuration / libraries:1. Normal usage : 200 tween over 100 frames x 50 times2. Medium usage : 5000 tween over 100 frames x 10 times3. Heavy usage : 20000 tween over 100 frames x 5 times (to test many concurrent tween)4. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC)Each scenario run 5 times to have more accurate estimation.</description>
     </item>
     
     <item>
@@ -73,8 +73,10 @@ Fatina  Init(): void This method has to be called once to initialize fatina Paus
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/basics/download/</guid>
-      <description>Installation Download the library and include it in your code:
-&amp;lt;script src=&amp;quot;fatina.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;   ``` ### More advanced users might want to... #### Use `npm` ```bash npm install Fatina ``` Then include the Fatina module with the standard node.js `require`: ```javascript var Fatina = require(&#39;Fatina&#39;); ``` And you can use Fatina as in all other samples : ```javascript var t = new Fatina.Tween( /* etc */ ); t.start(); ``` -- More coming soon &amp;hellip;</description>
+      <description> Installation Download the library and include it in your code:
+&amp;lt;script src=&amp;quot;fatina.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;   ``` -- More advanced users might want to&amp;hellip; Use npm npm install Fatina  Then include the Fatina module with the standard node.js require:
+var Fatina = require(&#39;Fatina&#39;);  And you can use Fatina as in all other samples :
+var t = new Fatina.Tween( /* etc */ ); t.start();  </description>
     </item>
     
     <item>
