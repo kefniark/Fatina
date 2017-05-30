@@ -1,0 +1,50 @@
+<div id="canvas3"></div>
+<script>
+    var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0xFFFFFF});
+    document.getElementById('canvas3').appendChild(app.view);
+    let cooldown = 0;
+
+    // Listen for animate update
+    app.ticker.add(function(delta) {
+        cooldown -= delta;
+        if (cooldown < 0) {
+            SpawnBall(Math.random() * 0.4 + 0.8, Math.random() * 0.4 + 0.8);
+            cooldown = 10 + Math.random() * 20;
+        }
+    });
+
+    function SpawnBall(xSpeed, yRebounce) {
+        let ball = AddSprite('/Fatina/pixi/Soccer-Ball.png', app.stage, app.renderer.width - 50, 50, 0.1);
+
+        // Fadein
+        Fatina.Tween(ball, ['alpha']).From({ alpha: 0 }).To({ alpha: 1 }, 450).SetEasing('outSine').Start();
+
+        // Move horizontaly
+        Fatina.Tween(ball, ['x']).To({ x: - 100}, 5000 / xSpeed).Start();
+        Fatina.Tween(ball, ['rotation']).To({ rotation: -25 }, 5000).Start();
+
+        let sequence = Fatina.Sequence();
+        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: app.renderer.height - 50}, 800).SetEasing('inCirc'));
+        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: 100 / yRebounce }, 800).SetEasing('outCirc'));
+        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: app.renderer.height - 50}, 800).SetEasing('inCirc'));
+        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: 150 / yRebounce }, 800).SetEasing('outCirc'));
+        sequence.AppendCallback(() => Fatina.Tween(ball, ['alpha']).To({ alpha: 0 }, 250).SetEasing('inSine').Start());
+        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: app.renderer.height - 50}, 800).SetEasing('inCirc'));
+        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: 200 / yRebounce }, 800).SetEasing('outCirc'));
+        sequence.AppendInterval(1500);
+        sequence.OnComplete(() => ball.destroy());
+        sequence.Start();
+    }
+
+    function AddSprite(path, container, x, y, scale) {
+            var img = PIXI.Sprite.fromImage(path);
+            img.alpha = 0;
+            img.anchor.set(0.5);
+            img.x = x;
+            img.y = y;
+            img.scale.x = scale;
+            img.scale.y = scale;
+            container.addChild(img);
+            return img;
+    }
+</script>

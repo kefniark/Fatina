@@ -8,9 +8,12 @@
   <title>Pixi.js Tweening</title>
   <meta property="og:title" content="Pixi.js Tweening" />
   <meta name="twitter:title" content="Pixi.js Tweening" />
-  <meta name="description" content="Lorem Ipsum">
-  <meta property="og:description" content="Lorem Ipsum">
-  <meta name="twitter:description" content="Lorem Ipsum">
+  <meta name="description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
+Unity Chan GO!!! Parallax   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb}); document.getElementById(&#39;canvas1&#39;).appendChild(app.view); // Create background with parallax CreateBackgrounds(); // Create unity chan let textures = LoadUnityChanTextures(); var unitychan = new PIXI.Sprite(textures[0]); unitychan.anchor.set(0.5); unitychan.scale.x = 1.5; unitychan.scale.y = 1.5; unitychan.x = app.renderer.width / 4; unitychan.y = app.renderer.height - 78; app.">
+  <meta property="og:description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
+Unity Chan GO!!! Parallax   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb}); document.getElementById(&#39;canvas1&#39;).appendChild(app.view); // Create background with parallax CreateBackgrounds(); // Create unity chan let textures = LoadUnityChanTextures(); var unitychan = new PIXI.Sprite(textures[0]); unitychan.anchor.set(0.5); unitychan.scale.x = 1.5; unitychan.scale.y = 1.5; unitychan.x = app.renderer.width / 4; unitychan.y = app.renderer.height - 78; app.">
+  <meta name="twitter:description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
+Unity Chan GO!!! Parallax   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb}); …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -60,8 +63,15 @@
           
         
           
-            <li>
-              <a title="Samples" href="/Fatina/samples/generic/">Samples</a>
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">Samples</a>
+              <div class="navlinks-children">
+                
+                  <a href="/Fatina/samples/generic/">Basics</a>
+                
+                  <a href="/Fatina/samples/pixi/">Pixi.js</a>
+                
+              </div>
             </li>
           
         
@@ -138,7 +148,216 @@
   <div class="row">
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
       <article role="main" class="blog-post">
-        <p>Lorem Ipsum</p>
+        <p><script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.2/pixi.min.js"></script>
+<script></p>
+
+<p></script>
+Few examples of <strong>Fatina</strong> working with <a href="http://www.pixijs.com/">Pixi.js</a> (<small>HTML 5 2D rendering engine</small>)</p>
+
+<h3>Unity Chan GO!!! <small>Parallax</small></h3>
+
+<div id="canvas1"></div>
+<script>
+    var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb});
+    document.getElementById('canvas1').appendChild(app.view);
+
+    // Create background with parallax
+    CreateBackgrounds();
+
+    // Create unity chan
+    let textures = LoadUnityChanTextures();
+
+    var unitychan = new PIXI.Sprite(textures[0]);
+    unitychan.anchor.set(0.5);
+    unitychan.scale.x = 1.5;
+    unitychan.scale.y = 1.5;
+    unitychan.x = app.renderer.width / 4;
+    unitychan.y = app.renderer.height - 78;
+    app.stage.addChild(unitychan);
+
+    // Tween to update unity chan sprite
+    Fatina.Tween({}, [])
+    .To({}, 1800)
+    .OnUpdate((dt, progress) => {
+        let index = Math.round(progress * (textures.length - 1));
+        unitychan.setTexture(textures[index]);
+    })
+    .SetLoop(-1)
+    .Start();
+
+    // Tween to update unity chan position
+    Fatina.Sequence()
+        .Append(Fatina.Tween(unitychan, ['x']).SetRelative(true).To({ x : -20}, 3000).SetEasing('outQuad'))
+        .Append(Fatina.Tween(unitychan, ['x']).SetRelative(true).To({ x : 40}, 3000).SetEasing('inOutQuad'))
+        .Append(Fatina.Tween(unitychan, ['x']).SetRelative(true).To({ x : -20}, 3000).SetEasing('inQuad'))
+        .SetLoop(-1)
+        .Start();
+
+
+    function CreateBackgrounds() {
+        // create a new Sprite from an image path
+        var layerSky = new PIXI.Container();
+        var layerMountain = new PIXI.Container();
+        var layerMountain2 = new PIXI.Container();
+        var layerFront = new PIXI.Container();
+
+        // create a new Sprite from an image path
+        AddSprite('/Fatina/pixi/clouds.png', layerSky, app.renderer.width / 2, app.renderer.height / 2 - 20, 0.5);
+        AddSprite('/Fatina/pixi/clouds.png', layerSky, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2 - 20, 0.5);
+        AddSprite('/Fatina/pixi/mountains.png', layerMountain2, app.renderer.width / 2, app.renderer.height / 2, 0.5);
+        AddSprite('/Fatina/pixi/mountains.png', layerMountain2, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2, 0.5);
+        AddSprite('/Fatina/pixi/mountains.png', layerMountain, app.renderer.width / 2, app.renderer.height / 2 + 30, 0.5);
+        AddSprite('/Fatina/pixi/mountains.png', layerMountain, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2 + 30, 0.5);
+        AddSprite('/Fatina/pixi/ground.png', layerFront, app.renderer.width / 2, app.renderer.height / 2, 0.5);
+        AddSprite('/Fatina/pixi/ground.png', layerFront, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2, 0.5);
+
+        // Move horizontaly each layer at different speed
+        AutoMove(layerSky, 90000);
+        AutoMove(layerMountain2, 35000);
+        AutoMove(layerMountain, 18000);
+        AutoMove(layerFront, 6000);
+
+        // Apply a vertical sin on the cloud
+        Fatina.Sequence()
+            .Append(Fatina.Tween(layerSky, ['y']).SetRelative(true).To({ y : -10}, 5000).SetEasing('outSine'))
+            .Append(Fatina.Tween(layerSky, ['y']).SetRelative(true).To({ y : 20}, 10000).SetEasing('inOutSine'))
+            .Append(Fatina.Tween(layerSky, ['y']).SetRelative(true).To({ y : -10}, 5000).SetEasing('inSine'))
+            .SetLoop(-1)
+            .Start();
+
+        // Add to stage
+        app.stage.addChild(layerSky);
+        app.stage.addChild(layerMountain2);
+        app.stage.addChild(layerMountain);
+        app.stage.addChild(layerFront);
+    }
+
+    function AddSprite(path, container, x, y, scale) {
+            var img = PIXI.Sprite.fromImage(path);
+            img.anchor.set(0.5);
+            img.x = x;
+            img.y = y;
+            img.scale.x = scale;
+            img.scale.y = scale;
+            container.addChild(img);
+            return img;
+    }
+
+    function AutoMove(container, duration) {
+        Fatina.Tween(container, ['x'])
+            .From({x: 0})
+            .To({x: -app.renderer.width }, duration)
+            .SetLoop(-1)
+            .Start();
+    }
+
+    function LoadUnityChanTextures() {
+        let textures = [];
+        for (let i = 1; i < 19; i++) {
+            textures.push(PIXI.Texture.fromImage('/Fatina/pixi/run/Unitychan_Run_' + i + '.png'));
+        }
+        return textures;
+    }
+</script>
+
+<p>A simple demo with unity-chan to show how to easily create a parallax effect using few tweens and without any math</p>
+
+<h3>Star <small>Looping Sequence</small></h3>
+
+<p><div id="canvas2"></div>
+<script>
+    var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000});
+    document.getElementById('canvas2').appendChild(app.view);
+
+    var star = new PIXI.Container();
+    star.x += 100;
+    star.y += 50;
+    app.stage.addChild(star);
+
+    // Create 250 sprites
+    for (let i = 0; i < 250; i++) {
+        let dx = Math.random() * 8 - 4;
+        let dy = Math.random() * 8 - 4;
+        let currentSprite = AddSprite('/Fatina/Yuko_Blink_2.png', star, 20 + dx, 80 + dy, 1);
+        let currentTimescale = Math.random() + 0.5;
+
+        var sequence = Fatina.Sequence().SetLoop(-1);
+        sequence.AppendInterval(Math.random() * 1000);
+        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 280 + dx, y: 80 + dy}, 1400).SetEasing('inOutSine').SetTimescale(currentTimescale));
+        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 50 + dx, y: 250 + dy}, 1400).SetEasing('inOutQuad').SetTimescale(currentTimescale));
+        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 150 + dx, y: 0 + dy}, 1400).SetEasing('inOutSine').SetTimescale(currentTimescale));
+        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 250 + dx, y: 250 + dy}, 1400).SetEasing('inOutQuad').SetTimescale(currentTimescale));
+        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 20 + dx, y: 80 + dy}, 1400).SetEasing('inOutQuad').SetTimescale(currentTimescale));
+        sequence.Start();
+    }
+
+    function AddSprite(path, container, x, y, scale) {
+        var img = PIXI.Sprite.fromImage(path);
+        img.anchor.set(0.5);
+        img.x = x;
+        img.y = y;
+        img.scale.x = scale;
+        img.scale.y = scale;
+        container.addChild(img);
+        return img;
+    }
+</script>
+</p>
+
+<p>A demonic star with 250 moving sprites along a defined path</p>
+
+<h3>Balls</h3>
+
+<p><div id="canvas3"></div>
+<script>
+    var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0xFFFFFF});
+    document.getElementById('canvas3').appendChild(app.view);
+    let cooldown = 0;
+
+    // Listen for animate update
+    app.ticker.add(function(delta) {
+        cooldown -= delta;
+        if (cooldown < 0) {
+            SpawnBall(Math.random() * 0.4 + 0.8, Math.random() * 0.4 + 0.8);
+            cooldown = 10 + Math.random() * 20;
+        }
+    });
+
+    function SpawnBall(xSpeed, yRebounce) {
+        let ball = AddSprite('/Fatina/pixi/Soccer-Ball.png', app.stage, app.renderer.width - 50, 50, 0.1);
+
+        // Fadein
+        Fatina.Tween(ball, ['alpha']).From({ alpha: 0 }).To({ alpha: 1 }, 450).SetEasing('outSine').Start();
+
+        // Move horizontaly
+        Fatina.Tween(ball, ['x']).To({ x: - 100}, 5000 / xSpeed).Start();
+        Fatina.Tween(ball, ['rotation']).To({ rotation: -25 }, 5000).Start();
+
+        let sequence = Fatina.Sequence();
+        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: app.renderer.height - 50}, 800).SetEasing('inCirc'));
+        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: 100 / yRebounce }, 800).SetEasing('outCirc'));
+        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: app.renderer.height - 50}, 800).SetEasing('inCirc'));
+        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: 150 / yRebounce }, 800).SetEasing('outCirc'));
+        sequence.AppendCallback(() => Fatina.Tween(ball, ['alpha']).To({ alpha: 0 }, 250).SetEasing('inSine').Start());
+        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: app.renderer.height - 50}, 800).SetEasing('inCirc'));
+        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: 200 / yRebounce }, 800).SetEasing('outCirc'));
+        sequence.AppendInterval(1500);
+        sequence.OnComplete(() => ball.destroy());
+        sequence.Start();
+    }
+
+    function AddSprite(path, container, x, y, scale) {
+            var img = PIXI.Sprite.fromImage(path);
+            img.alpha = 0;
+            img.anchor.set(0.5);
+            img.x = x;
+            img.y = y;
+            img.scale.x = scale;
+            img.scale.y = scale;
+            container.addChild(img);
+            return img;
+    }
+</script></p>
 
       </article>
 

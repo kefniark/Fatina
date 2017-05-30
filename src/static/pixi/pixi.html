@@ -1,0 +1,103 @@
+<div id="canvas1"></div>
+<script>
+    var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb});
+    document.getElementById('canvas1').appendChild(app.view);
+
+    // Create background with parallax
+    CreateBackgrounds();
+
+    // Create unity chan
+    let textures = LoadUnityChanTextures();
+
+    var unitychan = new PIXI.Sprite(textures[0]);
+    unitychan.anchor.set(0.5);
+    unitychan.scale.x = 1.5;
+    unitychan.scale.y = 1.5;
+    unitychan.x = app.renderer.width / 4;
+    unitychan.y = app.renderer.height - 78;
+    app.stage.addChild(unitychan);
+
+    // Tween to update unity chan sprite
+    Fatina.Tween({}, [])
+    .To({}, 1800)
+    .OnUpdate((dt, progress) => {
+        let index = Math.round(progress * (textures.length - 1));
+        unitychan.setTexture(textures[index]);
+    })
+    .SetLoop(-1)
+    .Start();
+
+    // Tween to update unity chan position
+    Fatina.Sequence()
+        .Append(Fatina.Tween(unitychan, ['x']).SetRelative(true).To({ x : -20}, 3000).SetEasing('outQuad'))
+        .Append(Fatina.Tween(unitychan, ['x']).SetRelative(true).To({ x : 40}, 3000).SetEasing('inOutQuad'))
+        .Append(Fatina.Tween(unitychan, ['x']).SetRelative(true).To({ x : -20}, 3000).SetEasing('inQuad'))
+        .SetLoop(-1)
+        .Start();
+
+
+    function CreateBackgrounds() {
+        // create a new Sprite from an image path
+        var layerSky = new PIXI.Container();
+        var layerMountain = new PIXI.Container();
+        var layerMountain2 = new PIXI.Container();
+        var layerFront = new PIXI.Container();
+
+        // create a new Sprite from an image path
+        AddSprite('/Fatina/pixi/clouds.png', layerSky, app.renderer.width / 2, app.renderer.height / 2 - 20, 0.5);
+        AddSprite('/Fatina/pixi/clouds.png', layerSky, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2 - 20, 0.5);
+        AddSprite('/Fatina/pixi/mountains.png', layerMountain2, app.renderer.width / 2, app.renderer.height / 2, 0.5);
+        AddSprite('/Fatina/pixi/mountains.png', layerMountain2, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2, 0.5);
+        AddSprite('/Fatina/pixi/mountains.png', layerMountain, app.renderer.width / 2, app.renderer.height / 2 + 30, 0.5);
+        AddSprite('/Fatina/pixi/mountains.png', layerMountain, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2 + 30, 0.5);
+        AddSprite('/Fatina/pixi/ground.png', layerFront, app.renderer.width / 2, app.renderer.height / 2, 0.5);
+        AddSprite('/Fatina/pixi/ground.png', layerFront, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2, 0.5);
+
+        // Move horizontaly each layer at different speed
+        AutoMove(layerSky, 90000);
+        AutoMove(layerMountain2, 35000);
+        AutoMove(layerMountain, 18000);
+        AutoMove(layerFront, 6000);
+
+        // Apply a vertical sin on the cloud
+        Fatina.Sequence()
+            .Append(Fatina.Tween(layerSky, ['y']).SetRelative(true).To({ y : -10}, 5000).SetEasing('outSine'))
+            .Append(Fatina.Tween(layerSky, ['y']).SetRelative(true).To({ y : 20}, 10000).SetEasing('inOutSine'))
+            .Append(Fatina.Tween(layerSky, ['y']).SetRelative(true).To({ y : -10}, 5000).SetEasing('inSine'))
+            .SetLoop(-1)
+            .Start();
+
+        // Add to stage
+        app.stage.addChild(layerSky);
+        app.stage.addChild(layerMountain2);
+        app.stage.addChild(layerMountain);
+        app.stage.addChild(layerFront);
+    }
+
+    function AddSprite(path, container, x, y, scale) {
+            var img = PIXI.Sprite.fromImage(path);
+            img.anchor.set(0.5);
+            img.x = x;
+            img.y = y;
+            img.scale.x = scale;
+            img.scale.y = scale;
+            container.addChild(img);
+            return img;
+    }
+
+    function AutoMove(container, duration) {
+        Fatina.Tween(container, ['x'])
+            .From({x: 0})
+            .To({x: -app.renderer.width }, duration)
+            .SetLoop(-1)
+            .Start();
+    }
+
+    function LoadUnityChanTextures() {
+        let textures = [];
+        for (let i = 1; i < 19; i++) {
+            textures.push(PIXI.Texture.fromImage('/Fatina/pixi/run/Unitychan_Run_' + i + '.png'));
+        }
+        return textures;
+    }
+</script>

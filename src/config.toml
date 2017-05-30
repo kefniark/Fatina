@@ -52,16 +52,16 @@ theme = "beautifulhugo"
     weight = 1
 
 [[menu.main]]
-#    identifier = "samples"
+    identifier = "samples"
     name = "Samples"
     url = "samples/generic/"
     weight = 2
 
-#[[menu.main]]
-#    parent = "samples"
-#    name = "Generic"
-#    url = "samples/generic/"
-#    weight = 1
+[[menu.main]]
+    parent = "samples"
+    name = "Basics"
+    url = "samples/generic/"
+    weight = 1
 
 #[[menu.main]]
 #    parent = "samples"
@@ -69,11 +69,11 @@ theme = "beautifulhugo"
 #    url = "samples/dom/"
 #    weight = 2
 
-#[[menu.main]]
-#    parent = "samples"
-#    name = "pixi.js"
-#    url = "samples/pixi/"
-#    weight = 3
+[[menu.main]]
+    parent = "samples"
+    name = "Pixi.js"
+    url = "samples/pixi/"
+    weight = 3
 
 #[[menu.main]]
 #    parent = "samples"
