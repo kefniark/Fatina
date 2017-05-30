@@ -75,8 +75,8 @@ Unity Chan GO!!! Parallax   var app = new PIXI.Application(1024 / 2, 768 / 2, {b
       
       <guid>https://kefniark.github.io/Fatina/basics/download/</guid>
       <description> Installation Download the library and include it in your code:
-&amp;lt;script src=&amp;quot;fatina.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;   ``` -- More advanced users might want to&amp;hellip; Use npm npm install Fatina  Then include the Fatina module with the standard node.js require:
-var Fatina = require(&#39;Fatina&#39;);  And you can use Fatina as in all other samples :
+&amp;lt;script src=&amp;quot;fatina.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;   ``` -- More advanced users might want to use npm npm install fatina  Then include the Fatina module with the standard node.js require:
+var Fatina = require(&#39;fatina&#39;);  And you can use Fatina as in all other samples :
 var t = new Fatina.Tween( /* etc */ ); t.start();  </description>
     </item>
     

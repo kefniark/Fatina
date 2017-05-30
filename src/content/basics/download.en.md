@@ -21,18 +21,16 @@ You can also reference a CDN-hosted version in your code, thanks to cdnjs. For e
 ```
 -->
 
-### More advanced users might want to...
-
-#### Use `npm`
+### More advanced users might want to use `npm`
 
 ```bash
-npm install Fatina
+npm install fatina
 ```
 
 Then include the Fatina module with the standard node.js `require`:
 
 ```javascript
-var Fatina = require('Fatina');
+var Fatina = require('fatina');
 ```
 
 And you can use Fatina as in all other samples :
