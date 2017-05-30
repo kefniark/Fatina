@@ -3,12 +3,27 @@
   "description": "Small & Light tweening library for web / games",
   "version": "0.0.1",
   "homepage": "https://kefniark.github.io/Fatina/",
-  "license": "MIT",
+  "main": "build/fatina.js",
   "types": "build/fatina.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:kefniark/Fatina.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kefniark/Fatina/issues"
+  },
+  "license": "MIT",
+  "keywords": [
+    "typescript",
+    "tween",
+    "interpolation",
+    "games"
+  ],
   "author": {
     "name": "Kevin destrem",
     "email": "kef1@free.fr"
   },
+  "dependencies": {},
   "scripts": {
     "all": "npm run deps && npm run build && npm run dev",
     "deps": "npm install .",
