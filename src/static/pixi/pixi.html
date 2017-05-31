@@ -44,14 +44,14 @@
         var layerFront = new PIXI.Container();
 
         // create a new Sprite from an image path
-        AddSprite('/Fatina/pixi/clouds.png', layerSky, app.renderer.width / 2, app.renderer.height / 2 - 20, 0.5);
-        AddSprite('/Fatina/pixi/clouds.png', layerSky, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2 - 20, 0.5);
-        AddSprite('/Fatina/pixi/mountains.png', layerMountain2, app.renderer.width / 2, app.renderer.height / 2, 0.5);
-        AddSprite('/Fatina/pixi/mountains.png', layerMountain2, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2, 0.5);
-        AddSprite('/Fatina/pixi/mountains.png', layerMountain, app.renderer.width / 2, app.renderer.height / 2 + 30, 0.5);
-        AddSprite('/Fatina/pixi/mountains.png', layerMountain, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2 + 30, 0.5);
-        AddSprite('/Fatina/pixi/ground.png', layerFront, app.renderer.width / 2, app.renderer.height / 2, 0.5);
-        AddSprite('/Fatina/pixi/ground.png', layerFront, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2, 0.5);
+        AddSprite('/Fatina/pixi/clouds.png', layerSky, app.renderer.width / 2, app.renderer.height / 2 - 20, 1);
+        AddSprite('/Fatina/pixi/clouds.png', layerSky, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2 - 20, 1);
+        AddSprite('/Fatina/pixi/mountains.png', layerMountain2, app.renderer.width / 2, app.renderer.height / 2, 1);
+        AddSprite('/Fatina/pixi/mountains.png', layerMountain2, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2, 1);
+        AddSprite('/Fatina/pixi/mountains.png', layerMountain, app.renderer.width / 2, app.renderer.height / 2 + 30, 1);
+        AddSprite('/Fatina/pixi/mountains.png', layerMountain, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2 + 30, 1);
+        AddSprite('/Fatina/pixi/ground.png', layerFront, app.renderer.width / 2, app.renderer.height / 2, 1);
+        AddSprite('/Fatina/pixi/ground.png', layerFront, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2, 1);
 
         // Move horizontaly each layer at different speed
         AutoMove(layerSky, 90000);
