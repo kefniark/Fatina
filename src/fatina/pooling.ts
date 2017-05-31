@@ -3,13 +3,16 @@ import { Tween } from './tweens/tween';
 import { ISequence } from './core/interfaces/ISequence';
 import { Sequence } from './tweens/sequence';
 
+/**
+ * This class is used to store unused tween and sequence to be able to reuse them later
+ *
+ * @export
+ * @class Pooling
+ */
 export class Pooling {
 	private targetSize: number;
-	private tweens: ITween[] = [];
-	private sequences: ISequence[] = [];
-	private created = 0;
-	private poped = 0;
-	private pushed = 0;
+	private tweenPool: ITween[] = [];
+	private sequencePool: ISequence[] = [];
 
 	constructor(size: number) {
 		this.targetSize = size * 2;
@@ -21,57 +24,97 @@ export class Pooling {
 		}
 	}
 
+	/**
+	 * Private method used to instantiate an empty tween
+	 *
+	 * @private
+	 * @returns {ITween}
+	 *
+	 * @memberOf Pooling
+	 */
 	private CreateTween(): ITween {
-		this.created ++;
 		return new Tween(null, []);
 	}
 
-	public PopTween(): ITween {
-		if (this.tweens.length === 0) {
-			this.tweens.push(this.CreateTween());
-		}
-		this.poped ++;
-		return this.tweens.pop() as ITween;
+	/**
+	 * Private method used to instantiate an empty sequence
+	 *
+	 * @private
+	 * @returns {ISequence}
+	 *
+	 * @memberOf Pooling
+	 */
+	private CreateSequence(): ISequence {
+		return new Sequence();
 	}
 
+	/**
+	 * Method used to get a tween (create it if necessary)
+	 *
+	 * @returns {ITween}
+	 *
+	 * @memberOf Pooling
+	 */
+	public PopTween(): ITween {
+		if (this.tweenPool.length === 0) {
+			this.tweenPool.push(this.CreateTween());
+		}
+		return this.tweenPool.pop() as ITween;
+	}
+
+	/**
+	 * Method used to get a sequence (create it if necessary)
+	 *
+	 * @returns {ISequence}
+	 *
+	 * @memberOf Pooling
+	 */
+	public PopSequence(): ISequence {
+		if (this.sequencePool.length === 0) {
+			this.sequencePool.push(this.CreateSequence());
+		}
+		return this.sequencePool.pop() as ISequence;
+	}
+
+	/**
+	 * Method used to get a used tween back in the pool (to reuse it later)
+	 *
+	 * @param {ITween} tween
+	 * @returns
+	 *
+	 * @memberOf Pooling
+	 */
 	public PushTween(tween: ITween) {
 		if (tween === undefined) {
 			return;
 		}
 
-		if (this.tweens.length > this.targetSize) {
+		if (this.tweenPool.length > this.targetSize) {
 			return;
 		}
 
 		tween.Default();
-		this.pushed ++;
-		this.tweens.push(tween);
+		this.tweenPool.push(tween);
 	}
 
-	private CreateSequence(): ISequence {
-		this.created ++;
-		return new Sequence();
-	}
-
-	public PopSequence(): ISequence {
-		if (this.sequences.length === 0) {
-			this.sequences.push(this.CreateSequence());
-		}
-		this.poped ++;
-		return this.sequences.pop() as ISequence;
-	}
-
+	/**
+	 * Method used to get a used sequence back in the pool (to reuse it later)
+	 *
+	 * @param {ISequence} sequence
+	 * @returns
+	 *
+	 * @memberOf Pooling
+	 */
 	public PushSequence(sequence: ISequence) {
 		if (sequence === undefined) {
 			return;
 		}
 
-		if (this.tweens.length > this.targetSize) {
+		if (this.tweenPool.length > this.targetSize) {
 			return;
 		}
 
 		sequence.Default();
-		this.pushed ++;
-		this.sequences.push(sequence);
+		this.sequencePool.push(sequence);
 	}
 }

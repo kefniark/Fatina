@@ -8,7 +8,7 @@ import { Delay } from './delay';
 import { TweenType } from '../core/enum/tweenType';
 import { State } from '../core/enum/state';
 
-export class Sequence extends BaseTween implements ISequence, ITicker {
+export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable {
 	public get Type() {
 		return TweenType.Sequence;
 	}
@@ -118,7 +118,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker {
 			if (this.loop === 0) {
 				this.Complete();
 			} else {
-				this.ResetAndStart();
+				this.ResetAndStart(false, dt);
 			}
 		}
 	}
@@ -143,7 +143,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker {
 		}
 	}
 
-	public Append(tween: ITween): ISequence {
+	public Append(tween: ITween | ISequence): ISequence {
 		tween.SetParent(this);
 		this.tweens.push([tween]);
 		return this;
@@ -163,7 +163,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker {
 		return this;
 	}
 
-	public Prepend(tween: ITween): ISequence {
+	public Prepend(tween: ITween | ISequence): ISequence {
 		tween.SetParent(this);
 		this.tweens.unshift([tween]);
 		return this;
@@ -181,6 +181,28 @@ export class Sequence extends BaseTween implements ISequence, ITicker {
 		playable.SetParent(this);
 		this.tweens.unshift([playable]);
 		return this;
+	}
+
+	public Skip(): void {
+		if (this.state === State.Killed || this.state === State.Finished) {
+			console.warn('cant skip this tween, already in state', this.state);
+			return;
+		}
+		for (let i = 0; i < this.tweens.length; i++) {
+			let tweenArray = this.tweens[i];
+			for (let j = 0; j < tweenArray.length; j++) {
+				let tween = tweenArray[j];
+				if (tween.IsKilled() || tween.IsCompleted()) {
+					continue;
+				}
+				if (tween.Elapsed === 0) {
+					this.StepStarted(tween);
+				}
+				tween.Skip();
+				this.StepEnded(tween);
+			}
+		}
+		super.Skip();
 	}
 
 	public Kill(): void {
@@ -201,7 +223,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker {
 		super.Kill();
 	}
 
-	public Join(tween: ITween): ISequence {
+	public Join(tween: ITween | ISequence): ISequence {
 		if (this.tweens.length === 0) {
 			return this.Append(tween);
 		}

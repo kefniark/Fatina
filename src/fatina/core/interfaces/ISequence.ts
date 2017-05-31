@@ -10,13 +10,13 @@ export interface ISequence extends IControl {
 	SetTimescale(scale: number): ISequence;
 	SetLoop(loop: number): ISequence;
 
-	Append(tween: ITween): ISequence;
+	Append(tween: ITween | ISequence): ISequence;
 	AppendCallback(cb: () => void): ISequence;
 	AppendInterval(duration: number): ISequence;
-	Prepend(tween: ITween): ISequence;
+	Prepend(tween: ITween| ISequence): ISequence;
 	PrependCallback(cb: () => void): ISequence;
 	PrependInterval(duration: number): ISequence;
-	Join(tween: ITween): ISequence;
+	Join(tween: ITween | ISequence): ISequence;
 
 	OnStart(cb: () => void): ISequence;
 	OnStepStart(cb: (tween: ITween | IPlayable) => void): ISequence;

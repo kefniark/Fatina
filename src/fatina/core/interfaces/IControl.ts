@@ -14,4 +14,5 @@ export interface IControl {
 	Resume(): void;
 	Kill(): void;
 	Reset(): void;
+	Skip(): void;
 }

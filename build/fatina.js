@@ -60,22 +60,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ticker_1 = __webpack_require__(7);
 	var pooling_1 = __webpack_require__(9);
 	var tweenType_1 = __webpack_require__(5);
-	var requestFrame;
-	var cancelFrame;
-	if (typeof (window) !== 'undefined') {
-	    requestFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-	    cancelFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
-	}
-	function updateLoop(timestamp) {
-	    var dt = timestamp - lastTime;
-	    if (isFirstUpdate) {
-	        dt = 1;
-	        isFirstUpdate = false;
-	    }
-	    Update(dt);
-	    lastTime = timestamp;
-	    lastFrame = requestFrame(updateLoop);
-	}
 	var tickerManager;
 	var pooling;
 	var initialized = false;
@@ -160,6 +144,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return new sequence_1.Sequence().SetParent(tickerManager);
 	}
 	exports.Sequence = Sequence;
+	var requestFrame;
+	var cancelFrame;
+	if (typeof (window) !== 'undefined') {
+	    requestFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+	    cancelFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+	}
+	function updateLoop(timestamp) {
+	    var dt = timestamp - lastTime;
+	    if (isFirstUpdate) {
+	        dt = 1;
+	        isFirstUpdate = false;
+	    }
+	    Update(dt);
+	    lastTime = timestamp;
+	    lastFrame = requestFrame(updateLoop);
+	}
 
 
 /***/ }),
@@ -280,7 +280,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.Complete();
 	            }
 	            else {
-	                this.ResetAndStart();
+	                this.ResetAndStart(false, dt);
 	            }
 	        }
 	    };
@@ -337,6 +337,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	        playable.SetParent(this);
 	        this.tweens.unshift([playable]);
 	        return this;
+	    };
+	    Sequence.prototype.Skip = function () {
+	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
+	            console.warn('cant skip this tween, already in state', this.state);
+	            return;
+	        }
+	        for (var i = 0; i < this.tweens.length; i++) {
+	            var tweenArray = this.tweens[i];
+	            for (var j = 0; j < tweenArray.length; j++) {
+	                var tween = tweenArray[j];
+	                if (tween.IsKilled() || tween.IsCompleted()) {
+	                    continue;
+	                }
+	                if (tween.Elapsed === 0) {
+	                    this.StepStarted(tween);
+	                }
+	                tween.Skip();
+	                this.StepEnded(tween);
+	            }
+	        }
+	        _super.prototype.Skip.call(this);
 	    };
 	    Sequence.prototype.Kill = function () {
 	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
@@ -496,12 +517,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.LoopInit();
 	    };
-	    BaseTween.prototype.ResetAndStart = function (resetloop) {
+	    BaseTween.prototype.ResetAndStart = function (resetloop, dtRemains) {
 	        if (resetloop === true) {
 	            this.loop = 1;
 	        }
 	        this.LoopInit();
 	        this.state = state_1.State.Run;
+	        if (dtRemains > 0) {
+	            this.tickCb(dtRemains);
+	        }
+	    };
+	    BaseTween.prototype.Skip = function () {
+	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
+	            console.warn('cant skip this tween, already in state', this.state);
+	            return;
+	        }
+	        if (this.state === state_1.State.Idle) {
+	            this.Started();
+	        }
+	        this.elapsed = this.duration;
+	        this.Complete();
 	    };
 	    BaseTween.prototype.Pause = function () {
 	        if (this.state !== state_1.State.Run) {
@@ -777,8 +812,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.eventToAdd = [];
 	        _this.eventToRemove = [];
 	        _this.cleanUpdate = 0;
-	        _this.cleanTweens1 = [];
-	        _this.cleanTweens2 = [];
+	        _this.clean1 = [];
+	        _this.clean2 = [];
 	        return _this;
 	    }
 	    Object.defineProperty(Ticker.prototype, "Type", {
@@ -788,19 +823,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        enumerable: true,
 	        configurable: true
 	    });
-	    Ticker.prototype.GetCleanTweens = function () {
-	        if (this.cleanUpdate % 2 === 0) {
-	            this.cleanTweens2.length = 0;
-	            return this.cleanTweens1;
-	        }
-	        else {
-	            this.cleanTweens1.length = 0;
-	            return this.cleanTweens2;
-	        }
-	    };
-	    Ticker.prototype.SetTimescale = function (scale) {
-	        this.timescale = scale;
-	    };
 	    Object.defineProperty(Ticker.prototype, "Elapsed", {
 	        get: function () {
 	            return this.elapsed;
@@ -815,6 +837,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        enumerable: true,
 	        configurable: true
 	    });
+	    Ticker.prototype.IsCompleted = function () {
+	        return this.state === state_1.State.Finished;
+	    };
+	    Ticker.prototype.IsRunning = function () {
+	        return this.state === state_1.State.Run;
+	    };
+	    Ticker.prototype.IsKilled = function () {
+	        return this.state === state_1.State.Killed;
+	    };
+	    Ticker.prototype.SetTimescale = function (scale) {
+	        this.timescale = scale;
+	    };
 	    Ticker.prototype.AddTickListener = function (cb) {
 	        this.eventToAdd.push(cb);
 	    };
@@ -848,15 +882,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.cleanUpdate += 1;
 	        this.UpdateListener();
 	    };
-	    Ticker.prototype.IsCompleted = function () {
-	        return this.state === state_1.State.Finished;
-	    };
-	    Ticker.prototype.IsRunning = function () {
-	        return this.state === state_1.State.Run;
-	    };
-	    Ticker.prototype.IsKilled = function () {
-	        return this.state === state_1.State.Killed;
-	    };
 	    Ticker.prototype.Start = function () {
 	        if (this.state !== state_1.State.Idle) {
 	            return;
@@ -881,6 +906,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.state = state_1.State.Killed;
 	    };
+	    Ticker.prototype.Skip = function () {
+	        throw new Error('The main ticker cannot be skipped');
+	    };
 	    Ticker.prototype.Reset = function () {
 	        this.state = state_1.State.Idle;
 	    };
@@ -888,11 +916,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        for (var i = 0; i < data.length; i++) {
 	            var obj = data[i];
 	            if (this.cleanUpdate % 2 === 0) {
-	                this.cleanTweens2.push(obj);
+	                this.clean2.push(obj);
 	            }
 	            else {
-	                this.cleanTweens1.push(obj);
+	                this.clean1.push(obj);
 	            }
+	        }
+	    };
+	    Ticker.prototype.GetCleanTweens = function () {
+	        if (this.cleanUpdate % 2 === 0) {
+	            this.clean2.length = 0;
+	            return this.clean1;
+	        }
+	        else {
+	            this.clean1.length = 0;
+	            return this.clean2;
 	        }
 	    };
 	    return Ticker;
@@ -988,11 +1026,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var sequence_1 = __webpack_require__(1);
 	var Pooling = (function () {
 	    function Pooling(size) {
-	        this.tweens = [];
-	        this.sequences = [];
-	        this.created = 0;
-	        this.poped = 0;
-	        this.pushed = 0;
+	        this.tweenPool = [];
+	        this.sequencePool = [];
 	        this.targetSize = size * 2;
 	        for (var i = 0; i < size; i++) {
 	            this.CreateTween();
@@ -1002,48 +1037,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }
 	    Pooling.prototype.CreateTween = function () {
-	        this.created++;
 	        return new tween_1.Tween(null, []);
 	    };
+	    Pooling.prototype.CreateSequence = function () {
+	        return new sequence_1.Sequence();
+	    };
 	    Pooling.prototype.PopTween = function () {
-	        if (this.tweens.length === 0) {
-	            this.tweens.push(this.CreateTween());
+	        if (this.tweenPool.length === 0) {
+	            this.tweenPool.push(this.CreateTween());
 	        }
-	        this.poped++;
-	        return this.tweens.pop();
+	        return this.tweenPool.pop();
+	    };
+	    Pooling.prototype.PopSequence = function () {
+	        if (this.sequencePool.length === 0) {
+	            this.sequencePool.push(this.CreateSequence());
+	        }
+	        return this.sequencePool.pop();
 	    };
 	    Pooling.prototype.PushTween = function (tween) {
 	        if (tween === undefined) {
 	            return;
 	        }
-	        if (this.tweens.length > this.targetSize) {
+	        if (this.tweenPool.length > this.targetSize) {
 	            return;
 	        }
 	        tween.Default();
-	        this.pushed++;
-	        this.tweens.push(tween);
-	    };
-	    Pooling.prototype.CreateSequence = function () {
-	        this.created++;
-	        return new sequence_1.Sequence();
-	    };
-	    Pooling.prototype.PopSequence = function () {
-	        if (this.sequences.length === 0) {
-	            this.sequences.push(this.CreateSequence());
-	        }
-	        this.poped++;
-	        return this.sequences.pop();
+	        this.tweenPool.push(tween);
 	    };
 	    Pooling.prototype.PushSequence = function (sequence) {
 	        if (sequence === undefined) {
 	            return;
 	        }
-	        if (this.tweens.length > this.targetSize) {
+	        if (this.tweenPool.length > this.targetSize) {
 	            return;
 	        }
 	        sequence.Default();
-	        this.pushed++;
-	        this.sequences.push(sequence);
+	        this.sequencePool.push(sequence);
 	    };
 	    return Pooling;
 	}());
@@ -1086,10 +1115,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (_this.elapsed >= _this.duration) {
 	                _this.loop--;
 	                if (_this.loop === 0) {
+	                    for (var i = 0; i < _this.properties.length; i++) {
+	                        var prop = _this.properties[i];
+	                        _this.object[prop] = _this.currentTo[prop];
+	                    }
 	                    _this.Complete();
 	                }
 	                else {
-	                    _this.ResetAndStart();
+	                    _this.ResetAndStart(false, 0);
 	                }
 	            }
 	        };
@@ -1126,32 +1159,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!this.ease) {
 	            this.ease = easing_1.easeTypes[easingType_1.EasingType.Linear];
 	        }
+	        this.currentFrom = {};
+	        this.currentTo = {};
 	        if (!this.from) {
-	            this.from = {};
 	            for (var i = 0; i < this.properties.length; i++) {
 	                var prop = this.properties[i];
-	                this.from[prop] = this.object[prop];
+	                this.currentFrom[prop] = this.object[prop];
 	            }
 	        }
 	        else {
 	            for (var i = 0; i < this.properties.length; i++) {
 	                var prop = this.properties[i];
+	                this.currentFrom[prop] = this.from[prop];
 	                this.object[prop] = this.from[prop];
 	            }
 	        }
 	        if (this.relative) {
 	            for (var i = 0; i < this.properties.length; i++) {
 	                var prop = this.properties[i];
-	                this.to[prop] = this.object[prop] + this.to[prop];
+	                this.currentTo[prop] = this.object[prop] + this.to[prop];
 	            }
 	        }
-	    };
-	    Tween.prototype.LoopInit = function () {
-	        this.elapsed = 0;
-	        if (this.from) {
+	        else {
 	            for (var i = 0; i < this.properties.length; i++) {
 	                var prop = this.properties[i];
-	                this.object[prop] = this.from[prop];
+	                this.currentTo[prop] = this.to[prop];
 	            }
 	        }
 	    };
@@ -1159,28 +1191,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var val = this.ease(progress);
 	        for (var i = 0; i < this.properties.length; i++) {
 	            var prop = this.properties[i];
-	            this.object[prop] = this.from[prop] + (this.to[prop] - this.from[prop]) * val;
+	            this.object[prop] = this.currentFrom[prop] + (this.currentTo[prop] - this.currentFrom[prop]) * val;
 	        }
 	        _super.prototype.Updated.call(this, dt, progress);
 	    };
 	    Tween.prototype.SetParent = function (ticker) {
 	        _super.prototype.SetParent.call(this, ticker);
 	        return this;
-	    };
-	    Tween.prototype.Cleanup = function () {
-	        if (!this.parent) {
-	            return;
-	        }
-	        this.parent.Clean([this]);
-	    };
-	    Tween.prototype.Default = function () {
-	        _super.prototype.Default.call(this);
-	        this.object = undefined;
-	        this.properties.length = 0;
-	        this.from = undefined;
-	        this.to = undefined;
-	        this.relative = false;
-	        this.ease = easing_1.easeTypes[0];
 	    };
 	    Tween.prototype.From = function (from) {
 	        this.from = from;
@@ -1226,6 +1243,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Tween.prototype.SetEasing = function (type) {
 	        this.ease = this.Easing(type);
 	        return this;
+	    };
+	    Tween.prototype.LoopInit = function () {
+	        this.elapsed = 0;
+	    };
+	    Tween.prototype.Cleanup = function () {
+	        if (!this.parent) {
+	            return;
+	        }
+	        this.parent.Clean([this]);
+	    };
+	    Tween.prototype.Default = function () {
+	        _super.prototype.Default.call(this);
+	        this.object = undefined;
+	        this.properties.length = 0;
+	        this.from = undefined;
+	        this.to = undefined;
+	        this.currentFrom = undefined;
+	        this.currentTo = undefined;
+	        this.relative = false;
+	        this.currentFrom = undefined;
+	        this.currentTo = undefined;
+	        this.ease = easing_1.easeTypes[0];
 	    };
 	    Tween.prototype.OnStart = function (cb) {
 	        _super.prototype.OnStart.call(this, cb);

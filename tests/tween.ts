@@ -427,3 +427,24 @@ test('[Fatina.Tween] Test Tween with broken callback', function (t: any) {
 	t.equal(44, obj.x, 'tween finished properly');
 	t.end();
 });
+
+test('[Fatina.Tween] Test Skip', function (t: any) {
+	let ticker = new Ticker();
+	ticker.Start();
+
+	let complete = 0;
+	let tween = new Tween({}, [])
+		.To({}, 2)
+		.SetParent(ticker)
+		.OnComplete(() => complete++)
+		.Start();
+
+	ticker.Tick(1);
+	t.equal(1, tween.Elapsed, 'check this tween is started');
+
+	tween.Skip();
+	t.equal(2, tween.Elapsed, 'check this tween is over');
+	t.equal(1, complete, 'check the onComplete callback is emitted');
+
+	t.end();
+});

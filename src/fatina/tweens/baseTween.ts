@@ -82,7 +82,7 @@ export abstract class BaseTween {
 		this.LoopInit();
 	}
 
-	public ResetAndStart(resetloop?: boolean) {
+	public ResetAndStart(resetloop: boolean, dtRemains: number) {
 		if (resetloop === true) {
 			this.loop = 1;
 		}
@@ -90,6 +90,23 @@ export abstract class BaseTween {
 		this.LoopInit();
 
 		this.state = State.Run;
+		if (dtRemains > 0) {
+			this.tickCb(dtRemains);
+		}
+	}
+
+	public Skip(): void {
+		if (this.state === State.Killed || this.state === State.Finished) {
+			console.warn('cant skip this tween, already in state', this.state);
+			return;
+		}
+
+		if (this.state === State.Idle) {
+			this.Started();
+		}
+
+		this.elapsed = this.duration;
+		this.Complete();
 	}
 
 	public Pause(): void {
