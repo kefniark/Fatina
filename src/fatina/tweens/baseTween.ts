@@ -224,18 +224,18 @@ export abstract class BaseTween {
 	}
 
 	public OnStart(cb: () => void): void {
-		this.eventStart.push(cb);
+		this.eventStart[this.eventStart.length] = cb;
 	}
 
 	public OnUpdate(cb: (dt: number, progress: number) => void): void {
-		this.eventUpdate.push(cb);
+		this.eventUpdate[this.eventUpdate.length] = cb;
 	}
 
 	public OnKilled(cb: () => void): void {
-		this.eventKill.push(cb);
+		this.eventKill[this.eventKill.length] = cb;
 	}
 
 	public OnComplete(cb: () => void): void {
-		this.eventComplete.push(cb);
+		this.eventComplete[this.eventComplete.length] = cb;
 	}
 }

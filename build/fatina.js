@@ -82,7 +82,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (typeof (window) !== 'undefined' && !disableAutoTick) {
 	        lastFrame = requestFrame(updateLoop);
 	    }
-	    pooling = new pooling_1.Pooling(1000);
+	    pooling = new pooling_1.Pooling(400);
 	    initialized = true;
 	    return true;
 	}
@@ -155,6 +155,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (isFirstUpdate) {
 	        dt = 1;
 	        isFirstUpdate = false;
+	    }
+	    if (dt > 500) {
+	        console.warn('[Fatina] Delta between two update was too high ' + Math.round(dt) + 'ms. , Capped to 500ms.');
+	        dt = 500;
 	    }
 	    Update(dt);
 	    lastTime = timestamp;
@@ -264,8 +268,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        var remainsDt = dt;
 	        if (this.currentTween) {
-	            if (this.currentTween.some(function (x) { return !x.IsCompleted(); })) {
-	                return;
+	            for (var i = 0; i < this.currentTween.length; i++) {
+	                if (!this.currentTween[i].IsCompleted()) {
+	                    return;
+	                }
 	            }
 	            var first = this.currentTween[0];
 	            remainsDt = first.Elapsed - first.Duration;
@@ -309,19 +315,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    Sequence.prototype.Append = function (tween) {
 	        tween.SetParent(this);
-	        this.tweens.push([tween]);
+	        this.tweens[this.tweens.length] = [tween];
 	        return this;
 	    };
 	    Sequence.prototype.AppendCallback = function (cb) {
 	        var playable = new callback_1.Callback(cb);
 	        playable.SetParent(this);
-	        this.tweens.push([playable]);
+	        this.tweens[this.tweens.length] = [playable];
 	        return this;
 	    };
 	    Sequence.prototype.AppendInterval = function (duration) {
 	        var playable = new delay_1.Delay(duration);
 	        playable.SetParent(this);
-	        this.tweens.push([playable]);
+	        this.tweens[this.tweens.length] = [playable];
 	        return this;
 	    };
 	    Sequence.prototype.Prepend = function (tween) {
@@ -409,12 +415,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!this.parent) {
 	            return;
 	        }
-	        this.cleanTweens.push(this);
+	        this.cleanTweens[this.cleanTweens.length] = this;
 	        this.parent.Clean(this.cleanTweens);
 	    };
 	    Sequence.prototype.Clean = function (data) {
 	        for (var i = 0; i < data.length; i++) {
-	            this.cleanTweens.push(data[i]);
+	            this.cleanTweens[this.cleanTweens.length] = data[i];
 	        }
 	    };
 	    Sequence.prototype.OnStart = function (cb) {
@@ -434,11 +440,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    };
 	    Sequence.prototype.OnStepStart = function (cb) {
-	        this.eventStepStart.push(cb);
+	        this.eventStepStart[this.eventStepStart.length] = cb;
 	        return this;
 	    };
 	    Sequence.prototype.OnStepEnd = function (cb) {
-	        this.eventStepEnd.push(cb);
+	        this.eventStepEnd[this.eventStepEnd.length] = cb;
 	        return this;
 	    };
 	    return Sequence;
@@ -643,16 +649,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.eventComplete.length = 0;
 	    };
 	    BaseTween.prototype.OnStart = function (cb) {
-	        this.eventStart.push(cb);
+	        this.eventStart[this.eventStart.length] = cb;
 	    };
 	    BaseTween.prototype.OnUpdate = function (cb) {
-	        this.eventUpdate.push(cb);
+	        this.eventUpdate[this.eventUpdate.length] = cb;
 	    };
 	    BaseTween.prototype.OnKilled = function (cb) {
-	        this.eventKill.push(cb);
+	        this.eventKill[this.eventKill.length] = cb;
 	    };
 	    BaseTween.prototype.OnComplete = function (cb) {
-	        this.eventComplete.push(cb);
+	        this.eventComplete[this.eventComplete.length] = cb;
 	    };
 	    return BaseTween;
 	}());
@@ -1037,10 +1043,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.sequencePool = [];
 	        this.targetSize = size * 2;
 	        for (var i = 0; i < size; i++) {
-	            this.CreateTween();
+	            this.tweenPool.push(this.CreateTween());
 	        }
 	        for (var i = 0; i < size / 4; i++) {
-	            this.CreateTween();
+	            this.sequencePool.push(this.CreateSequence());
 	        }
 	    }
 	    Pooling.prototype.CreateTween = function () {
@@ -1069,7 +1075,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return;
 	        }
 	        tween.Default();
-	        this.tweenPool.push(tween);
+	        this.tweenPool[this.tweenPool.length] = tween;
 	    };
 	    Pooling.prototype.PushSequence = function (sequence) {
 	        if (sequence === undefined) {
@@ -1079,7 +1085,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return;
 	        }
 	        sequence.Default();
-	        this.sequencePool.push(sequence);
+	        this.sequencePool[this.sequencePool.length] = sequence;
 	    };
 	    return Pooling;
 	}());

@@ -99,8 +99,10 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 
 		// Current tween over
 		if (this.currentTween) {
-			if (this.currentTween.some(x => !x.IsCompleted())) {
-				return;
+			for (let i = 0; i < this.currentTween.length; i++) {
+				if (!this.currentTween[i].IsCompleted()) {
+					return;
+				}
 			}
 
 			let first = this.currentTween[0];
@@ -149,21 +151,21 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 
 	public Append(tween: ITween | ISequence): ISequence {
 		tween.SetParent(this);
-		this.tweens.push([tween]);
+		this.tweens[this.tweens.length] = [tween];
 		return this;
 	}
 
 	public AppendCallback(cb: () => void): ISequence {
 		let playable = new Callback(cb);
 		playable.SetParent(this);
-		this.tweens.push([playable]);
+		this.tweens[this.tweens.length] = [playable];
 		return this;
 	}
 
 	public AppendInterval(duration: number): ISequence {
 		let playable = new Delay(duration);
 		playable.SetParent(this);
-		this.tweens.push([playable]);
+		this.tweens[this.tweens.length] = [playable];
 		return this;
 	}
 
@@ -261,13 +263,14 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 		if (!this.parent) {
 			return;
 		}
-		this.cleanTweens.push(this);
+
+		this.cleanTweens[this.cleanTweens.length] = this;
 		this.parent.Clean(this.cleanTweens);
 	}
 
 	public Clean(data: (ITween | ISequence)[]) {
 		for (let i = 0; i < data.length; i++) {
-			this.cleanTweens.push(data[i]);
+			this.cleanTweens[this.cleanTweens.length] = data[i];
 		}
 	}
 
@@ -292,12 +295,12 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 	}
 
 	public OnStepStart(cb: (index: ITween | IPlayable) => void): ISequence {
-		this.eventStepStart.push(cb);
+		this.eventStepStart[this.eventStepStart.length] = cb;
 		return this;
 	}
 
 	public OnStepEnd(cb: (index: ITween | IPlayable) => void): ISequence {
-		this.eventStepEnd.push(cb);
+		this.eventStepEnd[this.eventStepEnd.length] = cb;
 		return this;
 	}
 }

@@ -43,7 +43,7 @@ export function Init(disableAutoTick?: boolean): boolean {
 		lastFrame = requestFrame(updateLoop);
 	}
 
-	pooling = new Pooling(1000);
+	pooling = new Pooling(400);
 
 	initialized = true;
 	return true;
@@ -170,6 +170,13 @@ function updateLoop(timestamp: number) {
 		dt = 1;
 		isFirstUpdate = false;
 	}
+
+	// cap to 500 ms
+	if (dt > 500) {
+		console.warn('[Fatina] Delta between two update was too high ' + Math.round(dt) + 'ms. , Capped to 500ms.');
+		dt = 500;
+	}
+
 	Update(dt);
 	lastTime = timestamp;
 	lastFrame = requestFrame(updateLoop);

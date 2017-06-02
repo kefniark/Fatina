@@ -17,10 +17,10 @@ export class Pooling {
 	constructor(size: number) {
 		this.targetSize = size * 2;
 		for (let i = 0; i < size; i ++) {
-			this.CreateTween();
+			this.tweenPool.push(this.CreateTween());
 		}
 		for (let i = 0; i < size / 4; i ++) {
-			this.CreateTween();
+			this.sequencePool.push(this.CreateSequence());
 		}
 	}
 
@@ -94,7 +94,7 @@ export class Pooling {
 		}
 
 		tween.Default();
-		this.tweenPool.push(tween);
+		this.tweenPool[this.tweenPool.length] = tween;
 	}
 
 	/**
@@ -115,6 +115,6 @@ export class Pooling {
 		}
 
 		sequence.Default();
-		this.sequencePool.push(sequence);
+		this.sequencePool[this.sequencePool.length] = sequence;
 	}
 }
