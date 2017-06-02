@@ -83,15 +83,19 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 			}
 		}
 
-		// Tick every listener
-		for (let i = this.eventTick.length - 1; i >= 0; i--) {
-			this.eventTick[i](dt);
+		if (this.currentTween) {
+			// Tick every listener
+			for (let i = this.eventTick.length - 1; i >= 0; i--) {
+				this.eventTick[i](dt);
+			}
+
+			// Dont emit update event for remains dt
+			if (remains !== true) {
+				super.Updated(dt, 0);
+			}
 		}
 
-		// Dont emit update event for remains dt
-		if (remains !== true) {
-			super.Updated(dt, 0);
-		}
+		let remainsDt = dt;
 
 		// Current tween over
 		if (this.currentTween) {
@@ -100,7 +104,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 			}
 
 			let first = this.currentTween[0];
-			let remainsDt = first.Elapsed - first.Duration;
+			remainsDt = first.Elapsed - first.Duration;
 
 			this.StepEnded(this.currentTween[0]);
 			this.currentTween = undefined;
@@ -118,7 +122,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 			if (this.loop === 0) {
 				this.Complete();
 			} else {
-				this.ResetAndStart(false, dt);
+				this.ResetAndStart(false, remainsDt);
 			}
 		}
 	}

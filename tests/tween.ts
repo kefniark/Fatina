@@ -448,3 +448,35 @@ test('[Fatina.Tween] Test Skip', function (t: any) {
 
 	t.end();
 });
+
+test('[Fatina.Tween] Looping relative tween', function (t: any) {
+	let ticker = new Ticker();
+	ticker.Start();
+
+	let obj = { x: 0 };
+
+	new Tween(obj, [ 'x' ])
+		.SetParent(ticker)
+		.SetRelative(true)
+		.To({ x: 1 }, 1)
+		.SetEasing('inOutQuad')
+		.SetLoop(-1)
+		.Start();
+
+	ticker.Tick(1);
+	t.equal(1, obj.x, 'Check the object moved');
+
+	ticker.Tick(40);
+	t.equal(41, obj.x, 'Check the object moved 40 times');
+
+	for (let i = 0; i < 4; i++) {
+		ticker.Tick(0.2);
+		ticker.Tick(0.2);
+		ticker.Tick(0.2);
+		ticker.Tick(0.2);
+		ticker.Tick(0.2);
+	}
+	t.equal(45, obj.x, 'Check the object reached his destination');
+
+	t.end();
+});

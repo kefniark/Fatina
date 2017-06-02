@@ -196,6 +196,7 @@
     Pause(): void;
     Resume(): void;
     Kill(): void;
+    protected CheckPosition(): void;
     protected abstract Cleanup(): void;
     Default(): void;
     protected Complete(): void;
@@ -277,6 +278,7 @@
     Init(object: any, properties: string[]): void;
     Start(): ITween;
     protected Validate(): void;
+    protected CheckPosition(): void;
     private Update(dt, progress);
     SetParent(ticker: ITicker): ITween;
     From(from: any): ITween;

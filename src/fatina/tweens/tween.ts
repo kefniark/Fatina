@@ -54,7 +54,8 @@ export class Tween extends BaseTween implements ITween {
 					}
 					this.Complete();
 				} else {
-					this.ResetAndStart(false, 0);
+					this.CheckPosition();
+					this.ResetAndStart(false, this.elapsed - this.duration);
 				}
 			}
 		};
@@ -93,7 +94,6 @@ export class Tween extends BaseTween implements ITween {
 	 * @memberOf Tween
 	 */
 	protected Validate() {
-
 		// Check the object
 		if (!this.object) {
 			throw new Error('Cant Tween a undefined object');
@@ -117,6 +117,10 @@ export class Tween extends BaseTween implements ITween {
 			this.ease = easeTypes[EasingType.Linear];
 		}
 
+		this.CheckPosition();
+	}
+
+	protected CheckPosition() {
 		this.currentFrom = {};
 		this.currentTo = {};
 

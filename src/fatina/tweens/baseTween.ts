@@ -57,6 +57,8 @@ export abstract class BaseTween {
 
 		if (this.firstStart) {
 			this.Validate();
+		} else {
+			this.CheckPosition();
 		}
 
 		this.state = State.Run;
@@ -145,6 +147,8 @@ export abstract class BaseTween {
 		this.Killed();
 		this.Cleanup();
 	}
+
+	protected CheckPosition(): void {}
 
 	protected abstract Cleanup(): void;
 

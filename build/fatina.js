@@ -254,18 +254,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.StepStarted(this.currentTween[0]);
 	            }
 	        }
-	        for (var i = this.eventTick.length - 1; i >= 0; i--) {
-	            this.eventTick[i](dt);
+	        if (this.currentTween) {
+	            for (var i = this.eventTick.length - 1; i >= 0; i--) {
+	                this.eventTick[i](dt);
+	            }
+	            if (remains !== true) {
+	                _super.prototype.Updated.call(this, dt, 0);
+	            }
 	        }
-	        if (remains !== true) {
-	            _super.prototype.Updated.call(this, dt, 0);
-	        }
+	        var remainsDt = dt;
 	        if (this.currentTween) {
 	            if (this.currentTween.some(function (x) { return !x.IsCompleted(); })) {
 	                return;
 	            }
 	            var first = this.currentTween[0];
-	            var remainsDt = first.Elapsed - first.Duration;
+	            remainsDt = first.Elapsed - first.Duration;
 	            this.StepEnded(this.currentTween[0]);
 	            this.currentTween = undefined;
 	            this.sequenceIndex++;
@@ -280,7 +283,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.Complete();
 	            }
 	            else {
-	                this.ResetAndStart(false, dt);
+	                this.ResetAndStart(false, remainsDt);
 	            }
 	        }
 	    };
@@ -500,6 +503,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.firstStart) {
 	            this.Validate();
 	        }
+	        else {
+	            this.CheckPosition();
+	        }
 	        this.state = state_1.State.Run;
 	        this.parent.AddTickListener(this.tickCb);
 	        if (this.firstStart) {
@@ -568,6 +574,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.Killed();
 	        this.Cleanup();
 	    };
+	    BaseTween.prototype.CheckPosition = function () { };
 	    BaseTween.prototype.Default = function () {
 	        this.elapsed = 0;
 	        this.duration = 0;
@@ -1122,7 +1129,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    _this.Complete();
 	                }
 	                else {
-	                    _this.ResetAndStart(false, 0);
+	                    _this.CheckPosition();
+	                    _this.ResetAndStart(false, _this.elapsed - _this.duration);
 	                }
 	            }
 	        };
@@ -1159,6 +1167,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!this.ease) {
 	            this.ease = easing_1.easeTypes[easingType_1.EasingType.Linear];
 	        }
+	        this.CheckPosition();
+	    };
+	    Tween.prototype.CheckPosition = function () {
 	        this.currentFrom = {};
 	        this.currentTo = {};
 	        if (!this.from) {

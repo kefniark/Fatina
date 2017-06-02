@@ -324,3 +324,51 @@ test('[Fatina.Sequence] Sequence Skip', function (t: any) {
 
 	t.end();
 });
+
+test('[Fatina.Sequence] Sequence Looping relative tween', function (t: any) {
+	let ticker = new Ticker();
+	ticker.Start();
+
+	let obj = { x: 0, y: 0 };
+
+	new Sequence()
+		.SetParent(ticker)
+		.AppendInterval(1)
+		.Append(
+			new Tween(obj, [ 'x', 'y' ])
+				.SetRelative(true)
+				.To({ x: 1, y: 0 }, 1)
+				.SetEasing('outQuad')
+		)
+		.Append(
+			new Tween(obj, [ 'x', 'y' ])
+				.SetRelative(true)
+				.To({ x: 0, y: 1 }, 1)
+				.SetEasing('inOutQuad')
+		)
+		.Append(
+			new Tween(obj, [ 'x', 'y' ])
+				.SetRelative(true)
+				.To({ x: -1, y: -1 }, 1)
+				.SetEasing('inQuad')
+		)
+		.SetLoop(-1)
+		.Start();
+
+	ticker.Tick(4);
+	t.deepEqual({ x: 0, y: 0 }, obj, 'Check the object is back at his original position : normal duration');
+
+	ticker.Tick(40);
+	t.deepEqual({ x: 0, y: 0 }, obj, 'Check the object is back at his original position : long update duration');
+
+	for (let i = 0; i < 4; i++) {
+		ticker.Tick(0.2);
+		ticker.Tick(0.2);
+		ticker.Tick(0.2);
+		ticker.Tick(0.2);
+		ticker.Tick(0.2);
+	}
+	t.deepEqual({ x: 0, y: 0 }, obj, 'Check the object is back at his original position : micro update duration');
+
+	t.end();
+});
