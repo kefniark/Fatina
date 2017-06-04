@@ -449,6 +449,28 @@ test('[Fatina.Tween] Test Skip', function (t: any) {
 	t.end();
 });
 
+test('[Fatina.Tween] Test Modify', function (t: any) {
+	/*
+	let ticker = new Ticker();
+	ticker.Start();
+
+	let complete = 0;
+	let obj = { x: 0 };
+	let tween = new Tween(obj, ['x'])
+		.To({ x: 1}, 2)
+		.SetParent(ticker)
+		.Start();
+
+	ticker.Tick(1);
+	t.equal(1, tween.Elapsed, 'check this tween is started');
+
+	tween.Skip();
+	t.equal(2, tween.Elapsed, 'check this tween is over');
+	t.equal(1, complete, 'check the onComplete callback is emitted');
+	*/
+	t.end();
+});
+
 test('[Fatina.Tween] Looping relative tween', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();

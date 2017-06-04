@@ -24,9 +24,7 @@ export class Ticker extends EventList implements ITicker {
 	private elapsed = 0;
 	private eventToAdd: { (dt: number): void }[] = [];
 	private eventToRemove: { (dt: number): void }[] = [];
-	private cleanUpdate = 0;
-	private clean1: (ITween | ISequence)[] = [];
-	private clean2: (ITween | ISequence)[] = [];
+	private clean: (ITween | ISequence)[] = [];
 
 	public get Elapsed(): number {
 		return this.elapsed;
@@ -125,7 +123,6 @@ export class Ticker extends EventList implements ITicker {
 			tick(localDt);
 		}
 		this.elapsed += localDt;
-		this.cleanUpdate += 1;
 
 		this.UpdateListener();
 	}
@@ -177,21 +174,15 @@ export class Ticker extends EventList implements ITicker {
 	public Clean(data: (ITween | ISequence)[]): void {
 		for (let i = 0; i < data.length; i++) {
 			let obj = data[i];
-			if (this.cleanUpdate % 2 === 0) {
-				this.clean2.push(obj);
-			} else {
-				this.clean1.push(obj);
-			}
+			this.clean.push(obj);
 		}
 	}
 
 	public GetCleanTweens(): (ITween | ISequence)[] {
-		if (this.cleanUpdate % 2 === 0) {
-			this.clean2.length = 0;
-			return this.clean1;
-		} else {
-			this.clean1.length = 0;
-			return this.clean2;
+		for (let i = 0; i < this.clean.length; i++) {
+			this.clean[i].Default();
 		}
+		this.clean.length = 0;
+		return this.clean;
 	}
 }

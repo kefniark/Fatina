@@ -28,6 +28,9 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 	constructor() {
 		super();
 		this.tickCb = (dt: number) => {
+			if (this.state === State.Finished || this.state === State.Killed) {
+				return;
+			}
 			let localDt = dt * this.timescale;
 			this.elapsed += localDt;
 			this.Tick(localDt);

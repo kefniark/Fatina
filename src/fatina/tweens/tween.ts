@@ -7,6 +7,7 @@ import { easeNames, easeTypes } from '../easing/easing';
 import { Sequence } from './sequence';
 import { ISequence } from '../core/interfaces/ISequence';
 import { TweenType } from '../core/enum/tweenType';
+import { State } from '../core/enum/state';
 
 /**
  * Tween class
@@ -39,6 +40,9 @@ export class Tween extends BaseTween implements ITween {
 		this.properties = properties;
 
 		this.tickCb = (dt: number) => {
+			if (this.state === State.Finished || this.state === State.Killed) {
+				return;
+			}
 			let localDt = dt * this.timescale;
 			this.elapsed += localDt;
 
@@ -253,6 +257,29 @@ export class Tween extends BaseTween implements ITween {
 	}
 
 	/**
+	 * To apply a modifier on a current tween
+	 *
+	 * @param {*} diff
+	 * @param {boolean} updateTo
+	 *
+	 * @memberof Tween
+	 */
+	public Modify(diff: any, updateTo: boolean): void {
+		for (let i = 0; i < this.properties.length; i++) {
+			let prop = this.properties[i];
+			if (!diff.hasOwnProperty(prop)) {
+				continue;
+			}
+			this.object[prop] += diff[prop];
+			if (updateTo) {
+				this.currentTo[prop] += diff[prop];
+			} else {
+				this.currentFrom[prop] += diff[prop];
+			}
+		}
+	}
+
+	/**
 	 * Method used to create a sequence with this tween as first value.
 	 * Usually used with .AppendInterval(1250) or .PrependInterval(160) to add a delay
 	 *
@@ -338,8 +365,6 @@ export class Tween extends BaseTween implements ITween {
 		this.currentFrom = undefined;
 		this.currentTo = undefined;
 		this.relative = false;
-		this.currentFrom = undefined;
-		this.currentTo = undefined;
 		this.ease = easeTypes[0];
 	}
 

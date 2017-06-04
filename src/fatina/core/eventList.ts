@@ -15,6 +15,12 @@ export abstract class EventList {
 		this.length += 1;
 	}
 
+	public Pop(): INode | undefined {
+		let first = this.first;
+		this.Remove(first);
+		return first;
+	}
+
 	public Remove(obj: any): void {
 		let node = obj as INode;
 		if (node === undefined) {

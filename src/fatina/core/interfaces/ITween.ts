@@ -9,6 +9,7 @@ export interface ITween extends IControl {
 	Start(): ITween;
 	From(from: any): ITween;
 	To(to: any, duration: number): ITween;
+	Modify(diff: any, updateTo: boolean): void;
 
 	SetParent(ticker: ITicker): ITween;
 	SetLoop(loop: number): ITween;
