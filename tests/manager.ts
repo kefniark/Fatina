@@ -2,7 +2,7 @@ import * as test from 'tape';
 import { TweenType } from '../src/fatina/core/enum/tweenType';
 let fatina = require('../src/fatina/index');
 
-fatina.Init();
+fatina.Init(false, 2);
 
 test('[Fatina.Manager] Update manually', function (t: any) {
 	let previousTime = fatina.time;
@@ -89,5 +89,58 @@ test('[Fatina.Manager] Create sequence', function (t: any) {
 });
 
 test('[Fatina.Manager] Check pooling', function (t: any) {
+	let obj = { x: 0 };
+
+	for (let i = 0; i < 5; i++) {
+		let sequence = fatina.Sequence();
+		sequence.Append(fatina.Tween(obj, ['x']).To({x: 1}, 0.5));
+		sequence.Append(fatina.Tween(obj, ['x']).To({x: 2}, 0.5));
+		sequence.Append(fatina.Tween(obj, ['x']).To({x: 3}, 0.5));
+		sequence.Append(fatina.Tween(obj, ['x']).To({x: 4}, 0.5));
+		sequence.Start();
+
+		let ticker = fatina.Ticker();
+
+		t.equal(0, ticker.ToClean().length, 'check there is nothing to clean');
+		fatina.Update(1);
+		t.equal(2, obj.x, 'check the sequence is moving properly');
+
+		t.equal(0, ticker.ToClean().length, 'check there is nothing to clean');
+		fatina.Update(1);
+		t.equal(4, obj.x, 'check the sequence is moving properly');
+
+		t.equal(5, ticker.ToClean().length, 'check there is 4 tweens + 1 sequence to clean');
+		fatina.Update(1);
+
+		t.equal(0, ticker.ToClean().length, 'check there is nothing to clean anymore');
+	}
+
+	t.end();
+});
+
+test('[Fatina.Manager] Check pooling with looping sequence', function (t: any) {
+	let obj = { x: 0 };
+
+	let sequence = fatina.Sequence();
+	sequence.Append(fatina.Tween(obj, ['x']).To({x: 1}, 0.5));
+	sequence.Append(fatina.Tween(obj, ['x']).To({x: 2}, 0.5));
+	sequence.Append(fatina.Tween(obj, ['x']).To({x: 3}, 0.5));
+	sequence.Append(fatina.Tween(obj, ['x']).To({x: 4}, 0.5));
+	sequence.SetLoop(-1);
+	sequence.Start();
+
+	let ticker = fatina.Ticker();
+	t.equal(0, ticker.ToClean().length, 'check there is nothing to clean');
+
+	for (let i = 0; i < 10; i++) {
+		fatina.Update(1);
+		t.equal(0, ticker.ToClean().length, 'check there is nothing to clean');
+	}
+
+	sequence.Kill();
+	t.equal(0, ticker.ToClean().length, 'check there is nothing to clean even after a kill');
+	fatina.Update(1);
+	t.equal(5, ticker.ToClean().length, 'check there is 4 tweens + 1 sequence to clean');
+
 	t.end();
 });

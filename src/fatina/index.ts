@@ -5,6 +5,7 @@ import { ISequence } from './core/interfaces/ISequence';
 import { ITicker } from './core/interfaces/ITicker';
 import { TweenPool } from './pooling/tweenPool';
 import { SequencePool } from './pooling/sequencePool';
+import { TweenType } from './core/enum/tweenType';
 
 let tickerManager: ticker;
 let tweenPooling: TweenPool;
@@ -22,6 +23,10 @@ export function Elapsed() {
 	return tickerManager.Elapsed;
 }
 
+export function Ticker() {
+	return tickerManager;
+}
+
 /**
  * Method used when Fatina is used for the first time.
  * Can take few ms. (pool initialization & object creation)
@@ -30,7 +35,7 @@ export function Elapsed() {
  * @param {boolean} [disableAutoTick]
  * @returns {boolean}
  */
-export function Init(disableAutoTick?: boolean): boolean {
+export function Init(disableAutoTick?: boolean, poolSize?: number): boolean {
 	if (initialized) {
 		return false;
 	}
@@ -44,8 +49,8 @@ export function Init(disableAutoTick?: boolean): boolean {
 		lastFrame = requestFrame(updateLoop);
 	}
 
-	tweenPooling = new TweenPool(1000);
-	sequencePooling = new SequencePool(250);
+	tweenPooling = new TweenPool(poolSize === undefined ? 600 : poolSize);
+	sequencePooling = new SequencePool(poolSize === undefined ? 250 : poolSize);
 
 	initialized = true;
 	return true;
@@ -109,12 +114,11 @@ export function Update(timestamp: number): any {
 		return;
 	}
 
-	tickerManager.GetCleanTweens();
+	let toClean = tickerManager.GetCleanTweens();
 
 	tickerManager.Tick(timestamp);
 	time += timestamp;
 
-	/*
 	for (let i = 0; i < toClean.length; i++) {
 		let clean = toClean[i];
 		if (clean.Type === TweenType.Tween) {
@@ -123,7 +127,7 @@ export function Update(timestamp: number): any {
 			sequencePooling.PushSequence(clean as ISequence);
 		}
 	}
-	*/
+	toClean.length = 0;
 }
 
 /**

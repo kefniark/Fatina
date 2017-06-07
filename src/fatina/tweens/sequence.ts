@@ -20,6 +20,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 	private currentTween: (ITween | IPlayable)[] | undefined;
 	private sequenceIndex = 0;
 	private cleanTweens: (ITween | ISequence)[] = [];
+	private cleaned: boolean;
 
 	public get CurrentTween(): (ITween | IPlayable)[] | undefined {
 		return this.currentTween;
@@ -260,13 +261,14 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 		this.currentTween = undefined;
 		this.sequenceIndex = 0;
 		this.cleanTweens.length = 0;
+		this.cleaned = false;
 	}
 
 	public Cleanup() {
-		if (!this.parent) {
+		if (!this.parent || this.cleaned) {
 			return;
 		}
-
+		this.cleaned = true;
 		this.cleanTweens[this.cleanTweens.length] = this;
 		this.parent.Clean(this.cleanTweens);
 	}

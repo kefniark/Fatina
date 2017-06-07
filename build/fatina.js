@@ -58,10 +58,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var sequence_1 = __webpack_require__(1);
 	var ticker_1 = __webpack_require__(7);
-	var pooling_1 = __webpack_require__(9);
+	var tweenPool_1 = __webpack_require__(9);
+	var sequencePool_1 = __webpack_require__(13);
 	var tweenType_1 = __webpack_require__(5);
 	var tickerManager;
-	var pooling;
+	var tweenPooling;
+	var sequencePooling;
 	var initialized = false;
 	var isFirstUpdate = true;
 	var lastFrame;
@@ -71,7 +73,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return tickerManager.Elapsed;
 	}
 	exports.Elapsed = Elapsed;
-	function Init(disableAutoTick) {
+	function Ticker() {
+	    return tickerManager;
+	}
+	exports.Ticker = Ticker;
+	function Init(disableAutoTick, poolSize) {
 	    if (initialized) {
 	        return false;
 	    }
@@ -82,7 +88,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (typeof (window) !== 'undefined' && !disableAutoTick) {
 	        lastFrame = requestFrame(updateLoop);
 	    }
-	    pooling = new pooling_1.Pooling(400);
+	    tweenPooling = new tweenPool_1.TweenPool(poolSize === undefined ? 600 : poolSize);
+	    sequencePooling = new sequencePool_1.SequencePool(poolSize === undefined ? 250 : poolSize);
 	    initialized = true;
 	    return true;
 	}
@@ -119,19 +126,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    for (var i = 0; i < toClean.length; i++) {
 	        var clean = toClean[i];
 	        if (clean.Type === tweenType_1.TweenType.Tween) {
-	            pooling.PushTween(clean);
+	            tweenPooling.PushTween(clean);
 	        }
 	        else if (clean.Type === tweenType_1.TweenType.Sequence) {
-	            pooling.PushSequence(clean);
+	            sequencePooling.PushSequence(clean);
 	        }
 	    }
+	    toClean.length = 0;
 	}
 	exports.Update = Update;
 	function Tween(obj, properties) {
 	    if (!initialized) {
 	        Init();
 	    }
-	    var tween = pooling.PopTween();
+	    var tween = tweenPooling.PopTween();
 	    tween.Init(obj, properties);
 	    tween.SetParent(tickerManager);
 	    return tween;
@@ -198,6 +206,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.sequenceIndex = 0;
 	        _this.cleanTweens = [];
 	        _this.tickCb = function (dt) {
+	            if (_this.state === state_1.State.Finished || _this.state === state_1.State.Killed) {
+	                return;
+	            }
 	            var localDt = dt * _this.timescale;
 	            _this.elapsed += localDt;
 	            _this.Tick(localDt);
@@ -410,11 +421,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.currentTween = undefined;
 	        this.sequenceIndex = 0;
 	        this.cleanTweens.length = 0;
+	        this.cleaned = false;
 	    };
 	    Sequence.prototype.Cleanup = function () {
-	        if (!this.parent) {
+	        if (!this.parent || this.cleaned) {
 	            return;
 	        }
+	        this.cleaned = true;
 	        this.cleanTweens[this.cleanTweens.length] = this;
 	        this.parent.Clean(this.cleanTweens);
 	    };
@@ -822,9 +835,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.state = state_1.State.Idle;
 	        _this.timescale = 1;
 	        _this.elapsed = 0;
+	        _this.update = 0;
 	        _this.eventToAdd = [];
 	        _this.eventToRemove = [];
-	        _this.cleanUpdate = 0;
 	        _this.clean1 = [];
 	        _this.clean2 = [];
 	        return _this;
@@ -836,6 +849,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        enumerable: true,
 	        configurable: true
 	    });
+	    Ticker.prototype.ToClean = function () {
+	        return this.update % 2 === 1 ? this.clean1 : this.clean2;
+	    };
 	    Object.defineProperty(Ticker.prototype, "Elapsed", {
 	        get: function () {
 	            return this.elapsed;
@@ -892,7 +908,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            tick(localDt);
 	        }
 	        this.elapsed += localDt;
-	        this.cleanUpdate += 1;
+	        this.update++;
 	        this.UpdateListener();
 	    };
 	    Ticker.prototype.Start = function () {
@@ -928,23 +944,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Ticker.prototype.Clean = function (data) {
 	        for (var i = 0; i < data.length; i++) {
 	            var obj = data[i];
-	            if (this.cleanUpdate % 2 === 0) {
-	                this.clean2.push(obj);
+	            if (this.update % 2 === 0) {
+	                this.clean1.push(obj);
 	            }
 	            else {
-	                this.clean1.push(obj);
+	                this.clean2.push(obj);
 	            }
 	        }
 	    };
 	    Ticker.prototype.GetCleanTweens = function () {
-	        if (this.cleanUpdate % 2 === 0) {
-	            this.clean2.length = 0;
-	            return this.clean1;
+	        var toClean = this.update % 2 === 1 ? this.clean1 : this.clean2;
+	        for (var i = 0; i < toClean.length; i++) {
+	            toClean[i].Default();
 	        }
-	        else {
-	            this.clean1.length = 0;
-	            return this.clean2;
-	        }
+	        return toClean;
 	    };
 	    return Ticker;
 	}(eventList_1.EventList));
@@ -972,6 +985,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.last = newNode;
 	        }
 	        this.length += 1;
+	    };
+	    EventList.prototype.Pop = function () {
+	        var first = this.first;
+	        this.Remove(first);
+	        return first;
 	    };
 	    EventList.prototype.Remove = function (obj) {
 	        var node = obj;
@@ -1036,60 +1054,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var tween_1 = __webpack_require__(10);
-	var sequence_1 = __webpack_require__(1);
-	var Pooling = (function () {
-	    function Pooling(size) {
-	        this.tweenPool = [];
-	        this.sequencePool = [];
+	var TweenPool = (function () {
+	    function TweenPool(size) {
+	        this.tweens = [];
 	        this.targetSize = size * 2;
 	        for (var i = 0; i < size; i++) {
-	            this.tweenPool.push(this.CreateTween());
-	        }
-	        for (var i = 0; i < size / 4; i++) {
-	            this.sequencePool.push(this.CreateSequence());
+	            this.Add(this.CreateTween());
 	        }
 	    }
-	    Pooling.prototype.CreateTween = function () {
+	    TweenPool.prototype.Add = function (tween) {
+	        this.tweens.push(tween);
+	    };
+	    TweenPool.prototype.Pop = function () {
+	        return this.tweens.shift();
+	    };
+	    TweenPool.prototype.CreateTween = function () {
 	        return new tween_1.Tween(null, []);
 	    };
-	    Pooling.prototype.CreateSequence = function () {
-	        return new sequence_1.Sequence();
-	    };
-	    Pooling.prototype.PopTween = function () {
-	        if (this.tweenPool.length === 0) {
-	            this.tweenPool.push(this.CreateTween());
+	    TweenPool.prototype.PopTween = function () {
+	        var tween = this.Pop();
+	        if (tween === undefined) {
+	            return this.CreateTween();
 	        }
-	        return this.tweenPool.pop();
+	        tween.Default();
+	        return tween;
 	    };
-	    Pooling.prototype.PopSequence = function () {
-	        if (this.sequencePool.length === 0) {
-	            this.sequencePool.push(this.CreateSequence());
-	        }
-	        return this.sequencePool.pop();
-	    };
-	    Pooling.prototype.PushTween = function (tween) {
+	    TweenPool.prototype.PushTween = function (tween) {
 	        if (tween === undefined) {
 	            return;
 	        }
-	        if (this.tweenPool.length > this.targetSize) {
+	        if (this.tweens.length > this.targetSize) {
 	            return;
 	        }
 	        tween.Default();
-	        this.tweenPool[this.tweenPool.length] = tween;
+	        this.Add(tween);
 	    };
-	    Pooling.prototype.PushSequence = function (sequence) {
-	        if (sequence === undefined) {
-	            return;
-	        }
-	        if (this.tweenPool.length > this.targetSize) {
-	            return;
-	        }
-	        sequence.Default();
-	        this.sequencePool[this.sequencePool.length] = sequence;
-	    };
-	    return Pooling;
+	    return TweenPool;
 	}());
-	exports.Pooling = Pooling;
+	exports.TweenPool = TweenPool;
 
 
 /***/ }),
@@ -1113,6 +1115,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var easing_1 = __webpack_require__(12);
 	var sequence_1 = __webpack_require__(1);
 	var tweenType_1 = __webpack_require__(5);
+	var state_1 = __webpack_require__(3);
 	var Tween = (function (_super) {
 	    __extends(Tween, _super);
 	    function Tween(object, properties) {
@@ -1121,6 +1124,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.object = object;
 	        _this.properties = properties;
 	        _this.tickCb = function (dt) {
+	            if (_this.state === state_1.State.Finished || _this.state === state_1.State.Killed) {
+	                return;
+	            }
 	            var localDt = dt * _this.timescale;
 	            _this.elapsed += localDt;
 	            var progress = Math.max(Math.min(_this.elapsed / _this.duration, 1), 0);
@@ -1145,6 +1151,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Object.defineProperty(Tween.prototype, "Type", {
 	        get: function () {
 	            return tweenType_1.TweenType.Tween;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(Tween.prototype, "Object", {
+	        get: function () {
+	            return this.object;
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -1237,6 +1250,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.timescale = scale;
 	        return this;
 	    };
+	    Tween.prototype.Modify = function (diff, updateTo) {
+	        for (var i = 0; i < this.properties.length; i++) {
+	            var prop = this.properties[i];
+	            if (!diff.hasOwnProperty(prop)) {
+	                continue;
+	            }
+	            this.object[prop] += diff[prop];
+	            if (updateTo) {
+	                this.currentTo[prop] += diff[prop];
+	            }
+	            else {
+	                this.currentFrom[prop] += diff[prop];
+	            }
+	        }
+	    };
 	    Tween.prototype.ToSequence = function () {
 	        if (!this.parent) {
 	            throw new Error('Cant convert to a sequence, parent ticker not defined');
@@ -1265,9 +1293,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.elapsed = 0;
 	    };
 	    Tween.prototype.Cleanup = function () {
-	        if (!this.parent) {
+	        if (!this.parent || this.cleaned) {
 	            return;
 	        }
+	        this.cleaned = true;
 	        this.parent.Clean([this]);
 	    };
 	    Tween.prototype.Default = function () {
@@ -1279,9 +1308,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.currentFrom = undefined;
 	        this.currentTo = undefined;
 	        this.relative = false;
-	        this.currentFrom = undefined;
-	        this.currentTo = undefined;
 	        this.ease = easing_1.easeTypes[0];
+	        this.cleaned = false;
 	    };
 	    Tween.prototype.OnStart = function (cb) {
 	        _super.prototype.OnStart.call(this, cb);
@@ -1534,6 +1562,53 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	exports.easeTypes = easingByType;
 	exports.easeNames = easingByName;
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var sequence_1 = __webpack_require__(1);
+	var SequencePool = (function () {
+	    function SequencePool(size) {
+	        this.sequences = [];
+	        this.targetSize = size * 2;
+	        for (var i = 0; i < size; i++) {
+	            this.Add(this.CreateSequence());
+	        }
+	    }
+	    SequencePool.prototype.Add = function (tween) {
+	        this.sequences.push(tween);
+	    };
+	    SequencePool.prototype.Pop = function () {
+	        return this.sequences.shift();
+	    };
+	    SequencePool.prototype.CreateSequence = function () {
+	        return new sequence_1.Sequence();
+	    };
+	    SequencePool.prototype.PopSequence = function () {
+	        var sequence = this.Pop();
+	        if (sequence === undefined) {
+	            return this.CreateSequence();
+	        }
+	        sequence.Default();
+	        return sequence;
+	    };
+	    SequencePool.prototype.PushSequence = function (sequence) {
+	        if (sequence === undefined) {
+	            return;
+	        }
+	        if (this.sequences.length > this.targetSize) {
+	            return;
+	        }
+	        sequence.Default();
+	        this.Add(sequence);
+	    };
+	    return SequencePool;
+	}());
+	exports.SequencePool = SequencePool;
 
 
 /***/ })

@@ -22,9 +22,15 @@ export class Ticker extends EventList implements ITicker {
 	private state = State.Idle;
 	private timescale = 1;
 	private elapsed = 0;
+	private update = 0;
 	private eventToAdd: { (dt: number): void }[] = [];
 	private eventToRemove: { (dt: number): void }[] = [];
-	private clean: (ITween | ISequence)[] = [];
+	private clean1: (ITween | ISequence)[] = [];
+	private clean2: (ITween | ISequence)[] = [];
+
+	public ToClean(): (ITween | ISequence)[] {
+		return this.update % 2 === 1 ? this.clean1 : this.clean2;
+	}
 
 	public get Elapsed(): number {
 		return this.elapsed;
@@ -123,6 +129,7 @@ export class Ticker extends EventList implements ITicker {
 			tick(localDt);
 		}
 		this.elapsed += localDt;
+		this.update++;
 
 		this.UpdateListener();
 	}
@@ -174,15 +181,19 @@ export class Ticker extends EventList implements ITicker {
 	public Clean(data: (ITween | ISequence)[]): void {
 		for (let i = 0; i < data.length; i++) {
 			let obj = data[i];
-			this.clean.push(obj);
+			if (this.update % 2 === 0) {
+				this.clean1.push(obj);
+			} else {
+				this.clean2.push(obj);
+			}
 		}
 	}
 
 	public GetCleanTweens(): (ITween | ISequence)[] {
-		for (let i = 0; i < this.clean.length; i++) {
-			this.clean[i].Default();
+		let toClean = this.update % 2 === 1 ? this.clean1 : this.clean2;
+		for (let i = 0; i < toClean.length; i++) {
+			toClean[i].Default();
 		}
-		this.clean.length = 0;
-		return this.clean;
+		return toClean;
 	}
 }

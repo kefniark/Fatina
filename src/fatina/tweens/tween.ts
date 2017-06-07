@@ -23,12 +23,17 @@ export class Tween extends BaseTween implements ITween {
 		return TweenType.Tween;
 	}
 
+	public get Object() {
+		return this.object;
+	}
+
 	private object: any;
 	private properties: string[];
 	private from: any;
 	private to: any;
 	private currentFrom: any;
 	private currentTo: any;
+	private cleaned: boolean;
 
 	private relative = false;
 	private ease: (t: number, args?: any) => number;
@@ -344,9 +349,10 @@ export class Tween extends BaseTween implements ITween {
 	 * @memberOf Tween
 	 */
 	public Cleanup() {
-		if (!this.parent) {
+		if (!this.parent || this.cleaned) {
 			return;
 		}
+		this.cleaned = true;
 		this.parent.Clean([this]);
 	}
 
@@ -366,6 +372,7 @@ export class Tween extends BaseTween implements ITween {
 		this.currentTo = undefined;
 		this.relative = false;
 		this.ease = easeTypes[0];
+		this.cleaned = false;
 	}
 
 	public OnStart(cb: () => void): ITween {

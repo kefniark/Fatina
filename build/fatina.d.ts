@@ -1,26 +1,15 @@
 
 
-    private targetSize;
-    private tweenPool;
-    private sequencePool;
-    constructor(size: number);
-    private CreateTween();
-    private CreateSequence();
-    PopTween(): ITween;
-    PopSequence(): ISequence;
-    PushTween(tween: ITween): void;
-    PushSequence(sequence: ISequence): void;
-}
-
     readonly Type: TweenType;
     private state;
     private timescale;
     private elapsed;
+    private update;
     private eventToAdd;
     private eventToRemove;
-    private cleanUpdate;
     private clean1;
     private clean2;
+    ToClean(): (ITween | ISequence)[];
     readonly Elapsed: number;
     readonly Duration: number;
     IsCompleted(): boolean;
@@ -45,6 +34,7 @@
     last: INode | undefined;
     length: number;
     Add(obj: any): void;
+    Pop(): INode | undefined;
     Remove(obj: any): void;
     Clear(): void;
     private GetNode(obj, previous, next, list);
@@ -148,11 +138,13 @@
     Clean(data: (ITween | ISequence)[]): void;
 }
 
+    Object: any;
     Default(): void;
     Init(object: any, properties: string[]): void;
     Start(): ITween;
     From(from: any): ITween;
     To(to: any, duration: number): ITween;
+    Modify(diff: any, updateTo: boolean): void;
     SetParent(ticker: ITicker): ITween;
     SetLoop(loop: number): ITween;
     SetRelative(relative: boolean): ITween;
@@ -167,6 +159,26 @@
 
     [id: string]: (t: number, args?: any) => number;
 };
+
+    private targetSize;
+    private sequences;
+    constructor(size: number);
+    private Add(tween);
+    private Pop();
+    private CreateSequence();
+    PopSequence(): ISequence;
+    PushSequence(sequence: ISequence): void;
+}
+
+    private targetSize;
+    private tweens;
+    constructor(size: number);
+    private Add(tween);
+    private Pop();
+    private CreateTween();
+    PopTween(): ITween;
+    PushTween(tween: ITween): void;
+}
 
     elapsed: number;
     duration: number;
@@ -232,6 +244,7 @@
     private currentTween;
     private sequenceIndex;
     private cleanTweens;
+    private cleaned;
     readonly CurrentTween: (ITween | IPlayable)[] | undefined;
     constructor();
     Start(): ISequence;
@@ -266,12 +279,14 @@
 }
 
     readonly Type: TweenType;
+    readonly Object: any;
     private object;
     private properties;
     private from;
     private to;
     private currentFrom;
     private currentTo;
+    private cleaned;
     private relative;
     private ease;
     constructor(object: any, properties: string[]);
@@ -286,6 +301,7 @@
     SetLoop(loop: number): ITween;
     SetRelative(relative: boolean): ITween;
     SetTimescale(scale: number): ITween;
+    Modify(diff: any, updateTo: boolean): void;
     ToSequence(): ISequence;
     private Easing(type);
     SetEasing(type: EasingType | string): ITween;
