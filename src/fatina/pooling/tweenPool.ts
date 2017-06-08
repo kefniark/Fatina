@@ -29,7 +29,6 @@ export class TweenPool {
 		if (tween === undefined) {
 			return this.CreateTween();
 		}
-		tween.Default();
 		return tween;
 	}
 

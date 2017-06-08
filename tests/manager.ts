@@ -138,9 +138,28 @@ test('[Fatina.Manager] Check pooling with looping sequence', function (t: any) {
 	}
 
 	sequence.Kill();
-	t.equal(0, ticker.ToClean().length, 'check there is nothing to clean even after a kill');
-	fatina.Update(1);
 	t.equal(5, ticker.ToClean().length, 'check there is 4 tweens + 1 sequence to clean');
+	fatina.Update(1);
+	t.equal(0, ticker.ToClean().length, 'check there is nothing to clean even after a kill');
 
+	t.end();
+});
+
+test('[Fatina.Manager] Check pooling with looping sequence', function (t: any) {
+	let obj = { x: 0, y: 1 };
+	for (let i = 0; i < 10; i++) {
+		let tween = fatina.Tween({}, []).To({}, 0.2).Start();
+		console.log('before', tween);
+		fatina.Update(0.1);
+		console.log('after', tween);
+
+		let sequence = fatina.Sequence();
+		sequence.Append(fatina.Tween(obj, ['x']).To({x: 1}, 0.15).SetRelative(true).SetLoop(2));
+		sequence.Join(fatina.Tween(obj, ['y']).To({y: 2}, 0.15).SetEasing('inOutQuad').SetTimescale(1.5));
+		sequence.Start();
+		for (let j = 0; j < 10; j++) {
+			fatina.Update(0.1);
+		}
+	}
 	t.end();
 });

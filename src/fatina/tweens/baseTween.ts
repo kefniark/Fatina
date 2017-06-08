@@ -8,15 +8,6 @@ export abstract class BaseTween {
 	public timescale = 1;
 	protected loop = 1;
 
-	public abstract get Type(): TweenType;
-
-	public get Elapsed() {
-		return this.elapsed;
-	}
-	public get Duration() {
-		return this.duration;
-	}
-
 	protected parent: ITicker;
 	protected tickCb: (dt: number) => void;
 	protected state: State = State.Idle;
@@ -30,6 +21,15 @@ export abstract class BaseTween {
 	protected abstract Validate(): void;
 	protected abstract LoopInit(): void;
 
+	public abstract get Type(): TweenType;
+
+	public get Elapsed() {
+		return this.elapsed;
+	}
+	public get Duration() {
+		return this.duration;
+	}
+
 	public SetParent(ticker: ITicker): void {
 		if (this.parent) {
 			this.parent.RemoveTickListener(this.tickCb);
@@ -37,15 +37,15 @@ export abstract class BaseTween {
 		this.parent = ticker;
 	}
 
-	public IsRunning(): boolean {
+	public get IsRunning(): boolean {
 		return this.state === State.Run;
 	}
 
-	public IsCompleted(): boolean {
+	public get IsCompleted(): boolean {
 		return this.state === State.Finished;
 	}
 
-	public IsKilled(): boolean {
+	public get IsKilled(): boolean {
 		return this.state === State.Killed;
 	}
 
@@ -163,6 +163,7 @@ export abstract class BaseTween {
 		this.eventComplete.length = 0;
 		this.firstStart = true;
 		this.state = State.Idle;
+		delete this.parent;
 	}
 
 	protected Complete(): void {

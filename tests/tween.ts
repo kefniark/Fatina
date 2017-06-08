@@ -17,7 +17,7 @@ test('[Fatina.Tween] Get tween data', function (t: any) {
 
 	tween.Start();
 
-	t.notOk(tween.IsCompleted(), 'Tween is not completed yet');
+	t.notOk(tween.IsCompleted, 'Tween is not completed yet');
 	t.equal(0, tween.Elapsed, 'Elapsed is correct at the beginning');
 	t.equal(10, tween.Duration, 'Duration');
 
@@ -29,7 +29,7 @@ test('[Fatina.Tween] Get tween data', function (t: any) {
 		ticker.Tick(1);
 	}
 
-	t.ok(tween.IsCompleted(), 'Tween is completed now');
+	t.ok(tween.IsCompleted, 'Tween is completed now');
 	t.equal(10, tween.Elapsed, 'Elapsed match duration at the end');
 	t.end();
 });
@@ -366,13 +366,13 @@ test('[Fatina.Tween] Test Tween Kill', function (t: any) {
 
 	tween.Start();
 	ticker.Tick(1);
-	t.ok(tween.IsRunning());
-	t.notOk(tween.IsKilled());
+	t.ok(tween.IsRunning);
+	t.notOk(tween.IsKilled);
 	tween.Kill();
 
-	t.notOk(tween.IsRunning());
-	t.ok(tween.IsKilled());
-	t.notOk(tween.IsCompleted());
+	t.notOk(tween.IsRunning);
+	t.ok(tween.IsKilled);
+	t.notOk(tween.IsCompleted);
 	tween.Kill();
 
 	t.equal(1, killed)

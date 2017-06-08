@@ -4,10 +4,9 @@ export interface IControl {
 	Type: TweenType;
 	Elapsed: number;
 	Duration: number;
-
-	IsRunning(): boolean;
-	IsCompleted(): boolean;
-	IsKilled(): boolean;
+	IsRunning: boolean;
+	IsCompleted: boolean;
+	IsKilled: boolean;
 
 	Start(): void;
 	Pause(): void;

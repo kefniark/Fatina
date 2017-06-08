@@ -29,7 +29,6 @@ export class SequencePool {
 		if (sequence === undefined) {
 			return this.CreateSequence();
 		}
-		sequence.Default();
 		return sequence;
 	}
 

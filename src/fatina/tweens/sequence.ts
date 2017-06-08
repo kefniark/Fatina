@@ -28,14 +28,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 
 	constructor() {
 		super();
-		this.tickCb = (dt: number) => {
-			if (this.state === State.Finished || this.state === State.Killed) {
-				return;
-			}
-			let localDt = dt * this.timescale;
-			this.elapsed += localDt;
-			this.Tick(localDt);
-		};
+		this.tickCb = this.Tick.bind(this);
 	}
 
 	public Start(): ISequence {
@@ -73,18 +66,19 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 		}
 	}
 
-	private Tick(dt: number, remains?: boolean) {
+	private Tick(dt: number) {
+		if (this.state === State.Finished || this.state === State.Killed) {
+			return;
+		}
+		let localDt = dt * this.timescale;
+		this.elapsed += localDt;
+		this.LocalTick(localDt);
+	}
+
+	private LocalTick(dt: number, remains?: boolean) {
 		// If no current tween, take the first one and start it
 		if (!this.currentTween) {
-			this.currentTween = this.tweens[this.sequenceIndex];
-			if (this.currentTween) {
-				for (let i = 0; i < this.currentTween.length; i++) {
-					let tween = this.currentTween[i];
-					tween.Start();
-				}
-
-				this.StepStarted(this.currentTween[0]);
-			}
+			this.NextTween();
 		}
 
 		if (this.currentTween) {
@@ -104,7 +98,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 		// Current tween over
 		if (this.currentTween) {
 			for (let i = 0; i < this.currentTween.length; i++) {
-				if (!this.currentTween[i].IsCompleted()) {
+				if (!this.currentTween[i].IsCompleted) {
 					return;
 				}
 			}
@@ -117,7 +111,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 			this.sequenceIndex++;
 
 			if (remainsDt > 0.01) {
-				this.Tick(remainsDt, true);
+				this.LocalTick(remainsDt, true);
 				return;
 			}
 		}
@@ -130,6 +124,18 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 			} else {
 				this.ResetAndStart(false, remainsDt);
 			}
+		}
+	}
+
+	private NextTween() {
+		this.currentTween = this.tweens[this.sequenceIndex];
+		if (this.currentTween) {
+			for (let i = 0; i < this.currentTween.length; i++) {
+				let tween = this.currentTween[i];
+				tween.Start();
+			}
+
+			this.StepStarted(this.currentTween[0]);
 		}
 	}
 
@@ -202,7 +208,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 			let tweenArray = this.tweens[i];
 			for (let j = 0; j < tweenArray.length; j++) {
 				let tween = tweenArray[j];
-				if (tween.IsKilled() || tween.IsCompleted()) {
+				if (tween.IsKilled || tween.IsCompleted) {
 					continue;
 				}
 				if (tween.Elapsed === 0) {
@@ -224,7 +230,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 			let tweenArray = this.tweens[i];
 			for (let j = 0; j < tweenArray.length; j++) {
 				let tween = tweenArray[j];
-				if (tween.IsKilled() || tween.IsCompleted()) {
+				if (tween.IsKilled || tween.IsCompleted) {
 					continue;
 				}
 				tween.Kill();

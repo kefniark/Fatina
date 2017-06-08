@@ -43,31 +43,33 @@ export class Tween extends BaseTween implements ITween {
 
 		this.object = object;
 		this.properties = properties;
+		this.tickCb = this.Tick.bind(this);
+	}
 
-		this.tickCb = (dt: number) => {
-			if (this.state === State.Finished || this.state === State.Killed) {
-				return;
-			}
-			let localDt = dt * this.timescale;
-			this.elapsed += localDt;
+	private Tick(dt: number) {
+		if (this.state === State.Finished || this.state === State.Killed) {
+			return;
+		}
 
-			let progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
-			this.Update(localDt, progress);
+		let localDt = dt * this.timescale;
+		this.elapsed += localDt;
 
-			if (this.elapsed >= this.duration) {
-				this.loop--;
-				if (this.loop === 0) {
-					for (let i = 0; i < this.properties.length; i++) {
-						let prop = this.properties[i];
-						this.object[prop] = this.currentTo[prop];
-					}
-					this.Complete();
-				} else {
-					this.CheckPosition();
-					this.ResetAndStart(false, this.elapsed - this.duration);
+		let progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
+		this.Update(localDt, progress);
+
+		if (this.elapsed >= this.duration) {
+			this.loop--;
+			if (this.loop === 0) {
+				for (let i = 0; i < this.properties.length; i++) {
+					let prop = this.properties[i];
+					this.object[prop] = this.currentTo[prop];
 				}
+				this.Complete();
+			} else {
+				this.CheckPosition();
+				this.ResetAndStart(false, this.elapsed - this.duration);
 			}
-		};
+		}
 	}
 
 	/**

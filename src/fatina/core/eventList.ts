@@ -56,22 +56,6 @@ export abstract class EventList {
 		this.length -= 1;
 	}
 
-	public Clear() {
-		let node = this.first;
-		while (node !== undefined) {
-			let nextNode = node.node_next;
-			node.node_valid = false;
-			node.node_previous = undefined;
-			node.node_next = undefined;
-			node.node_list = undefined;
-			node = nextNode;
-		}
-
-		this.first = undefined;
-		this.last = undefined;
-		this.length = 0;
-	}
-
 	private GetNode(obj: any, previous: INode | undefined, next: INode | undefined, list: EventList): INode {
 		let node = obj as INode;
 		if (!node.node_valid) {

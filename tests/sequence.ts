@@ -213,8 +213,8 @@ test('[Fatina.Sequence] Sequence timescale & kill', function (t: any) {
 
 	sequence.Kill();
 
-	t.ok(sequence.IsKilled(), 'check the sequence is marked as killed');
-	t.ok(tween.IsKilled(), 'check the tween is marked as killed');
+	t.ok(sequence.IsKilled, 'check the sequence is marked as killed');
+	t.ok(tween.IsKilled, 'check the tween is marked as killed');
 	t.equal(1, killed, 'check the onKilled event is emitted');
 
 	t.end();
