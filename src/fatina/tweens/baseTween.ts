@@ -3,6 +3,7 @@ import { State } from '../core/enum/state';
 import { TweenType } from '../core/enum/tweenType';
 
 export abstract class BaseTween {
+	public abstract type: TweenType;
 	public elapsed = 0;
 	public duration = 0;
 	public timescale = 1;
@@ -10,7 +11,7 @@ export abstract class BaseTween {
 
 	protected parent: ITicker;
 	protected tickCb: (dt: number) => void;
-	protected state: State = State.Idle;
+	public state: State = State.Idle;
 
 	private eventStart: {(): void}[] = [];
 	private eventUpdate: {(dt: number, progress: number): void}[] = [];
@@ -20,15 +21,6 @@ export abstract class BaseTween {
 
 	protected abstract Validate(): void;
 	protected abstract LoopInit(): void;
-
-	public abstract get Type(): TweenType;
-
-	public get Elapsed() {
-		return this.elapsed;
-	}
-	public get Duration() {
-		return this.duration;
-	}
 
 	public SetParent(ticker: ITicker): void {
 		if (this.parent) {

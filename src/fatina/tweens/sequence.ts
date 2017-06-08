@@ -9,22 +9,16 @@ import { TweenType } from '../core/enum/tweenType';
 import { State } from '../core/enum/state';
 
 export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable {
-	public get Type() {
-		return TweenType.Sequence;
-	}
+	public readonly type = TweenType.Sequence;
 
 	private eventTick: {(dt: number): void}[] = [];
 	private eventStepStart: {(tween: ITween | IPlayable): void}[] = [];
 	private eventStepEnd: {(tween: ITween | IPlayable): void}[] = [];
 	private tweens: ((ITween | IPlayable)[])[] = [];
-	private currentTween: (ITween | IPlayable)[] | undefined;
+	public currentTween: (ITween | IPlayable)[] | undefined;
 	private sequenceIndex = 0;
 	private cleanTweens: (ITween | ISequence)[] = [];
 	private cleaned: boolean;
-
-	public get CurrentTween(): (ITween | IPlayable)[] | undefined {
-		return this.currentTween;
-	}
 
 	constructor() {
 		super();
@@ -98,13 +92,13 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 		// Current tween over
 		if (this.currentTween) {
 			for (let i = 0; i < this.currentTween.length; i++) {
-				if (!this.currentTween[i].IsCompleted) {
+				if (this.currentTween[i].state !== State.Finished) {
 					return;
 				}
 			}
 
 			let first = this.currentTween[0];
-			remainsDt = first.Elapsed - first.Duration;
+			remainsDt = first.elapsed - first.duration;
 
 			this.StepEnded(this.currentTween[0]);
 			this.currentTween = undefined;
@@ -208,10 +202,10 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 			let tweenArray = this.tweens[i];
 			for (let j = 0; j < tweenArray.length; j++) {
 				let tween = tweenArray[j];
-				if (tween.IsKilled || tween.IsCompleted) {
+				if (tween.state === State.Killed || tween.state === State.Finished) {
 					continue;
 				}
-				if (tween.Elapsed === 0) {
+				if (tween.elapsed === 0) {
 					this.StepStarted(tween);
 				}
 				tween.Skip();
@@ -230,7 +224,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 			let tweenArray = this.tweens[i];
 			for (let j = 0; j < tweenArray.length; j++) {
 				let tween = tweenArray[j];
-				if (tween.IsKilled || tween.IsCompleted) {
+				if (tween.state === State.Killed || tween.state === State.Finished) {
 					continue;
 				}
 				tween.Kill();
@@ -275,8 +269,8 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 			return;
 		}
 		this.cleaned = true;
-		this.cleanTweens[this.cleanTweens.length] = this;
-		this.parent.Clean(this.cleanTweens);
+		// this.cleanTweens[this.cleanTweens.length] = this;
+		// this.parent.Clean(this.cleanTweens);
 	}
 
 	public Clean(data: (ITween | ISequence)[]) {

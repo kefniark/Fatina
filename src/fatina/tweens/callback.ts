@@ -3,9 +3,7 @@ import { IPlayable } from '../core/interfaces/IPlayable';
 import { TweenType } from '../core/enum/tweenType';
 
 export class Callback extends BaseTween implements IPlayable {
-	public get Type() {
-		return TweenType.Callback;
-	}
+	public readonly type = TweenType.Callback;
 
 	constructor(cb: () => void) {
 		super();

@@ -2,6 +2,7 @@ import * as test from 'tape';
 import { Sequence } from '../src/fatina/tweens/sequence';
 import { Tween } from '../src/fatina/tweens/tween';
 import { Ticker } from '../src/fatina/ticker';
+import { State } from '../src/fatina/core/enum/state';
 
 test('[Fatina.Sequence] Create a basic Sequence', function (t: any) {
 	let ticker = new Ticker();
@@ -138,7 +139,7 @@ test('[Fatina.Sequence] Test Join', function (t: any) {
 		.Join(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 1.5))
 		.Prepend(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 2))
 		.Join(new Tween(obj, [ 'alpha' ]).To({ alpha: 0 }, 2).OnStart(() => {
-			let current = (sequence as Sequence).CurrentTween;
+			let current = (sequence as Sequence).currentTween;
 			if (current) {
 				t.equal(2, current.length, 'check 2 tween are running at the same time');
 			}
@@ -208,13 +209,13 @@ test('[Fatina.Sequence] Sequence timescale & kill', function (t: any) {
 		ticker.Tick(1);
 	}
 
-	t.equal(3, sequence.Elapsed, 'check the time of this sequence is 0.5');
-	t.equal(1.5, tween.Elapsed, 'check the time of the tween is 0.25');
+	t.equal(3, sequence.elapsed, 'check the time of this sequence is 0.5');
+	t.equal(1.5, tween.elapsed, 'check the time of the tween is 0.25');
 
 	sequence.Kill();
 
-	t.ok(sequence.IsKilled, 'check the sequence is marked as killed');
-	t.ok(tween.IsKilled, 'check the tween is marked as killed');
+	t.ok(sequence.state === State.Killed, 'check the sequence is marked as killed');
+	t.ok(tween.state === State.Killed, 'check the tween is marked as killed');
 	t.equal(1, killed, 'check the onKilled event is emitted');
 
 	t.end();

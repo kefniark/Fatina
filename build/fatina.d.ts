@@ -1,20 +1,13 @@
 
 
-    readonly Type: TweenType;
-    private state;
+    type: TweenType;
+    state: State;
     private timescale;
-    private elapsed;
+    elapsed: number;
+    duration: number;
     private update;
     private eventToAdd;
     private eventToRemove;
-    private clean1;
-    private clean2;
-    ToClean(): (ITween | ISequence)[];
-    readonly Elapsed: number;
-    readonly Duration: number;
-    IsCompleted(): boolean;
-    IsRunning(): boolean;
-    IsKilled(): boolean;
     SetTimescale(scale: number): void;
     AddTickListener(cb: (dt: number) => void): void;
     RemoveTickListener(cb: (dt: number) => void): void;
@@ -26,8 +19,6 @@
     Kill(): void;
     Skip(): void;
     Reset(): void;
-    Clean(data: (ITween | ISequence)[]): void;
-    GetCleanTweens(): (ITween | ISequence)[];
 }
 
     first: INode | undefined;
@@ -36,7 +27,6 @@
     Add(obj: any): void;
     Pop(): INode | undefined;
     Remove(obj: any): void;
-    Clear(): void;
     private GetNode(obj, previous, next, list);
 }
     node_valid: boolean;
@@ -93,12 +83,10 @@
     None = 5,
 }
 
-    Type: TweenType;
-    Elapsed: number;
-    Duration: number;
-    IsRunning(): boolean;
-    IsCompleted(): boolean;
-    IsKilled(): boolean;
+    type: TweenType;
+    elapsed: number;
+    duration: number;
+    state: State;
     Start(): void;
     Pause(): void;
     Resume(): void;
@@ -107,6 +95,7 @@
     Skip(): void;
 }
 
+    state: State;
     OnStart(cb: () => void): void;
     OnUpdate(cb: (dt: number, progress: number) => void): void;
     OnKilled(cb: () => void): void;
@@ -135,10 +124,8 @@
 
     AddTickListener(cb: (dt: number) => void): void;
     RemoveTickListener(cb: (dt: number) => void): void;
-    Clean(data: (ITween | ISequence)[]): void;
 }
 
-    Object: any;
     Default(): void;
     Init(object: any, properties: string[]): void;
     Start(): ITween;
@@ -160,36 +147,18 @@
     [id: string]: (t: number, args?: any) => number;
 };
 
-    private targetSize;
-    private sequences;
-    constructor(size: number);
-    private Add(tween);
-    private Pop();
-    private CreateSequence();
-    PopSequence(): ISequence;
-    PushSequence(sequence: ISequence): void;
-}
 
-    private targetSize;
-    private tweens;
-    constructor(size: number);
-    private Add(tween);
-    private Pop();
-    private CreateTween();
-    PopTween(): ITween;
-    PushTween(tween: ITween): void;
-}
 
+
+
+    abstract type: TweenType;
     elapsed: number;
     duration: number;
     timescale: number;
     protected loop: number;
-    readonly abstract Type: TweenType;
-    readonly Elapsed: number;
-    readonly Duration: number;
     protected parent: ITicker;
     protected tickCb: (dt: number) => void;
-    protected state: State;
+    state: State;
     private eventStart;
     private eventUpdate;
     private eventKill;
@@ -198,9 +167,9 @@
     protected abstract Validate(): void;
     protected abstract LoopInit(): void;
     SetParent(ticker: ITicker): void;
-    IsRunning(): boolean;
-    IsCompleted(): boolean;
-    IsKilled(): boolean;
+    readonly IsRunning: boolean;
+    readonly IsCompleted: boolean;
+    readonly IsKilled: boolean;
     Start(): void;
     Reset(resetloop?: boolean): void;
     ResetAndStart(resetloop: boolean, dtRemains: number): void;
@@ -222,30 +191,29 @@
     OnComplete(cb: () => void): void;
 }
 
-    readonly Type: TweenType;
+    readonly type: TweenType;
     constructor(cb: () => void);
     protected Validate(): void;
     protected LoopInit(): void;
     protected Cleanup(): void;
 }
 
-    readonly Type: TweenType;
+    readonly type: TweenType;
     constructor(duration: number);
     protected Validate(): void;
     protected LoopInit(): void;
     protected Cleanup(): void;
 }
 
-    readonly Type: TweenType;
+    readonly type: TweenType;
     private eventTick;
     private eventStepStart;
     private eventStepEnd;
     private tweens;
-    private currentTween;
+    currentTween: (ITween | IPlayable)[] | undefined;
     private sequenceIndex;
     private cleanTweens;
     private cleaned;
-    readonly CurrentTween: (ITween | IPlayable)[] | undefined;
     constructor();
     Start(): ISequence;
     protected Validate(): void;
@@ -253,7 +221,9 @@
     SetParent(ticker: ITicker): ISequence;
     AddTickListener(cb: (dt: number) => void): void;
     RemoveTickListener(cb: (dt: number) => void): void;
-    private Tick(dt, remains?);
+    private Tick(dt);
+    private LocalTick(dt, remains?);
+    private NextTween();
     private StepStarted(tween);
     private StepEnded(tween);
     Append(tween: ITween | ISequence): ISequence;
@@ -278,8 +248,7 @@
     OnStepEnd(cb: (index: ITween | IPlayable) => void): ISequence;
 }
 
-    readonly Type: TweenType;
-    readonly Object: any;
+    readonly type: TweenType;
     private object;
     private properties;
     private from;
@@ -287,6 +256,7 @@
     private currentFrom;
     private currentTo;
     private cleaned;
+    private remainsDt;
     private relative;
     private ease;
     constructor(object: any, properties: string[]);
@@ -294,6 +264,7 @@
     Start(): ITween;
     protected Validate(): void;
     protected CheckPosition(): void;
+    private Tick(dt);
     private Update(dt, progress);
     SetParent(ticker: ITicker): ITween;
     From(from: any): ITween;

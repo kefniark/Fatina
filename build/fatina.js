@@ -57,20 +57,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var sequence_1 = __webpack_require__(1);
-	var ticker_1 = __webpack_require__(7);
-	var tweenPool_1 = __webpack_require__(9);
-	var sequencePool_1 = __webpack_require__(13);
-	var tweenType_1 = __webpack_require__(5);
+	var tween_1 = __webpack_require__(7);
+	var ticker_1 = __webpack_require__(10);
 	var tickerManager;
-	var tweenPooling;
-	var sequencePooling;
 	var initialized = false;
 	var isFirstUpdate = true;
 	var lastFrame;
 	var lastTime = 0;
 	exports.time = 0;
 	function Elapsed() {
-	    return tickerManager.Elapsed;
+	    return tickerManager.elapsed;
 	}
 	exports.Elapsed = Elapsed;
 	function Ticker() {
@@ -88,8 +84,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (typeof (window) !== 'undefined' && !disableAutoTick) {
 	        lastFrame = requestFrame(updateLoop);
 	    }
-	    tweenPooling = new tweenPool_1.TweenPool(poolSize === undefined ? 600 : poolSize);
-	    sequencePooling = new sequencePool_1.SequencePool(poolSize === undefined ? 250 : poolSize);
 	    initialized = true;
 	    return true;
 	}
@@ -120,29 +114,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (!initialized || !tickerManager) {
 	        return;
 	    }
-	    var toClean = tickerManager.GetCleanTweens();
 	    tickerManager.Tick(timestamp);
 	    exports.time += timestamp;
-	    for (var i = 0; i < toClean.length; i++) {
-	        var clean = toClean[i];
-	        if (clean.Type === tweenType_1.TweenType.Tween) {
-	            tweenPooling.PushTween(clean);
-	        }
-	        else if (clean.Type === tweenType_1.TweenType.Sequence) {
-	            sequencePooling.PushSequence(clean);
-	        }
-	    }
-	    toClean.length = 0;
 	}
 	exports.Update = Update;
 	function Tween(obj, properties) {
 	    if (!initialized) {
 	        Init();
 	    }
-	    var tween = tweenPooling.PopTween();
-	    tween.Init(obj, properties);
-	    tween.SetParent(tickerManager);
-	    return tween;
+	    return new tween_1.Tween(obj, properties).SetParent(tickerManager);
 	}
 	exports.Tween = Tween;
 	function Sequence() {
@@ -199,36 +179,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __extends(Sequence, _super);
 	    function Sequence() {
 	        var _this = _super.call(this) || this;
+	        _this.type = tweenType_1.TweenType.Sequence;
 	        _this.eventTick = [];
 	        _this.eventStepStart = [];
 	        _this.eventStepEnd = [];
 	        _this.tweens = [];
 	        _this.sequenceIndex = 0;
 	        _this.cleanTweens = [];
-	        _this.tickCb = function (dt) {
-	            if (_this.state === state_1.State.Finished || _this.state === state_1.State.Killed) {
-	                return;
-	            }
-	            var localDt = dt * _this.timescale;
-	            _this.elapsed += localDt;
-	            _this.Tick(localDt);
-	        };
+	        _this.tickCb = _this.Tick.bind(_this);
 	        return _this;
 	    }
-	    Object.defineProperty(Sequence.prototype, "Type", {
-	        get: function () {
-	            return tweenType_1.TweenType.Sequence;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(Sequence.prototype, "CurrentTween", {
-	        get: function () {
-	            return this.currentTween;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
 	    Sequence.prototype.Start = function () {
 	        _super.prototype.Start.call(this);
 	        return this;
@@ -258,16 +218,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.eventTick.splice(index, 1);
 	        }
 	    };
-	    Sequence.prototype.Tick = function (dt, remains) {
+	    Sequence.prototype.Tick = function (dt) {
+	        if (this.state === state_1.State.Finished || this.state === state_1.State.Killed) {
+	            return;
+	        }
+	        var localDt = dt * this.timescale;
+	        this.elapsed += localDt;
+	        this.LocalTick(localDt);
+	    };
+	    Sequence.prototype.LocalTick = function (dt, remains) {
 	        if (!this.currentTween) {
-	            this.currentTween = this.tweens[this.sequenceIndex];
-	            if (this.currentTween) {
-	                for (var i = 0; i < this.currentTween.length; i++) {
-	                    var tween = this.currentTween[i];
-	                    tween.Start();
-	                }
-	                this.StepStarted(this.currentTween[0]);
-	            }
+	            this.NextTween();
 	        }
 	        if (this.currentTween) {
 	            for (var i = this.eventTick.length - 1; i >= 0; i--) {
@@ -280,17 +241,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var remainsDt = dt;
 	        if (this.currentTween) {
 	            for (var i = 0; i < this.currentTween.length; i++) {
-	                if (!this.currentTween[i].IsCompleted()) {
+	                if (this.currentTween[i].state !== state_1.State.Finished) {
 	                    return;
 	                }
 	            }
 	            var first = this.currentTween[0];
-	            remainsDt = first.Elapsed - first.Duration;
+	            remainsDt = first.elapsed - first.duration;
 	            this.StepEnded(this.currentTween[0]);
 	            this.currentTween = undefined;
 	            this.sequenceIndex++;
 	            if (remainsDt > 0.01) {
-	                this.Tick(remainsDt, true);
+	                this.LocalTick(remainsDt, true);
 	                return;
 	            }
 	        }
@@ -302,6 +263,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            else {
 	                this.ResetAndStart(false, remainsDt);
 	            }
+	        }
+	    };
+	    Sequence.prototype.NextTween = function () {
+	        this.currentTween = this.tweens[this.sequenceIndex];
+	        if (this.currentTween) {
+	            for (var i = 0; i < this.currentTween.length; i++) {
+	                var tween = this.currentTween[i];
+	                tween.Start();
+	            }
+	            this.StepStarted(this.currentTween[0]);
 	        }
 	    };
 	    Sequence.prototype.StepStarted = function (tween) {
@@ -367,10 +338,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var tweenArray = this.tweens[i];
 	            for (var j = 0; j < tweenArray.length; j++) {
 	                var tween = tweenArray[j];
-	                if (tween.IsKilled() || tween.IsCompleted()) {
+	                if (tween.state === state_1.State.Killed || tween.state === state_1.State.Finished) {
 	                    continue;
 	                }
-	                if (tween.Elapsed === 0) {
+	                if (tween.elapsed === 0) {
 	                    this.StepStarted(tween);
 	                }
 	                tween.Skip();
@@ -388,7 +359,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var tweenArray = this.tweens[i];
 	            for (var j = 0; j < tweenArray.length; j++) {
 	                var tween = tweenArray[j];
-	                if (tween.IsKilled() || tween.IsCompleted()) {
+	                if (tween.state === state_1.State.Killed || tween.state === state_1.State.Finished) {
 	                    continue;
 	                }
 	                tween.Kill();
@@ -428,8 +399,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return;
 	        }
 	        this.cleaned = true;
-	        this.cleanTweens[this.cleanTweens.length] = this;
-	        this.parent.Clean(this.cleanTweens);
 	    };
 	    Sequence.prototype.Clean = function (data) {
 	        for (var i = 0; i < data.length; i++) {
@@ -485,35 +454,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.eventComplete = [];
 	        this.firstStart = true;
 	    }
-	    Object.defineProperty(BaseTween.prototype, "Elapsed", {
-	        get: function () {
-	            return this.elapsed;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(BaseTween.prototype, "Duration", {
-	        get: function () {
-	            return this.duration;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
 	    BaseTween.prototype.SetParent = function (ticker) {
 	        if (this.parent) {
 	            this.parent.RemoveTickListener(this.tickCb);
 	        }
 	        this.parent = ticker;
 	    };
-	    BaseTween.prototype.IsRunning = function () {
-	        return this.state === state_1.State.Run;
-	    };
-	    BaseTween.prototype.IsCompleted = function () {
-	        return this.state === state_1.State.Finished;
-	    };
-	    BaseTween.prototype.IsKilled = function () {
-	        return this.state === state_1.State.Killed;
-	    };
+	    Object.defineProperty(BaseTween.prototype, "IsRunning", {
+	        get: function () {
+	            return this.state === state_1.State.Run;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(BaseTween.prototype, "IsCompleted", {
+	        get: function () {
+	            return this.state === state_1.State.Finished;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(BaseTween.prototype, "IsKilled", {
+	        get: function () {
+	            return this.state === state_1.State.Killed;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
 	    BaseTween.prototype.Start = function () {
 	        if (this.state !== state_1.State.Idle) {
 	            console.warn('cant start this tween, already in state', this.state);
@@ -605,6 +572,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.eventComplete.length = 0;
 	        this.firstStart = true;
 	        this.state = state_1.State.Idle;
+	        delete this.parent;
 	    };
 	    BaseTween.prototype.Complete = function () {
 	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
@@ -716,6 +684,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __extends(Callback, _super);
 	    function Callback(cb) {
 	        var _this = _super.call(this) || this;
+	        _this.type = tweenType_1.TweenType.Callback;
 	        _this.tickCb = function (dt) {
 	            _this.elapsed += dt;
 	            _this.duration = 0;
@@ -725,13 +694,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	        return _this;
 	    }
-	    Object.defineProperty(Callback.prototype, "Type", {
-	        get: function () {
-	            return tweenType_1.TweenType.Callback;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
 	    Callback.prototype.Validate = function () { };
 	    Callback.prototype.LoopInit = function () {
 	        this.elapsed = 0;
@@ -781,6 +743,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __extends(Delay, _super);
 	    function Delay(duration) {
 	        var _this = _super.call(this) || this;
+	        _this.type = tweenType_1.TweenType.Delay;
 	        _this.duration = duration;
 	        _this.tickCb = function (dt) {
 	            _this.elapsed += dt;
@@ -792,13 +755,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	        return _this;
 	    }
-	    Object.defineProperty(Delay.prototype, "Type", {
-	        get: function () {
-	            return tweenType_1.TweenType.Delay;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
 	    Delay.prototype.Validate = function () { };
 	    Delay.prototype.LoopInit = function () {
 	        this.elapsed = 0;
@@ -825,294 +781,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	})();
 	Object.defineProperty(exports, "__esModule", { value: true });
-	var state_1 = __webpack_require__(3);
-	var tweenType_1 = __webpack_require__(5);
-	var eventList_1 = __webpack_require__(8);
-	var Ticker = (function (_super) {
-	    __extends(Ticker, _super);
-	    function Ticker() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.state = state_1.State.Idle;
-	        _this.timescale = 1;
-	        _this.elapsed = 0;
-	        _this.update = 0;
-	        _this.eventToAdd = [];
-	        _this.eventToRemove = [];
-	        _this.clean1 = [];
-	        _this.clean2 = [];
-	        return _this;
-	    }
-	    Object.defineProperty(Ticker.prototype, "Type", {
-	        get: function () {
-	            return tweenType_1.TweenType.Ticker;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Ticker.prototype.ToClean = function () {
-	        return this.update % 2 === 1 ? this.clean1 : this.clean2;
-	    };
-	    Object.defineProperty(Ticker.prototype, "Elapsed", {
-	        get: function () {
-	            return this.elapsed;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(Ticker.prototype, "Duration", {
-	        get: function () {
-	            return 0;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Ticker.prototype.IsCompleted = function () {
-	        return this.state === state_1.State.Finished;
-	    };
-	    Ticker.prototype.IsRunning = function () {
-	        return this.state === state_1.State.Run;
-	    };
-	    Ticker.prototype.IsKilled = function () {
-	        return this.state === state_1.State.Killed;
-	    };
-	    Ticker.prototype.SetTimescale = function (scale) {
-	        this.timescale = scale;
-	    };
-	    Ticker.prototype.AddTickListener = function (cb) {
-	        this.eventToAdd.push(cb);
-	    };
-	    Ticker.prototype.RemoveTickListener = function (cb) {
-	        this.eventToRemove.push(cb);
-	    };
-	    Ticker.prototype.UpdateListener = function () {
-	        if (this.eventToAdd.length > 0) {
-	            for (var i = 0; i < this.eventToAdd.length; i++) {
-	                this.Add(this.eventToAdd[i]);
-	            }
-	            this.eventToAdd = [];
-	        }
-	        if (this.eventToRemove.length > 0) {
-	            for (var i = 0; i < this.eventToRemove.length; i++) {
-	                this.Remove(this.eventToRemove[i]);
-	            }
-	            this.eventToRemove = [];
-	        }
-	    };
-	    Ticker.prototype.Tick = function (dt) {
-	        if (this.state !== state_1.State.Run) {
-	            return;
-	        }
-	        this.UpdateListener();
-	        var localDt = dt * this.timescale;
-	        for (var tick = this.first; tick; tick = tick.node_next) {
-	            tick(localDt);
-	        }
-	        this.elapsed += localDt;
-	        this.update++;
-	        this.UpdateListener();
-	    };
-	    Ticker.prototype.Start = function () {
-	        if (this.state !== state_1.State.Idle) {
-	            return;
-	        }
-	        this.state = state_1.State.Run;
-	    };
-	    Ticker.prototype.Pause = function () {
-	        if (this.state !== state_1.State.Run) {
-	            return;
-	        }
-	        this.state = state_1.State.Pause;
-	    };
-	    Ticker.prototype.Resume = function () {
-	        if (this.state !== state_1.State.Pause) {
-	            return;
-	        }
-	        this.state = state_1.State.Run;
-	    };
-	    Ticker.prototype.Kill = function () {
-	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
-	            return;
-	        }
-	        this.state = state_1.State.Killed;
-	    };
-	    Ticker.prototype.Skip = function () {
-	        throw new Error('The main ticker cannot be skipped');
-	    };
-	    Ticker.prototype.Reset = function () {
-	        this.state = state_1.State.Idle;
-	    };
-	    Ticker.prototype.Clean = function (data) {
-	        for (var i = 0; i < data.length; i++) {
-	            var obj = data[i];
-	            if (this.update % 2 === 0) {
-	                this.clean1.push(obj);
-	            }
-	            else {
-	                this.clean2.push(obj);
-	            }
-	        }
-	    };
-	    Ticker.prototype.GetCleanTweens = function () {
-	        var toClean = this.update % 2 === 1 ? this.clean1 : this.clean2;
-	        for (var i = 0; i < toClean.length; i++) {
-	            toClean[i].Default();
-	        }
-	        return toClean;
-	    };
-	    return Ticker;
-	}(eventList_1.EventList));
-	exports.Ticker = Ticker;
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
-	var EventList = (function () {
-	    function EventList() {
-	        this.length = 0;
-	    }
-	    EventList.prototype.Add = function (obj) {
-	        var newNode = this.GetNode(obj, this.last, undefined, this);
-	        if (this.first === undefined) {
-	            this.first = newNode;
-	            this.last = newNode;
-	        }
-	        else if (this.last !== undefined) {
-	            this.last.node_next = newNode;
-	            this.last = newNode;
-	        }
-	        this.length += 1;
-	    };
-	    EventList.prototype.Pop = function () {
-	        var first = this.first;
-	        this.Remove(first);
-	        return first;
-	    };
-	    EventList.prototype.Remove = function (obj) {
-	        var node = obj;
-	        if (node === undefined) {
-	            console.log('Trying to remove an object which is not a node');
-	            return;
-	        }
-	        if (node.node_list !== this) {
-	            return;
-	        }
-	        if (node.node_next === undefined) {
-	            this.last = node.node_previous;
-	        }
-	        else {
-	            node.node_next.node_previous = node.node_previous;
-	        }
-	        if (node.node_previous === undefined) {
-	            this.first = node.node_next;
-	        }
-	        else {
-	            node.node_previous.node_next = node.node_next;
-	        }
-	        node.node_valid = false;
-	        node.node_previous = undefined;
-	        node.node_next = undefined;
-	        node.node_list = undefined;
-	        this.length -= 1;
-	    };
-	    EventList.prototype.Clear = function () {
-	        var node = this.first;
-	        while (node !== undefined) {
-	            var nextNode = node.node_next;
-	            node.node_valid = false;
-	            node.node_previous = undefined;
-	            node.node_next = undefined;
-	            node.node_list = undefined;
-	            node = nextNode;
-	        }
-	        this.first = undefined;
-	        this.last = undefined;
-	        this.length = 0;
-	    };
-	    EventList.prototype.GetNode = function (obj, previous, next, list) {
-	        var node = obj;
-	        if (!node.node_valid) {
-	            node.node_valid = true;
-	            node.node_previous = previous;
-	            node.node_next = next;
-	            node.node_list = list;
-	        }
-	        return node;
-	    };
-	    return EventList;
-	}());
-	exports.EventList = EventList;
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
-	var tween_1 = __webpack_require__(10);
-	var TweenPool = (function () {
-	    function TweenPool(size) {
-	        this.tweens = [];
-	        this.targetSize = size * 2;
-	        for (var i = 0; i < size; i++) {
-	            this.Add(this.CreateTween());
-	        }
-	    }
-	    TweenPool.prototype.Add = function (tween) {
-	        this.tweens.push(tween);
-	    };
-	    TweenPool.prototype.Pop = function () {
-	        return this.tweens.shift();
-	    };
-	    TweenPool.prototype.CreateTween = function () {
-	        return new tween_1.Tween(null, []);
-	    };
-	    TweenPool.prototype.PopTween = function () {
-	        var tween = this.Pop();
-	        if (tween === undefined) {
-	            return this.CreateTween();
-	        }
-	        tween.Default();
-	        return tween;
-	    };
-	    TweenPool.prototype.PushTween = function (tween) {
-	        if (tween === undefined) {
-	            return;
-	        }
-	        if (this.tweens.length > this.targetSize) {
-	            return;
-	        }
-	        tween.Default();
-	        this.Add(tween);
-	    };
-	    return TweenPool;
-	}());
-	exports.TweenPool = TweenPool;
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
-	Object.defineProperty(exports, "__esModule", { value: true });
 	var baseTween_1 = __webpack_require__(2);
-	var easingType_1 = __webpack_require__(11);
-	var easing_1 = __webpack_require__(12);
+	var easingType_1 = __webpack_require__(8);
+	var easing_1 = __webpack_require__(9);
 	var sequence_1 = __webpack_require__(1);
 	var tweenType_1 = __webpack_require__(5);
 	var state_1 = __webpack_require__(3);
@@ -1120,48 +791,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __extends(Tween, _super);
 	    function Tween(object, properties) {
 	        var _this = _super.call(this) || this;
+	        _this.type = tweenType_1.TweenType.Tween;
 	        _this.relative = false;
 	        _this.object = object;
 	        _this.properties = properties;
-	        _this.tickCb = function (dt) {
-	            if (_this.state === state_1.State.Finished || _this.state === state_1.State.Killed) {
-	                return;
-	            }
-	            var localDt = dt * _this.timescale;
-	            _this.elapsed += localDt;
-	            var progress = Math.max(Math.min(_this.elapsed / _this.duration, 1), 0);
-	            _this.Update(localDt, progress);
-	            if (_this.elapsed >= _this.duration) {
-	                _this.loop--;
-	                if (_this.loop === 0) {
-	                    for (var i = 0; i < _this.properties.length; i++) {
-	                        var prop = _this.properties[i];
-	                        _this.object[prop] = _this.currentTo[prop];
-	                    }
-	                    _this.Complete();
-	                }
-	                else {
-	                    _this.CheckPosition();
-	                    _this.ResetAndStart(false, _this.elapsed - _this.duration);
-	                }
-	            }
-	        };
+	        _this.tickCb = _this.Tick.bind(_this);
 	        return _this;
 	    }
-	    Object.defineProperty(Tween.prototype, "Type", {
-	        get: function () {
-	            return tweenType_1.TweenType.Tween;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(Tween.prototype, "Object", {
-	        get: function () {
-	            return this.object;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
 	    Tween.prototype.Init = function (object, properties) {
 	        this.object = object;
 	        this.properties = properties;
@@ -1217,13 +853,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	    };
+	    Tween.prototype.Tick = function (dt) {
+	        if (this.state === state_1.State.Finished || this.state === state_1.State.Killed) {
+	            return;
+	        }
+	        this.remainsDt = dt * this.timescale;
+	        while (this.remainsDt > 0) {
+	            this.elapsed += this.remainsDt;
+	            var progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
+	            this.Update(this.remainsDt, progress);
+	            if (this.elapsed < this.duration) {
+	                return;
+	            }
+	            this.remainsDt = this.elapsed - this.duration;
+	            this.loop--;
+	            if (this.loop === 0) {
+	                for (var i = 0; i < this.properties.length; i++) {
+	                    var prop = this.properties[i];
+	                    this.object[prop] = this.currentTo[prop];
+	                }
+	                this.Complete();
+	                return;
+	            }
+	            this.CheckPosition();
+	            this.ResetAndStart(false, 0);
+	        }
+	    };
 	    Tween.prototype.Update = function (dt, progress) {
 	        var val = this.ease(progress);
 	        for (var i = 0; i < this.properties.length; i++) {
 	            var prop = this.properties[i];
 	            this.object[prop] = this.currentFrom[prop] + (this.currentTo[prop] - this.currentFrom[prop]) * val;
 	        }
-	        _super.prototype.Updated.call(this, dt, progress);
+	        this.Updated(dt, progress);
 	    };
 	    Tween.prototype.SetParent = function (ticker) {
 	        _super.prototype.SetParent.call(this, ticker);
@@ -1297,7 +959,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return;
 	        }
 	        this.cleaned = true;
-	        this.parent.Clean([this]);
 	    };
 	    Tween.prototype.Default = function () {
 	        _super.prototype.Default.call(this);
@@ -1333,7 +994,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 11 */
+/* 8 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -1375,12 +1036,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 12 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	Object.defineProperty(exports, "__esModule", { value: true });
-	var easingType_1 = __webpack_require__(11);
+	var easingType_1 = __webpack_require__(8);
 	var PI = Math.PI;
 	var PI_OVER_TWO = Math.PI / 2;
 	var BACK = 1.70158;
@@ -1565,50 +1226,176 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 13 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
+	var __extends = (this && this.__extends) || (function () {
+	    var extendStatics = Object.setPrototypeOf ||
+	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+	    return function (d, b) {
+	        extendStatics(d, b);
+	        function __() { this.constructor = d; }
+	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	    };
+	})();
 	Object.defineProperty(exports, "__esModule", { value: true });
-	var sequence_1 = __webpack_require__(1);
-	var SequencePool = (function () {
-	    function SequencePool(size) {
-	        this.sequences = [];
-	        this.targetSize = size * 2;
-	        for (var i = 0; i < size; i++) {
-	            this.Add(this.CreateSequence());
-	        }
+	var state_1 = __webpack_require__(3);
+	var tweenType_1 = __webpack_require__(5);
+	var eventList_1 = __webpack_require__(11);
+	var Ticker = (function (_super) {
+	    __extends(Ticker, _super);
+	    function Ticker() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.type = tweenType_1.TweenType.Ticker;
+	        _this.state = state_1.State.Idle;
+	        _this.timescale = 1;
+	        _this.elapsed = 0;
+	        _this.duration = 0;
+	        _this.update = 0;
+	        _this.eventToAdd = [];
+	        _this.eventToRemove = [];
+	        return _this;
 	    }
-	    SequencePool.prototype.Add = function (tween) {
-	        this.sequences.push(tween);
+	    Ticker.prototype.SetTimescale = function (scale) {
+	        this.timescale = scale;
 	    };
-	    SequencePool.prototype.Pop = function () {
-	        return this.sequences.shift();
+	    Ticker.prototype.AddTickListener = function (cb) {
+	        this.eventToAdd.push(cb);
 	    };
-	    SequencePool.prototype.CreateSequence = function () {
-	        return new sequence_1.Sequence();
+	    Ticker.prototype.RemoveTickListener = function (cb) {
+	        this.eventToRemove.push(cb);
 	    };
-	    SequencePool.prototype.PopSequence = function () {
-	        var sequence = this.Pop();
-	        if (sequence === undefined) {
-	            return this.CreateSequence();
+	    Ticker.prototype.UpdateListener = function () {
+	        if (this.eventToAdd.length > 0) {
+	            for (var i = 0; i < this.eventToAdd.length; i++) {
+	                this.Add(this.eventToAdd[i]);
+	            }
+	            this.eventToAdd = [];
 	        }
-	        sequence.Default();
-	        return sequence;
+	        if (this.eventToRemove.length > 0) {
+	            for (var i = 0; i < this.eventToRemove.length; i++) {
+	                this.Remove(this.eventToRemove[i]);
+	            }
+	            this.eventToRemove = [];
+	        }
 	    };
-	    SequencePool.prototype.PushSequence = function (sequence) {
-	        if (sequence === undefined) {
+	    Ticker.prototype.Tick = function (dt) {
+	        if (this.state !== state_1.State.Run) {
 	            return;
 	        }
-	        if (this.sequences.length > this.targetSize) {
+	        this.UpdateListener();
+	        var localDt = dt * this.timescale;
+	        for (var tick = this.first; tick; tick = tick.node_next) {
+	            tick(localDt);
+	        }
+	        this.elapsed += localDt;
+	        this.update++;
+	        this.UpdateListener();
+	    };
+	    Ticker.prototype.Start = function () {
+	        if (this.state !== state_1.State.Idle) {
 	            return;
 	        }
-	        sequence.Default();
-	        this.Add(sequence);
+	        this.state = state_1.State.Run;
 	    };
-	    return SequencePool;
+	    Ticker.prototype.Pause = function () {
+	        if (this.state !== state_1.State.Run) {
+	            return;
+	        }
+	        this.state = state_1.State.Pause;
+	    };
+	    Ticker.prototype.Resume = function () {
+	        if (this.state !== state_1.State.Pause) {
+	            return;
+	        }
+	        this.state = state_1.State.Run;
+	    };
+	    Ticker.prototype.Kill = function () {
+	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
+	            return;
+	        }
+	        this.state = state_1.State.Killed;
+	    };
+	    Ticker.prototype.Skip = function () {
+	        throw new Error('The main ticker cannot be skipped');
+	    };
+	    Ticker.prototype.Reset = function () {
+	        this.state = state_1.State.Idle;
+	    };
+	    return Ticker;
+	}(eventList_1.EventList));
+	exports.Ticker = Ticker;
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var EventList = (function () {
+	    function EventList() {
+	        this.length = 0;
+	    }
+	    EventList.prototype.Add = function (obj) {
+	        var newNode = this.GetNode(obj, this.last, undefined, this);
+	        if (this.first === undefined) {
+	            this.first = newNode;
+	            this.last = newNode;
+	        }
+	        else if (this.last !== undefined) {
+	            this.last.node_next = newNode;
+	            this.last = newNode;
+	        }
+	        this.length += 1;
+	    };
+	    EventList.prototype.Pop = function () {
+	        var first = this.first;
+	        this.Remove(first);
+	        return first;
+	    };
+	    EventList.prototype.Remove = function (obj) {
+	        var node = obj;
+	        if (node === undefined) {
+	            console.log('Trying to remove an object which is not a node');
+	            return;
+	        }
+	        if (node.node_list !== this) {
+	            return;
+	        }
+	        if (node.node_next === undefined) {
+	            this.last = node.node_previous;
+	        }
+	        else {
+	            node.node_next.node_previous = node.node_previous;
+	        }
+	        if (node.node_previous === undefined) {
+	            this.first = node.node_next;
+	        }
+	        else {
+	            node.node_previous.node_next = node.node_next;
+	        }
+	        node.node_valid = false;
+	        node.node_previous = undefined;
+	        node.node_next = undefined;
+	        node.node_list = undefined;
+	        this.length -= 1;
+	    };
+	    EventList.prototype.GetNode = function (obj, previous, next, list) {
+	        var node = obj;
+	        if (!node.node_valid) {
+	            node.node_valid = true;
+	            node.node_previous = previous;
+	            node.node_next = next;
+	            node.node_list = list;
+	        }
+	        return node;
+	    };
+	    return EventList;
 	}());
-	exports.SequencePool = SequencePool;
+	exports.EventList = EventList;
 
 
 /***/ })

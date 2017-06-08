@@ -1,15 +1,16 @@
 import { Sequence as sequence } from './tweens/sequence';
+import { Tween as tween } from './tweens/tween';
 import { Ticker as ticker } from './ticker';
 import { ITween } from './core/interfaces/ITween';
 import { ISequence } from './core/interfaces/ISequence';
 import { ITicker } from './core/interfaces/ITicker';
-import { TweenPool } from './pooling/tweenPool';
-import { SequencePool } from './pooling/sequencePool';
-import { TweenType } from './core/enum/tweenType';
+// import { TweenPool } from './pooling/tweenPool';
+// import { SequencePool } from './pooling/sequencePool';
+// import { TweenType } from './core/enum/tweenType';
 
 let tickerManager: ticker;
-let tweenPooling: TweenPool;
-let sequencePooling: SequencePool;
+// let tweenPooling: TweenPool;
+// let sequencePooling: SequencePool;
 let initialized = false;
 let isFirstUpdate = true;
 let lastFrame: any;
@@ -20,7 +21,7 @@ export let time = 0;
 
 // time updated internally (affected by timescale, pause, ...)
 export function Elapsed() {
-	return tickerManager.Elapsed;
+	return tickerManager.elapsed;
 }
 
 export function Ticker() {
@@ -49,8 +50,8 @@ export function Init(disableAutoTick?: boolean, poolSize?: number): boolean {
 		lastFrame = requestFrame(updateLoop);
 	}
 
-	tweenPooling = new TweenPool(poolSize === undefined ? 600 : poolSize);
-	sequencePooling = new SequencePool(poolSize === undefined ? 250 : poolSize);
+	// tweenPooling = new TweenPool(poolSize === undefined ? 600 : poolSize);
+	// sequencePooling = new SequencePool(poolSize === undefined ? 250 : poolSize);
 
 	initialized = true;
 	return true;
@@ -114,11 +115,12 @@ export function Update(timestamp: number): any {
 		return;
 	}
 
-	let toClean = tickerManager.GetCleanTweens();
+	// let toClean = tickerManager.GetCleanTweens();
 
 	tickerManager.Tick(timestamp);
 	time += timestamp;
 
+	/*
 	for (let i = 0; i < toClean.length; i++) {
 		let clean = toClean[i];
 		if (clean.Type === TweenType.Tween) {
@@ -128,6 +130,7 @@ export function Update(timestamp: number): any {
 		}
 	}
 	toClean.length = 0;
+	*/
 }
 
 /**
@@ -143,10 +146,7 @@ export function Tween(obj: any, properties: string[]): ITween {
 		Init();
 	}
 
-	let tween = tweenPooling.PopTween();
-	tween.Init(obj, properties);
-	tween.SetParent(tickerManager as ITicker);
-	return tween;
+	return new tween(obj, properties).SetParent(tickerManager as ITicker);
 }
 
 /**
@@ -159,6 +159,7 @@ export function Sequence(): ISequence {
 	if (!initialized) {
 		Init();
 	}
+
 	return new sequence().SetParent(tickerManager as ITicker);
 }
 

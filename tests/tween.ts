@@ -2,6 +2,7 @@ import * as test from 'tape';
 import { Tween } from '../src/fatina/tweens/tween';
 import { ITween } from '../src/fatina/core/interfaces/ITween';
 import { Ticker } from '../src/fatina/ticker';
+import { State } from '../src/fatina/core/enum/state';
 
 test('[Fatina.Tween] Get tween data', function (t: any) {
 	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
@@ -17,20 +18,20 @@ test('[Fatina.Tween] Get tween data', function (t: any) {
 
 	tween.Start();
 
-	t.notOk(tween.IsCompleted, 'Tween is not completed yet');
-	t.equal(0, tween.Elapsed, 'Elapsed is correct at the beginning');
-	t.equal(10, tween.Duration, 'Duration');
+	t.notOk(tween.state === State.Finished, 'Tween is not completed yet');
+	t.equal(0, tween.elapsed, 'Elapsed is correct at the beginning');
+	t.equal(10, tween.duration, 'Duration');
 
 	ticker.Tick(1);
 
-	t.equal(1, tween.Elapsed, 'Elapsed is correct at the middle');
+	t.equal(1, tween.elapsed, 'Elapsed is correct at the middle');
 
 	for (let i = 0; i < 12; i++) {
 		ticker.Tick(1);
 	}
 
-	t.ok(tween.IsCompleted, 'Tween is completed now');
-	t.equal(10, tween.Elapsed, 'Elapsed match duration at the end');
+	t.ok(tween.state === State.Finished, 'Tween is completed now');
+	t.equal(10, tween.elapsed, 'Elapsed match duration at the end');
 	t.end();
 });
 
@@ -366,13 +367,13 @@ test('[Fatina.Tween] Test Tween Kill', function (t: any) {
 
 	tween.Start();
 	ticker.Tick(1);
-	t.ok(tween.IsRunning);
-	t.notOk(tween.IsKilled);
+	t.ok(tween.state === State.Run);
+	t.notOk(tween.state === State.Killed);
 	tween.Kill();
 
-	t.notOk(tween.IsRunning);
-	t.ok(tween.IsKilled);
-	t.notOk(tween.IsCompleted);
+	t.notOk(tween.state === State.Run);
+	t.ok(tween.state === State.Killed);
+	t.notOk(tween.state === State.Finished);
 	tween.Kill();
 
 	t.equal(1, killed)
@@ -440,10 +441,10 @@ test('[Fatina.Tween] Test Skip', function (t: any) {
 		.Start();
 
 	ticker.Tick(1);
-	t.equal(1, tween.Elapsed, 'check this tween is started');
+	t.equal(1, tween.elapsed, 'check this tween is started');
 
 	tween.Skip();
-	t.equal(2, tween.Elapsed, 'check this tween is over');
+	t.equal(2, tween.elapsed, 'check this tween is over');
 	t.equal(1, complete, 'check the onComplete callback is emitted');
 
 	t.end();

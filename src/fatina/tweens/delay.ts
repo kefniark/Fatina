@@ -3,9 +3,7 @@ import { IPlayable } from '../core/interfaces/IPlayable';
 import { TweenType } from '../core/enum/tweenType';
 
 export class Delay extends BaseTween implements IPlayable {
-	public get Type() {
-		return TweenType.Delay;
-	}
+	public readonly type = TweenType.Delay;
 
 	constructor(duration: number) {
 		super();

@@ -1,8 +1,8 @@
 import { ITicker } from './core/interfaces/ITicker';
 import { State } from './core/enum/state';
 import { TweenType } from './core/enum/tweenType';
-import { ITween } from './core/interfaces/ITween';
-import { ISequence } from './core/interfaces/ISequence';
+// import { ITween } from './core/interfaces/ITween';
+// import { ISequence } from './core/interfaces/ISequence';
 import { EventList } from './core/eventList';
 
 /**
@@ -15,41 +15,16 @@ import { EventList } from './core/eventList';
  * @implements {ITicker}
  */
 export class Ticker extends EventList implements ITicker {
-	public get Type() {
-		return TweenType.Ticker;
-	}
+	public type = TweenType.Ticker;
 
-	private state = State.Idle;
+	public state = State.Idle;
 	private timescale = 1;
-	private elapsed = 0;
+	public elapsed = 0;
+	public duration = 0;
 	private update = 0;
 	private eventToAdd: { (dt: number): void }[] = [];
 	private eventToRemove: { (dt: number): void }[] = [];
-	private clean: (ITween | ISequence)[] = [];
-
-	public ToClean(): (ITween | ISequence)[] {
-		return this.clean;
-	}
-
-	public get Elapsed(): number {
-		return this.elapsed;
-	}
-
-	public get Duration(): number {
-		return 0;
-	}
-
-	public get IsCompleted(): boolean {
-		return this.state === State.Finished;
-	}
-
-	public get IsRunning(): boolean {
-		return this.state === State.Run;
-	}
-
-	public get IsKilled(): boolean {
-		return this.state === State.Killed;
-	}
+	// private clean: (ITween | ISequence)[] = [];
 
 	/**
 	 * Method used to change the timescale
@@ -167,26 +142,5 @@ export class Ticker extends EventList implements ITicker {
 
 	public Reset(): void {
 		this.state = State.Idle;
-	}
-
-	/**
-	 * Method used to clean a list of old tween / sequence
-	 * This is using 2 array to avoid allocating new one on each frames
-	 *
-	 * @param {((ITween | ISequence)[])} data
-	 *
-	 * @memberOf Ticker
-	 */
-	public Clean(data: (ITween | ISequence)[]): void {
-		for (let i = 0; i < data.length; i++) {
-			let obj = data[i];
-			this.clean.push(obj);
-		}
-	}
-
-	public GetCleanTweens(): (ITween | ISequence)[] {
-		let toClean = this.clean;
-		this.clean = new Array(0);
-		return toClean;
 	}
 }
