@@ -1,5 +1,4 @@
 import * as test from 'tape';
-import { TweenType } from '../src/fatina/core/enum/tweenType';
 let fatina = require('../src/fatina/index');
 
 fatina.Init(false, 2);
@@ -53,7 +52,6 @@ test('[Fatina.Manager] Create tween', function (t: any) {
 	tween.Start();
 
 	t.equal(0, obj.x, 'check the tween is not starting magically');
-	t.equal(TweenType.Tween, tween.type, 'Check the tween is really a tween type');
 
 	fatina.Update(0.5);
 	t.equal(0.5, obj.x, 'check the tween is halfway through');
@@ -73,7 +71,6 @@ test('[Fatina.Manager] Create sequence', function (t: any) {
 	sequence.Start();
 
 	t.equal(0, obj.x, 'check the sequence is not starting magically');
-	t.equal(TweenType.Sequence, sequence.type, 'Check the tween is really a sequence type');
 
 	fatina.Update(2);
 	t.equal(1, obj.x, 'check the sequence is finished');

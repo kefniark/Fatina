@@ -5,12 +5,9 @@ import { ITween } from '../core/interfaces/ITween';
 import { IPlayable } from '../core/interfaces/IPlayable';
 import { Callback } from './callback';
 import { Delay } from './delay';
-import { TweenType } from '../core/enum/tweenType';
 import { State } from '../core/enum/state';
 
 export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable {
-	public readonly type = TweenType.Sequence;
-
 	private eventTick: {(dt: number): void}[] = [];
 	private tweens: ((ITween | IPlayable)[])[] = [];
 	private eventStepStart: {(tween: ITween | IPlayable): void}[] | undefined;

@@ -1,7 +1,7 @@
-import { EasingType } from '../enum/EasingType';
 import { IControl } from './IControl';
 import { ITicker } from './ITicker';
 import { ISequence } from './ISequence';
+import { EasingType } from '../../easing/easingType';
 
 export interface ITween extends IControl {
 	Default(): void;

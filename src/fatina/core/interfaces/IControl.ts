@@ -1,8 +1,6 @@
-import { TweenType } from '../enum/tweenType';
 import { State } from '../enum/state';
 
 export interface IControl {
-	type: TweenType;
 	elapsed: number;
 	duration: number;
 	state: State;

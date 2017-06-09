@@ -1,6 +1,5 @@
 import { ITicker } from './core/interfaces/ITicker';
 import { State } from './core/enum/state';
-import { TweenType } from './core/enum/tweenType';
 import { EventList } from './core/eventList';
 
 /**
@@ -13,8 +12,6 @@ import { EventList } from './core/eventList';
  * @implements {ITicker}
  */
 export class Ticker extends EventList implements ITicker {
-	public type = TweenType.Ticker;
-
 	public state = State.Idle;
 	private timescale = 1;
 	public elapsed = 0;

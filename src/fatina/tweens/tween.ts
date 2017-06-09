@@ -1,12 +1,11 @@
 import { BaseTween } from './baseTween';
 import { ITween } from '../core/interfaces/ITween';
 import { ITicker } from '../core/interfaces/ITicker';
-import { EasingType } from '../core/enum/easingType';
 import { easeNames, easeTypes } from '../easing/easing';
 import { Sequence } from './sequence';
 import { ISequence } from '../core/interfaces/ISequence';
-import { TweenType } from '../core/enum/tweenType';
 import { State } from '../core/enum/state';
+import { EasingType } from '../easing/easingType';
 
 /**
  * Tween class
@@ -18,8 +17,6 @@ import { State } from '../core/enum/state';
  * @implements {ITween}
  */
 export class Tween extends BaseTween implements ITween {
-	public readonly type = TweenType.Tween;
-
 	private object: any;
 	private properties: string[];
 	private from: any;

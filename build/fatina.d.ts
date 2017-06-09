@@ -1,6 +1,5 @@
 
 
-    type: TweenType;
     state: State;
     private timescale;
     elapsed: number;
@@ -35,39 +34,6 @@
     node_list: EventList | undefined;
 }
 
-    Linear = 0,
-    InQuad = 1,
-    OutQuad = 2,
-    InOutQuad = 3,
-    InCubic = 4,
-    OutCubic = 5,
-    InOutCubic = 6,
-    InQuart = 7,
-    OutQuart = 8,
-    InOutQuart = 9,
-    InSine = 10,
-    OutSine = 11,
-    InOutSine = 12,
-    InCirc = 13,
-    OutCirc = 14,
-    InOutCirc = 15,
-    InQuint = 16,
-    OutQuint = 17,
-    InOutQuint = 18,
-    InExponential = 19,
-    OutExponential = 20,
-    InOutExponential = 21,
-    InElastic = 22,
-    OutElastic = 23,
-    InOutElastic = 24,
-    InBack = 25,
-    OutBack = 26,
-    InOutBack = 27,
-    InBounce = 28,
-    OutBounce = 29,
-    InOutBounce = 30,
-}
-
     Idle = 0,
     Run = 1,
     Pause = 2,
@@ -75,15 +41,6 @@
     Killed = 4,
 }
 
-    Ticker = 0,
-    Sequence = 1,
-    Tween = 2,
-    Callback = 3,
-    Delay = 4,
-    None = 5,
-}
-
-    type: TweenType;
     elapsed: number;
     duration: number;
     state: State;
@@ -96,10 +53,6 @@
 }
 
     state: State;
-    OnStart(cb: () => void): void;
-    OnUpdate(cb: (dt: number, progress: number) => void): void;
-    OnKilled(cb: () => void): void;
-    OnComplete(cb: () => void): void;
 }
 
     Default(): void;
@@ -147,11 +100,39 @@
     [id: string]: (t: number, args?: any) => number;
 };
 
+    Linear = 0,
+    InQuad = 1,
+    OutQuad = 2,
+    InOutQuad = 3,
+    InCubic = 4,
+    OutCubic = 5,
+    InOutCubic = 6,
+    InQuart = 7,
+    OutQuart = 8,
+    InOutQuart = 9,
+    InSine = 10,
+    OutSine = 11,
+    InOutSine = 12,
+    InCirc = 13,
+    OutCirc = 14,
+    InOutCirc = 15,
+    InQuint = 16,
+    OutQuint = 17,
+    InOutQuint = 18,
+    InExponential = 19,
+    OutExponential = 20,
+    InOutExponential = 21,
+    InElastic = 22,
+    OutElastic = 23,
+    InOutElastic = 24,
+    InBack = 25,
+    OutBack = 26,
+    InOutBack = 27,
+    InBounce = 28,
+    OutBounce = 29,
+    InOutBounce = 30,
+}
 
-
-
-
-    abstract type: TweenType;
     elapsed: number;
     duration: number;
     timescale: number;
@@ -159,64 +140,55 @@
     protected parent: ITicker;
     protected tickCb: (dt: number) => void;
     state: State;
-    private eventStart;
-    private eventUpdate;
-    private eventKill;
-    private eventComplete;
+    protected eventStart: {
+        (): void;
+    }[] | undefined;
+    protected eventUpdate: {
+        (dt: number, progress: number): void;
+    }[] | undefined;
+    protected eventKill: {
+        (): void;
+    }[] | undefined;
+    protected eventComplete: {
+        (): void;
+    }[] | undefined;
     private firstStart;
-    protected abstract Validate(): void;
-    protected abstract LoopInit(): void;
-    SetParent(ticker: ITicker): void;
-    readonly IsRunning: boolean;
-    readonly IsCompleted: boolean;
-    readonly IsKilled: boolean;
     Start(): void;
-    Reset(resetloop?: boolean): void;
-    ResetAndStart(resetloop: boolean, dtRemains: number): void;
+    Reset(): void;
+    ResetAndStart(dtRemains: number): void;
     Skip(): void;
     Pause(): void;
     Resume(): void;
+    protected Complete(): void;
     Kill(): void;
     protected CheckPosition(): void;
-    protected abstract Cleanup(): void;
+    protected Validate(): void;
+    protected LoopInit(): void;
+    SetParent(ticker: ITicker): void;
     Default(): void;
-    protected Complete(): void;
-    protected Started(): void;
-    protected Updated(dt: number, progress: number): void;
-    protected Killed(): void;
-    protected Completed(): void;
-    OnStart(cb: () => void): void;
-    OnUpdate(cb: (dt: number, progress: number) => void): void;
-    OnKilled(cb: () => void): void;
-    OnComplete(cb: () => void): void;
+    protected EmitEvent(listeners: {
+        (): void;
+    }[] | undefined): void;
+    protected EmitUpdateEvent(dt: number, progress: number): void;
 }
 
-    readonly type: TweenType;
+    private callback;
     constructor(cb: () => void);
-    protected Validate(): void;
-    protected LoopInit(): void;
-    protected Cleanup(): void;
+    private Tick(dt);
 }
 
-    readonly type: TweenType;
     constructor(duration: number);
-    protected Validate(): void;
-    protected LoopInit(): void;
-    protected Cleanup(): void;
+    private Tick(dt);
 }
 
-    readonly type: TweenType;
     private eventTick;
+    private tweens;
     private eventStepStart;
     private eventStepEnd;
-    private tweens;
     currentTween: (ITween | IPlayable)[] | undefined;
     private sequenceIndex;
-    private cleanTweens;
-    private cleaned;
     constructor();
     Start(): ISequence;
-    protected Validate(): void;
     protected LoopInit(): void;
     SetParent(ticker: ITicker): ISequence;
     AddTickListener(cb: (dt: number) => void): void;
@@ -238,8 +210,6 @@
     SetTimescale(scale: number): ISequence;
     SetLoop(loop: number): ISequence;
     Default(): void;
-    Cleanup(): void;
-    Clean(data: (ITween | ISequence)[]): void;
     OnStart(cb: () => void): ISequence;
     OnUpdate(cb: (dt: number, progress: number) => void): ISequence;
     OnKilled(cb: () => void): ISequence;
@@ -248,14 +218,12 @@
     OnStepEnd(cb: (index: ITween | IPlayable) => void): ISequence;
 }
 
-    readonly type: TweenType;
     private object;
     private properties;
     private from;
     private to;
     private currentFrom;
     private currentTo;
-    private cleaned;
     private remainsDt;
     private relative;
     private ease;
@@ -265,7 +233,6 @@
     protected Validate(): void;
     protected CheckPosition(): void;
     private Tick(dt);
-    private Update(dt, progress);
     SetParent(ticker: ITicker): ITween;
     From(from: any): ITween;
     To(to: any, duration: number): ITween;
@@ -277,7 +244,6 @@
     private Easing(type);
     SetEasing(type: EasingType | string): ITween;
     protected LoopInit(): void;
-    Cleanup(): void;
     Default(): void;
     OnStart(cb: () => void): ITween;
     OnUpdate(cb: (dt: number, progress: number) => void): ITween;

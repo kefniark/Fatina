@@ -1,9 +1,7 @@
 import { BaseTween } from './baseTween';
 import { IPlayable } from '../core/interfaces/IPlayable';
-import { TweenType } from '../core/enum/tweenType';
 
 export class Callback extends BaseTween implements IPlayable {
-	public readonly type = TweenType.Callback;
 	private callback: () => void;
 
 	constructor(cb: () => void) {

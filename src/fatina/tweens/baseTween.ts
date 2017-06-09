@@ -1,9 +1,7 @@
 import { ITicker } from '../core/interfaces/ITicker';
 import { State } from '../core/enum/state';
-import { TweenType } from '../core/enum/tweenType';
 
 export abstract class BaseTween {
-	public abstract type: TweenType;
 	public elapsed = 0;
 	public duration = 0;
 	public timescale = 1;

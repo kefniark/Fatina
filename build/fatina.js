@@ -57,8 +57,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var sequence_1 = __webpack_require__(1);
-	var tween_1 = __webpack_require__(7);
-	var ticker_1 = __webpack_require__(10);
+	var tween_1 = __webpack_require__(6);
+	var ticker_1 = __webpack_require__(9);
 	var tickerManager;
 	var initialized = false;
 	var isFirstUpdate = true;
@@ -172,20 +172,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var baseTween_1 = __webpack_require__(2);
 	var callback_1 = __webpack_require__(4);
-	var delay_1 = __webpack_require__(6);
-	var tweenType_1 = __webpack_require__(5);
+	var delay_1 = __webpack_require__(5);
 	var state_1 = __webpack_require__(3);
 	var Sequence = (function (_super) {
 	    __extends(Sequence, _super);
 	    function Sequence() {
 	        var _this = _super.call(this) || this;
-	        _this.type = tweenType_1.TweenType.Sequence;
 	        _this.eventTick = [];
-	        _this.eventStepStart = [];
-	        _this.eventStepEnd = [];
 	        _this.tweens = [];
 	        _this.sequenceIndex = 0;
-	        _this.cleanTweens = [];
 	        _this.tickCb = _this.Tick.bind(_this);
 	        return _this;
 	    }
@@ -193,15 +188,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _super.prototype.Start.call(this);
 	        return this;
 	    };
-	    Sequence.prototype.Validate = function () {
-	    };
 	    Sequence.prototype.LoopInit = function () {
 	        this.sequenceIndex = 0;
 	        for (var i = 0; i < this.tweens.length; i++) {
 	            var tweenArray = this.tweens[i];
 	            for (var j = 0; j < tweenArray.length; j++) {
 	                var tween = tweenArray[j];
-	                tween.Reset(true);
+	                tween.Reset();
 	            }
 	        }
 	    };
@@ -235,7 +228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.eventTick[i](dt);
 	            }
 	            if (remains !== true) {
-	                _super.prototype.Updated.call(this, dt, 0);
+	                this.EmitUpdateEvent(dt, 0);
 	            }
 	        }
 	        var remainsDt = dt;
@@ -261,7 +254,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.Complete();
 	            }
 	            else {
-	                this.ResetAndStart(false, remainsDt);
+	                this.ResetAndStart(remainsDt);
 	            }
 	        }
 	    };
@@ -276,6 +269,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 	    Sequence.prototype.StepStarted = function (tween) {
+	        if (!this.eventStepStart) {
+	            return;
+	        }
 	        for (var i = 0; i < this.eventStepStart.length; i++) {
 	            try {
 	                this.eventStepStart[i](tween);
@@ -286,6 +282,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 	    Sequence.prototype.StepEnded = function (tween) {
+	        if (!this.eventStepEnd) {
+	            return;
+	        }
 	        for (var i = 0; i < this.eventStepEnd.length; i++) {
 	            try {
 	                this.eventStepEnd[i](tween);
@@ -331,7 +330,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    Sequence.prototype.Skip = function () {
 	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
-	            console.warn('cant skip this tween, already in state', this.state);
+	            console.warn('cant skip this tween', this.state);
 	            return;
 	        }
 	        for (var i = 0; i < this.tweens.length; i++) {
@@ -352,7 +351,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    Sequence.prototype.Kill = function () {
 	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
-	            console.warn('cant kill this tween, already in state', this.state);
+	            console.warn('cant kill this tween', this.state);
 	            return;
 	        }
 	        for (var i = 0; i < this.tweens.length; i++) {
@@ -385,47 +384,49 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    Sequence.prototype.Default = function () {
 	        _super.prototype.Default.call(this);
-	        this.eventTick.length = 0;
-	        this.eventStepStart.length = 0;
-	        this.eventStepEnd.length = 0;
 	        this.tweens.length = 0;
 	        this.currentTween = undefined;
 	        this.sequenceIndex = 0;
-	        this.cleanTweens.length = 0;
-	        this.cleaned = false;
-	    };
-	    Sequence.prototype.Cleanup = function () {
-	        if (!this.parent || this.cleaned) {
-	            return;
-	        }
-	        this.cleaned = true;
-	    };
-	    Sequence.prototype.Clean = function (data) {
-	        for (var i = 0; i < data.length; i++) {
-	            this.cleanTweens[this.cleanTweens.length] = data[i];
-	        }
 	    };
 	    Sequence.prototype.OnStart = function (cb) {
-	        _super.prototype.OnStart.call(this, cb);
+	        if (!this.eventStart) {
+	            this.eventStart = [];
+	        }
+	        this.eventStart[this.eventStart.length] = cb;
 	        return this;
 	    };
 	    Sequence.prototype.OnUpdate = function (cb) {
-	        _super.prototype.OnUpdate.call(this, cb);
+	        if (!this.eventUpdate) {
+	            this.eventUpdate = [];
+	        }
+	        this.eventUpdate[this.eventUpdate.length] = cb;
 	        return this;
 	    };
 	    Sequence.prototype.OnKilled = function (cb) {
-	        _super.prototype.OnKilled.call(this, cb);
+	        if (!this.eventKill) {
+	            this.eventKill = [];
+	        }
+	        this.eventKill[this.eventKill.length] = cb;
 	        return this;
 	    };
 	    Sequence.prototype.OnComplete = function (cb) {
-	        _super.prototype.OnComplete.call(this, cb);
+	        if (!this.eventComplete) {
+	            this.eventComplete = [];
+	        }
+	        this.eventComplete[this.eventComplete.length] = cb;
 	        return this;
 	    };
 	    Sequence.prototype.OnStepStart = function (cb) {
+	        if (!this.eventStepStart) {
+	            this.eventStepStart = [];
+	        }
 	        this.eventStepStart[this.eventStepStart.length] = cb;
 	        return this;
 	    };
 	    Sequence.prototype.OnStepEnd = function (cb) {
+	        if (!this.eventStepEnd) {
+	            this.eventStepEnd = [];
+	        }
 	        this.eventStepEnd[this.eventStepEnd.length] = cb;
 	        return this;
 	    };
@@ -448,42 +449,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.timescale = 1;
 	        this.loop = 1;
 	        this.state = state_1.State.Idle;
-	        this.eventStart = [];
-	        this.eventUpdate = [];
-	        this.eventKill = [];
-	        this.eventComplete = [];
 	        this.firstStart = true;
 	    }
-	    BaseTween.prototype.SetParent = function (ticker) {
-	        if (this.parent) {
-	            this.parent.RemoveTickListener(this.tickCb);
-	        }
-	        this.parent = ticker;
-	    };
-	    Object.defineProperty(BaseTween.prototype, "IsRunning", {
-	        get: function () {
-	            return this.state === state_1.State.Run;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(BaseTween.prototype, "IsCompleted", {
-	        get: function () {
-	            return this.state === state_1.State.Finished;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(BaseTween.prototype, "IsKilled", {
-	        get: function () {
-	            return this.state === state_1.State.Killed;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
 	    BaseTween.prototype.Start = function () {
 	        if (this.state !== state_1.State.Idle) {
-	            console.warn('cant start this tween, already in state', this.state);
+	            console.warn('cant start this tween', this.state);
 	            return;
 	        }
 	        if (this.firstStart) {
@@ -495,24 +465,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.state = state_1.State.Run;
 	        this.parent.AddTickListener(this.tickCb);
 	        if (this.firstStart) {
-	            this.Started();
+	            this.EmitEvent(this.eventStart);
 	            this.firstStart = false;
 	        }
 	    };
-	    BaseTween.prototype.Reset = function (resetloop) {
+	    BaseTween.prototype.Reset = function () {
 	        this.state = state_1.State.Idle;
 	        if (this.parent) {
 	            this.parent.RemoveTickListener(this.tickCb);
 	        }
-	        if (resetloop === true) {
-	            this.loop = 1;
-	        }
+	        this.loop = 1;
 	        this.LoopInit();
 	    };
-	    BaseTween.prototype.ResetAndStart = function (resetloop, dtRemains) {
-	        if (resetloop === true) {
-	            this.loop = 1;
-	        }
+	    BaseTween.prototype.ResetAndStart = function (dtRemains) {
 	        this.LoopInit();
 	        this.state = state_1.State.Run;
 	        if (dtRemains > 0) {
@@ -521,18 +486,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    BaseTween.prototype.Skip = function () {
 	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
-	            console.warn('cant skip this tween, already in state', this.state);
+	            console.warn('cant skip this tween', this.state);
 	            return;
 	        }
 	        if (this.state === state_1.State.Idle) {
-	            this.Started();
+	            this.EmitEvent(this.eventStart);
 	        }
 	        this.elapsed = this.duration;
 	        this.Complete();
 	    };
 	    BaseTween.prototype.Pause = function () {
 	        if (this.state !== state_1.State.Run) {
-	            console.warn('cant pause this tween, already in state', this.state);
+	            console.warn('cant pause this tween', this.state);
 	            return;
 	        }
 	        this.state = state_1.State.Pause;
@@ -542,62 +507,70 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    BaseTween.prototype.Resume = function () {
 	        if (this.state !== state_1.State.Pause) {
-	            console.warn('cant resume this tween, already in state', this.state);
+	            console.warn('cant resume this tween', this.state);
 	            return;
 	        }
 	        this.state = state_1.State.Run;
 	        this.parent.AddTickListener(this.tickCb);
 	    };
-	    BaseTween.prototype.Kill = function () {
-	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
-	            console.warn('cant kill this tween, already in state', this.state);
-	            return;
-	        }
-	        if (this.parent) {
-	            this.parent.RemoveTickListener(this.tickCb);
-	        }
-	        this.state = state_1.State.Killed;
-	        this.Killed();
-	        this.Cleanup();
-	    };
-	    BaseTween.prototype.CheckPosition = function () { };
-	    BaseTween.prototype.Default = function () {
-	        this.elapsed = 0;
-	        this.duration = 0;
-	        this.timescale = 1;
-	        this.loop = 1;
-	        this.eventStart.length = 0;
-	        this.eventUpdate.length = 0;
-	        this.eventKill.length = 0;
-	        this.eventComplete.length = 0;
-	        this.firstStart = true;
-	        this.state = state_1.State.Idle;
-	        delete this.parent;
-	    };
 	    BaseTween.prototype.Complete = function () {
 	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
-	            console.warn('cant complete this tween, already in state', this.state);
+	            console.warn('cant complete this tween', this.state);
 	            return;
 	        }
 	        if (this.parent) {
 	            this.parent.RemoveTickListener(this.tickCb);
 	        }
 	        this.state = state_1.State.Finished;
-	        this.Completed();
-	        this.Cleanup();
+	        this.EmitEvent(this.eventComplete);
 	    };
-	    BaseTween.prototype.Started = function () {
-	        for (var i = 0; i < this.eventStart.length; i++) {
+	    BaseTween.prototype.Kill = function () {
+	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
+	            console.warn('cant kill this tween', this.state);
+	            return;
+	        }
+	        if (this.parent) {
+	            this.parent.RemoveTickListener(this.tickCb);
+	        }
+	        this.state = state_1.State.Killed;
+	        this.EmitEvent(this.eventKill);
+	    };
+	    BaseTween.prototype.CheckPosition = function () { };
+	    BaseTween.prototype.Validate = function () { };
+	    BaseTween.prototype.LoopInit = function () {
+	        this.elapsed = 0;
+	    };
+	    BaseTween.prototype.SetParent = function (ticker) {
+	        if (this.parent) {
+	            this.parent.RemoveTickListener(this.tickCb);
+	        }
+	        this.parent = ticker;
+	    };
+	    BaseTween.prototype.Default = function () {
+	        this.elapsed = 0;
+	        this.duration = 0;
+	        this.timescale = 1;
+	        this.loop = 1;
+	        this.firstStart = true;
+	        this.state = state_1.State.Idle;
+	    };
+	    BaseTween.prototype.EmitEvent = function (listeners) {
+	        if (!listeners) {
+	            return;
+	        }
+	        for (var i = 0; i < listeners.length; i++) {
 	            try {
-	                this.eventStart[i]();
+	                listeners[i]();
 	            }
 	            catch (e) {
 	                console.warn(e);
 	            }
 	        }
-	        this.eventStart.length = 0;
 	    };
-	    BaseTween.prototype.Updated = function (dt, progress) {
+	    BaseTween.prototype.EmitUpdateEvent = function (dt, progress) {
+	        if (!this.eventUpdate) {
+	            return;
+	        }
 	        for (var i = 0; i < this.eventUpdate.length; i++) {
 	            try {
 	                this.eventUpdate[i](dt, progress);
@@ -606,40 +579,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                console.warn(e);
 	            }
 	        }
-	    };
-	    BaseTween.prototype.Killed = function () {
-	        for (var i = 0; i < this.eventKill.length; i++) {
-	            try {
-	                this.eventKill[i]();
-	            }
-	            catch (e) {
-	                console.warn(e);
-	            }
-	        }
-	        this.eventKill.length = 0;
-	    };
-	    BaseTween.prototype.Completed = function () {
-	        for (var i = 0; i < this.eventComplete.length; i++) {
-	            try {
-	                this.eventComplete[i]();
-	            }
-	            catch (e) {
-	                console.warn(e);
-	            }
-	        }
-	        this.eventComplete.length = 0;
-	    };
-	    BaseTween.prototype.OnStart = function (cb) {
-	        this.eventStart[this.eventStart.length] = cb;
-	    };
-	    BaseTween.prototype.OnUpdate = function (cb) {
-	        this.eventUpdate[this.eventUpdate.length] = cb;
-	    };
-	    BaseTween.prototype.OnKilled = function (cb) {
-	        this.eventKill[this.eventKill.length] = cb;
-	    };
-	    BaseTween.prototype.OnComplete = function (cb) {
-	        this.eventComplete[this.eventComplete.length] = cb;
 	    };
 	    return BaseTween;
 	}());
@@ -679,26 +618,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var baseTween_1 = __webpack_require__(2);
-	var tweenType_1 = __webpack_require__(5);
 	var Callback = (function (_super) {
 	    __extends(Callback, _super);
 	    function Callback(cb) {
 	        var _this = _super.call(this) || this;
-	        _this.type = tweenType_1.TweenType.Callback;
-	        _this.tickCb = function (dt) {
-	            _this.elapsed += dt;
-	            _this.duration = 0;
-	            cb();
-	            _this.Updated(dt, 1);
-	            _this.Complete();
-	        };
+	        _this.callback = cb;
+	        _this.tickCb = _this.Tick.bind(_this);
 	        return _this;
 	    }
-	    Callback.prototype.Validate = function () { };
-	    Callback.prototype.LoopInit = function () {
-	        this.elapsed = 0;
+	    Callback.prototype.Tick = function (dt) {
+	        this.elapsed += dt;
+	        this.duration = 0;
+	        this.callback();
+	        this.EmitUpdateEvent(dt, 1);
+	        this.Complete();
 	    };
-	    Callback.prototype.Cleanup = function () { };
 	    return Callback;
 	}(baseTween_1.BaseTween));
 	exports.Callback = Callback;
@@ -706,19 +640,40 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
+	var __extends = (this && this.__extends) || (function () {
+	    var extendStatics = Object.setPrototypeOf ||
+	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+	    return function (d, b) {
+	        extendStatics(d, b);
+	        function __() { this.constructor = d; }
+	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	    };
+	})();
 	Object.defineProperty(exports, "__esModule", { value: true });
-	var TweenType;
-	(function (TweenType) {
-	    TweenType[TweenType["Ticker"] = 0] = "Ticker";
-	    TweenType[TweenType["Sequence"] = 1] = "Sequence";
-	    TweenType[TweenType["Tween"] = 2] = "Tween";
-	    TweenType[TweenType["Callback"] = 3] = "Callback";
-	    TweenType[TweenType["Delay"] = 4] = "Delay";
-	    TweenType[TweenType["None"] = 5] = "None";
-	})(TweenType = exports.TweenType || (exports.TweenType = {}));
+	var baseTween_1 = __webpack_require__(2);
+	var Delay = (function (_super) {
+	    __extends(Delay, _super);
+	    function Delay(duration) {
+	        var _this = _super.call(this) || this;
+	        _this.duration = duration;
+	        _this.tickCb = _this.Tick.bind(_this);
+	        return _this;
+	    }
+	    Delay.prototype.Tick = function (dt) {
+	        this.elapsed += dt;
+	        var progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
+	        this.EmitUpdateEvent(dt, progress);
+	        if (this.elapsed >= this.duration) {
+	            this.Complete();
+	        }
+	    };
+	    return Delay;
+	}(baseTween_1.BaseTween));
+	exports.Delay = Delay;
 
 
 /***/ }),
@@ -738,60 +693,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var baseTween_1 = __webpack_require__(2);
-	var tweenType_1 = __webpack_require__(5);
-	var Delay = (function (_super) {
-	    __extends(Delay, _super);
-	    function Delay(duration) {
-	        var _this = _super.call(this) || this;
-	        _this.type = tweenType_1.TweenType.Delay;
-	        _this.duration = duration;
-	        _this.tickCb = function (dt) {
-	            _this.elapsed += dt;
-	            var progress = Math.max(Math.min(_this.elapsed / _this.duration, 1), 0);
-	            _super.prototype.Updated.call(_this, dt, progress);
-	            if (_this.elapsed >= _this.duration) {
-	                _this.Complete();
-	            }
-	        };
-	        return _this;
-	    }
-	    Delay.prototype.Validate = function () { };
-	    Delay.prototype.LoopInit = function () {
-	        this.elapsed = 0;
-	    };
-	    Delay.prototype.Cleanup = function () { };
-	    return Delay;
-	}(baseTween_1.BaseTween));
-	exports.Delay = Delay;
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __extends = (this && this.__extends) || (function () {
-	    var extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return function (d, b) {
-	        extendStatics(d, b);
-	        function __() { this.constructor = d; }
-	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	    };
-	})();
-	Object.defineProperty(exports, "__esModule", { value: true });
-	var baseTween_1 = __webpack_require__(2);
-	var easingType_1 = __webpack_require__(8);
-	var easing_1 = __webpack_require__(9);
+	var easing_1 = __webpack_require__(7);
 	var sequence_1 = __webpack_require__(1);
-	var tweenType_1 = __webpack_require__(5);
 	var state_1 = __webpack_require__(3);
+	var easingType_1 = __webpack_require__(8);
 	var Tween = (function (_super) {
 	    __extends(Tween, _super);
 	    function Tween(object, properties) {
 	        var _this = _super.call(this) || this;
-	        _this.type = tweenType_1.TweenType.Tween;
 	        _this.relative = false;
 	        _this.object = object;
 	        _this.properties = properties;
@@ -827,28 +736,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Tween.prototype.CheckPosition = function () {
 	        this.currentFrom = {};
 	        this.currentTo = {};
-	        if (!this.from) {
-	            for (var i = 0; i < this.properties.length; i++) {
-	                var prop = this.properties[i];
+	        for (var i = 0; i < this.properties.length; i++) {
+	            var prop = this.properties[i];
+	            if (!this.from) {
 	                this.currentFrom[prop] = this.object[prop];
 	            }
-	        }
-	        else {
-	            for (var i = 0; i < this.properties.length; i++) {
-	                var prop = this.properties[i];
+	            else {
 	                this.currentFrom[prop] = this.from[prop];
 	                this.object[prop] = this.from[prop];
 	            }
-	        }
-	        if (this.relative) {
-	            for (var i = 0; i < this.properties.length; i++) {
-	                var prop = this.properties[i];
+	            if (this.relative) {
 	                this.currentTo[prop] = this.object[prop] + this.to[prop];
 	            }
-	        }
-	        else {
-	            for (var i = 0; i < this.properties.length; i++) {
-	                var prop = this.properties[i];
+	            else {
 	                this.currentTo[prop] = this.to[prop];
 	            }
 	        }
@@ -861,31 +761,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	        while (this.remainsDt > 0) {
 	            this.elapsed += this.remainsDt;
 	            var progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
-	            this.Update(this.remainsDt, progress);
+	            var val = this.ease(progress);
+	            for (var i = 0; i < this.properties.length; i++) {
+	                var prop = this.properties[i];
+	                this.object[prop] = this.currentFrom[prop] + (this.currentTo[prop] - this.currentFrom[prop]) * val;
+	            }
+	            this.EmitUpdateEvent(this.remainsDt, progress);
 	            if (this.elapsed < this.duration) {
 	                return;
 	            }
 	            this.remainsDt = this.elapsed - this.duration;
 	            this.loop--;
 	            if (this.loop === 0) {
-	                for (var i = 0; i < this.properties.length; i++) {
-	                    var prop = this.properties[i];
-	                    this.object[prop] = this.currentTo[prop];
-	                }
 	                this.Complete();
 	                return;
 	            }
 	            this.CheckPosition();
-	            this.ResetAndStart(false, 0);
+	            this.ResetAndStart(0);
 	        }
-	    };
-	    Tween.prototype.Update = function (dt, progress) {
-	        var val = this.ease(progress);
-	        for (var i = 0; i < this.properties.length; i++) {
-	            var prop = this.properties[i];
-	            this.object[prop] = this.currentFrom[prop] + (this.currentTo[prop] - this.currentFrom[prop]) * val;
-	        }
-	        this.Updated(dt, progress);
 	    };
 	    Tween.prototype.SetParent = function (ticker) {
 	        _super.prototype.SetParent.call(this, ticker);
@@ -954,12 +847,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Tween.prototype.LoopInit = function () {
 	        this.elapsed = 0;
 	    };
-	    Tween.prototype.Cleanup = function () {
-	        if (!this.parent || this.cleaned) {
-	            return;
-	        }
-	        this.cleaned = true;
-	    };
 	    Tween.prototype.Default = function () {
 	        _super.prototype.Default.call(this);
 	        this.object = undefined;
@@ -969,23 +856,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.currentFrom = undefined;
 	        this.currentTo = undefined;
 	        this.relative = false;
-	        this.ease = easing_1.easeTypes[0];
-	        this.cleaned = false;
 	    };
 	    Tween.prototype.OnStart = function (cb) {
-	        _super.prototype.OnStart.call(this, cb);
+	        if (!this.eventStart) {
+	            this.eventStart = [];
+	        }
+	        this.eventStart[this.eventStart.length] = cb;
 	        return this;
 	    };
 	    Tween.prototype.OnUpdate = function (cb) {
-	        _super.prototype.OnUpdate.call(this, cb);
+	        if (!this.eventUpdate) {
+	            this.eventUpdate = [];
+	        }
+	        this.eventUpdate[this.eventUpdate.length] = cb;
 	        return this;
 	    };
 	    Tween.prototype.OnKilled = function (cb) {
-	        _super.prototype.OnKilled.call(this, cb);
+	        if (!this.eventKill) {
+	            this.eventKill = [];
+	        }
+	        this.eventKill[this.eventKill.length] = cb;
 	        return this;
 	    };
 	    Tween.prototype.OnComplete = function (cb) {
-	        _super.prototype.OnComplete.call(this, cb);
+	        if (!this.eventComplete) {
+	            this.eventComplete = [];
+	        }
+	        this.eventComplete[this.eventComplete.length] = cb;
 	        return this;
 	    };
 	    return Tween;
@@ -994,49 +891,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-	"use strict";
-	Object.defineProperty(exports, "__esModule", { value: true });
-	var EasingType;
-	(function (EasingType) {
-	    EasingType[EasingType["Linear"] = 0] = "Linear";
-	    EasingType[EasingType["InQuad"] = 1] = "InQuad";
-	    EasingType[EasingType["OutQuad"] = 2] = "OutQuad";
-	    EasingType[EasingType["InOutQuad"] = 3] = "InOutQuad";
-	    EasingType[EasingType["InCubic"] = 4] = "InCubic";
-	    EasingType[EasingType["OutCubic"] = 5] = "OutCubic";
-	    EasingType[EasingType["InOutCubic"] = 6] = "InOutCubic";
-	    EasingType[EasingType["InQuart"] = 7] = "InQuart";
-	    EasingType[EasingType["OutQuart"] = 8] = "OutQuart";
-	    EasingType[EasingType["InOutQuart"] = 9] = "InOutQuart";
-	    EasingType[EasingType["InSine"] = 10] = "InSine";
-	    EasingType[EasingType["OutSine"] = 11] = "OutSine";
-	    EasingType[EasingType["InOutSine"] = 12] = "InOutSine";
-	    EasingType[EasingType["InCirc"] = 13] = "InCirc";
-	    EasingType[EasingType["OutCirc"] = 14] = "OutCirc";
-	    EasingType[EasingType["InOutCirc"] = 15] = "InOutCirc";
-	    EasingType[EasingType["InQuint"] = 16] = "InQuint";
-	    EasingType[EasingType["OutQuint"] = 17] = "OutQuint";
-	    EasingType[EasingType["InOutQuint"] = 18] = "InOutQuint";
-	    EasingType[EasingType["InExponential"] = 19] = "InExponential";
-	    EasingType[EasingType["OutExponential"] = 20] = "OutExponential";
-	    EasingType[EasingType["InOutExponential"] = 21] = "InOutExponential";
-	    EasingType[EasingType["InElastic"] = 22] = "InElastic";
-	    EasingType[EasingType["OutElastic"] = 23] = "OutElastic";
-	    EasingType[EasingType["InOutElastic"] = 24] = "InOutElastic";
-	    EasingType[EasingType["InBack"] = 25] = "InBack";
-	    EasingType[EasingType["OutBack"] = 26] = "OutBack";
-	    EasingType[EasingType["InOutBack"] = 27] = "InOutBack";
-	    EasingType[EasingType["InBounce"] = 28] = "InBounce";
-	    EasingType[EasingType["OutBounce"] = 29] = "OutBounce";
-	    EasingType[EasingType["InOutBounce"] = 30] = "InOutBounce";
-	})(EasingType = exports.EasingType || (exports.EasingType = {}));
-
-
-/***/ }),
-/* 9 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1226,7 +1081,49 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 10 */
+/* 8 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	Object.defineProperty(exports, "__esModule", { value: true });
+	var EasingType;
+	(function (EasingType) {
+	    EasingType[EasingType["Linear"] = 0] = "Linear";
+	    EasingType[EasingType["InQuad"] = 1] = "InQuad";
+	    EasingType[EasingType["OutQuad"] = 2] = "OutQuad";
+	    EasingType[EasingType["InOutQuad"] = 3] = "InOutQuad";
+	    EasingType[EasingType["InCubic"] = 4] = "InCubic";
+	    EasingType[EasingType["OutCubic"] = 5] = "OutCubic";
+	    EasingType[EasingType["InOutCubic"] = 6] = "InOutCubic";
+	    EasingType[EasingType["InQuart"] = 7] = "InQuart";
+	    EasingType[EasingType["OutQuart"] = 8] = "OutQuart";
+	    EasingType[EasingType["InOutQuart"] = 9] = "InOutQuart";
+	    EasingType[EasingType["InSine"] = 10] = "InSine";
+	    EasingType[EasingType["OutSine"] = 11] = "OutSine";
+	    EasingType[EasingType["InOutSine"] = 12] = "InOutSine";
+	    EasingType[EasingType["InCirc"] = 13] = "InCirc";
+	    EasingType[EasingType["OutCirc"] = 14] = "OutCirc";
+	    EasingType[EasingType["InOutCirc"] = 15] = "InOutCirc";
+	    EasingType[EasingType["InQuint"] = 16] = "InQuint";
+	    EasingType[EasingType["OutQuint"] = 17] = "OutQuint";
+	    EasingType[EasingType["InOutQuint"] = 18] = "InOutQuint";
+	    EasingType[EasingType["InExponential"] = 19] = "InExponential";
+	    EasingType[EasingType["OutExponential"] = 20] = "OutExponential";
+	    EasingType[EasingType["InOutExponential"] = 21] = "InOutExponential";
+	    EasingType[EasingType["InElastic"] = 22] = "InElastic";
+	    EasingType[EasingType["OutElastic"] = 23] = "OutElastic";
+	    EasingType[EasingType["InOutElastic"] = 24] = "InOutElastic";
+	    EasingType[EasingType["InBack"] = 25] = "InBack";
+	    EasingType[EasingType["OutBack"] = 26] = "OutBack";
+	    EasingType[EasingType["InOutBack"] = 27] = "InOutBack";
+	    EasingType[EasingType["InBounce"] = 28] = "InBounce";
+	    EasingType[EasingType["OutBounce"] = 29] = "OutBounce";
+	    EasingType[EasingType["InOutBounce"] = 30] = "InOutBounce";
+	})(EasingType = exports.EasingType || (exports.EasingType = {}));
+
+
+/***/ }),
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1242,13 +1139,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var state_1 = __webpack_require__(3);
-	var tweenType_1 = __webpack_require__(5);
-	var eventList_1 = __webpack_require__(11);
+	var eventList_1 = __webpack_require__(10);
 	var Ticker = (function (_super) {
 	    __extends(Ticker, _super);
 	    function Ticker() {
 	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.type = tweenType_1.TweenType.Ticker;
 	        _this.state = state_1.State.Idle;
 	        _this.timescale = 1;
 	        _this.elapsed = 0;
@@ -1330,7 +1225,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports) {
 
 	"use strict";
