@@ -13,37 +13,15 @@ export abstract class BaseTween {
 	protected tickCb: (dt: number) => void;
 	public state: State = State.Idle;
 
-	private eventStart: {(): void}[] = [];
-	private eventUpdate: {(dt: number, progress: number): void}[] = [];
-	private eventKill: {(): void}[] = [];
-	private eventComplete: {(): void}[] = [];
+	protected eventStart: {(): void}[] | undefined;
+	protected eventUpdate: {(dt: number, progress: number): void}[] | undefined;
+	protected eventKill: {(): void}[] | undefined;
+	protected eventComplete: {(): void}[] | undefined;
 	private firstStart = true;
-
-	protected abstract Validate(): void;
-	protected abstract LoopInit(): void;
-
-	public SetParent(ticker: ITicker): void {
-		if (this.parent) {
-			this.parent.RemoveTickListener(this.tickCb);
-		}
-		this.parent = ticker;
-	}
-
-	public get IsRunning(): boolean {
-		return this.state === State.Run;
-	}
-
-	public get IsCompleted(): boolean {
-		return this.state === State.Finished;
-	}
-
-	public get IsKilled(): boolean {
-		return this.state === State.Killed;
-	}
 
 	public Start(): void {
 		if (this.state !== State.Idle) {
-			console.warn('cant start this tween, already in state', this.state);
+			console.warn('cant start this tween', this.state);
 			return;
 		}
 
@@ -57,30 +35,23 @@ export abstract class BaseTween {
 		this.parent.AddTickListener(this.tickCb);
 
 		if (this.firstStart) {
-			this.Started();
+			this.EmitEvent(this.eventStart);
 			this.firstStart = false;
 		}
 	}
 
-	public Reset(resetloop?: boolean): void {
+	public Reset(): void {
 		this.state = State.Idle;
 
 		if (this.parent) {
 			this.parent.RemoveTickListener(this.tickCb);
 		}
 
-		if (resetloop === true) {
-			this.loop = 1;
-		}
-
+		this.loop = 1;
 		this.LoopInit();
 	}
 
-	public ResetAndStart(resetloop: boolean, dtRemains: number) {
-		if (resetloop === true) {
-			this.loop = 1;
-		}
-
+	public ResetAndStart(dtRemains: number) {
 		this.LoopInit();
 
 		this.state = State.Run;
@@ -91,12 +62,12 @@ export abstract class BaseTween {
 
 	public Skip(): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
-			console.warn('cant skip this tween, already in state', this.state);
+			console.warn('cant skip this tween', this.state);
 			return;
 		}
 
 		if (this.state === State.Idle) {
-			this.Started();
+			this.EmitEvent(this.eventStart);
 		}
 
 		this.elapsed = this.duration;
@@ -105,7 +76,7 @@ export abstract class BaseTween {
 
 	public Pause(): void {
 		if (this.state !== State.Run) {
-			console.warn('cant pause this tween, already in state', this.state);
+			console.warn('cant pause this tween', this.state);
 			return;
 		}
 
@@ -117,7 +88,7 @@ export abstract class BaseTween {
 
 	public Resume(): void {
 		if (this.state !== State.Pause) {
-			console.warn('cant resume this tween, already in state', this.state);
+			console.warn('cant resume this tween', this.state);
 			return;
 		}
 
@@ -125,42 +96,9 @@ export abstract class BaseTween {
 		this.parent.AddTickListener(this.tickCb);
 	}
 
-	public Kill(): void {
-		if (this.state === State.Killed || this.state === State.Finished) {
-			console.warn('cant kill this tween, already in state', this.state);
-			return;
-		}
-
-		if (this.parent) {
-			this.parent.RemoveTickListener(this.tickCb);
-		}
-
-		this.state = State.Killed
-		this.Killed();
-		this.Cleanup();
-	}
-
-	protected CheckPosition(): void {}
-
-	protected abstract Cleanup(): void;
-
-	public Default() {
-		this.elapsed = 0;
-		this.duration = 0;
-		this.timescale = 1;
-		this.loop = 1;
-		this.eventStart.length = 0;
-		this.eventUpdate.length = 0;
-		this.eventKill.length = 0;
-		this.eventComplete.length = 0;
-		this.firstStart = true;
-		this.state = State.Idle;
-		delete this.parent;
-	}
-
 	protected Complete(): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
-			console.warn('cant complete this tween, already in state', this.state);
+			console.warn('cant complete this tween', this.state);
 			return;
 		}
 
@@ -169,22 +107,64 @@ export abstract class BaseTween {
 		}
 
 		this.state = State.Finished;
-		this.Completed();
-		this.Cleanup();
+		this.EmitEvent(this.eventComplete);
 	}
 
-	protected Started() {
-		for (let i = 0; i < this.eventStart.length; i++) {
+	public Kill(): void {
+		if (this.state === State.Killed || this.state === State.Finished) {
+			console.warn('cant kill this tween', this.state);
+			return;
+		}
+
+		if (this.parent) {
+			this.parent.RemoveTickListener(this.tickCb);
+		}
+
+		this.state = State.Killed
+		this.EmitEvent(this.eventKill);
+	}
+
+	protected CheckPosition(): void {}
+	protected Validate(): void {}
+	protected LoopInit(): void {
+		this.elapsed = 0;
+	}
+
+	public SetParent(ticker: ITicker): void {
+		if (this.parent) {
+			this.parent.RemoveTickListener(this.tickCb);
+		}
+		this.parent = ticker;
+	}
+
+	public Default() {
+		this.elapsed = 0;
+		this.duration = 0;
+		this.timescale = 1;
+		this.loop = 1;
+		this.firstStart = true;
+		this.state = State.Idle;
+	}
+
+	protected EmitEvent(listeners: {(): void}[] | undefined) {
+		if (!listeners) {
+			return;
+		}
+
+		for (let i = 0; i < listeners.length; i++) {
 			try {
-				this.eventStart[i]();
+				listeners[i]();
 			} catch (e) {
 				console.warn(e);
 			}
 		}
-		this.eventStart.length = 0;
 	}
 
-	protected Updated(dt: number, progress: number) {
+	protected EmitUpdateEvent(dt: number, progress: number) {
+		if (!this.eventUpdate) {
+			return;
+		}
+
 		for (let i = 0; i < this.eventUpdate.length; i++) {
 			try {
 				this.eventUpdate[i](dt, progress);
@@ -192,43 +172,5 @@ export abstract class BaseTween {
 				console.warn(e);
 			}
 		}
-	}
-
-	protected Killed() {
-		for (let i = 0; i < this.eventKill.length; i++) {
-			try {
-				this.eventKill[i]();
-			} catch (e) {
-				console.warn(e);
-			}
-		}
-		this.eventKill.length = 0;
-	}
-
-	protected Completed() {
-		for (let i = 0; i < this.eventComplete.length; i++) {
-			try {
-				this.eventComplete[i]();
-			} catch (e) {
-				console.warn(e);
-			}
-		}
-		this.eventComplete.length = 0;
-	}
-
-	public OnStart(cb: () => void): void {
-		this.eventStart[this.eventStart.length] = cb;
-	}
-
-	public OnUpdate(cb: (dt: number, progress: number) => void): void {
-		this.eventUpdate[this.eventUpdate.length] = cb;
-	}
-
-	public OnKilled(cb: () => void): void {
-		this.eventKill[this.eventKill.length] = cb;
-	}
-
-	public OnComplete(cb: () => void): void {
-		this.eventComplete[this.eventComplete.length] = cb;
 	}
 }

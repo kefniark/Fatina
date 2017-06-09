@@ -4,13 +4,8 @@ import { Ticker as ticker } from './ticker';
 import { ITween } from './core/interfaces/ITween';
 import { ISequence } from './core/interfaces/ISequence';
 import { ITicker } from './core/interfaces/ITicker';
-// import { TweenPool } from './pooling/tweenPool';
-// import { SequencePool } from './pooling/sequencePool';
-// import { TweenType } from './core/enum/tweenType';
 
 let tickerManager: ticker;
-// let tweenPooling: TweenPool;
-// let sequencePooling: SequencePool;
 let initialized = false;
 let isFirstUpdate = true;
 let lastFrame: any;
@@ -49,9 +44,6 @@ export function Init(disableAutoTick?: boolean, poolSize?: number): boolean {
 	if (typeof(window) !== 'undefined' && !disableAutoTick) {
 		lastFrame = requestFrame(updateLoop);
 	}
-
-	// tweenPooling = new TweenPool(poolSize === undefined ? 600 : poolSize);
-	// sequencePooling = new SequencePool(poolSize === undefined ? 250 : poolSize);
 
 	initialized = true;
 	return true;
@@ -114,23 +106,8 @@ export function Update(timestamp: number): any {
 	if (!initialized || !tickerManager) {
 		return;
 	}
-
-	// let toClean = tickerManager.GetCleanTweens();
-
 	tickerManager.Tick(timestamp);
 	time += timestamp;
-
-	/*
-	for (let i = 0; i < toClean.length; i++) {
-		let clean = toClean[i];
-		if (clean.Type === TweenType.Tween) {
-			tweenPooling.PushTween(clean as ITween);
-		} else if (clean.Type === TweenType.Sequence) {
-			sequencePooling.PushSequence(clean as ISequence);
-		}
-	}
-	toClean.length = 0;
-	*/
 }
 
 /**

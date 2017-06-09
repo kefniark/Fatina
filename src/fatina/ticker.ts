@@ -1,8 +1,6 @@
 import { ITicker } from './core/interfaces/ITicker';
 import { State } from './core/enum/state';
 import { TweenType } from './core/enum/tweenType';
-// import { ITween } from './core/interfaces/ITween';
-// import { ISequence } from './core/interfaces/ISequence';
 import { EventList } from './core/eventList';
 
 /**
@@ -24,7 +22,6 @@ export class Ticker extends EventList implements ITicker {
 	private update = 0;
 	private eventToAdd: { (dt: number): void }[] = [];
 	private eventToRemove: { (dt: number): void }[] = [];
-	// private clean: (ITween | ISequence)[] = [];
 
 	/**
 	 * Method used to change the timescale

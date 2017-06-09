@@ -12,13 +12,11 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 	public readonly type = TweenType.Sequence;
 
 	private eventTick: {(dt: number): void}[] = [];
-	private eventStepStart: {(tween: ITween | IPlayable): void}[] = [];
-	private eventStepEnd: {(tween: ITween | IPlayable): void}[] = [];
 	private tweens: ((ITween | IPlayable)[])[] = [];
+	private eventStepStart: {(tween: ITween | IPlayable): void}[] | undefined;
+	private eventStepEnd: {(tween: ITween | IPlayable): void}[] | undefined;
 	public currentTween: (ITween | IPlayable)[] | undefined;
 	private sequenceIndex = 0;
-	private cleanTweens: (ITween | ISequence)[] = [];
-	private cleaned: boolean;
 
 	constructor() {
 		super();
@@ -30,16 +28,13 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 		return this;
 	}
 
-	protected Validate() {
-	}
-
 	protected LoopInit() {
 		this.sequenceIndex = 0;
 		for (let i = 0; i < this.tweens.length; i++) {
 			let tweenArray = this.tweens[i];
 			for (let j = 0; j < tweenArray.length; j++) {
 				let tween = tweenArray[j];
-				(tween as BaseTween).Reset(true);
+				(tween as BaseTween).Reset();
 			}
 		}
 	}
@@ -83,7 +78,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 
 			// Dont emit update event for remains dt
 			if (remains !== true) {
-				super.Updated(dt, 0);
+				this.EmitUpdateEvent(dt, 0);
 			}
 		}
 
@@ -116,7 +111,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 			if (this.loop === 0) {
 				this.Complete();
 			} else {
-				this.ResetAndStart(false, remainsDt);
+				this.ResetAndStart(remainsDt);
 			}
 		}
 	}
@@ -134,6 +129,9 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 	}
 
 	private StepStarted(tween: (ITween | IPlayable)) {
+		if (!this.eventStepStart) {
+			return;
+		}
 		for (let i = 0; i < this.eventStepStart.length; i++) {
 			try {
 				this.eventStepStart[i](tween);
@@ -144,6 +142,9 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 	}
 
 	private StepEnded(tween: (ITween | IPlayable)) {
+		if (!this.eventStepEnd) {
+			return;
+		}
 		for (let i = 0; i < this.eventStepEnd.length; i++) {
 			try {
 				this.eventStepEnd[i](tween);
@@ -195,7 +196,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 
 	public Skip(): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
-			console.warn('cant skip this tween, already in state', this.state);
+			console.warn('cant skip this tween', this.state);
 			return;
 		}
 		for (let i = 0; i < this.tweens.length; i++) {
@@ -217,7 +218,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 
 	public Kill(): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
-			console.warn('cant kill this tween, already in state', this.state);
+			console.warn('cant kill this tween', this.state);
 			return;
 		}
 		for (let i = 0; i < this.tweens.length; i++) {
@@ -254,57 +255,55 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 
 	public Default() {
 		super.Default();
-		this.eventTick.length = 0;
-		this.eventStepStart.length = 0;
-		this.eventStepEnd.length = 0;
 		this.tweens.length = 0;
 		this.currentTween = undefined;
 		this.sequenceIndex = 0;
-		this.cleanTweens.length = 0;
-		this.cleaned = false;
-	}
-
-	public Cleanup() {
-		if (!this.parent || this.cleaned) {
-			return;
-		}
-		this.cleaned = true;
-		// this.cleanTweens[this.cleanTweens.length] = this;
-		// this.parent.Clean(this.cleanTweens);
-	}
-
-	public Clean(data: (ITween | ISequence)[]) {
-		for (let i = 0; i < data.length; i++) {
-			this.cleanTweens[this.cleanTweens.length] = data[i];
-		}
 	}
 
 	public OnStart(cb: () => void): ISequence {
-		super.OnStart(cb);
+		if (!this.eventStart) {
+			this.eventStart = [];
+		}
+		this.eventStart[this.eventStart.length] = cb;
 		return this;
 	}
 
 	public OnUpdate(cb: (dt: number, progress: number) => void): ISequence {
-		super.OnUpdate(cb);
+		if (!this.eventUpdate) {
+			this.eventUpdate = [];
+		}
+		this.eventUpdate[this.eventUpdate.length] = cb;
 		return this;
 	}
 
 	public OnKilled(cb: () => void): ISequence {
-		super.OnKilled(cb);
+		if (!this.eventKill) {
+			this.eventKill = [];
+		}
+		this.eventKill[this.eventKill.length] = cb;
 		return this;
 	}
 
 	public OnComplete(cb: () => void): ISequence {
-		super.OnComplete(cb);
+		if (!this.eventComplete) {
+			this.eventComplete = [];
+		}
+		this.eventComplete[this.eventComplete.length] = cb;
 		return this;
 	}
 
 	public OnStepStart(cb: (index: ITween | IPlayable) => void): ISequence {
+		if (!this.eventStepStart) {
+			this.eventStepStart = [];
+		}
 		this.eventStepStart[this.eventStepStart.length] = cb;
 		return this;
 	}
 
 	public OnStepEnd(cb: (index: ITween | IPlayable) => void): ISequence {
+		if (!this.eventStepEnd) {
+			this.eventStepEnd = [];
+		}
 		this.eventStepEnd[this.eventStepEnd.length] = cb;
 		return this;
 	}
