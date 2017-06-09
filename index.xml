@@ -56,7 +56,7 @@ Fatina  Init(): void This method has to be called once to initialize fatina Paus
       
       <guid>https://kefniark.github.io/Fatina/samples/pixi/</guid>
       <description>Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
-Unity Chan GO!!! Parallax   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb}); document.getElementById(&#39;canvas1&#39;).appendChild(app.view); // Create background with parallax CreateBackgrounds(); // Create unity chan let textures = LoadUnityChanTextures(); var unitychan = new PIXI.Sprite(textures[0]); unitychan.anchor.set(0.5); unitychan.scale.x = 1.5; unitychan.scale.y = 1.5; unitychan.x = app.renderer.width / 4; unitychan.y = app.renderer.height - 78; app.</description>
+Unity Chan GO!!! Parallax var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb});document.getElementById(&#39;canvas1&#39;).appendChild(app.view);// Create background with parallaxCreateBackgrounds();// Create unity chanlet textures = LoadUnityChanTextures();var unitychan = new PIXI.Sprite(textures[0]);unitychan.anchor.set(0.5);unitychan.scale.x = 1.5;unitychan.scale.y = 1.5;unitychan.x = app.renderer.width / 4;unitychan.y = app.renderer.height - 78;app.stage.addChild(unitychan);// Tween to update unity chan spriteFatina.</description>
     </item>
     
     <item>
