@@ -1,3 +1,4 @@
+
 export enum EasingType {
 	Linear,
 	InQuad,

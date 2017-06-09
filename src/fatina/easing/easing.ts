@@ -1,10 +1,10 @@
-import { EasingType } from '../core/enum/easingType';
-
 /**
  * List of easing method
  *
  * Mostly based on http://easings.net/
  */
+import { EasingType } from './easingType';
+
 let PI = Math.PI;
 let PI_OVER_TWO = Math.PI / 2;
 let BACK = 1.70158;

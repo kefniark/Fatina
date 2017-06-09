@@ -15,6 +15,12 @@ export abstract class EventList {
 		this.length += 1;
 	}
 
+	public Pop(): INode | undefined {
+		let first = this.first;
+		this.Remove(first);
+		return first;
+	}
+
 	public Remove(obj: any): void {
 		let node = obj as INode;
 		if (node === undefined) {
@@ -48,22 +54,6 @@ export abstract class EventList {
 
 		// One less node in the list
 		this.length -= 1;
-	}
-
-	public Clear() {
-		let node = this.first;
-		while (node !== undefined) {
-			let nextNode = node.node_next;
-			node.node_valid = false;
-			node.node_previous = undefined;
-			node.node_next = undefined;
-			node.node_list = undefined;
-			node = nextNode;
-		}
-
-		this.first = undefined;
-		this.last = undefined;
-		this.length = 0;
 	}
 
 	private GetNode(obj: any, previous: INode | undefined, next: INode | undefined, list: EventList): INode {

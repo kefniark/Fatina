@@ -1,13 +1,11 @@
 import { Sequence as sequence } from './tweens/sequence';
+import { Tween as tween } from './tweens/tween';
 import { Ticker as ticker } from './ticker';
 import { ITween } from './core/interfaces/ITween';
 import { ISequence } from './core/interfaces/ISequence';
 import { ITicker } from './core/interfaces/ITicker';
-import { Pooling } from './pooling';
-import { TweenType } from './core/enum/tweenType';
 
 let tickerManager: ticker;
-let pooling: Pooling;
 let initialized = false;
 let isFirstUpdate = true;
 let lastFrame: any;
@@ -18,7 +16,11 @@ export let time = 0;
 
 // time updated internally (affected by timescale, pause, ...)
 export function Elapsed() {
-	return tickerManager.Elapsed;
+	return tickerManager.elapsed;
+}
+
+export function Ticker() {
+	return tickerManager;
 }
 
 /**
@@ -29,7 +31,7 @@ export function Elapsed() {
  * @param {boolean} [disableAutoTick]
  * @returns {boolean}
  */
-export function Init(disableAutoTick?: boolean): boolean {
+export function Init(disableAutoTick?: boolean, poolSize?: number): boolean {
 	if (initialized) {
 		return false;
 	}
@@ -42,8 +44,6 @@ export function Init(disableAutoTick?: boolean): boolean {
 	if (typeof(window) !== 'undefined' && !disableAutoTick) {
 		lastFrame = requestFrame(updateLoop);
 	}
-
-	pooling = new Pooling(1000);
 
 	initialized = true;
 	return true;
@@ -106,20 +106,8 @@ export function Update(timestamp: number): any {
 	if (!initialized || !tickerManager) {
 		return;
 	}
-
-	let toClean = tickerManager.GetCleanTweens();
-
 	tickerManager.Tick(timestamp);
 	time += timestamp;
-
-	for (let i = 0; i < toClean.length; i++) {
-		let clean = toClean[i];
-		if (clean.Type === TweenType.Tween) {
-			pooling.PushTween(clean as ITween);
-		} else if (clean.Type === TweenType.Sequence) {
-			pooling.PushSequence(clean as ISequence);
-		}
-	}
 }
 
 /**
@@ -135,10 +123,7 @@ export function Tween(obj: any, properties: string[]): ITween {
 		Init();
 	}
 
-	let tween = pooling.PopTween();
-	tween.Init(obj, properties);
-	tween.SetParent(tickerManager as ITicker);
-	return tween;
+	return new tween(obj, properties).SetParent(tickerManager as ITicker);
 }
 
 /**
@@ -151,6 +136,7 @@ export function Sequence(): ISequence {
 	if (!initialized) {
 		Init();
 	}
+
 	return new sequence().SetParent(tickerManager as ITicker);
 }
 
@@ -170,6 +156,13 @@ function updateLoop(timestamp: number) {
 		dt = 1;
 		isFirstUpdate = false;
 	}
+
+	// cap to 500 ms
+	if (dt > 500) {
+		console.warn('[Fatina] Delta between two update was too high ' + Math.round(dt) + 'ms. , Capped to 500ms.');
+		dt = 500;
+	}
+
 	Update(dt);
 	lastTime = timestamp;
 	lastFrame = requestFrame(updateLoop);

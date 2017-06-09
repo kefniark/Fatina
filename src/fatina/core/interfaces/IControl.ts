@@ -1,13 +1,9 @@
-import { TweenType } from '../enum/tweenType';
+import { State } from '../enum/state';
 
 export interface IControl {
-	Type: TweenType;
-	Elapsed: number;
-	Duration: number;
-
-	IsRunning(): boolean;
-	IsCompleted(): boolean;
-	IsKilled(): boolean;
+	elapsed: number;
+	duration: number;
+	state: State;
 
 	Start(): void;
 	Pause(): void;

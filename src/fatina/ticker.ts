@@ -1,8 +1,5 @@
 import { ITicker } from './core/interfaces/ITicker';
 import { State } from './core/enum/state';
-import { TweenType } from './core/enum/tweenType';
-import { ITween } from './core/interfaces/ITween';
-import { ISequence } from './core/interfaces/ISequence';
 import { EventList } from './core/eventList';
 
 /**
@@ -15,38 +12,13 @@ import { EventList } from './core/eventList';
  * @implements {ITicker}
  */
 export class Ticker extends EventList implements ITicker {
-	public get Type() {
-		return TweenType.Ticker;
-	}
-
-	private state = State.Idle;
+	public state = State.Idle;
 	private timescale = 1;
-	private elapsed = 0;
+	public elapsed = 0;
+	public duration = 0;
+	private update = 0;
 	private eventToAdd: { (dt: number): void }[] = [];
 	private eventToRemove: { (dt: number): void }[] = [];
-	private cleanUpdate = 0;
-	private clean1: (ITween | ISequence)[] = [];
-	private clean2: (ITween | ISequence)[] = [];
-
-	public get Elapsed(): number {
-		return this.elapsed;
-	}
-
-	public get Duration(): number {
-		return 0;
-	}
-
-	public IsCompleted(): boolean {
-		return this.state === State.Finished;
-	}
-
-	public IsRunning(): boolean {
-		return this.state === State.Run;
-	}
-
-	public IsKilled(): boolean {
-		return this.state === State.Killed;
-	}
 
 	/**
 	 * Method used to change the timescale
@@ -125,7 +97,7 @@ export class Ticker extends EventList implements ITicker {
 			tick(localDt);
 		}
 		this.elapsed += localDt;
-		this.cleanUpdate += 1;
+		this.update++;
 
 		this.UpdateListener();
 	}
@@ -164,34 +136,5 @@ export class Ticker extends EventList implements ITicker {
 
 	public Reset(): void {
 		this.state = State.Idle;
-	}
-
-	/**
-	 * Method used to clean a list of old tween / sequence
-	 * This is using 2 array to avoid allocating new one on each frames
-	 *
-	 * @param {((ITween | ISequence)[])} data
-	 *
-	 * @memberOf Ticker
-	 */
-	public Clean(data: (ITween | ISequence)[]): void {
-		for (let i = 0; i < data.length; i++) {
-			let obj = data[i];
-			if (this.cleanUpdate % 2 === 0) {
-				this.clean2.push(obj);
-			} else {
-				this.clean1.push(obj);
-			}
-		}
-	}
-
-	public GetCleanTweens(): (ITween | ISequence)[] {
-		if (this.cleanUpdate % 2 === 0) {
-			this.clean2.length = 0;
-			return this.clean1;
-		} else {
-			this.clean1.length = 0;
-			return this.clean2;
-		}
 	}
 }

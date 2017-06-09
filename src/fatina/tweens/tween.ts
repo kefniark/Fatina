@@ -1,12 +1,11 @@
-
 import { BaseTween } from './baseTween';
 import { ITween } from '../core/interfaces/ITween';
 import { ITicker } from '../core/interfaces/ITicker';
-import { EasingType } from '../core/enum/easingType';
 import { easeNames, easeTypes } from '../easing/easing';
 import { Sequence } from './sequence';
 import { ISequence } from '../core/interfaces/ISequence';
-import { TweenType } from '../core/enum/tweenType';
+import { State } from '../core/enum/state';
+import { EasingType } from '../easing/easingType';
 
 /**
  * Tween class
@@ -18,46 +17,22 @@ import { TweenType } from '../core/enum/tweenType';
  * @implements {ITween}
  */
 export class Tween extends BaseTween implements ITween {
-	public get Type() {
-		return TweenType.Tween;
-	}
-
 	private object: any;
 	private properties: string[];
 	private from: any;
 	private to: any;
 	private currentFrom: any;
 	private currentTo: any;
-
+	private remainsDt: number;
 	private relative = false;
-	private ease: (t: number, args?: any) => number;
+	private ease: (t: number) => number;
 
 	constructor(object: any, properties: string[]) {
 		super();
 
 		this.object = object;
 		this.properties = properties;
-
-		this.tickCb = (dt: number) => {
-			let localDt = dt * this.timescale;
-			this.elapsed += localDt;
-
-			let progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
-			this.Update(localDt, progress);
-
-			if (this.elapsed >= this.duration) {
-				this.loop--;
-				if (this.loop === 0) {
-					for (let i = 0; i < this.properties.length; i++) {
-						let prop = this.properties[i];
-						this.object[prop] = this.currentTo[prop];
-					}
-					this.Complete();
-				} else {
-					this.ResetAndStart(false, 0);
-				}
-			}
-		};
+		this.tickCb = this.Tick.bind(this);
 	}
 
 	/**
@@ -93,7 +68,6 @@ export class Tween extends BaseTween implements ITween {
 	 * @memberOf Tween
 	 */
 	protected Validate() {
-
 		// Check the object
 		if (!this.object) {
 			throw new Error('Cant Tween a undefined object');
@@ -117,53 +91,73 @@ export class Tween extends BaseTween implements ITween {
 			this.ease = easeTypes[EasingType.Linear];
 		}
 
+		this.CheckPosition();
+	}
+
+	protected CheckPosition() {
 		this.currentFrom = {};
 		this.currentTo = {};
 
-		// From
-		if (!this.from) {
-			for (let i = 0; i < this.properties.length; i++) {
-				let prop = this.properties[i];
+		for (let i = 0; i < this.properties.length; i++) {
+			let prop = this.properties[i];
+
+			// From
+			if (!this.from) {
 				this.currentFrom[prop] = this.object[prop];
-			}
-		} else {
-			for (let i = 0; i < this.properties.length; i++) {
-				let prop = this.properties[i];
+			} else {
 				this.currentFrom[prop] = this.from[prop];
 				this.object[prop] = this.from[prop];
 			}
-		}
 
-		// Relative
-		if (this.relative) {
-			for (let i = 0; i < this.properties.length; i++) {
-				let prop = this.properties[i];
+			// Relative
+			if (this.relative) {
 				this.currentTo[prop] = this.object[prop] + this.to[prop];
-			}
-		} else {
-			for (let i = 0; i < this.properties.length; i++) {
-				let prop = this.properties[i];
+			} else {
 				this.currentTo[prop] = this.to[prop];
 			}
 		}
 	}
 
 	/**
-	 * Method used to update the properties and emit the onUpdate event
+	 *
 	 *
 	 * @private
 	 * @param {number} dt
-	 * @param {number} progress
+	 * @returns
 	 *
 	 * @memberOf Tween
 	 */
-	private Update(dt: number, progress: number) {
-		let val = this.ease(progress);
-		for (let i = 0; i < this.properties.length; i++) {
-			let prop = this.properties[i];
-			this.object[prop] = this.currentFrom[prop] + (this.currentTo[prop] - this.currentFrom[prop]) * val;
+	private Tick(dt: number) {
+		if (this.state === State.Finished || this.state === State.Killed) {
+			return;
 		}
-		super.Updated(dt, progress);
+
+		this.remainsDt = dt * this.timescale;
+
+		while (this.remainsDt > 0) {
+			this.elapsed += this.remainsDt;
+			let progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
+			let val = this.ease(progress);
+			for (let i = 0; i < this.properties.length; i++) {
+				let prop = this.properties[i];
+				this.object[prop] = this.currentFrom[prop] + (this.currentTo[prop] - this.currentFrom[prop]) * val;
+			}
+			this.EmitUpdateEvent(this.remainsDt, progress);
+
+			if (this.elapsed < this.duration) {
+				return;
+			}
+
+			this.remainsDt = this.elapsed - this.duration;
+			this.loop--;
+			if (this.loop === 0) {
+				this.Complete();
+				return;
+			}
+
+			this.CheckPosition();
+			this.ResetAndStart(0);
+		}
 	}
 
 	/**
@@ -249,6 +243,29 @@ export class Tween extends BaseTween implements ITween {
 	}
 
 	/**
+	 * To apply a modifier on a current tween
+	 *
+	 * @param {*} diff
+	 * @param {boolean} updateTo
+	 *
+	 * @memberOf Tween
+	 */
+	public Modify(diff: any, updateTo: boolean): void {
+		for (let i = 0; i < this.properties.length; i++) {
+			let prop = this.properties[i];
+			if (!diff.hasOwnProperty(prop)) {
+				continue;
+			}
+			this.object[prop] += diff[prop];
+			if (updateTo) {
+				this.currentTo[prop] += diff[prop];
+			} else {
+				this.currentFrom[prop] += diff[prop];
+			}
+		}
+	}
+
+	/**
 	 * Method used to create a sequence with this tween as first value.
 	 * Usually used with .AppendInterval(1250) or .PrependInterval(160) to add a delay
 	 *
@@ -306,20 +323,6 @@ export class Tween extends BaseTween implements ITween {
 	}
 
 	/**
-	 * Method used to notify the ticker that this tween is finished (can be clean)
-	 *
-	 * @returns
-	 *
-	 * @memberOf Tween
-	 */
-	public Cleanup() {
-		if (!this.parent) {
-			return;
-		}
-		this.parent.Clean([this]);
-	}
-
-	/**
 	 * Method used set everything back to normal values
 	 *
 	 *
@@ -334,28 +337,37 @@ export class Tween extends BaseTween implements ITween {
 		this.currentFrom = undefined;
 		this.currentTo = undefined;
 		this.relative = false;
-		this.currentFrom = undefined;
-		this.currentTo = undefined;
-		this.ease = easeTypes[0];
 	}
 
 	public OnStart(cb: () => void): ITween {
-		super.OnStart(cb);
+		if (!this.eventStart) {
+			this.eventStart = [];
+		}
+		this.eventStart[this.eventStart.length] = cb;
 		return this;
 	}
 
 	public OnUpdate(cb: (dt: number, progress: number) => void): ITween {
-		super.OnUpdate(cb);
+		if (!this.eventUpdate) {
+			this.eventUpdate = [];
+		}
+		this.eventUpdate[this.eventUpdate.length] = cb;
 		return this;
 	}
 
 	public OnKilled(cb: () => void): ITween {
-		super.OnKilled(cb);
+		if (!this.eventKill) {
+			this.eventKill = [];
+		}
+		this.eventKill[this.eventKill.length] = cb;
 		return this;
 	}
 
 	public OnComplete(cb: () => void): ITween {
-		super.OnComplete(cb);
+		if (!this.eventComplete) {
+			this.eventComplete = [];
+		}
+		this.eventComplete[this.eventComplete.length] = cb;
 		return this;
 	}
 }
