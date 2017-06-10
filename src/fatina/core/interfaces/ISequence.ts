@@ -3,6 +3,13 @@ import { ITicker } from './ITicker';
 import { ITween } from './ITween';
 import { IPlayable } from './IPlayable';
 
+/**
+ * Interface used by Sequence
+ *
+ * @export
+ * @interface ISequence
+ * @extends {IControl}
+ */
 export interface ISequence extends IControl {
 	Default(): void;
 	Start(): ISequence;

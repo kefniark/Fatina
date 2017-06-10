@@ -10,6 +10,7 @@ let initialized = false;
 let isFirstUpdate = true;
 let lastFrame: any;
 let lastTime = 0;
+let tickers: {[id: string]: ITicker } = {};
 
 // real time of Fatina (not affected by timescale, pause, ...)
 export let time = 0;
@@ -17,10 +18,6 @@ export let time = 0;
 // time updated internally (affected by timescale, pause, ...)
 export function Elapsed() {
 	return tickerManager.elapsed;
-}
-
-export function Ticker() {
-	return tickerManager;
 }
 
 /**
@@ -138,6 +135,33 @@ export function Sequence(): ISequence {
 	}
 
 	return new sequence().SetParent(tickerManager as ITicker);
+}
+
+/**
+ * Create or Get a ticker with a defined name
+ * This ticker is a child of the main ticker
+ *
+ * @export
+ * @param {string} name
+ * @returns {(ITicker | undefined)}
+ */
+export function Ticker(name: string): ITicker | undefined {
+	if (!initialized) {
+		Init();
+	}
+
+	// Create a ticker with that name
+	if (!(name in tickers)) {
+		let tick = new ticker();
+		let handler = tick.Tick.bind(tick);
+		tick.SetParent(tickerManager, handler);
+		tickerManager.AddTickListener(handler);
+		tick.Start();
+
+		tickers[name] = tick;
+	}
+
+	return tickers[name];
 }
 
 /**

@@ -8,8 +8,7 @@ import { State } from '../core/enum/state';
 import { EasingType } from '../easing/easingType';
 
 /**
- * Tween class
- * Takes control of a/many values of one object and animates them.
+ * Tween: Used to animate values of an object
  *
  * @export
  * @class Tween
@@ -94,9 +93,20 @@ export class Tween extends BaseTween implements ITween {
 		this.CheckPosition();
 	}
 
+	/**
+	 * Method used to calculate currentFrom/currentTo based on the config
+	 *
+	 * @protected
+	 *
+	 * @memberOf Tween
+	 */
 	protected CheckPosition() {
-		this.currentFrom = {};
-		this.currentTo = {};
+		if (!this.currentFrom) {
+			this.currentFrom = {};
+		}
+		if (!this.currentTo) {
+			this.currentTo = {};
+		}
 
 		for (let i = 0; i < this.properties.length; i++) {
 			let prop = this.properties[i];
@@ -118,15 +128,6 @@ export class Tween extends BaseTween implements ITween {
 		}
 	}
 
-	/**
-	 *
-	 *
-	 * @private
-	 * @param {number} dt
-	 * @returns
-	 *
-	 * @memberOf Tween
-	 */
 	private Tick(dt: number) {
 		if (this.state === State.Finished || this.state === State.Killed) {
 			return;
@@ -142,7 +143,7 @@ export class Tween extends BaseTween implements ITween {
 				let prop = this.properties[i];
 				this.object[prop] = this.currentFrom[prop] + (this.currentTo[prop] - this.currentFrom[prop]) * val;
 			}
-			this.EmitUpdateEvent(this.remainsDt, progress);
+			this.EmitEvent(this.eventUpdate, [this.remainsDt, progress]);
 
 			if (this.elapsed < this.duration) {
 				return;
@@ -341,7 +342,7 @@ export class Tween extends BaseTween implements ITween {
 
 	public OnStart(cb: () => void): ITween {
 		if (!this.eventStart) {
-			this.eventStart = [];
+			this.eventStart = new Array(0);
 		}
 		this.eventStart[this.eventStart.length] = cb;
 		return this;
@@ -349,7 +350,7 @@ export class Tween extends BaseTween implements ITween {
 
 	public OnUpdate(cb: (dt: number, progress: number) => void): ITween {
 		if (!this.eventUpdate) {
-			this.eventUpdate = [];
+			this.eventUpdate = new Array(0);
 		}
 		this.eventUpdate[this.eventUpdate.length] = cb;
 		return this;
@@ -357,7 +358,7 @@ export class Tween extends BaseTween implements ITween {
 
 	public OnKilled(cb: () => void): ITween {
 		if (!this.eventKill) {
-			this.eventKill = [];
+			this.eventKill = new Array(0);
 		}
 		this.eventKill[this.eventKill.length] = cb;
 		return this;
@@ -365,7 +366,7 @@ export class Tween extends BaseTween implements ITween {
 
 	public OnComplete(cb: () => void): ITween {
 		if (!this.eventComplete) {
-			this.eventComplete = [];
+			this.eventComplete = new Array(0);
 		}
 		this.eventComplete[this.eventComplete.length] = cb;
 		return this;

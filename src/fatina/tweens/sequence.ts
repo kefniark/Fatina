@@ -7,6 +7,17 @@ import { Callback } from './callback';
 import { Delay } from './delay';
 import { State } from '../core/enum/state';
 
+/**
+ * Sequence: used to animate other tweens or sequence
+ * Can play them sequentially or in parallel
+ *
+ * @export
+ * @class Sequence
+ * @extends {BaseTween}
+ * @implements {ISequence}
+ * @implements {ITicker}
+ * @implements {IPlayable}
+ */
 export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable {
 	private eventTick: {(dt: number): void}[] = [];
 	private tweens: ((ITween | IPlayable)[])[] = [];
@@ -75,7 +86,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 
 			// Dont emit update event for remains dt
 			if (remains !== true) {
-				this.EmitUpdateEvent(dt, 0);
+				this.EmitEvent(this.eventUpdate, [dt, 0]);
 			}
 		}
 
@@ -92,7 +103,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 			let first = this.currentTween[0];
 			remainsDt = first.elapsed - first.duration;
 
-			this.StepEnded(this.currentTween[0]);
+			this.EmitEvent(this.eventStepEnd, [this.currentTween[0]]);
 			this.currentTween = undefined;
 			this.sequenceIndex++;
 
@@ -121,33 +132,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 				tween.Start();
 			}
 
-			this.StepStarted(this.currentTween[0]);
-		}
-	}
-
-	private StepStarted(tween: (ITween | IPlayable)) {
-		if (!this.eventStepStart) {
-			return;
-		}
-		for (let i = 0; i < this.eventStepStart.length; i++) {
-			try {
-				this.eventStepStart[i](tween);
-			} catch (e) {
-				console.warn(e);
-			}
-		}
-	}
-
-	private StepEnded(tween: (ITween | IPlayable)) {
-		if (!this.eventStepEnd) {
-			return;
-		}
-		for (let i = 0; i < this.eventStepEnd.length; i++) {
-			try {
-				this.eventStepEnd[i](tween);
-			} catch (e) {
-				console.warn(e);
-			}
+			this.EmitEvent(this.eventStepStart, [this.currentTween[0]]);
 		}
 	}
 
@@ -204,10 +189,10 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 					continue;
 				}
 				if (tween.elapsed === 0) {
-					this.StepStarted(tween);
+					this.EmitEvent(this.eventStepStart, [tween]);
 				}
 				tween.Skip();
-				this.StepEnded(tween);
+				this.EmitEvent(this.eventStepEnd, [tween]);
 			}
 		}
 		super.Skip();
@@ -259,7 +244,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 
 	public OnStart(cb: () => void): ISequence {
 		if (!this.eventStart) {
-			this.eventStart = [];
+			this.eventStart = new Array(0);
 		}
 		this.eventStart[this.eventStart.length] = cb;
 		return this;
@@ -267,7 +252,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 
 	public OnUpdate(cb: (dt: number, progress: number) => void): ISequence {
 		if (!this.eventUpdate) {
-			this.eventUpdate = [];
+			this.eventUpdate = new Array(0);
 		}
 		this.eventUpdate[this.eventUpdate.length] = cb;
 		return this;
@@ -275,7 +260,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 
 	public OnKilled(cb: () => void): ISequence {
 		if (!this.eventKill) {
-			this.eventKill = [];
+			this.eventKill = new Array(0);
 		}
 		this.eventKill[this.eventKill.length] = cb;
 		return this;
@@ -283,7 +268,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 
 	public OnComplete(cb: () => void): ISequence {
 		if (!this.eventComplete) {
-			this.eventComplete = [];
+			this.eventComplete = new Array(0);
 		}
 		this.eventComplete[this.eventComplete.length] = cb;
 		return this;
@@ -291,7 +276,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 
 	public OnStepStart(cb: (index: ITween | IPlayable) => void): ISequence {
 		if (!this.eventStepStart) {
-			this.eventStepStart = [];
+			this.eventStepStart = new Array(0);
 		}
 		this.eventStepStart[this.eventStepStart.length] = cb;
 		return this;
@@ -299,7 +284,7 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 
 	public OnStepEnd(cb: (index: ITween | IPlayable) => void): ISequence {
 		if (!this.eventStepEnd) {
-			this.eventStepEnd = [];
+			this.eventStepEnd = new Array(0);
 		}
 		this.eventStepEnd[this.eventStepEnd.length] = cb;
 		return this;

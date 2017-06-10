@@ -451,24 +451,30 @@ test('[Fatina.Tween] Test Skip', function (t: any) {
 });
 
 test('[Fatina.Tween] Test Modify', function (t: any) {
-	/*
 	let ticker = new Ticker();
 	ticker.Start();
 
 	let complete = 0;
 	let obj = { x: 0 };
 	let tween = new Tween(obj, ['x'])
-		.To({ x: 1}, 2)
+		.To({ x: 1 }, 2)
 		.SetParent(ticker)
+		.OnComplete(() => complete++)
 		.Start();
 
 	ticker.Tick(1);
-	t.equal(1, tween.Elapsed, 'check this tween is started');
+	t.equal(1, tween.elapsed, 'check this tween is started');
+	tween.Modify({ x: 1 }, true);
 
-	tween.Skip();
-	t.equal(2, tween.Elapsed, 'check this tween is over');
+	ticker.Tick(1);
+	t.equal(2, tween.elapsed, 'check this tween is over');
+	t.equal(2, obj.x, 'check the final position was updated');
 	t.equal(1, complete, 'check the onComplete callback is emitted');
-	*/
+
+	tween.Default();
+	t.equal(0, tween.elapsed, 'check the tween elapsed after Default');
+	t.equal(0, tween.duration, 'check the tween duration after Default');
+
 	t.end();
 });
 
