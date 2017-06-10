@@ -1,44 +1,30 @@
 
 
-    private targetSize;
-    private tweens;
-    private sequences;
-    private created;
-    private poped;
-    private pushed;
-    constructor(size: number);
-    private CreateTween();
-    PopTween(): ITween;
-    PushTween(tween: ITween): void;
-    private CreateSequence();
-    PopSequence(): ISequence;
-    PushSequence(sequence: ISequence): void;
-}
-
-    readonly Type: TweenType;
-    private state;
+    state: State;
     private timescale;
-    private elapsed;
+    elapsed: number;
+    duration: number;
+    private update;
     private eventToAdd;
     private eventToRemove;
-    private cleanTweens;
-    GetCleanTweens(): (ITween | ISequence)[];
+    tick: {
+        (dt: number): void;
+    } | undefined;
+    private parent;
+    SetParent(parent: ITicker, tick: {
+        (dt: number): void;
+    }): void;
     SetTimescale(scale: number): void;
-    readonly Elapsed: number;
-    readonly Duration: number;
     AddTickListener(cb: (dt: number) => void): void;
     RemoveTickListener(cb: (dt: number) => void): void;
     private UpdateListener();
     Tick(dt: number): void;
-    IsCompleted(): boolean;
-    IsRunning(): boolean;
-    IsKilled(): boolean;
     Start(): void;
     Pause(): void;
     Resume(): void;
     Kill(): void;
+    Skip(): void;
     Reset(): void;
-    Clean(data: (ITween | ISequence)[]): void;
 }
 
     first: INode | undefined;
@@ -46,14 +32,79 @@
     length: number;
     Add(obj: any): void;
     Remove(obj: any): void;
-    Clear(): void;
     private GetNode(obj, previous, next, list);
 }
     node_valid: boolean;
     node_previous: INode | undefined;
     node_next: INode | undefined;
-    node_list: EventList;
+    node_list: EventList | undefined;
 }
+
+    Idle = 0,
+    Run = 1,
+    Pause = 2,
+    Finished = 3,
+    Killed = 4,
+}
+
+    elapsed: number;
+    duration: number;
+    state: State;
+    Start(): void;
+    Pause(): void;
+    Resume(): void;
+    Kill(): void;
+    Reset(): void;
+    Skip(): void;
+}
+
+    state: State;
+}
+
+    Default(): void;
+    Start(): ISequence;
+    SetParent(ticker: ITicker): ISequence;
+    SetTimescale(scale: number): ISequence;
+    SetLoop(loop: number): ISequence;
+    Append(tween: ITween | ISequence): ISequence;
+    AppendCallback(cb: () => void): ISequence;
+    AppendInterval(duration: number): ISequence;
+    Prepend(tween: ITween | ISequence): ISequence;
+    PrependCallback(cb: () => void): ISequence;
+    PrependInterval(duration: number): ISequence;
+    Join(tween: ITween | ISequence): ISequence;
+    OnStart(cb: () => void): ISequence;
+    OnStepStart(cb: (tween: ITween | IPlayable) => void): ISequence;
+    OnStepEnd(cb: (index: ITween | IPlayable) => void): ISequence;
+    OnUpdate(cb: (dt: number, progress: number) => void): ISequence;
+    OnKilled(cb: () => void): ISequence;
+    OnComplete(cb: () => void): ISequence;
+}
+
+    AddTickListener(cb: (dt: number) => void): void;
+    RemoveTickListener(cb: (dt: number) => void): void;
+}
+
+    Default(): void;
+    Init(object: any, properties: string[]): void;
+    Start(): ITween;
+    From(from: any): ITween;
+    To(to: any, duration: number): ITween;
+    Modify(diff: any, updateTo: boolean): void;
+    SetParent(ticker: ITicker): ITween;
+    SetLoop(loop: number): ITween;
+    SetRelative(relative: boolean): ITween;
+    SetEasing(type: EasingType | string): ITween;
+    SetTimescale(scale: number): ITween;
+    ToSequence(): ISequence;
+    OnStart(cb: () => void): ITween;
+    OnUpdate(cb: (dt: number, progress: number) => void): ITween;
+    OnKilled(cb: () => void): ITween;
+    OnComplete(cb: () => void): ITween;
+}
+
+    [id: string]: (t: number, args?: any) => number;
+};
 
     Linear = 0,
     InQuad = 1,
@@ -88,171 +139,79 @@
     InOutBounce = 30,
 }
 
-    Idle = 0,
-    Run = 1,
-    Pause = 2,
-    Finished = 3,
-    Killed = 4,
-}
-
-    Ticker = 0,
-    Sequence = 1,
-    Tween = 2,
-    Callback = 3,
-    Delay = 4,
-    None = 5,
-}
-
-    Type: TweenType;
-    Elapsed: number;
-    Duration: number;
-    IsRunning(): boolean;
-    IsCompleted(): boolean;
-    IsKilled(): boolean;
-    Start(): void;
-    Pause(): void;
-    Resume(): void;
-    Kill(): void;
-    Reset(): void;
-}
-
-    OnStart(cb: () => void): void;
-    OnUpdate(cb: (dt: number, progress: number) => void): void;
-    OnKilled(cb: () => void): void;
-    OnComplete(cb: () => void): void;
-}
-
-    Default(): void;
-    Start(): ISequence;
-    SetParent(ticker: ITicker): ISequence;
-    SetTimescale(scale: number): ISequence;
-    SetLoop(loop: number): ISequence;
-    Append(tween: ITween): ISequence;
-    AppendCallback(cb: () => void): ISequence;
-    AppendInterval(duration: number): ISequence;
-    Prepend(tween: ITween): ISequence;
-    PrependCallback(cb: () => void): ISequence;
-    PrependInterval(duration: number): ISequence;
-    Join(tween: ITween): ISequence;
-    OnStart(cb: () => void): ISequence;
-    OnStepStart(cb: (tween: ITween | IPlayable) => void): ISequence;
-    OnStepEnd(cb: (index: ITween | IPlayable) => void): ISequence;
-    OnUpdate(cb: (dt: number, progress: number) => void): ISequence;
-    OnKilled(cb: () => void): ISequence;
-    OnComplete(cb: () => void): ISequence;
-}
-
-    AddTickListener(cb: (dt: number) => void): void;
-    RemoveTickListener(cb: (dt: number) => void): void;
-    Clean(data: (ITween | ISequence)[]): void;
-}
-
-    Default(): void;
-    Init(object: any, properties: string[]): void;
-    Start(): ITween;
-    From(from: any): ITween;
-    To(to: any, duration: number): ITween;
-    SetParent(ticker: ITicker): ITween;
-    SetLoop(loop: number): ITween;
-    SetRelative(relative: boolean): ITween;
-    SetEasing(type: EasingType | string): ITween;
-    SetTimescale(scale: number): ITween;
-    ToSequence(): ISequence;
-    OnStart(cb: () => void): ITween;
-    OnUpdate(cb: (dt: number, progress: number) => void): ITween;
-    OnKilled(cb: () => void): ITween;
-    OnComplete(cb: () => void): ITween;
-}
-
-    [id: string]: (t: number, args?: any) => number;
-};
-
     elapsed: number;
     duration: number;
     timescale: number;
     protected loop: number;
-    readonly abstract Type: TweenType;
-    readonly Elapsed: number;
-    readonly Duration: number;
     protected parent: ITicker;
     protected tickCb: (dt: number) => void;
-    protected state: State;
-    private eventStart;
-    private eventUpdate;
-    private eventKill;
-    private eventComplete;
+    state: State;
+    protected eventStart: {
+        (): void;
+    }[] | undefined;
+    protected eventUpdate: {
+        (dt: number, progress: number): void;
+    }[] | undefined;
+    protected eventKill: {
+        (): void;
+    }[] | undefined;
+    protected eventComplete: {
+        (): void;
+    }[] | undefined;
     private firstStart;
-    protected abstract Validate(): void;
-    protected abstract LoopInit(): void;
-    SetParent(ticker: ITicker): void;
-    IsRunning(): boolean;
-    IsCompleted(): boolean;
-    IsKilled(): boolean;
     Start(): void;
-    Reset(resetloop?: boolean): void;
-    ResetAndStart(resetloop?: boolean): void;
+    Reset(): void;
+    ResetAndStart(dtRemains: number): void;
     Pause(): void;
     Resume(): void;
-    Kill(): void;
-    protected abstract Cleanup(): void;
-    Default(): void;
+    Skip(): void;
     protected Complete(): void;
-    protected Started(): void;
-    protected Updated(dt: number, progress: number): void;
-    protected Killed(): void;
-    protected Completed(): void;
-    OnStart(cb: () => void): void;
-    OnUpdate(cb: (dt: number, progress: number) => void): void;
-    OnKilled(cb: () => void): void;
-    OnComplete(cb: () => void): void;
+    Kill(): void;
+    protected CheckPosition(): void;
+    protected Validate(): void;
+    protected LoopInit(): void;
+    SetParent(ticker: ITicker): void;
+    Default(): void;
+    private Emit(func, args);
+    protected EmitEvent(listeners: any, args?: any): void;
 }
 
-    readonly Type: TweenType;
+    private callback;
     constructor(cb: () => void);
-    protected Validate(): void;
-    protected LoopInit(): void;
-    protected Cleanup(): void;
+    private Tick(dt);
 }
 
-    readonly Type: TweenType;
     constructor(duration: number);
-    protected Validate(): void;
-    protected LoopInit(): void;
-    protected Cleanup(): void;
+    private Tick(dt);
 }
 
-    readonly Type: TweenType;
     private eventTick;
+    private tweens;
     private eventStepStart;
     private eventStepEnd;
-    private tweens;
-    private currentTween;
+    currentTween: (ITween | IPlayable)[] | undefined;
     private sequenceIndex;
-    private cleanTweens;
-    readonly CurrentTween: (ITween | IPlayable)[] | undefined;
     constructor();
     Start(): ISequence;
-    protected Validate(): void;
     protected LoopInit(): void;
     SetParent(ticker: ITicker): ISequence;
     AddTickListener(cb: (dt: number) => void): void;
     RemoveTickListener(cb: (dt: number) => void): void;
-    private Tick(dt, remains?);
-    private StepStarted(tween);
-    private StepEnded(tween);
-    Append(tween: ITween): ISequence;
+    private Tick(dt);
+    private LocalTick(dt, remains?);
+    private NextTween();
+    Append(tween: ITween | ISequence): ISequence;
     AppendCallback(cb: () => void): ISequence;
     AppendInterval(duration: number): ISequence;
-    Prepend(tween: ITween): ISequence;
+    Prepend(tween: ITween | ISequence): ISequence;
     PrependCallback(cb: () => void): ISequence;
     PrependInterval(duration: number): ISequence;
+    Skip(): void;
     Kill(): void;
-    Join(tween: ITween): ISequence;
+    Join(tween: ITween | ISequence): ISequence;
     SetTimescale(scale: number): ISequence;
     SetLoop(loop: number): ISequence;
     Default(): void;
-    Cleanup(): void;
-    Clean(data: (ITween | ISequence)[]): void;
     OnStart(cb: () => void): ISequence;
     OnUpdate(cb: (dt: number, progress: number) => void): ISequence;
     OnKilled(cb: () => void): ISequence;
@@ -261,30 +220,33 @@
     OnStepEnd(cb: (index: ITween | IPlayable) => void): ISequence;
 }
 
-    readonly Type: TweenType;
     private object;
     private properties;
     private from;
     private to;
+    private currentFrom;
+    private currentTo;
+    private remainsDt;
     private relative;
     private ease;
     constructor(object: any, properties: string[]);
     Init(object: any, properties: string[]): void;
     Start(): ITween;
     protected Validate(): void;
-    protected LoopInit(): void;
-    private Update(dt, progress);
+    protected CheckPosition(): void;
+    private Tick(dt);
     SetParent(ticker: ITicker): ITween;
-    Cleanup(): void;
-    Default(): void;
     From(from: any): ITween;
     To(to: any, duration: number): ITween;
     SetLoop(loop: number): ITween;
     SetRelative(relative: boolean): ITween;
     SetTimescale(scale: number): ITween;
+    Modify(diff: any, updateTo: boolean): void;
     ToSequence(): ISequence;
     private Easing(type);
     SetEasing(type: EasingType | string): ITween;
+    protected LoopInit(): void;
+    Default(): void;
     OnStart(cb: () => void): ITween;
     OnUpdate(cb: (dt: number, progress: number) => void): ITween;
     OnKilled(cb: () => void): ITween;

@@ -1,3 +1,10 @@
+
+/**
+ * List of all easing's methods
+ *
+ * @export
+ * @enum {number}
+ */
 export enum EasingType {
 	Linear,
 	InQuad,

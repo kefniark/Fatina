@@ -1,8 +1,13 @@
 import { IControl } from './IControl';
+import { State } from '../enum/state';
 
+/**
+ * Interface used for pseudo tween (delay / callbacks)
+ *
+ * @export
+ * @interface IPlayable
+ * @extends {IControl}
+ */
 export interface IPlayable extends IControl {
-	OnStart(cb: () => void): void;
-	OnUpdate(cb: (dt: number, progress: number) => void): void;
-	OnKilled(cb: () => void): void;
-	OnComplete(cb: () => void): void;
+	state: State;
 }

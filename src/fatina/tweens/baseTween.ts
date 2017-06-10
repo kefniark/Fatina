@@ -1,100 +1,76 @@
 import { ITicker } from '../core/interfaces/ITicker';
 import { State } from '../core/enum/state';
-import { TweenType } from '../core/enum/tweenType';
 
+/**
+ * Shared behaviors between different types of tweens and sequence
+ * Used mostly to manage:
+ *  - events
+ *  - state
+ *  - loop and restart
+ *
+ * @export
+ * @abstract
+ * @class BaseTween
+ */
 export abstract class BaseTween {
 	public elapsed = 0;
 	public duration = 0;
 	public timescale = 1;
 	protected loop = 1;
-
-	public abstract get Type(): TweenType;
-
-	public get Elapsed() {
-		return this.elapsed;
-	}
-	public get Duration() {
-		return this.duration;
-	}
-
 	protected parent: ITicker;
 	protected tickCb: (dt: number) => void;
-	protected state: State = State.Idle;
+	public state: State = State.Idle;
 
-	private eventStart: {(): void}[] = [];
-	private eventUpdate: {(dt: number, progress: number): void}[] = [];
-	private eventKill: {(): void}[] = [];
-	private eventComplete: {(): void}[] = [];
+	protected eventStart: {(): void}[] | undefined;
+	protected eventUpdate: {(dt: number, progress: number): void}[] | undefined;
+	protected eventKill: {(): void}[] | undefined;
+	protected eventComplete: {(): void}[] | undefined;
 	private firstStart = true;
-
-	protected abstract Validate(): void;
-	protected abstract LoopInit(): void;
-
-	public SetParent(ticker: ITicker): void {
-		if (this.parent) {
-			this.parent.RemoveTickListener(this.tickCb);
-		}
-		this.parent = ticker;
-	}
-
-	public IsRunning(): boolean {
-		return this.state === State.Run;
-	}
-
-	public IsCompleted(): boolean {
-		return this.state === State.Finished;
-	}
-
-	public IsKilled(): boolean {
-		return this.state === State.Killed;
-	}
 
 	public Start(): void {
 		if (this.state !== State.Idle) {
-			console.warn('cant start this tween, already in state', this.state);
+			console.warn('cant start this tween', this.state);
 			return;
 		}
 
 		if (this.firstStart) {
 			this.Validate();
+		} else {
+			this.CheckPosition();
 		}
 
 		this.state = State.Run;
 		this.parent.AddTickListener(this.tickCb);
 
 		if (this.firstStart) {
-			this.Started();
+			this.EmitEvent(this.eventStart);
 			this.firstStart = false;
 		}
 	}
 
-	public Reset(resetloop?: boolean): void {
+	public Reset(): void {
 		this.state = State.Idle;
 
 		if (this.parent) {
 			this.parent.RemoveTickListener(this.tickCb);
 		}
 
-		if (resetloop === true) {
-			this.loop = 1;
-		}
-
+		this.loop = 1;
 		this.LoopInit();
 	}
 
-	public ResetAndStart(resetloop?: boolean) {
-		if (resetloop === true) {
-			this.loop = 1;
-		}
-
+	public ResetAndStart(dtRemains: number) {
 		this.LoopInit();
 
 		this.state = State.Run;
+		if (dtRemains > 0) {
+			this.tickCb(dtRemains);
+		}
 	}
 
 	public Pause(): void {
 		if (this.state !== State.Run) {
-			console.warn('cant pause this tween, already in state', this.state);
+			console.warn('cant pause this tween', this.state);
 			return;
 		}
 
@@ -106,7 +82,7 @@ export abstract class BaseTween {
 
 	public Resume(): void {
 		if (this.state !== State.Pause) {
-			console.warn('cant resume this tween, already in state', this.state);
+			console.warn('cant resume this tween', this.state);
 			return;
 		}
 
@@ -114,39 +90,23 @@ export abstract class BaseTween {
 		this.parent.AddTickListener(this.tickCb);
 	}
 
-	public Kill(): void {
+	public Skip(): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
-			console.warn('cant kill this tween, already in state', this.state);
+			console.warn('cant skip this tween', this.state);
 			return;
 		}
 
-		if (this.parent) {
-			this.parent.RemoveTickListener(this.tickCb);
+		if (this.state === State.Idle) {
+			this.EmitEvent(this.eventStart);
 		}
 
-		this.state = State.Killed
-		this.Killed();
-		this.Cleanup();
-	}
-
-	protected abstract Cleanup(): void;
-
-	public Default() {
-		this.elapsed = 0;
-		this.duration = 0;
-		this.timescale = 1;
-		this.loop = 1;
-		this.eventStart = [];
-		this.eventUpdate = [];
-		this.eventKill = [];
-		this.eventComplete = [];
-		this.firstStart = true;
-		this.state = State.Idle;
+		this.elapsed = this.duration;
+		this.Complete();
 	}
 
 	protected Complete(): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
-			console.warn('cant complete this tween, already in state', this.state);
+			console.warn('cant complete this tween', this.state);
 			return;
 		}
 
@@ -155,66 +115,60 @@ export abstract class BaseTween {
 		}
 
 		this.state = State.Finished;
-		this.Completed();
-		this.Cleanup();
+		this.EmitEvent(this.eventComplete);
 	}
 
-	protected Started() {
-		for (let i = 0; i < this.eventStart.length; i++) {
-			try {
-				this.eventStart[i]();
-			} catch (e) {
-				console.warn(e);
-			}
+	public Kill(): void {
+		if (this.state === State.Killed || this.state === State.Finished) {
+			console.warn('cant kill this tween', this.state);
+			return;
 		}
-		this.eventStart = [];
+
+		if (this.parent) {
+			this.parent.RemoveTickListener(this.tickCb);
+		}
+
+		this.state = State.Killed
+		this.EmitEvent(this.eventKill);
 	}
 
-	protected Updated(dt: number, progress: number) {
-		for (let i = 0; i < this.eventUpdate.length; i++) {
-			try {
-				this.eventUpdate[i](dt, progress);
-			} catch (e) {
-				console.warn(e);
-			}
+	protected CheckPosition(): void {}
+	protected Validate(): void {}
+	protected LoopInit(): void {
+		this.elapsed = 0;
+	}
+
+	public SetParent(ticker: ITicker): void {
+		if (this.parent) {
+			this.parent.RemoveTickListener(this.tickCb);
+		}
+		this.parent = ticker;
+	}
+
+	public Default() {
+		this.elapsed = 0;
+		this.duration = 0;
+		this.timescale = 1;
+		this.loop = 1;
+		this.firstStart = true;
+		this.state = State.Idle;
+	}
+
+	private Emit(func: any, args: any) {
+		try {
+			func.apply(this, args);
+		} catch (e) {
+			console.warn(e);
 		}
 	}
 
-	protected Killed() {
-		for (let i = 0; i < this.eventKill.length; i++) {
-			try {
-				this.eventKill[i]();
-			} catch (e) {
-				console.warn(e);
-			}
+	protected EmitEvent(listeners: any, args?: any) {
+		if (!listeners) {
+			return;
 		}
-		this.eventKill = [];
-	}
 
-	protected Completed() {
-		for (let i = 0; i < this.eventComplete.length; i++) {
-			try {
-				this.eventComplete[i]();
-			} catch (e) {
-				console.warn(e);
-			}
+		for (let i = 0; i < listeners.length; i++) {
+			this.Emit(listeners[i], args);
 		}
-		this.eventComplete = [];
-	}
-
-	public OnStart(cb: () => void): void {
-		this.eventStart.push(cb);
-	}
-
-	public OnUpdate(cb: (dt: number, progress: number) => void): void {
-		this.eventUpdate.push(cb);
-	}
-
-	public OnKilled(cb: () => void): void {
-		this.eventKill.push(cb);
-	}
-
-	public OnComplete(cb: () => void): void {
-		this.eventComplete.push(cb);
 	}
 }

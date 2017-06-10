@@ -1,29 +1,28 @@
 import { BaseTween } from './baseTween';
 import { IPlayable } from '../core/interfaces/IPlayable';
-import { TweenType } from '../core/enum/tweenType';
 
+/**
+ * Fake tween used to append or join callback in a sequence
+ *
+ * @export
+ * @class Callback
+ * @extends {BaseTween}
+ * @implements {IPlayable}
+ */
 export class Callback extends BaseTween implements IPlayable {
-	public get Type() {
-		return TweenType.Callback;
-	}
+	private callback: () => void;
 
 	constructor(cb: () => void) {
 		super();
-		this.tickCb = (dt: number) => {
-			this.elapsed += dt;
-			this.duration = 0;
-
-			cb();
-
-			this.Updated(dt, 1);
-			this.Complete();
-		};
+		this.callback = cb;
+		this.tickCb = this.Tick.bind(this);
 	}
 
-	protected Validate() {}
-	protected LoopInit() {
-		this.elapsed = 0;
+	private Tick(dt: number) {
+		this.elapsed += dt;
+		this.duration = 0;
+		this.callback();
+		this.EmitEvent(this.eventUpdate, [dt, 1]);
+		this.Complete();
 	}
-
-	protected Cleanup(): void {}
 }

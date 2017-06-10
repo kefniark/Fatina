@@ -1,8 +1,7 @@
 import * as test from 'tape';
-import { TweenType } from '../src/fatina/core/enum/tweenType';
 let fatina = require('../src/fatina/index');
 
-fatina.Init();
+fatina.Init(false, 2);
 
 test('[Fatina.Manager] Update manually', function (t: any) {
 	let previousTime = fatina.time;
@@ -53,17 +52,13 @@ test('[Fatina.Manager] Create tween', function (t: any) {
 	tween.Start();
 
 	t.equal(0, obj.x, 'check the tween is not starting magically');
-	t.equal(TweenType.Tween, tween.Type, 'Check the tween is really a tween type');
 
 	fatina.Update(0.5);
 	t.equal(0.5, obj.x, 'check the tween is halfway through');
 
 	fatina.Update(0.5);
 	t.equal(1, obj.x, 'check the tween is finished');
-	t.equal(1, tween.Elapsed, 'check the tween is still there with final values');
-
-	fatina.Update(0.5);
-	t.equal(0, tween.Elapsed, 'check the tween has been cleaned 1 update after the end');
+	t.equal(1, tween.elapsed, 'check the tween is still there with final values');
 
 	t.end();
 });
@@ -76,18 +71,54 @@ test('[Fatina.Manager] Create sequence', function (t: any) {
 	sequence.Start();
 
 	t.equal(0, obj.x, 'check the sequence is not starting magically');
-	t.equal(TweenType.Sequence, sequence.Type, 'Check the tween is really a sequence type');
 
 	fatina.Update(2);
 	t.equal(1, obj.x, 'check the sequence is finished');
-	t.equal(2, sequence.Elapsed, 'check the sequence is still there with final values');
-
-	fatina.Update(0.5);
-	t.equal(0, sequence.Elapsed, 'check the sequence has been cleaned 1 update after the end');
+	t.equal(2, sequence.elapsed, 'check the sequence is still there with final values');
 
 	t.end();
 });
 
-test('[Fatina.Manager] Check pooling', function (t: any) {
+test('[Fatina.Manager] Create ticker', function (t: any) {
+	let obj = { x: 0, y: 0, z: 0 };
+	let gameTicker = fatina.Ticker('game');
+	let uiTicker = fatina.Ticker('ui');
+
+	fatina.Tween(obj, ['x']).SetParent(gameTicker).To({x: 5}, 5).Start();
+	fatina.Tween(obj, ['y']).SetParent(uiTicker).To({y: 5}, 5).Start();
+	fatina.Tween(obj, ['z']).To({z: 5}, 5).Start();
+
+	t.notEqual(undefined, gameTicker, 'check a ticker is properly created');
+	t.equal(gameTicker, fatina.Ticker('game'), 'check the same ticker is returned when the same name is used twice');
+
+	fatina.Update(1);
+	t.equal(1, obj.x, 'check the game ticker runs');
+	t.equal(1, obj.y, 'check the ui ticker runs');
+	t.equal(1, obj.z, 'check the main ticker runs');
+
+	fatina.SetTimescale(2);
+	gameTicker.SetTimescale(0.5);
+	uiTicker.SetTimescale(0.25);
+
+	fatina.Update(1);
+	t.equal(2, obj.x, 'check the game ticker runs');
+	t.equal(1.5, obj.y, 'check the ui ticker runs');
+	t.equal(3, obj.z, 'check the main ticker runs');
+
+	fatina.SetTimescale(1);
+	gameTicker.SetTimescale(1);
+
+	gameTicker.Pause();
+	uiTicker.Kill();
+	fatina.Update(1);
+	t.equal(2, obj.x, 'check the game ticker is paused');
+	t.equal(1.5, obj.y, 'check the ui ticker is killed')
+
+	gameTicker.Resume();
+	fatina.Update(1);
+	t.equal(3, obj.x, 'check the game ticker is resumed');
+
+	fatina.Destroy();
+
 	t.end();
 });

@@ -1,3 +1,11 @@
+/**
+ * Simple doublylist used for events management
+ * Optimized to apeend, remove and iterate
+ *
+ * @export
+ * @abstract
+ * @class EventList
+ */
 export abstract class EventList {
 	public first: INode | undefined;
 	public last: INode | undefined;
@@ -23,7 +31,6 @@ export abstract class EventList {
 		}
 
 		if (node.node_list !== this) {
-			// console.warn('Trying to remove a node that does not belong to the list');
 			return;
 		}
 
@@ -41,29 +48,13 @@ export abstract class EventList {
 		}
 
 		// Removing any existing reference from the node
-		delete node.node_valid;
-		delete node.node_previous;
-		delete node.node_next;
-		delete node.node_list;
+		node.node_valid = false;
+		node.node_previous = undefined;
+		node.node_next = undefined;
+		node.node_list = undefined;
 
 		// One less node in the list
 		this.length -= 1;
-	}
-
-	public Clear() {
-		let node = this.first;
-		while (node !== undefined) {
-			let nextNode = node.node_next;
-			delete node.node_valid;
-			delete node.node_previous;
-			delete node.node_next;
-			delete node.node_list;
-			node = nextNode;
-		}
-
-		this.first = undefined;
-		this.last = undefined;
-		this.length = 0;
 	}
 
 	private GetNode(obj: any, previous: INode | undefined, next: INode | undefined, list: EventList): INode {
@@ -82,5 +73,5 @@ export interface INode {
 	node_valid: boolean;
 	node_previous: INode | undefined;
 	node_next: INode | undefined;
-	node_list: EventList;
+	node_list: EventList | undefined;
 }
