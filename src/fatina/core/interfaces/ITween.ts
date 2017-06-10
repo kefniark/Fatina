@@ -3,6 +3,13 @@ import { ITicker } from './ITicker';
 import { ISequence } from './ISequence';
 import { EasingType } from '../../easing/easingType';
 
+/**
+ * Interface used by tweens
+ *
+ * @export
+ * @interface ITween
+ * @extends {IControl}
+ */
 export interface ITween extends IControl {
 	Default(): void;
 	Init(object: any, properties: string[]): void;

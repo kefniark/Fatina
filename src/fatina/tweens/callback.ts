@@ -1,6 +1,14 @@
 import { BaseTween } from './baseTween';
 import { IPlayable } from '../core/interfaces/IPlayable';
 
+/**
+ * Fake tween used to append or join callback in a sequence
+ *
+ * @export
+ * @class Callback
+ * @extends {BaseTween}
+ * @implements {IPlayable}
+ */
 export class Callback extends BaseTween implements IPlayable {
 	private callback: () => void;
 
@@ -14,7 +22,7 @@ export class Callback extends BaseTween implements IPlayable {
 		this.elapsed += dt;
 		this.duration = 0;
 		this.callback();
-		this.EmitUpdateEvent(dt, 1);
+		this.EmitEvent(this.eventUpdate, [dt, 1]);
 		this.Complete();
 	}
 }

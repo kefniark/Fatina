@@ -1,3 +1,11 @@
+/**
+ * Simple doublylist used for events management
+ * Optimized to apeend, remove and iterate
+ *
+ * @export
+ * @abstract
+ * @class EventList
+ */
 export abstract class EventList {
 	public first: INode | undefined;
 	public last: INode | undefined;
@@ -15,12 +23,6 @@ export abstract class EventList {
 		this.length += 1;
 	}
 
-	public Pop(): INode | undefined {
-		let first = this.first;
-		this.Remove(first);
-		return first;
-	}
-
 	public Remove(obj: any): void {
 		let node = obj as INode;
 		if (node === undefined) {
@@ -29,7 +31,6 @@ export abstract class EventList {
 		}
 
 		if (node.node_list !== this) {
-			// console.warn('Trying to remove a node that does not belong to the list');
 			return;
 		}
 

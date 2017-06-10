@@ -1,12 +1,22 @@
 import { ITicker } from '../core/interfaces/ITicker';
 import { State } from '../core/enum/state';
 
+/**
+ * Shared behaviors between different types of tweens and sequence
+ * Used mostly to manage:
+ *  - events
+ *  - state
+ *  - loop and restart
+ *
+ * @export
+ * @abstract
+ * @class BaseTween
+ */
 export abstract class BaseTween {
 	public elapsed = 0;
 	public duration = 0;
 	public timescale = 1;
 	protected loop = 1;
-
 	protected parent: ITicker;
 	protected tickCb: (dt: number) => void;
 	public state: State = State.Idle;
@@ -58,20 +68,6 @@ export abstract class BaseTween {
 		}
 	}
 
-	public Skip(): void {
-		if (this.state === State.Killed || this.state === State.Finished) {
-			console.warn('cant skip this tween', this.state);
-			return;
-		}
-
-		if (this.state === State.Idle) {
-			this.EmitEvent(this.eventStart);
-		}
-
-		this.elapsed = this.duration;
-		this.Complete();
-	}
-
 	public Pause(): void {
 		if (this.state !== State.Run) {
 			console.warn('cant pause this tween', this.state);
@@ -92,6 +88,20 @@ export abstract class BaseTween {
 
 		this.state = State.Run;
 		this.parent.AddTickListener(this.tickCb);
+	}
+
+	public Skip(): void {
+		if (this.state === State.Killed || this.state === State.Finished) {
+			console.warn('cant skip this tween', this.state);
+			return;
+		}
+
+		if (this.state === State.Idle) {
+			this.EmitEvent(this.eventStart);
+		}
+
+		this.elapsed = this.duration;
+		this.Complete();
 	}
 
 	protected Complete(): void {
@@ -144,31 +154,21 @@ export abstract class BaseTween {
 		this.state = State.Idle;
 	}
 
-	protected EmitEvent(listeners: {(): void}[] | undefined) {
+	private Emit(func: any, args: any) {
+		try {
+			func.apply(this, args);
+		} catch (e) {
+			console.warn(e);
+		}
+	}
+
+	protected EmitEvent(listeners: any, args?: any) {
 		if (!listeners) {
 			return;
 		}
 
 		for (let i = 0; i < listeners.length; i++) {
-			try {
-				listeners[i]();
-			} catch (e) {
-				console.warn(e);
-			}
-		}
-	}
-
-	protected EmitUpdateEvent(dt: number, progress: number) {
-		if (!this.eventUpdate) {
-			return;
-		}
-
-		for (let i = 0; i < this.eventUpdate.length; i++) {
-			try {
-				this.eventUpdate[i](dt, progress);
-			} catch (e) {
-				console.warn(e);
-			}
+			this.Emit(listeners[i], args);
 		}
 	}
 }

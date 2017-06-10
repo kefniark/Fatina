@@ -64,15 +64,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var isFirstUpdate = true;
 	var lastFrame;
 	var lastTime = 0;
+	var tickers = {};
 	exports.time = 0;
 	function Elapsed() {
 	    return tickerManager.elapsed;
 	}
 	exports.Elapsed = Elapsed;
-	function Ticker() {
-	    return tickerManager;
-	}
-	exports.Ticker = Ticker;
 	function Init(disableAutoTick, poolSize) {
 	    if (initialized) {
 	        return false;
@@ -132,6 +129,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return new sequence_1.Sequence().SetParent(tickerManager);
 	}
 	exports.Sequence = Sequence;
+	function Ticker(name) {
+	    if (!initialized) {
+	        Init();
+	    }
+	    if (!(name in tickers)) {
+	        var tick = new ticker_1.Ticker();
+	        var handler = tick.Tick.bind(tick);
+	        tick.SetParent(tickerManager, handler);
+	        tickerManager.AddTickListener(handler);
+	        tick.Start();
+	        tickers[name] = tick;
+	    }
+	    return tickers[name];
+	}
+	exports.Ticker = Ticker;
 	var requestFrame;
 	var cancelFrame;
 	if (typeof (window) !== 'undefined') {
@@ -228,7 +240,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.eventTick[i](dt);
 	            }
 	            if (remains !== true) {
-	                this.EmitUpdateEvent(dt, 0);
+	                this.EmitEvent(this.eventUpdate, [dt, 0]);
 	            }
 	        }
 	        var remainsDt = dt;
@@ -240,7 +252,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            var first = this.currentTween[0];
 	            remainsDt = first.elapsed - first.duration;
-	            this.StepEnded(this.currentTween[0]);
+	            this.EmitEvent(this.eventStepEnd, [this.currentTween[0]]);
 	            this.currentTween = undefined;
 	            this.sequenceIndex++;
 	            if (remainsDt > 0.01) {
@@ -265,33 +277,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var tween = this.currentTween[i];
 	                tween.Start();
 	            }
-	            this.StepStarted(this.currentTween[0]);
-	        }
-	    };
-	    Sequence.prototype.StepStarted = function (tween) {
-	        if (!this.eventStepStart) {
-	            return;
-	        }
-	        for (var i = 0; i < this.eventStepStart.length; i++) {
-	            try {
-	                this.eventStepStart[i](tween);
-	            }
-	            catch (e) {
-	                console.warn(e);
-	            }
-	        }
-	    };
-	    Sequence.prototype.StepEnded = function (tween) {
-	        if (!this.eventStepEnd) {
-	            return;
-	        }
-	        for (var i = 0; i < this.eventStepEnd.length; i++) {
-	            try {
-	                this.eventStepEnd[i](tween);
-	            }
-	            catch (e) {
-	                console.warn(e);
-	            }
+	            this.EmitEvent(this.eventStepStart, [this.currentTween[0]]);
 	        }
 	    };
 	    Sequence.prototype.Append = function (tween) {
@@ -341,10 +327,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    continue;
 	                }
 	                if (tween.elapsed === 0) {
-	                    this.StepStarted(tween);
+	                    this.EmitEvent(this.eventStepStart, [tween]);
 	                }
 	                tween.Skip();
-	                this.StepEnded(tween);
+	                this.EmitEvent(this.eventStepEnd, [tween]);
 	            }
 	        }
 	        _super.prototype.Skip.call(this);
@@ -390,42 +376,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    Sequence.prototype.OnStart = function (cb) {
 	        if (!this.eventStart) {
-	            this.eventStart = [];
+	            this.eventStart = new Array(0);
 	        }
 	        this.eventStart[this.eventStart.length] = cb;
 	        return this;
 	    };
 	    Sequence.prototype.OnUpdate = function (cb) {
 	        if (!this.eventUpdate) {
-	            this.eventUpdate = [];
+	            this.eventUpdate = new Array(0);
 	        }
 	        this.eventUpdate[this.eventUpdate.length] = cb;
 	        return this;
 	    };
 	    Sequence.prototype.OnKilled = function (cb) {
 	        if (!this.eventKill) {
-	            this.eventKill = [];
+	            this.eventKill = new Array(0);
 	        }
 	        this.eventKill[this.eventKill.length] = cb;
 	        return this;
 	    };
 	    Sequence.prototype.OnComplete = function (cb) {
 	        if (!this.eventComplete) {
-	            this.eventComplete = [];
+	            this.eventComplete = new Array(0);
 	        }
 	        this.eventComplete[this.eventComplete.length] = cb;
 	        return this;
 	    };
 	    Sequence.prototype.OnStepStart = function (cb) {
 	        if (!this.eventStepStart) {
-	            this.eventStepStart = [];
+	            this.eventStepStart = new Array(0);
 	        }
 	        this.eventStepStart[this.eventStepStart.length] = cb;
 	        return this;
 	    };
 	    Sequence.prototype.OnStepEnd = function (cb) {
 	        if (!this.eventStepEnd) {
-	            this.eventStepEnd = [];
+	            this.eventStepEnd = new Array(0);
 	        }
 	        this.eventStepEnd[this.eventStepEnd.length] = cb;
 	        return this;
@@ -484,17 +470,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.tickCb(dtRemains);
 	        }
 	    };
-	    BaseTween.prototype.Skip = function () {
-	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
-	            console.warn('cant skip this tween', this.state);
-	            return;
-	        }
-	        if (this.state === state_1.State.Idle) {
-	            this.EmitEvent(this.eventStart);
-	        }
-	        this.elapsed = this.duration;
-	        this.Complete();
-	    };
 	    BaseTween.prototype.Pause = function () {
 	        if (this.state !== state_1.State.Run) {
 	            console.warn('cant pause this tween', this.state);
@@ -512,6 +487,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.state = state_1.State.Run;
 	        this.parent.AddTickListener(this.tickCb);
+	    };
+	    BaseTween.prototype.Skip = function () {
+	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
+	            console.warn('cant skip this tween', this.state);
+	            return;
+	        }
+	        if (this.state === state_1.State.Idle) {
+	            this.EmitEvent(this.eventStart);
+	        }
+	        this.elapsed = this.duration;
+	        this.Complete();
 	    };
 	    BaseTween.prototype.Complete = function () {
 	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
@@ -554,30 +540,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.firstStart = true;
 	        this.state = state_1.State.Idle;
 	    };
-	    BaseTween.prototype.EmitEvent = function (listeners) {
+	    BaseTween.prototype.Emit = function (func, args) {
+	        try {
+	            func.apply(this, args);
+	        }
+	        catch (e) {
+	            console.warn(e);
+	        }
+	    };
+	    BaseTween.prototype.EmitEvent = function (listeners, args) {
 	        if (!listeners) {
 	            return;
 	        }
 	        for (var i = 0; i < listeners.length; i++) {
-	            try {
-	                listeners[i]();
-	            }
-	            catch (e) {
-	                console.warn(e);
-	            }
-	        }
-	    };
-	    BaseTween.prototype.EmitUpdateEvent = function (dt, progress) {
-	        if (!this.eventUpdate) {
-	            return;
-	        }
-	        for (var i = 0; i < this.eventUpdate.length; i++) {
-	            try {
-	                this.eventUpdate[i](dt, progress);
-	            }
-	            catch (e) {
-	                console.warn(e);
-	            }
+	            this.Emit(listeners[i], args);
 	        }
 	    };
 	    return BaseTween;
@@ -630,7 +606,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.elapsed += dt;
 	        this.duration = 0;
 	        this.callback();
-	        this.EmitUpdateEvent(dt, 1);
+	        this.EmitEvent(this.eventUpdate, [dt, 1]);
 	        this.Complete();
 	    };
 	    return Callback;
@@ -666,7 +642,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Delay.prototype.Tick = function (dt) {
 	        this.elapsed += dt;
 	        var progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
-	        this.EmitUpdateEvent(dt, progress);
+	        this.EmitEvent(this.eventUpdate, [dt, progress]);
 	        if (this.elapsed >= this.duration) {
 	            this.Complete();
 	        }
@@ -734,8 +710,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.CheckPosition();
 	    };
 	    Tween.prototype.CheckPosition = function () {
-	        this.currentFrom = {};
-	        this.currentTo = {};
+	        if (!this.currentFrom) {
+	            this.currentFrom = {};
+	        }
+	        if (!this.currentTo) {
+	            this.currentTo = {};
+	        }
 	        for (var i = 0; i < this.properties.length; i++) {
 	            var prop = this.properties[i];
 	            if (!this.from) {
@@ -766,7 +746,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var prop = this.properties[i];
 	                this.object[prop] = this.currentFrom[prop] + (this.currentTo[prop] - this.currentFrom[prop]) * val;
 	            }
-	            this.EmitUpdateEvent(this.remainsDt, progress);
+	            this.EmitEvent(this.eventUpdate, [this.remainsDt, progress]);
 	            if (this.elapsed < this.duration) {
 	                return;
 	            }
@@ -859,28 +839,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    Tween.prototype.OnStart = function (cb) {
 	        if (!this.eventStart) {
-	            this.eventStart = [];
+	            this.eventStart = new Array(0);
 	        }
 	        this.eventStart[this.eventStart.length] = cb;
 	        return this;
 	    };
 	    Tween.prototype.OnUpdate = function (cb) {
 	        if (!this.eventUpdate) {
-	            this.eventUpdate = [];
+	            this.eventUpdate = new Array(0);
 	        }
 	        this.eventUpdate[this.eventUpdate.length] = cb;
 	        return this;
 	    };
 	    Tween.prototype.OnKilled = function (cb) {
 	        if (!this.eventKill) {
-	            this.eventKill = [];
+	            this.eventKill = new Array(0);
 	        }
 	        this.eventKill[this.eventKill.length] = cb;
 	        return this;
 	    };
 	    Tween.prototype.OnComplete = function (cb) {
 	        if (!this.eventComplete) {
-	            this.eventComplete = [];
+	            this.eventComplete = new Array(0);
 	        }
 	        this.eventComplete[this.eventComplete.length] = cb;
 	        return this;
@@ -1153,6 +1133,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.eventToRemove = [];
 	        return _this;
 	    }
+	    Ticker.prototype.SetParent = function (parent, tick) {
+	        this.tick = tick;
+	        this.parent = parent;
+	    };
 	    Ticker.prototype.SetTimescale = function (scale) {
 	        this.timescale = scale;
 	    };
@@ -1190,26 +1174,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.UpdateListener();
 	    };
 	    Ticker.prototype.Start = function () {
-	        if (this.state !== state_1.State.Idle) {
-	            return;
+	        if (this.state === state_1.State.Idle) {
+	            this.state = state_1.State.Run;
 	        }
-	        this.state = state_1.State.Run;
 	    };
 	    Ticker.prototype.Pause = function () {
-	        if (this.state !== state_1.State.Run) {
-	            return;
+	        if (this.state === state_1.State.Run) {
+	            this.state = state_1.State.Pause;
 	        }
-	        this.state = state_1.State.Pause;
 	    };
 	    Ticker.prototype.Resume = function () {
-	        if (this.state !== state_1.State.Pause) {
-	            return;
+	        if (this.state === state_1.State.Pause) {
+	            this.state = state_1.State.Run;
 	        }
-	        this.state = state_1.State.Run;
 	    };
 	    Ticker.prototype.Kill = function () {
 	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
 	            return;
+	        }
+	        if (this.parent && this.tick) {
+	            this.parent.RemoveTickListener(this.tick);
 	        }
 	        this.state = state_1.State.Killed;
 	    };
@@ -1245,11 +1229,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.last = newNode;
 	        }
 	        this.length += 1;
-	    };
-	    EventList.prototype.Pop = function () {
-	        var first = this.first;
-	        this.Remove(first);
-	        return first;
 	    };
 	    EventList.prototype.Remove = function (obj) {
 	        var node = obj;

@@ -7,6 +7,13 @@
     private update;
     private eventToAdd;
     private eventToRemove;
+    tick: {
+        (dt: number): void;
+    } | undefined;
+    private parent;
+    SetParent(parent: ITicker, tick: {
+        (dt: number): void;
+    }): void;
     SetTimescale(scale: number): void;
     AddTickListener(cb: (dt: number) => void): void;
     RemoveTickListener(cb: (dt: number) => void): void;
@@ -24,7 +31,6 @@
     last: INode | undefined;
     length: number;
     Add(obj: any): void;
-    Pop(): INode | undefined;
     Remove(obj: any): void;
     private GetNode(obj, previous, next, list);
 }
@@ -156,9 +162,9 @@
     Start(): void;
     Reset(): void;
     ResetAndStart(dtRemains: number): void;
-    Skip(): void;
     Pause(): void;
     Resume(): void;
+    Skip(): void;
     protected Complete(): void;
     Kill(): void;
     protected CheckPosition(): void;
@@ -166,10 +172,8 @@
     protected LoopInit(): void;
     SetParent(ticker: ITicker): void;
     Default(): void;
-    protected EmitEvent(listeners: {
-        (): void;
-    }[] | undefined): void;
-    protected EmitUpdateEvent(dt: number, progress: number): void;
+    private Emit(func, args);
+    protected EmitEvent(listeners: any, args?: any): void;
 }
 
     private callback;
@@ -196,8 +200,6 @@
     private Tick(dt);
     private LocalTick(dt, remains?);
     private NextTween();
-    private StepStarted(tween);
-    private StepEnded(tween);
     Append(tween: ITween | ISequence): ISequence;
     AppendCallback(cb: () => void): ISequence;
     AppendInterval(duration: number): ISequence;

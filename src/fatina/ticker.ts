@@ -19,6 +19,13 @@ export class Ticker extends EventList implements ITicker {
 	private update = 0;
 	private eventToAdd: { (dt: number): void }[] = [];
 	private eventToRemove: { (dt: number): void }[] = [];
+	public tick: {(dt: number): void} | undefined;
+	private parent: ITicker;
+
+	public SetParent(parent: ITicker, tick: {(dt: number): void}) {
+		this.tick = tick;
+		this.parent = parent;
+	}
 
 	/**
 	 * Method used to change the timescale
@@ -103,30 +110,32 @@ export class Ticker extends EventList implements ITicker {
 	}
 
 	public Start(): void {
-		if (this.state !== State.Idle) {
-			return;
+		if (this.state === State.Idle) {
+			this.state = State.Run;
 		}
-		this.state = State.Run;
 	}
 
 	public Pause(): void {
-		if (this.state !== State.Run) {
-			return;
+		if (this.state === State.Run) {
+			this.state = State.Pause;
 		}
-		this.state = State.Pause;
 	}
 
 	public Resume(): void {
-		if (this.state !== State.Pause) {
-			return;
+		if (this.state === State.Pause) {
+			this.state = State.Run;
 		}
-		this.state = State.Run;
 	}
 
 	public Kill(): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
 			return;
 		}
+
+		if (this.parent && this.tick) {
+			this.parent.RemoveTickListener(this.tick);
+		}
+
 		this.state = State.Killed;
 	}
 
