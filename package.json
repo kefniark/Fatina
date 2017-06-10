@@ -1,7 +1,7 @@
 {
   "name": "fatina",
   "description": "Small & Light tweening library for web / games",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "homepage": "https://kefniark.github.io/Fatina/",
   "main": "build/fatina.js",
   "types": "build/fatina.d.ts",
