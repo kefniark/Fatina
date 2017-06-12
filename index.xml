@@ -26,9 +26,8 @@ Linear tween function sample1() {var elem = document.getElementById(&#34;sampl
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/samples/game/</guid>
-      <description>Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine).
-* Those are just samples, not real games :P
-Unity Chan GO!!! Parallax var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb});document.getElementById(&#39;canvas1&#39;).appendChild(app.view);// Create background with parallaxCreateBackgrounds();// Create unity chanlet textures = LoadUnityChanTextures();var unitychan = new PIXI.Sprite(textures[0]);unitychan.anchor.set(0.5);unitychan.scale.x = 1.5;unitychan.scale.y = 1.5;unitychan.x = app.</description>
+      <description>Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine).  Those are just samples, not real games :P Thanks Unity-chan for her help 
+Unity Chan GO!!! Parallax var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb});document.getElementById(&#39;canvas1&#39;).appendChild(app.view);// Create background with parallaxCreateBackgrounds();// Create unity chanlet textures = LoadUnityChanTextures();var unitychan = new PIXI.Sprite(textures[0]);unitychan.anchor.set(0.5);unitychan.scale.x = 1.</description>
     </item>
     
     <item>

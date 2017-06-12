@@ -12,7 +12,7 @@ A tween (from [_in-between_](http://en.wikipedia.org/wiki/Inbetweening)) is a co
 ## What is Fatina ?
 
 Fatina is a new tweening library designed to be easy to use and easy to understand.
-The main inspiration is the C# library [DOTween](http://dotween.demigiant.com/)
+The main inspiration is the <b>C#</b> library [DOTween](http://dotween.demigiant.com/) made for <b>Unity</b>
 
 {{% code "static/yuko_walk.html" %}}
 
@@ -20,9 +20,9 @@ The main inspiration is the C# library [DOTween](http://dotween.demigiant.com/)
 
 * **Logical and easy to use API** : An API made to boost efficiency, intuitiveness and ease of use.
 * **Lightweight** no extra dependencies and a minified file < 25KB
-* **Speed and efficiency** : Not only very fast, but also very efficient: everything is cached and reused to avoid useless GC allocations.
+* **Speed and efficiency** : Not only very fast, but also very efficient
 * **Open source & Easy to read**
-* **Plugins** : Fatina is built with an extensible architecture in mind, which allows you to create your own tween plugins as separate files.
+
 
 <div style="text-align: center">
     <a class="btn btn-primary" href="https://github.com/kefniark/Fatina/" target="_blank">Github</a>
