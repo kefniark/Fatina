@@ -1,0 +1,325 @@
+<div id="canvas2"></div>
+<script>
+    var app2 = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000});
+    document.getElementById('canvas2').appendChild(app2.view);
+
+    let origin = {
+        x: app2.renderer.width / 2,
+        y: 50,
+    };
+
+    PIXI.loader.add("/Fatina/pixi/schmup/schmup.json")
+    .load(function() {
+        CreateEnvironment();
+        CreateCharacters();
+        SpawnWaves();
+    });
+
+    let tokoTextures, unitychanTextures, bulletTexture, bullet2Texture, arrowTexture, hommingTexture;
+    let tokochan, uc;
+
+    // Create the background and preload the textures
+    function CreateEnvironment() {
+        let background = new PIXI.Sprite.fromImage("/Fatina/pixi/schmup/background.jpg");
+        background.anchor.set(0.5);
+        background.x = app2.renderer.width / 2;
+        background.y = app2.renderer.height / 2;
+        background.scale.x = 0.45;
+        background.scale.y = 0.45;
+        background.alpha = 0.7;
+        app2.stage.addChild(background);
+
+        // Textures
+        tokoTextures = LoadTokoTextures();
+        unitychanTextures = LoadUnityTextures();
+        bulletTexture = PIXI.TextureCache[29];
+        bullet2Texture = PIXI.TextureCache[26];
+        arrowTexture = PIXI.TextureCache[18];
+        hommingTexture = PIXI.TextureCache[19];
+    }
+
+    // Create both characters and animate them
+    function CreateCharacters() {
+        // Toko
+        tokochan = new PIXI.Sprite(tokoTextures[0]);
+        tokochan.anchor.set(0.5);
+        tokochan.scale.x = 0.8;
+        tokochan.scale.y = 0.8;
+        tokochan.x = origin.x;
+        tokochan.y = origin.y;
+        app2.stage.addChild(tokochan);
+
+        // Toko Sprite
+        Fatina.Tween({}, [])
+        .To({}, 1800)
+        .OnUpdate((dt, progress) => {
+            let index = Math.round(progress * (tokoTextures.length - 1));
+            tokochan.setTexture(tokoTextures[index]);
+        })
+        .SetLoop(-1)
+        .Start();
+
+        // UnityChan
+        uc = new PIXI.Sprite(unitychanTextures[0]);
+        uc.anchor.set(0.5);
+        uc.scale.x = 0.8;
+        uc.scale.y = 0.8;
+        uc.x = app2.renderer.width / 2;
+        uc.y = app2.renderer.height - 50;
+        app2.stage.addChild(uc);
+
+        // UnityChan Sprite
+        Fatina.Sequence()
+            .Append(Fatina.Tween(uc, ['x']).To({ x: app2.renderer.width - 160}, 1800).SetEasing('outCubic'))
+            .AppendCallback(() => uc.scale.x = -0.8)
+            .Append(Fatina.Tween(uc, ['x']).To({ x: 160}, 3600).SetEasing('inOutCubic'))
+            .AppendCallback(() => uc.scale.x = 0.8)
+            .Append(Fatina.Tween(uc, ['x']).To({ x: app2.renderer.width / 2}, 1800).SetEasing('inCubic'))
+            .SetLoop(-1)
+            .Start();
+
+        Fatina.Tween({}, [])
+        .To({}, 1800)
+        .OnUpdate((dt, progress) => {
+            let index = Math.round(progress * (unitychanTextures.length - 1));
+            uc.setTexture(unitychanTextures[index]);
+        })
+        .SetLoop(-1)
+        .Start();
+    }
+
+    // Main sequence used to spawn waves of bullets. 2x onUpdate, one for each character
+    function SpawnWaves() {
+        // Wave Timing
+        let deltaUnity = 0;
+        let delta = 0;
+        let dir = 1;
+        let homming = 0;
+        let count = 0;
+        let startPatern2 = false;
+        Fatina.Tween({}, []).To({}, 5000)
+            .OnUpdate((dt, progress) => {
+                delta += dt;
+                if (delta < 650) {
+                    return;
+                }
+                delta -= 650;
+                if (Math.floor(count / 10) % 2 === 0) {
+                    SpawnPatern1(dir, 24);
+                    startPatern2 = true;
+                } else {
+                    if (!startPatern2) {
+                        SpawnPatern2(dir, count % 2 === 0 ? 24 : 14);
+                    } else {
+                        delta -= 2500;
+                    }
+                    startPatern2 = false;
+                }
+
+                dir = dir === 1? -1 : 1;
+                count++;
+            })
+            .OnUpdate((dt, progress) => {
+                deltaUnity += dt;
+                if (deltaUnity < 80) {
+                    return;
+                }
+                deltaUnity -= 80;
+                CreateUnityAttack();
+                if (homming % 2 === 0) {
+                    CreateUnityHommingAttack();
+                }
+                homming++;
+            })
+            .SetLoop(-1)
+            .Start();
+    }
+
+    /*
+    * First pattern of bullet. Red circle of red bullets
+    * We don't create a tween for every bullet, we animate a virtual bullet and after we apply rotation to calculate the real position of the bullets
+    */
+    function SpawnPatern1(dir, number) {
+        let bullets = [];
+        for (let i = 0; i < number; i++) {
+            bullets.push(CreateBullet(origin.x, origin.y, bulletTexture));
+        }
+
+        let virtualBullet = { x: 0, y: 0, r: 0, a: 0, fadeIn: true };
+        Fatina.Sequence()
+            .Append(Fatina.Tween(virtualBullet, ['y', 'r']).To({ x: 0, y: 100, r: 45 }, 2500).SetEasing('outQuad'))
+            .Join(Fatina.Tween(virtualBullet, ['a']).To({ a: 1}, 700).SetEasing('inQuint').OnComplete(() => virtualBullet.fadeIn = false))
+            .Append(Fatina.Tween(virtualBullet, ['y', 'r']).SetRelative(true).To({ x: 0, y: 500, r: dir * 100 }, 5000).SetEasing('inOutQuad'))
+            .OnUpdate(() => {
+                for (let i = 0; i < bullets.length; i++) {
+                    let bullet = bullets[i];
+
+                    let rotated = Rotate([virtualBullet.x, virtualBullet.y], virtualBullet.r + i * 360 / bullets.length);
+                    bullet.x = origin.x + rotated[0];
+                    bullet.y = origin.y + rotated[1];
+                    if (virtualBullet.fadeIn) {
+                        bullet.alpha = virtualBullet.a;
+                    }
+
+                    let distance = Math.abs(bullet.x - uc.x) + Math.abs(bullet.y - uc.y);
+                    if (distance < 8) {
+                        bullet.alpha = 0;
+                    }
+                }
+            })
+            .OnComplete(() => {
+                for (let i = 0; i < bullets.length; i++) {
+                    let bullet = bullets[i];
+                    bullet.destroy();
+                }
+            })
+            .Start();
+    }
+
+    /*
+    * Second pattern of bullet, line of red arrow
+    */
+    function SpawnPatern2(dir, number) {
+        for (let step = 0; step < 8; step++) {
+            let bullets = [];
+            for (let i = 0; i < number; i++) {
+                bullets.push(CreateBullet(origin.x, origin.y, bullet2Texture));
+                bullets[bullets.length - 1].rotation = Math.PI - Math.PI / 10 - i * Math.PI * 2 / number;
+            }
+
+            let virtualBullet = { x: 0, y: 0, r: 0, a: 0, fadeIn: true };
+            Fatina.Sequence()
+                .AppendInterval(step * 50)
+                .Append(Fatina.Tween(virtualBullet, ['y', 'r']).To({ x: 0, y: 600, r: 30 }, 3500).SetEasing('outQuad'))
+                .Join(Fatina.Tween(virtualBullet, ['a']).To({ a: 1}, 140).SetEasing('inQuint').OnComplete(() => virtualBullet.fadeIn = false))
+                .OnUpdate(() => {
+                    for (let i = 0; i < bullets.length; i++) {
+                        let bullet = bullets[i];
+
+                        let rotated = Rotate([virtualBullet.x, virtualBullet.y], virtualBullet.r + i * 360 / bullets.length);
+                        bullet.x = origin.x + rotated[0];
+                        bullet.y = origin.y + rotated[1];
+                        if (virtualBullet.fadeIn) {
+                            bullet.alpha = virtualBullet.a;
+                        }
+
+                        let distance = Math.abs(bullet.x - uc.x) + Math.abs(bullet.y - uc.y);
+                        if (distance < 8) {
+                            bullet.alpha = 0;
+                        }
+                    }
+                })
+                .OnComplete(() => {
+                    for (let i = 0; i < bullets.length; i++) {
+                        let bullet = bullets[i];
+                        bullet.destroy();
+                    }
+                })
+                .Start();
+        }
+    }
+
+    /*
+    * Main unity chan attack, straight bullet
+    */
+    function CreateUnityAttack() {
+        let straightBullets = [
+            CreateBullet(uc.x, uc.y, arrowTexture),
+            CreateBullet(uc.x, uc.y, arrowTexture)
+        ];
+
+        let unityChanOrigin = {x: uc.x, y: uc.y};
+        let virtualBullet = { x: 0, y: 0, r: 0, a: 0, fadeIn: true };
+        Fatina.Sequence()
+            .Append(Fatina.Tween(virtualBullet, ['y'])
+                .To({ y: -600 }, 2500)
+                .SetEasing('outQuad')
+                .OnUpdate((dt, progress) => {
+                    straightBullets[0].x = unityChanOrigin.x + progress * progress * 50;
+                    straightBullets[1].x = unityChanOrigin.x + progress * progress * -50;
+                })
+            )
+            .Join(Fatina.Tween(virtualBullet, ['a']).To({ a: 1}, 70).SetEasing('inQuint').OnComplete(() => virtualBullet.fadeIn = false))
+            .OnUpdate((dt, progress) => {
+                for (let i = 0; i < straightBullets.length; i++) {
+                    let bullet = straightBullets[i];
+                    bullet.y = unityChanOrigin.y + virtualBullet.y;
+                    if (virtualBullet.fadeIn) {
+                        bullet.alpha = virtualBullet.a;
+                    }
+
+                    let distance = Math.abs(bullet.x - origin.x) + Math.abs(bullet.y - origin.y);
+                    if (distance <= 15) {
+                        bullet.alpha = 0;
+                    }
+                }
+            })
+            .Start();
+    }
+
+    /*
+    * Second unity chan attack, homming bullet in a range x [-100:100]
+    */
+    function CreateUnityHommingAttack() {
+        let hommingBullets = [
+            CreateBullet(uc.x, uc.y, hommingTexture),
+            CreateBullet(uc.x, uc.y, hommingTexture)
+        ];
+
+        let unityChanOrigin = {x: uc.x, y: uc.y};
+        for (let homming of hommingBullets) {
+            homming.x = unityChanOrigin.x;
+            let diff = origin.x - unityChanOrigin.x;
+            diff = (diff > 100) ? 100 : (diff < -100 ) ? -100 : diff + Math.random() * 20 - 10;
+            Fatina.Sequence()
+                .Append(Fatina.Tween(homming, ['x', 'y']).SetRelative(true).To({ x:diff, y: origin.y - unityChanOrigin.y }, 700 + Math.random() * 200))
+                .Join(Fatina.Tween(homming, ['alpha']).To({ alpha: 1}, 70).SetEasing('inQuint'))
+                .Append(Fatina.Tween(homming, ['y']).To({ y: -100 }, 500))
+                .OnUpdate(() => {
+                    let distance = Math.abs(homming.x - origin.x) + Math.abs(homming.y - origin.y);
+                    if (distance <= 15) {
+                        homming.alpha = 0;
+                    }
+                })
+                .Start();
+        }
+    }
+
+    // Helper used to rotate vectors
+    function Rotate(vec, angle) {
+        angle = -angle * (Math.PI/180);
+        var cos = Math.cos(angle);
+        var sin = Math.sin(angle);
+        return new Array(Math.round(10000*(vec[0] * cos - vec[1] * sin))/10000, Math.round(10000*(vec[0] * sin + vec[1] * cos))/10000);
+    }
+
+    // Helper used to create a sprite
+    function CreateBullet(x, y, texture) {
+        let bullet = new PIXI.Sprite(texture);
+        bullet.anchor.set(0.5);
+        bullet.scale.x = 0.4;
+        bullet.scale.y = 0.4;
+        bullet.x = x;
+        bullet.y = y;
+        bullet.alpha = 0;
+        app2.stage.addChild(bullet);
+
+        return bullet;
+    }
+
+    function LoadTokoTextures() {
+        let textures = [];
+        for (let i = 1; i < 7; i++) {
+            textures.push(PIXI.TextureCache['Toko_Pointat_' + i]);
+        }
+        return textures;
+    }
+
+    function LoadUnityTextures() {
+        let textures = [];
+        for (let i = 1; i < 6; i++) {
+            textures.push(PIXI.TextureCache['Unitychan_Wave_hand_' + i]);
+        }
+        return textures;
+    }
+</script>

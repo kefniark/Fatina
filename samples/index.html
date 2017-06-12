@@ -63,7 +63,9 @@
                 
                   <a href="/Fatina/samples/generic/">Basics</a>
                 
-                  <a href="/Fatina/samples/pixi/">Pixi.js</a>
+                  <a href="/Fatina/samples/advanced/">Advanced</a>
+                
+                  <a href="/Fatina/samples/game/">Games</a>
                 
               </div>
             </li>
@@ -133,7 +135,7 @@
           
             <article class="post-preview">
               <a href="https://kefniark.github.io/Fatina/samples/generic/">
-                <h2 class="post-title">Basics Tweens</h2>
+                <h2 class="post-title">Basics Samples</h2>
     
                 
               </a>
@@ -144,7 +146,7 @@
               <div class="post-entry">
                 
                   .imgTest { position: relative; margin: 0; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html elements but you can tween almost any kind of object and data. PlayAll 
-Linear tween  function sample1() { var elem = document.getElementById("sample1"); var obj = { x: 0, y: 0 }; Fatina.Tween(obj, ['x']) .From({x: 0}) .To({x: 500}, 2500) .
+Linear tween function sample1() {var elem = document.getElementById("sample1");var obj = { x: 0, y: 0 };Fatina.Tween(obj, ['x']).From({x: 0}).To({x: 500}, 2500).
                   <a href="https://kefniark.github.io/Fatina/samples/generic/" class="post-read-more">[Read More]</a>
                 
               </div>
@@ -154,8 +156,8 @@ Linear tween  function sample1() { var elem = document.getElementById("sample1")
             </article>
           
             <article class="post-preview">
-              <a href="https://kefniark.github.io/Fatina/samples/dom/">
-                <h2 class="post-title">DOM / CSS Tweening</h2>
+              <a href="https://kefniark.github.io/Fatina/samples/game/">
+                <h2 class="post-title">Games Samples</h2>
     
                 
               </a>
@@ -165,8 +167,10 @@ Linear tween  function sample1() { var elem = document.getElementById("sample1")
               </p>
               <div class="post-entry">
                 
-                  <p>Lorem Ipsum</p>
-
+                  Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine).
+* Those are just samples, not real games :P
+Unity Chan GO!!! Parallax var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb});document.getElementById('canvas1').appendChild(app.view);// Create background with parallaxCreateBackgrounds();// Create unity chanlet textures = LoadUnityChanTextures();var unitychan = new PIXI.Sprite(textures[0]);unitychan.anchor.set(0.5);unitychan.scale.x = 1.5;unitychan.scale.y = 1.5;unitychan.x = app.
+                  <a href="https://kefniark.github.io/Fatina/samples/game/" class="post-read-more">[Read More]</a>
                 
               </div>
     
@@ -175,8 +179,8 @@ Linear tween  function sample1() { var elem = document.getElementById("sample1")
             </article>
           
             <article class="post-preview">
-              <a href="https://kefniark.github.io/Fatina/samples/pixi/">
-                <h2 class="post-title">Pixi.js Tweening</h2>
+              <a href="https://kefniark.github.io/Fatina/samples/advanced/">
+                <h2 class="post-title">Advanced Samples</h2>
     
                 
               </a>
@@ -187,29 +191,10 @@ Linear tween  function sample1() { var elem = document.getElementById("sample1")
               <div class="post-entry">
                 
                   Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
-Unity Chan GO!!! Parallax var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb});document.getElementById('canvas1').appendChild(app.view);// Create background with parallaxCreateBackgrounds();// Create unity chanlet textures = LoadUnityChanTextures();var unitychan = new PIXI.Sprite(textures[0]);unitychan.anchor.set(0.5);unitychan.scale.x = 1.5;unitychan.scale.y = 1.5;unitychan.x = app.renderer.width / 4;unitychan.y = app.renderer.height - 78;app.stage.addChild(unitychan);// Tween to update unity chan spriteFatina.
-                  <a href="https://kefniark.github.io/Fatina/samples/pixi/" class="post-read-more">[Read More]</a>
-                
-              </div>
-    
-              
-    
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://kefniark.github.io/Fatina/samples/threejs/">
-                <h2 class="post-title">Three.js Tweening</h2>
-    
-                
-              </a>
-    
-              <p class="post-meta">
-                Posted on May 21, 2017
-              </p>
-              <div class="post-entry">
-                
-                  <p>Lorem Ipsum</p>
-
+Demonic Star Looping Sequence var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000});document.getElementById('canvas2').appendChild(app.view);var star = new PIXI.Container();star.x += 100;star.y += 50;app.stage.addChild(star);// Create 250 spritesfor (let i = 0; i A demonic star with 250 moving sprites along a defined path
+Read the code
+Golden Stars Use Modifier for curve and gravity var app4 = new PIXI.
+                  <a href="https://kefniark.github.io/Fatina/samples/advanced/" class="post-read-more">[Read More]</a>
                 
               </div>
     

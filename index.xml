@@ -11,13 +11,24 @@
     
     
     <item>
-      <title>Basics Tweens</title>
+      <title>Basics Samples</title>
       <link>https://kefniark.github.io/Fatina/samples/generic/</link>
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/samples/generic/</guid>
       <description>.imgTest { position: relative; margin: 0; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html elements but you can tween almost any kind of object and data. PlayAll 
-Linear tween  function sample1() { var elem = document.getElementById(&#34;sample1&#34;); var obj = { x: 0, y: 0 }; Fatina.Tween(obj, [&#39;x&#39;]) .From({x: 0}) .To({x: 500}, 2500) .</description>
+Linear tween function sample1() {var elem = document.getElementById(&#34;sample1&#34;);var obj = { x: 0, y: 0 };Fatina.Tween(obj, [&#39;x&#39;]).From({x: 0}).To({x: 500}, 2500).</description>
+    </item>
+    
+    <item>
+      <title>Games Samples</title>
+      <link>https://kefniark.github.io/Fatina/samples/game/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>https://kefniark.github.io/Fatina/samples/game/</guid>
+      <description>Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine).
+* Those are just samples, not real games :P
+Unity Chan GO!!! Parallax var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb});document.getElementById(&#39;canvas1&#39;).appendChild(app.view);// Create background with parallaxCreateBackgrounds();// Create unity chanlet textures = LoadUnityChanTextures();var unitychan = new PIXI.Sprite(textures[0]);unitychan.anchor.set(0.5);unitychan.scale.x = 1.5;unitychan.scale.y = 1.5;unitychan.x = app.</description>
     </item>
     
     <item>
@@ -27,15 +38,6 @@ Linear tween  function sample1() { var elem = document.getElementById(&#34;sampl
       
       <guid>https://kefniark.github.io/Fatina/basics/benchmark/</guid>
       <description>Tween counter: ~0kRun AllWhat is happening here:Bellow, 4 scenario are tested over different configuration / libraries:1. Normal usage : 200 tween over 100 frames x 50 times2. Medium usage : 5000 tween over 100 frames x 10 times3. Heavy usage : 20000 tween over 100 frames x 5 times (to test many concurrent tween)4. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC)Each scenario run 5 times to have more accurate estimation.</description>
-    </item>
-    
-    <item>
-      <title>DOM / CSS Tweening</title>
-      <link>https://kefniark.github.io/Fatina/samples/dom/</link>
-      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
-      
-      <guid>https://kefniark.github.io/Fatina/samples/dom/</guid>
-      <description>Lorem Ipsum</description>
     </item>
     
     <item>
@@ -50,22 +52,15 @@ Fatina  Init(): void This method has to be called once to initialize fatina Paus
     </item>
     
     <item>
-      <title>Pixi.js Tweening</title>
-      <link>https://kefniark.github.io/Fatina/samples/pixi/</link>
+      <title>Advanced Samples</title>
+      <link>https://kefniark.github.io/Fatina/samples/advanced/</link>
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
-      <guid>https://kefniark.github.io/Fatina/samples/pixi/</guid>
+      <guid>https://kefniark.github.io/Fatina/samples/advanced/</guid>
       <description>Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
-Unity Chan GO!!! Parallax var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb});document.getElementById(&#39;canvas1&#39;).appendChild(app.view);// Create background with parallaxCreateBackgrounds();// Create unity chanlet textures = LoadUnityChanTextures();var unitychan = new PIXI.Sprite(textures[0]);unitychan.anchor.set(0.5);unitychan.scale.x = 1.5;unitychan.scale.y = 1.5;unitychan.x = app.renderer.width / 4;unitychan.y = app.renderer.height - 78;app.stage.addChild(unitychan);// Tween to update unity chan spriteFatina.</description>
-    </item>
-    
-    <item>
-      <title>Three.js Tweening</title>
-      <link>https://kefniark.github.io/Fatina/samples/threejs/</link>
-      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
-      
-      <guid>https://kefniark.github.io/Fatina/samples/threejs/</guid>
-      <description>Lorem Ipsum</description>
+Demonic Star Looping Sequence var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000});document.getElementById(&#39;canvas2&#39;).appendChild(app.view);var star = new PIXI.Container();star.x += 100;star.y += 50;app.stage.addChild(star);// Create 250 spritesfor (let i = 0; i A demonic star with 250 moving sprites along a defined path
+Read the code
+Golden Stars Use Modifier for curve and gravity var app4 = new PIXI.</description>
     </item>
     
     <item>

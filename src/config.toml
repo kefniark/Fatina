@@ -71,9 +71,15 @@ theme = "beautifulhugo"
 
 [[menu.main]]
     parent = "samples"
-    name = "Pixi.js"
-    url = "samples/pixi/"
+    name = "Advanced"
+    url = "samples/advanced/"
     weight = 3
+
+[[menu.main]]
+    parent = "samples"
+    name = "Games"
+    url = "samples/game/"
+    weight = 4
 
 #[[menu.main]]
 #    parent = "samples"

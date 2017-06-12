@@ -1,0 +1,130 @@
+{
+	"meta": {
+		"app": "http://www.texturepacker.com",
+		"image": "schmup.png",
+		"size": {"w":512,"h":512},
+		"scale": "1"
+	},
+	"frames": {
+		"Unitychan_Wave_hand_4":
+		{
+			"frame": {"x":84,"y":4,"w":72,"h":72},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":72,"h":72},
+			"sourceSize": {"w":72,"h":72}
+		},
+		"Unitychan_Wave_hand_5":
+		{
+			"frame": {"x":4,"y":4,"w":72,"h":72},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":72,"h":72},
+			"sourceSize": {"w":72,"h":72}
+		},
+		"Unitychan_Wave_hand_3":
+		{
+			"frame": {"x":4,"y":84,"w":72,"h":72},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":72,"h":72},
+			"sourceSize": {"w":72,"h":72}
+		},
+		"Unitychan_Wave_hand_2":
+		{
+			"frame": {"x":84,"y":84,"w":72,"h":72},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":72,"h":72},
+			"sourceSize": {"w":72,"h":72}
+		},
+		"Unitychan_Wave_hand_1":
+		{
+			"frame": {"x":164,"y":4,"w":72,"h":72},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":72,"h":72},
+			"sourceSize": {"w":72,"h":72}
+		},
+		"Toko_Pointat_2":
+		{
+			"frame": {"x":164,"y":84,"w":64,"h":64},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+			"sourceSize": {"w":64,"h":64}
+		},
+		"Toko_Pointat_3":
+		{
+			"frame": {"x":4,"y":164,"w":64,"h":64},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+			"sourceSize": {"w":64,"h":64}
+		},
+		"18":
+		{
+			"frame": {"x":272,"y":148,"w":20,"h":26},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":20,"h":26},
+			"sourceSize": {"w":20,"h":26}
+		},
+		"Toko_Pointat_5":
+		{
+			"frame": {"x":148,"y":164,"w":64,"h":64},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+			"sourceSize": {"w":64,"h":64}
+		},
+		"Toko_Pointat_6":
+		{
+			"frame": {"x":244,"y":4,"w":64,"h":64},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+			"sourceSize": {"w":64,"h":64}
+		},
+		"Toko_Pointat_1":
+		{
+			"frame": {"x":244,"y":76,"w":64,"h":64},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+			"sourceSize": {"w":64,"h":64}
+		},
+		"26":
+		{
+			"frame": {"x":244,"y":148,"w":20,"h":60},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":20,"h":60},
+			"sourceSize": {"w":20,"h":60}
+		},
+		"29":
+		{
+			"frame": {"x":4,"y":236,"w":52,"h":52},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":52,"h":52},
+			"sourceSize": {"w":52,"h":52}
+		},
+		"19":
+		{
+			"frame": {"x":64,"y":236,"w":40,"h":40},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":40,"h":40},
+			"sourceSize": {"w":40,"h":40}
+		},
+		"Toko_Pointat_4":
+		{
+			"frame": {"x":76,"y":164,"w":64,"h":64},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+			"sourceSize": {"w":64,"h":64}
+		}
+	}
+}

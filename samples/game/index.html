@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>Games Samples</title>
+  <meta property="og:title" content="Games Samples" />
+  <meta name="twitter:title" content="Games Samples" />
+  <meta name="description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine).
+* Those are just samples, not real games :P
+Unity Chan GO!!! Parallax var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb});document.getElementById(&#39;canvas1&#39;).appendChild(app.view);// Create background with parallaxCreateBackgrounds();// Create unity chanlet textures = LoadUnityChanTextures();var unitychan = new PIXI.Sprite(textures[0]);unitychan.anchor.set(0.5);unitychan.scale.x = 1.5;unitychan.scale.y = 1.5;unitychan.x = app.">
+  <meta property="og:description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine).
+* Those are just samples, not real games :P
+Unity Chan GO!!! Parallax var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb});document.getElementById(&#39;canvas1&#39;).appendChild(app.view);// Create background with parallaxCreateBackgrounds();// Create unity chanlet textures = LoadUnityChanTextures();var unitychan = new PIXI.Sprite(textures[0]);unitychan.anchor.set(0.5);unitychan.scale.x = 1.5;unitychan.scale.y = 1.5;unitychan.x = app.">
+  <meta name="twitter:description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine).
+* Those are just samples, not real games :P
+Unity Chan GO!!! Parallax var app = new PIXI.Application(1024 / 2, 768 / 2, …">
+  <meta name="author" content="Kevin Destrem"/>
+  <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
+  <meta name="twitter:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@kefniark" />
+  <meta name="twitter:creator" content="@kefniark" />
+  <meta property="og:url" content="https://kefniark.github.io/Fatina/samples/game/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Fatina" />
+
+  <meta name="generator" content="Hugo 0.20.7" />
+  <link rel="canonical" href="https://kefniark.github.io/Fatina/samples/game/" />
+  <link rel="alternate" href="https://kefniark.github.io/Fatina/index.xml" type="application/rss+xml" title="Fatina">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/main.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/pygment_highlights.css" />
+  <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/highlight.min.css" />
+  <script type="text/javascript" src="https://kefniark.github.io/Fatina/fatina.min.js"></script>
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://kefniark.github.io/Fatina/">Fatina</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Getting Started" href="/Fatina/basics/download/">Getting Started</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">Samples</a>
+              <div class="navlinks-children">
+                
+                  <a href="/Fatina/samples/generic/">Basics</a>
+                
+                  <a href="/Fatina/samples/advanced/">Advanced</a>
+                
+                  <a href="/Fatina/samples/game/">Games</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="API" href="/Fatina/basics/api/">API</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Benchmark" href="/Fatina/basics/benchmark/">Benchmark</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About" href="/Fatina/basics/about/">About</a>
+            </li>
+          
+        
+
+        
+      </ul>
+    </div>
+
+    <div class="avatar-container">
+      <div class="avatar-img-border">
+        
+          <a title="Fatina" href="https://kefniark.github.io/Fatina/">
+            <img class="avatar-img" src="https://kefniark.github.io/Fatina/img/avatar-icon.png" alt="Fatina" />
+          </a>
+        
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+
+
+    
+  
+  
+  
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="samples-heading">
+              <h1>Games Samples</h1>
+                
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.2/pixi.min.js"></script>
+
+<p>Few examples of <strong>Fatina</strong> working with <a href="http://www.pixijs.com/">Pixi.js</a> (<small>HTML 5 2D rendering engine</small>).<br>
+<small>* Those are just samples, not real games :P</small></p>
+
+<h3>Unity Chan GO!!! <small>Parallax</small></h3>
+
+<div id="canvas1"></div>
+<script>
+    var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb});
+    document.getElementById('canvas1').appendChild(app.view);
+
+    // Create background with parallax
+    CreateBackgrounds();
+
+    // Create unity chan
+    let textures = LoadUnityChanTextures();
+
+    var unitychan = new PIXI.Sprite(textures[0]);
+    unitychan.anchor.set(0.5);
+    unitychan.scale.x = 1.5;
+    unitychan.scale.y = 1.5;
+    unitychan.x = app.renderer.width / 4;
+    unitychan.y = app.renderer.height - 78;
+    app.stage.addChild(unitychan);
+
+    // Tween to update unity chan sprite
+    Fatina.Tween({}, [])
+    .To({}, 1800)
+    .OnUpdate((dt, progress) => {
+        let index = Math.round(progress * (textures.length - 1));
+        unitychan.setTexture(textures[index]);
+    })
+    .SetLoop(-1)
+    .Start();
+
+    // Tween to update unity chan position
+    Fatina.Sequence()
+        .Append(Fatina.Tween(unitychan, ['x']).SetRelative(true).To({ x : -20}, 3000).SetEasing('outQuad'))
+        .Append(Fatina.Tween(unitychan, ['x']).SetRelative(true).To({ x : 40}, 3000).SetEasing('inOutQuad'))
+        .Append(Fatina.Tween(unitychan, ['x']).SetRelative(true).To({ x : -20}, 3000).SetEasing('inQuad'))
+        .SetLoop(-1)
+        .Start();
+
+
+    function CreateBackgrounds() {
+        // create a new Sprite from an image path
+        var layerSky = new PIXI.Container();
+        var layerMountain = new PIXI.Container();
+        var layerMountain2 = new PIXI.Container();
+        var layerFront = new PIXI.Container();
+
+        // create a new Sprite from an image path
+        AddSprite('/Fatina/pixi/clouds.png', layerSky, app.renderer.width / 2, app.renderer.height / 2 - 20, 1);
+        AddSprite('/Fatina/pixi/clouds.png', layerSky, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2 - 20, 1);
+        AddSprite('/Fatina/pixi/mountains.png', layerMountain2, app.renderer.width / 2, app.renderer.height / 2, 1);
+        AddSprite('/Fatina/pixi/mountains.png', layerMountain2, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2, 1);
+        AddSprite('/Fatina/pixi/mountains.png', layerMountain, app.renderer.width / 2, app.renderer.height / 2 + 30, 1);
+        AddSprite('/Fatina/pixi/mountains.png', layerMountain, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2 + 30, 1);
+        AddSprite('/Fatina/pixi/ground.png', layerFront, app.renderer.width / 2, app.renderer.height / 2, 1);
+        AddSprite('/Fatina/pixi/ground.png', layerFront, app.renderer.width + app.renderer.width / 2, app.renderer.height / 2, 1);
+
+        // Move horizontaly each layer at different speed
+        AutoMove(layerSky, 90000);
+        AutoMove(layerMountain2, 35000);
+        AutoMove(layerMountain, 18000);
+        AutoMove(layerFront, 6000);
+
+        // Apply a vertical sin on the cloud
+        Fatina.Sequence()
+            .Append(Fatina.Tween(layerSky, ['y']).SetRelative(true).To({ y : -10}, 5000).SetEasing('outSine'))
+            .Append(Fatina.Tween(layerSky, ['y']).SetRelative(true).To({ y : 20}, 10000).SetEasing('inOutSine'))
+            .Append(Fatina.Tween(layerSky, ['y']).SetRelative(true).To({ y : -10}, 5000).SetEasing('inSine'))
+            .SetLoop(-1)
+            .Start();
+
+        // Add to stage
+        app.stage.addChild(layerSky);
+        app.stage.addChild(layerMountain2);
+        app.stage.addChild(layerMountain);
+        app.stage.addChild(layerFront);
+    }
+
+    function AddSprite(path, container, x, y, scale) {
+            var img = PIXI.Sprite.fromImage(path);
+            img.anchor.set(0.5);
+            img.x = x;
+            img.y = y;
+            img.scale.x = scale;
+            img.scale.y = scale;
+            container.addChild(img);
+            return img;
+    }
+
+    function AutoMove(container, duration) {
+        Fatina.Tween(container, ['x'])
+            .From({x: 0})
+            .To({x: -app.renderer.width }, duration)
+            .SetLoop(-1)
+            .Start();
+    }
+
+    function LoadUnityChanTextures() {
+        let textures = [];
+        for (let i = 1; i < 19; i++) {
+            textures.push(PIXI.Texture.fromImage('/Fatina/pixi/run/Unitychan_Run_' + i + '.png'));
+        }
+        return textures;
+    }
+</script>
+
+<p>A simple demo with unity-chan to show how to easily create a parallax effect using few tweens and without any math</p>
+
+<p><a class="btn btn-primary" href="https://github.com/kefniark/Fatina/blob/gh-pages/src/static/pixi/pixi.html" target="_blank">Read the code</a></p>
+
+<h3>Unity Chan Danmaku!!! <small>Massive usage of sequence and callback</small></h3>
+
+<p><div id="canvas2"></div>
+<script>
+    var app2 = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000});
+    document.getElementById('canvas2').appendChild(app2.view);
+
+    let origin = {
+        x: app2.renderer.width / 2,
+        y: 50,
+    };
+
+    PIXI.loader.add("/Fatina/pixi/schmup/schmup.json")
+    .load(function() {
+        CreateEnvironment();
+        CreateCharacters();
+        SpawnWaves();
+    });
+
+    let tokoTextures, unitychanTextures, bulletTexture, bullet2Texture, arrowTexture, hommingTexture;
+    let tokochan, uc;
+
+    // Create the background and preload the textures
+    function CreateEnvironment() {
+        let background = new PIXI.Sprite.fromImage("/Fatina/pixi/schmup/background.jpg");
+        background.anchor.set(0.5);
+        background.x = app2.renderer.width / 2;
+        background.y = app2.renderer.height / 2;
+        background.scale.x = 0.45;
+        background.scale.y = 0.45;
+        background.alpha = 0.7;
+        app2.stage.addChild(background);
+
+        // Textures
+        tokoTextures = LoadTokoTextures();
+        unitychanTextures = LoadUnityTextures();
+        bulletTexture = PIXI.TextureCache[29];
+        bullet2Texture = PIXI.TextureCache[26];
+        arrowTexture = PIXI.TextureCache[18];
+        hommingTexture = PIXI.TextureCache[19];
+    }
+
+    // Create both characters and animate them
+    function CreateCharacters() {
+        // Toko
+        tokochan = new PIXI.Sprite(tokoTextures[0]);
+        tokochan.anchor.set(0.5);
+        tokochan.scale.x = 0.8;
+        tokochan.scale.y = 0.8;
+        tokochan.x = origin.x;
+        tokochan.y = origin.y;
+        app2.stage.addChild(tokochan);
+
+        // Toko Sprite
+        Fatina.Tween({}, [])
+        .To({}, 1800)
+        .OnUpdate((dt, progress) => {
+            let index = Math.round(progress * (tokoTextures.length - 1));
+            tokochan.setTexture(tokoTextures[index]);
+        })
+        .SetLoop(-1)
+        .Start();
+
+        // UnityChan
+        uc = new PIXI.Sprite(unitychanTextures[0]);
+        uc.anchor.set(0.5);
+        uc.scale.x = 0.8;
+        uc.scale.y = 0.8;
+        uc.x = app2.renderer.width / 2;
+        uc.y = app2.renderer.height - 50;
+        app2.stage.addChild(uc);
+
+        // UnityChan Sprite
+        Fatina.Sequence()
+            .Append(Fatina.Tween(uc, ['x']).To({ x: app2.renderer.width - 160}, 1800).SetEasing('outCubic'))
+            .AppendCallback(() => uc.scale.x = -0.8)
+            .Append(Fatina.Tween(uc, ['x']).To({ x: 160}, 3600).SetEasing('inOutCubic'))
+            .AppendCallback(() => uc.scale.x = 0.8)
+            .Append(Fatina.Tween(uc, ['x']).To({ x: app2.renderer.width / 2}, 1800).SetEasing('inCubic'))
+            .SetLoop(-1)
+            .Start();
+
+        Fatina.Tween({}, [])
+        .To({}, 1800)
+        .OnUpdate((dt, progress) => {
+            let index = Math.round(progress * (unitychanTextures.length - 1));
+            uc.setTexture(unitychanTextures[index]);
+        })
+        .SetLoop(-1)
+        .Start();
+    }
+
+    // Main sequence used to spawn waves of bullets. 2x onUpdate, one for each character
+    function SpawnWaves() {
+        // Wave Timing
+        let deltaUnity = 0;
+        let delta = 0;
+        let dir = 1;
+        let homming = 0;
+        let count = 0;
+        let startPatern2 = false;
+        Fatina.Tween({}, []).To({}, 5000)
+            .OnUpdate((dt, progress) => {
+                delta += dt;
+                if (delta < 650) {
+                    return;
+                }
+                delta -= 650;
+                if (Math.floor(count / 10) % 2 === 0) {
+                    SpawnPatern1(dir, 24);
+                    startPatern2 = true;
+                } else {
+                    if (!startPatern2) {
+                        SpawnPatern2(dir, count % 2 === 0 ? 24 : 14);
+                    } else {
+                        delta -= 2500;
+                    }
+                    startPatern2 = false;
+                }
+
+                dir = dir === 1? -1 : 1;
+                count++;
+            })
+            .OnUpdate((dt, progress) => {
+                deltaUnity += dt;
+                if (deltaUnity < 80) {
+                    return;
+                }
+                deltaUnity -= 80;
+                CreateUnityAttack();
+                if (homming % 2 === 0) {
+                    CreateUnityHommingAttack();
+                }
+                homming++;
+            })
+            .SetLoop(-1)
+            .Start();
+    }
+
+    /*
+    * First pattern of bullet. Red circle of red bullets
+    * We don't create a tween for every bullet, we animate a virtual bullet and after we apply rotation to calculate the real position of the bullets
+    */
+    function SpawnPatern1(dir, number) {
+        let bullets = [];
+        for (let i = 0; i < number; i++) {
+            bullets.push(CreateBullet(origin.x, origin.y, bulletTexture));
+        }
+
+        let virtualBullet = { x: 0, y: 0, r: 0, a: 0, fadeIn: true };
+        Fatina.Sequence()
+            .Append(Fatina.Tween(virtualBullet, ['y', 'r']).To({ x: 0, y: 100, r: 45 }, 2500).SetEasing('outQuad'))
+            .Join(Fatina.Tween(virtualBullet, ['a']).To({ a: 1}, 700).SetEasing('inQuint').OnComplete(() => virtualBullet.fadeIn = false))
+            .Append(Fatina.Tween(virtualBullet, ['y', 'r']).SetRelative(true).To({ x: 0, y: 500, r: dir * 100 }, 5000).SetEasing('inOutQuad'))
+            .OnUpdate(() => {
+                for (let i = 0; i < bullets.length; i++) {
+                    let bullet = bullets[i];
+
+                    let rotated = Rotate([virtualBullet.x, virtualBullet.y], virtualBullet.r + i * 360 / bullets.length);
+                    bullet.x = origin.x + rotated[0];
+                    bullet.y = origin.y + rotated[1];
+                    if (virtualBullet.fadeIn) {
+                        bullet.alpha = virtualBullet.a;
+                    }
+
+                    let distance = Math.abs(bullet.x - uc.x) + Math.abs(bullet.y - uc.y);
+                    if (distance < 8) {
+                        bullet.alpha = 0;
+                    }
+                }
+            })
+            .OnComplete(() => {
+                for (let i = 0; i < bullets.length; i++) {
+                    let bullet = bullets[i];
+                    bullet.destroy();
+                }
+            })
+            .Start();
+    }
+
+    /*
+    * Second pattern of bullet, line of red arrow
+    */
+    function SpawnPatern2(dir, number) {
+        for (let step = 0; step < 8; step++) {
+            let bullets = [];
+            for (let i = 0; i < number; i++) {
+                bullets.push(CreateBullet(origin.x, origin.y, bullet2Texture));
+                bullets[bullets.length - 1].rotation = Math.PI - Math.PI / 10 - i * Math.PI * 2 / number;
+            }
+
+            let virtualBullet = { x: 0, y: 0, r: 0, a: 0, fadeIn: true };
+            Fatina.Sequence()
+                .AppendInterval(step * 50)
+                .Append(Fatina.Tween(virtualBullet, ['y', 'r']).To({ x: 0, y: 600, r: 30 }, 3500).SetEasing('outQuad'))
+                .Join(Fatina.Tween(virtualBullet, ['a']).To({ a: 1}, 140).SetEasing('inQuint').OnComplete(() => virtualBullet.fadeIn = false))
+                .OnUpdate(() => {
+                    for (let i = 0; i < bullets.length; i++) {
+                        let bullet = bullets[i];
+
+                        let rotated = Rotate([virtualBullet.x, virtualBullet.y], virtualBullet.r + i * 360 / bullets.length);
+                        bullet.x = origin.x + rotated[0];
+                        bullet.y = origin.y + rotated[1];
+                        if (virtualBullet.fadeIn) {
+                            bullet.alpha = virtualBullet.a;
+                        }
+
+                        let distance = Math.abs(bullet.x - uc.x) + Math.abs(bullet.y - uc.y);
+                        if (distance < 8) {
+                            bullet.alpha = 0;
+                        }
+                    }
+                })
+                .OnComplete(() => {
+                    for (let i = 0; i < bullets.length; i++) {
+                        let bullet = bullets[i];
+                        bullet.destroy();
+                    }
+                })
+                .Start();
+        }
+    }
+
+    /*
+    * Main unity chan attack, straight bullet
+    */
+    function CreateUnityAttack() {
+        let straightBullets = [
+            CreateBullet(uc.x, uc.y, arrowTexture),
+            CreateBullet(uc.x, uc.y, arrowTexture)
+        ];
+
+        let unityChanOrigin = {x: uc.x, y: uc.y};
+        let virtualBullet = { x: 0, y: 0, r: 0, a: 0, fadeIn: true };
+        Fatina.Sequence()
+            .Append(Fatina.Tween(virtualBullet, ['y'])
+                .To({ y: -600 }, 2500)
+                .SetEasing('outQuad')
+                .OnUpdate((dt, progress) => {
+                    straightBullets[0].x = unityChanOrigin.x + progress * progress * 50;
+                    straightBullets[1].x = unityChanOrigin.x + progress * progress * -50;
+                })
+            )
+            .Join(Fatina.Tween(virtualBullet, ['a']).To({ a: 1}, 70).SetEasing('inQuint').OnComplete(() => virtualBullet.fadeIn = false))
+            .OnUpdate((dt, progress) => {
+                for (let i = 0; i < straightBullets.length; i++) {
+                    let bullet = straightBullets[i];
+                    bullet.y = unityChanOrigin.y + virtualBullet.y;
+                    if (virtualBullet.fadeIn) {
+                        bullet.alpha = virtualBullet.a;
+                    }
+
+                    let distance = Math.abs(bullet.x - origin.x) + Math.abs(bullet.y - origin.y);
+                    if (distance <= 15) {
+                        bullet.alpha = 0;
+                    }
+                }
+            })
+            .Start();
+    }
+
+    /*
+    * Second unity chan attack, homming bullet in a range x [-100:100]
+    */
+    function CreateUnityHommingAttack() {
+        let hommingBullets = [
+            CreateBullet(uc.x, uc.y, hommingTexture),
+            CreateBullet(uc.x, uc.y, hommingTexture)
+        ];
+
+        let unityChanOrigin = {x: uc.x, y: uc.y};
+        for (let homming of hommingBullets) {
+            homming.x = unityChanOrigin.x;
+            let diff = origin.x - unityChanOrigin.x;
+            diff = (diff > 100) ? 100 : (diff < -100 ) ? -100 : diff + Math.random() * 20 - 10;
+            Fatina.Sequence()
+                .Append(Fatina.Tween(homming, ['x', 'y']).SetRelative(true).To({ x:diff, y: origin.y - unityChanOrigin.y }, 700 + Math.random() * 200))
+                .Join(Fatina.Tween(homming, ['alpha']).To({ alpha: 1}, 70).SetEasing('inQuint'))
+                .Append(Fatina.Tween(homming, ['y']).To({ y: -100 }, 500))
+                .OnUpdate(() => {
+                    let distance = Math.abs(homming.x - origin.x) + Math.abs(homming.y - origin.y);
+                    if (distance <= 15) {
+                        homming.alpha = 0;
+                    }
+                })
+                .Start();
+        }
+    }
+
+    // Helper used to rotate vectors
+    function Rotate(vec, angle) {
+        angle = -angle * (Math.PI/180);
+        var cos = Math.cos(angle);
+        var sin = Math.sin(angle);
+        return new Array(Math.round(10000*(vec[0] * cos - vec[1] * sin))/10000, Math.round(10000*(vec[0] * sin + vec[1] * cos))/10000);
+    }
+
+    // Helper used to create a sprite
+    function CreateBullet(x, y, texture) {
+        let bullet = new PIXI.Sprite(texture);
+        bullet.anchor.set(0.5);
+        bullet.scale.x = 0.4;
+        bullet.scale.y = 0.4;
+        bullet.x = x;
+        bullet.y = y;
+        bullet.alpha = 0;
+        app2.stage.addChild(bullet);
+
+        return bullet;
+    }
+
+    function LoadTokoTextures() {
+        let textures = [];
+        for (let i = 1; i < 7; i++) {
+            textures.push(PIXI.TextureCache['Toko_Pointat_' + i]);
+        }
+        return textures;
+    }
+
+    function LoadUnityTextures() {
+        let textures = [];
+        for (let i = 1; i < 6; i++) {
+            textures.push(PIXI.TextureCache['Unitychan_Wave_hand_' + i]);
+        }
+        return textures;
+    }
+</script></p>
+
+<p>A demo with unity-chan to show how to implement complex pattern with sequences.<br>
+For fun, collision are implemented too.</p>
+
+<p><a class="btn btn-primary" href="https://github.com/kefniark/Fatina/blob/gh-pages/src/static/pixi/schmup.html" target="_blank">Read the code</a></p>
+
+      </article>
+
+      
+        
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="https://github.com/kefniark/fatina" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://twitter.com/kefniark" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+
+          
+        </ul>
+
+        <p class="credits copyright text-muted">
+          Kevin Destrem
+          &nbsp;&bull;&nbsp;
+          2017
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://kefniark.github.io/Fatina/">Fatina</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.20.7</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://kefniark.github.io/Fatina/js/main.js"></script>
+<script src="https://kefniark.github.io/Fatina/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> renderMathInElement(document.body); </script>
+
+
+
+
+
+  </body>
+</html>
+
