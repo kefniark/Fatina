@@ -471,6 +471,8 @@ test('[Fatina.Tween] Test Modify', function (t: any) {
 	t.equal(2, obj.x, 'check the final position was updated');
 	t.equal(1, complete, 'check the onComplete callback is emitted');
 
+	tween.Modify({ x: 1 }, false);
+
 	tween.Default();
 	t.equal(0, tween.elapsed, 'check the tween elapsed after Default');
 	t.equal(0, tween.duration, 'check the tween duration after Default');
@@ -506,6 +508,35 @@ test('[Fatina.Tween] Looping relative tween', function (t: any) {
 		ticker.Tick(0.2);
 	}
 	t.equal(45, obj.x, 'Check the object reached his destination');
+
+	t.end();
+});
+
+test('[Fatina.Tween] Tween destroyed object/properties', function (t: any) {
+	let ticker = new Ticker();
+	ticker.Start();
+
+	let obj = { x: 0 };
+
+	let tween = new Tween(obj, [ 'x' ])
+		.SetParent(ticker)
+		.To({ x: 5 }, 5)
+		.Start();
+
+	ticker.Tick(1);
+	t.equal(1, obj.x, 'Check the object moved');
+
+	delete obj.x;
+	ticker.Tick(1);
+
+	t.equal(2, obj.x, 'Check the object moved');
+
+	obj.x = 'test' as any;
+	ticker.Tick(1);
+	t.equal(3, obj.x, 'Check the object moved');
+
+	tween.Init(undefined, []);
+	t.equal(3, obj.x, 'Check the object moved');
 
 	t.end();
 });

@@ -100,6 +100,10 @@ test('[Fatina.Manager] Create ticker', function (t: any) {
 	gameTicker.SetTimescale(0.5);
 	uiTicker.SetTimescale(0.25);
 
+	uiTicker.AddTickListener(() => console.log('add event'));
+	uiTicker.RemoveTickListener(() => console.log('remove event'));
+	uiTicker.Remove(undefined);
+
 	fatina.Update(1);
 	t.equal(2, obj.x, 'check the game ticker runs');
 	t.equal(1.5, obj.y, 'check the ui ticker runs');
@@ -118,7 +122,12 @@ test('[Fatina.Manager] Create ticker', function (t: any) {
 	fatina.Update(1);
 	t.equal(3, obj.x, 'check the game ticker is resumed');
 
-	fatina.Destroy();
+	gameTicker.Kill();
+	gameTicker.Kill();
+	fatina.Update(1);
+	t.throws(() => gameTicker.Skip(), 'cannot skip ticker');
+	gameTicker.Reset();
 
+	fatina.Destroy();
 	t.end();
 });
