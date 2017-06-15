@@ -1,5 +1,15 @@
-
-
+export declare let time: number;
+export declare function Elapsed(): number;
+export declare function Init(disableAutoTick?: boolean): boolean;
+export declare function SetTimescale(scale: number): void;
+export declare function Pause(): void;
+export declare function Resume(): void;
+export declare function Destroy(): void;
+export declare function Update(timestamp: number): any;
+export declare function Tween(obj: any, properties: string[]): ITween;
+export declare function Sequence(): ISequence;
+export declare function Ticker(name: string): ITicker;
+export declare class Ticker extends EventList implements ITicker {
     state: State;
     private timescale;
     elapsed: number;
@@ -26,7 +36,7 @@
     Skip(): void;
     Reset(): void;
 }
-
+export declare abstract class EventList {
     first: INode | undefined;
     last: INode | undefined;
     length: number;
@@ -34,19 +44,20 @@
     Remove(obj: any): void;
     private GetNode(obj, previous, next, list);
 }
+export interface INode {
     node_valid: boolean;
     node_previous: INode | undefined;
     node_next: INode | undefined;
     node_list: EventList | undefined;
 }
-
+export declare enum State {
     Idle = 0,
     Run = 1,
     Pause = 2,
     Finished = 3,
     Killed = 4,
 }
-
+export interface IControl {
     elapsed: number;
     duration: number;
     state: State;
@@ -57,10 +68,10 @@
     Reset(): void;
     Skip(): void;
 }
-
+export interface IPlayable extends IControl {
     state: State;
 }
-
+export interface ISequence extends IControl {
     Default(): void;
     Start(): ISequence;
     SetParent(ticker: ITicker): ISequence;
@@ -80,12 +91,12 @@
     OnKilled(cb: () => void): ISequence;
     OnComplete(cb: () => void): ISequence;
 }
-
+export interface ITicker extends IControl {
     AddTickListener(cb: (dt: number) => void): void;
     RemoveTickListener(cb: (dt: number) => void): void;
     SetTimescale(scale: number): void;
 }
-
+export interface ITween extends IControl {
     Default(): void;
     Init(object: any, properties: string[]): void;
     Start(): ITween;
@@ -103,10 +114,11 @@
     OnKilled(cb: () => void): ITween;
     OnComplete(cb: () => void): ITween;
 }
-
+export declare let easeTypes: ((t: number, args?: any) => number)[];
+export declare let easeNames: {
     [id: string]: (t: number, args?: any) => number;
 };
-
+export declare enum EasingType {
     Linear = 0,
     InQuad = 1,
     OutQuad = 2,
@@ -139,7 +151,7 @@
     OutBounce = 29,
     InOutBounce = 30,
 }
-
+export declare abstract class BaseTween {
     elapsed: number;
     duration: number;
     timescale: number;
@@ -176,16 +188,16 @@
     private Emit(func, args);
     protected EmitEvent(listeners: any, args?: any): void;
 }
-
+export declare class Callback extends BaseTween implements IPlayable {
     private callback;
     constructor(cb: () => void);
     private Tick(dt);
 }
-
+export declare class Delay extends BaseTween implements IPlayable {
     constructor(duration: number);
     private Tick(dt);
 }
-
+export declare class Sequence extends BaseTween implements ISequence, ITicker, IPlayable {
     private eventTick;
     private tweens;
     private eventStepStart;
@@ -220,7 +232,7 @@
     OnStepStart(cb: (index: ITween | IPlayable) => void): ISequence;
     OnStepEnd(cb: (index: ITween | IPlayable) => void): ISequence;
 }
-
+export declare class Tween extends BaseTween implements ITween {
     private object;
     private properties;
     private from;
@@ -253,11 +265,6 @@
     OnKilled(cb: () => void): ITween;
     OnComplete(cb: () => void): ITween;
 }
-
-
-
-
-
 
 
 
