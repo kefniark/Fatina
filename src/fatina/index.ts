@@ -28,7 +28,7 @@ export function Elapsed() {
  * @param {boolean} [disableAutoTick]
  * @returns {boolean}
  */
-export function Init(disableAutoTick?: boolean, poolSize?: number): boolean {
+export function Init(disableAutoTick?: boolean): boolean {
 	if (initialized) {
 		return false;
 	}
@@ -145,7 +145,7 @@ export function Sequence(): ISequence {
  * @param {string} name
  * @returns {(ITicker | undefined)}
  */
-export function Ticker(name: string): ITicker | undefined {
+export function Ticker(name: string): ITicker {
 	if (!initialized) {
 		Init();
 	}
