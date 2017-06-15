@@ -16,7 +16,7 @@
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/api/basic/</guid>
-      <description>Fatina Tween Sequence  Fatina Init The first time you create a tween, DOTween will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .Init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  Pause() / Resume(): void SetTimescale(scale: number): void  Methods  Init(): void This method has to be called once to initialize Fatina Update(dt: number): void Tween(obj, properties): Tween Method used to create new tween Sequence(): Sequence Method used to create new sequence Ticker(name: string): ITicker  See MoreFor normal usage</description>
+      <description>Fatina Tween Sequence  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .Init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  Pause() / Resume(): void SetTimescale(scale: number): void  Methods  Init(): void This method has to be called once to initialize Fatina Update(dt: number): void Tween(obj, properties): Tween Method used to create new tween Sequence(): Sequence Method used to create new sequence Ticker(name: string): ITicker  See MoreFor normal usage</description>
     </item>
     
     <item>

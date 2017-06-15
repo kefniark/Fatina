@@ -14,7 +14,7 @@ weight = 2
 
 ## Fatina
 ### Init
-<blockquote>The first time you create a tween, DOTween will initialize itself automatically, using default values.
+<blockquote>The first time you create a tween, Fatina will initialize itself automatically, using default values.
 If instead you prefer to initialize it yourself (recommended), call the method <b>.Init()</b> once, BEFORE creating any tween (calling it afterwards will have no effect).</blockquote>
 
 ### Controls
