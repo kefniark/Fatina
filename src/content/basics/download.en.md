@@ -6,7 +6,7 @@ weight = 7
 
 +++
 
-## Installation
+### 1. Manual Installation
 
 Download the [library](https://github.com/kefniark/Fatina/releases) and include it in your code:
 
@@ -16,19 +16,27 @@ Download the [library](https://github.com/kefniark/Fatina/releases) and include 
 
 <br>
 
-### More advanced users might want to use `npm`
+### 1 bis. NPM Installation
 
+More advanced users might want to use `npm`
 ```bash
 npm install fatina
 ```
 
-Then include the Fatina module with the standard node.js `require`:
+Then include the Fatina module :
 
 ```javascript
+// standard node.js require
 var Fatina = require('fatina');
+
+// OR
+
+// standard import with typescript (typed version)
+import * as Fatina from 'fatina';
 ```
 
-And you can use Fatina as in all other samples :
+### 2. Done !
+Now you can use **Fatina** properly :
 ```javascript
 Fatina.Tween( /* etc */ ).Start();
 ```

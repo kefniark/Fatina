@@ -17,7 +17,7 @@
       
       <guid>https://kefniark.github.io/Fatina/samples/generic/</guid>
       <description>.imgTest { position: relative; margin: 0; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html elements but you can tween almost any kind of object and data. PlayAll 
-Linear tween function sample1() {var elem = document.getElementById(&#34;sample1&#34;);var obj = { x: 0, y: 0 };Fatina.Tween(obj, [&#39;x&#39;]).From({x: 0}).To({x: 500}, 2500).</description>
+Linear tween  function sample1() { var elem = document.getElementById(&#34;sample1&#34;); var obj = { x: 0, y: 0 }; Fatina.Tween(obj, [&#39;x&#39;]) .From({x: 0}) .To({x: 500}, 2500) .</description>
     </item>
     
     <item>
@@ -55,9 +55,9 @@ Unity Chan GO!!! Parallax var app = new PIXI.Application(1024 / 2, 768 / 2, {b
       
       <guid>https://kefniark.github.io/Fatina/samples/advanced/</guid>
       <description>Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
-Demonic Star Looping Sequence var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000});document.getElementById(&#39;canvas2&#39;).appendChild(app.view);var star = new PIXI.Container();star.x += 100;star.y += 50;app.stage.addChild(star);// Create 250 spritesfor (let i = 0; i A demonic star with 250 moving sprites along a defined path
+Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000}); document.getElementById(&#39;canvas2&#39;).appendChild(app.view); var star = new PIXI.Container(); star.x += 100; star.y += 50; app.stage.addChild(star); // Create 250 sprites for (let i = 0; i A demonic star with 250 moving sprites along a defined path
 Read the code
-Golden Stars Use Modifier for curve and gravity var app4 = new PIXI.</description>
+Golden Stars Use Modifier for curve and gravity    var app4 = new PIXI.</description>
     </item>
     
     <item>
@@ -86,12 +86,11 @@ Golden Stars Use Modifier for curve and gravity var app4 = new PIXI.</descrip
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/basics/download/</guid>
-      <description>Installation Download the library and include it in your code:
+      <description>1. Manual Installation Download the library and include it in your code:
 &amp;lt;script src=&amp;quot;fatina.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;  
-More advanced users might want to use npm npm install fatina  Then include the Fatina module with the standard node.js require:
-var Fatina = require(&#39;fatina&#39;);  And you can use Fatina as in all other samples :
-Fatina.Tween( /* etc */ ).Start();  
-API Doc Samples</description>
+1 bis. NPM Installation More advanced users might want to use npm
+npm install fatina  Then include the Fatina module :
+// standard node.js require var Fatina = require(&#39;fatina&#39;); // OR // standard import with typescript (typed version) import * as Fatina from &#39;fatina&#39;;  2. Done ! Now you can use Fatina properly :</description>
     </item>
     
     <item>

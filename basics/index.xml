@@ -25,12 +25,11 @@
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/basics/download/</guid>
-      <description>Installation Download the library and include it in your code:
+      <description>1. Manual Installation Download the library and include it in your code:
 &amp;lt;script src=&amp;quot;fatina.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;  
-More advanced users might want to use npm npm install fatina  Then include the Fatina module with the standard node.js require:
-var Fatina = require(&#39;fatina&#39;);  And you can use Fatina as in all other samples :
-Fatina.Tween( /* etc */ ).Start();  
-API Doc Samples</description>
+1 bis. NPM Installation More advanced users might want to use npm
+npm install fatina  Then include the Fatina module :
+// standard node.js require var Fatina = require(&#39;fatina&#39;); // OR // standard import with typescript (typed version) import * as Fatina from &#39;fatina&#39;;  2. Done ! Now you can use Fatina properly :</description>
     </item>
     
     <item>
