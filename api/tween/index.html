@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>Tween API</title>
+  <meta property="og:title" content="Tween API" />
+  <meta name="twitter:title" content="Tween API" />
+  <meta name="description" content="Fatina Tween Sequence   A Tween that takes control of values and animates them.
+ Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp; timescale) duration: number duration of this tween in ms.  Controls  Start(): Tween By default new tween are not started. Don&rsquo;t forget to call .Start() Pause(): void Resume(): void Skip(): void Kill(): void  See More// Create a tween let tween = Fatina.">
+  <meta property="og:description" content="Fatina Tween Sequence   A Tween that takes control of values and animates them.
+ Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp; timescale) duration: number duration of this tween in ms.  Controls  Start(): Tween By default new tween are not started. Don&rsquo;t forget to call .Start() Pause(): void Resume(): void Skip(): void Kill(): void  See More// Create a tween let tween = Fatina.">
+  <meta name="twitter:description" content="Fatina Tween Sequence   A Tween that takes control of values and animates them.
+ Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp; timescale) duration: number …">
+  <meta name="author" content="Kevin Destrem"/>
+  <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
+  <meta name="twitter:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@kefniark" />
+  <meta name="twitter:creator" content="@kefniark" />
+  <meta property="og:url" content="https://kefniark.github.io/Fatina/api/tween/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Fatina" />
+
+  <meta name="generator" content="Hugo 0.20.7" />
+  <link rel="canonical" href="https://kefniark.github.io/Fatina/api/tween/" />
+  <link rel="alternate" href="https://kefniark.github.io/Fatina/index.xml" type="application/rss+xml" title="Fatina">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/main.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/pygment_highlights.css" />
+  <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/highlight.min.css" />
+  <script type="text/javascript" src="https://kefniark.github.io/Fatina/fatina.min.js"></script>
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://kefniark.github.io/Fatina/">Fatina</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Getting Started" href="/Fatina/basics/download/">Getting Started</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">Samples</a>
+              <div class="navlinks-children">
+                
+                  <a href="/Fatina/samples/generic/">Basics</a>
+                
+                  <a href="/Fatina/samples/advanced/">Advanced</a>
+                
+                  <a href="/Fatina/samples/game/">Games</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">API</a>
+              <div class="navlinks-children">
+                
+                  <a href="/Fatina/api/basic/">Fatina</a>
+                
+                  <a href="/Fatina/api/tween/">Tween</a>
+                
+                  <a href="/Fatina/api/sequence/">Sequence</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Benchmark" href="/Fatina/basics/benchmark/">Benchmark</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About" href="/Fatina/basics/about/">About</a>
+            </li>
+          
+        
+
+        
+      </ul>
+    </div>
+
+    <div class="avatar-container">
+      <div class="avatar-img-border">
+        
+          <a title="Fatina" href="https://kefniark.github.io/Fatina/">
+            <img class="avatar-img" src="https://kefniark.github.io/Fatina/img/avatar-icon.png" alt="Fatina" />
+          </a>
+        
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+
+
+    
+  
+  
+  
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="api-heading">
+              <h1>Tween API</h1>
+                
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        
+
+<div style="text-align: center">
+    <a class="btn btn-default" href="/Fatina/api/basic/">Fatina</a>
+    <a class="btn btn-primary" href="/Fatina/api/tween/">Tween</a>
+    <a class="btn btn-default" href="/Fatina/api/sequence/">Sequence</a>
+</div>
+
+<blockquote>
+    <p>A <b>Tween</b> that takes control of values and animates them.</p>
+</blockquote>
+
+<h3 id="properties">Properties</h3>
+
+<ul>
+<li><strong>elapsed</strong>: <code>number</code> number of ms. elapsed for this tween <small>(affected by pause &amp; timescale)</small></li>
+<li><strong>duration</strong>: <code>number</code> duration of this tween in ms.</li>
+</ul>
+
+<h3 id="controls">Controls</h3>
+
+<ul>
+<li><strong>Start</strong>(): <code>Tween</code> By default new tween are not started. Don&rsquo;t forget to call <strong>.Start()</strong></li>
+<li><strong>Pause</strong>(): <code>void</code></li>
+<li><strong>Resume</strong>(): <code>void</code></li>
+<li><strong>Skip</strong>(): <code>void</code></li>
+<li><strong>Kill</strong>(): <code>void</code></li>
+</ul>
+
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<span class="btn btn-default">
+    	
+    	See More
+    	
+    	</span>
+		<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">// Create a tween
+let tween = Fatina.Tween({},[]).To({}, 100).Start();
+
+// Control this tween
+tween.Pause();
+tween.Resume();
+tween.Kill(); 
+</code></pre>
+
+    </div>
+</div>
+
+<h3 id="callbacks">Callbacks</h3>
+
+<ul>
+<li><strong>OnStart</strong>(cb: () =&gt; void): <code>Tween</code></li>
+<li><strong>OnUpdate</strong>(cb: (dt: number, progress: number) =&gt; void): <code>Tween</code></li>
+<li><strong>OnKilled</strong>(cb: () =&gt; void): <code>Tween</code></li>
+<li><strong>OnComplete</strong>(cb: () =&gt; void): <code>Tween</code></li>
+</ul>
+
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<span class="btn btn-default">
+    	
+    	See More
+    	
+    	</span>
+		<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">var obj = { x: 0 };
+
+// Create a tween with few callbacks
+Fatina.Tween(obj, ['x'])
+    .To({ x: 42 }, 100)
+    .OnStart(() =&gt; console.log('onStart'))
+    .OnUpdate((dt, progress) =&gt; console.log('onUpdate', dt, progress)) // progress: float between 0 and 1
+    .OnComplete(() =&gt; console.log('onComplete'))
+    .Start();
+</code></pre>
+
+    </div>
+</div>
+
+<h3 id="methods">Methods</h3>
+
+<ul>
+<li><strong>From</strong>(from: any): <code>Tween</code>;</li>
+<li><strong>To</strong>(to: any, duration: number): <code>Tween</code>;</li>
+<li><strong>Modify</strong>(force: any, updateTo: boolean): <code>void</code>;</li>
+<li><strong>SetLoop</strong>(loop: number): <code>Tween</code>;</li>
+<li><strong>SetRelative</strong>(relative: boolean): <code>Tween</code>;</li>
+<li><strong>SetEasing</strong>(type: EasingType | string): <code>Tween</code>;</li>
+<li><strong>SetTimescale</strong>(scale: number): <code>Tween</code>;</li>
+<li><strong>ToSequence</strong>(): <code>Sequence</code>;</li>
+</ul>
+
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<span class="btn btn-default">
+    	
+    	See More
+    	
+    	</span>
+		<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">var obj = { x: 0 };
+
+// A normal Tween
+Fatina.Tween(obj, ['x'])
+    .From({ x: -10 }) // to define the starting value
+    .To({ x: 10 }, 200) // to define the final value (absolute by default, for relative use .SetRelative(true))
+    .SetLoop(2) // play this tween twice
+    .SetTimescale(0.5) // play the tween at half the normal speed
+    .Start(); // start the tween
+
+// Convert to a sequence to use interval
+Fatina.Tween(obj, ['x'])
+    .From({ x: -10 })
+    .To({ x: 10 }, 200)
+    .ToSequence()
+    .PrependInterval(150)
+    .AppendInterval(150)
+    .Start();
+</code></pre>
+
+    </div>
+</div>
+
+<p><br></p>
+
+<h4 id="easing">Easing</h4>
+
+<p>The possible easing method usable in <strong>Tween.SetEasing(</strong>&hellip;<strong>)</strong> are: <br>
+<code>linear</code>,
+<code>inQuad</code>,
+<code>outQuad</code>,
+<code>inOutQuad</code>,
+<code>inCubic</code>,
+<code>outCubic</code>,
+<code>inOutCubic</code>,
+<code>inQuart</code>,
+<code>outQuart</code>,
+<code>inOutQuart</code>,
+<code>inSine</code>,
+<code>outSine</code>,
+<code>inOutSine</code>,
+<code>inCirc</code>,
+<code>outCirc</code>,
+<code>inOutCirc</code>,
+<code>inQuint</code>,
+<code>outQuint</code>,
+<code>inOutQuint</code>,
+<code>inExponential</code>,
+<code>outExponential</code>,
+<code>inOutExponential</code>,
+<code>inElastic</code>,
+<code>outElastic</code>,
+<code>inOutElastic</code>,
+<code>inBack</code>,
+<code>outBack</code>,
+<code>inOutBack</code>,
+<code>inBounce</code>,
+<code>outBounce</code>,
+<code>inOutBounce</code></p>
+
+<p>To see what they look like : <a href="http://easings.net">Easings.net</a></p>
+
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<span class="btn btn-default">
+    	
+    	See More
+    	
+    	</span>
+		<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">var obj = { x: 0 };
+
+// A tween with easing
+Fatina.Tween(obj, ['x'])
+    .From({ x: -10 })
+    .To({ x: 10 }, 200)
+    .SetEasing('inOutQuad')
+    .Start();
+</code></pre>
+
+    </div>
+</div>
+
+      </article>
+
+      
+        
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="https://github.com/kefniark/fatina" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://twitter.com/kefniark" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+
+          
+        </ul>
+
+        <p class="credits copyright text-muted">
+          Kevin Destrem
+          &nbsp;&bull;&nbsp;
+          2017
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://kefniark.github.io/Fatina/">Fatina</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.20.7</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://kefniark.github.io/Fatina/js/main.js"></script>
+<script src="https://kefniark.github.io/Fatina/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> renderMathInElement(document.body); </script>
+
+
+
+
+
+  </body>
+</html>
+

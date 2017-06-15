@@ -5,9 +5,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <title>Basics</title>
-  <meta property="og:title" content="Basics" />
-  <meta name="twitter:title" content="Basics" />
+  <title>Fatina API</title>
+  <meta property="og:title" content="Fatina API" />
+  <meta name="twitter:title" content="Fatina API" />
+  <meta name="description" content="Fatina Tween Sequence  Fatina Init The first time you create a tween, DOTween will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .Init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  Pause() / Resume(): void SetTimescale(scale: number): void  Methods  Init(): void This method has to be called once to initialize Fatina Update(dt: number): void Tween(obj, properties): Tween Method used to create new tween Sequence(): Sequence Method used to create new sequence Ticker(name: string): ITicker  See MoreFor normal usage">
+  <meta property="og:description" content="Fatina Tween Sequence  Fatina Init The first time you create a tween, DOTween will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .Init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  Pause() / Resume(): void SetTimescale(scale: number): void  Methods  Init(): void This method has to be called once to initialize Fatina Update(dt: number): void Tween(obj, properties): Tween Method used to create new tween Sequence(): Sequence Method used to create new sequence Ticker(name: string): ITicker  See MoreFor normal usage">
+  <meta name="twitter:description" content="Fatina Tween Sequence  Fatina Init The first time you create a tween, DOTween will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -15,12 +18,12 @@
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@kefniark" />
   <meta name="twitter:creator" content="@kefniark" />
-  <meta property="og:url" content="https://kefniark.github.io/Fatina/basics/" />
+  <meta property="og:url" content="https://kefniark.github.io/Fatina/api/basic/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Fatina" />
 
   <meta name="generator" content="Hugo 0.20.7" />
-  <link rel="canonical" href="https://kefniark.github.io/Fatina/basics/" />
+  <link rel="canonical" href="https://kefniark.github.io/Fatina/api/basic/" />
   <link rel="alternate" href="https://kefniark.github.io/Fatina/index.xml" type="application/rss+xml" title="Fatina">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -120,14 +123,26 @@
 
 
     
+  
+  
+  
+
+
+
+
+  
+
   <header class="header-section ">
+    
     <div class="intro-header no-img">
+      
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="page-heading">
-              <h1>Basics</h1>
-              <hr class="small">
+            <div class="api-heading">
+              <h1>Fatina API</h1>
+                
+                
             </div>
           </div>
         </div>
@@ -135,136 +150,132 @@
     </div>
   </header>
 
+
     
-  <div class="container" role="main">
-    <div class="row">
-      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
         
-        <div class="posts-list">
-          
-            <article class="post-preview">
-              <a href="https://kefniark.github.io/Fatina/basics/benchmark/">
-                <h2 class="post-title">Benchmark</h2>
-    
-                
-              </a>
-    
-              <p class="post-meta">
-                Posted on May 21, 2017
-              </p>
-              <div class="post-entry">
-                
-                  Tween counter: ~0kRun AllWhat is happening here:Bellow, 4 scenario are tested over different configuration / libraries:1. Normal usage : 200 tween over 100 frames x 50 times2. Medium usage : 5000 tween over 100 frames x 10 times3. Heavy usage : 20000 tween over 100 frames x 5 times (to test many concurrent tween)4. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC)Each scenario run 5 times to have more accurate estimation.
-                  <a href="https://kefniark.github.io/Fatina/basics/benchmark/" class="post-read-more">[Read More]</a>
-                
-              </div>
-    
-              
-    
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://kefniark.github.io/Fatina/basics/download/">
-                <h2 class="post-title">Getting Started</h2>
-    
-                
-              </a>
-    
-              <p class="post-meta">
-                Posted on May 21, 2017
-              </p>
-              <div class="post-entry">
-                
-                  
 
-<h2 id="installation">Installation</h2>
+<div style="text-align: center">
+    <a class="btn btn-primary" href="/Fatina/api/basic/">Fatina</a>
+    <a class="btn btn-default" href="/Fatina/api/tween/">Tween</a>
+    <a class="btn btn-default" href="/Fatina/api/sequence/">Sequence</a>
+</div>
 
-<p>Download the <a href="https://github.com/kefniark/Fatina/releases">library</a> and include it in your code:</p>
+<h2 id="fatina">Fatina</h2>
 
-<pre><code class="language-html">&lt;script src=&quot;fatina.min.js&quot;&gt;&lt;/script&gt;
+<h3 id="init">Init</h3>
+
+<blockquote>The first time you create a tween, DOTween will initialize itself automatically, using default values.
+If instead you prefer to initialize it yourself (recommended), call the method <b>.Init()</b> once, BEFORE creating any tween (calling it afterwards will have no effect).</blockquote>
+
+<h3 id="controls">Controls</h3>
+
+<ul>
+<li><strong>Pause</strong>() / <strong>Resume</strong>(): <code>void</code></li>
+<li><strong>SetTimescale</strong>(scale: number): <code>void</code></li>
+</ul>
+
+<h3 id="methods">Methods</h3>
+
+<ul>
+<li><strong>Init</strong>(): <code>void</code> <small>This method has to be called once to initialize Fatina</small></li>
+<li><strong>Update</strong>(dt: number): <code>void</code></li>
+<li><strong>Tween</strong>(obj, properties): <code>Tween</code> <small>Method used to create new tween</small></li>
+<li><strong>Sequence</strong>(): <code>Sequence</code> <small>Method used to create new sequence</small></li>
+<li><strong>Ticker</strong>(name: string): <code>ITicker</code></li>
+</ul>
+
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<span class="btn btn-default">
+    	
+    	See More
+    	
+    	</span>
+		<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    </div>
+    <div class="expand-content" style="display: none;">
+<p>For normal usage</p>
+
+<pre><code class="language-js">// Initialize Fatina (need to do that only once)
+Fatina.Init();
+
+// Create a tween to move an object during 250 ms.
+var obj = { x: 0, y: 0 };
+Fatina.Tween(obj, ['x', 'y'])
+    .To({ x: 42, y: 42 }, 250)
+    .Start();
 </code></pre>
+
+<p>If you want to update Fatina manually</p>
+
+<pre><code class="language-js">// Initialize Fatina (disable the auto-update)
+Fatina.Init(false);
+
+// Update manually (the default dt used by fatina is in ms.)
+Fatine.Update(1);
+</code></pre>
+
+    </div>
+</div>
 
 <p><br></p>
 
-<h3 id="more-advanced-users-might-want-to-use-npm">More advanced users might want to use <code>npm</code></h3>
+<h2 id="ticker">Ticker</h2>
 
-<pre><code class="language-bash">npm install fatina
-</code></pre>
+<blockquote>A <b>Ticker</b> is a container which provides a centralized tick to all his childrens.<br>
+By default, all the tweens are childs of the same default Ticker, but it's possible to change this behavior.</blockquote>
 
-<p>Then include the Fatina module with the standard node.js <code>require</code>:</p>
-
-<pre><code class="language-javascript">var Fatina = require('fatina');
-</code></pre>
-
-<p>And you can use Fatina as in all other samples :</p>
-
-<pre><code class="language-javascript">Fatina.Tween( /* etc */ ).Start();
-</code></pre>
-
-<p><br>
-<div style="text-align: center">
-    <a class="btn btn-success" href="/Fatina/api/basic/">API Doc</a>
-    <a class="btn btn-info" href="/Fatina/samples/advanced/">Samples</a>
-</div></p>
-
-                
-              </div>
-    
-              
-    
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://kefniark.github.io/Fatina/basics/about/">
-                <h2 class="post-title">About</h2>
-    
-                
-              </a>
-    
-              <p class="post-meta">
-                Posted on May 21, 2017
-              </p>
-              <div class="post-entry">
-                
-                  
-
-<h2 id="license">License</h2>
-
-<p><a href="https://github.com/kefniark/Fatina/blob/master/LICENSE.md">MIT License</a>
-A short and simple permissive license with conditions only requiring preservation of copyright and license notices. Licensed works, modifications, and larger works may be distributed under different terms and without source code.</p>
-
-<h2 id="thanks-to">Thanks to</h2>
+<h3 id="controls-1">Controls</h3>
 
 <ul>
-<li><a href="http://unity-chan.com/">Unity-chan</a> because cute samples &hellip;</li>
+<li><strong>Pause</strong>() / <strong>Resume</strong>(): <code>void</code></li>
+<li><strong>SetTimescale</strong>(scale: number): <code>void</code></li>
+<li><strong>Kill</strong>(): <code>void</code></li>
 </ul>
 
-<h2 id="why-this-name">Why this name ?</h2>
+<h3 id="methods-1">Methods</h3>
 
 <ul>
-<li><strong>F* Tina</strong>: No comment &hellip;</li>
-<li><strong>Fat</strong> Tina: Because everyone know that typescript is heavy and slow</li>
-<li>Reference to <strong>Fatina</strong> from <a href="https://en.wikipedia.org/wiki/The_Tower_of_Druaga_(anime)">Tower of Druaga</a></li>
+<li><strong>AddTickListener</strong>(listener: (dt: number) =&gt; void): <code>void</code>;</li>
+<li><strong>RemoveTickListener</strong>(listener: (dt: number) =&gt; void): <code>void</code>;</li>
 </ul>
 
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<span class="btn btn-default">
+    	
+    	See More
+    	
+    	</span>
+		<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">// Create few tickers
+var gameTicker = Fatina.Ticker('game');
+var uiTicker = Fatina.Ticker('ui');
+uiTicker.SetTimescale(0.8);
 
-<div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;">
-  <iframe src="//www.youtube.com/embed/Nu6A-hG5J5E" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" allowfullscreen frameborder="0"></iframe>
- </div>
+// You just have to tell to the tween or the sequence to use those ticker and not the default one
+Fatina.Tween(obj, ['x']).SetParent(gameTicker).To({x: 5}, 5).Start();
+Fatina.Tween(obj, ['y']).SetParent(uiTicker).To({y: 5}, 5).Start();
+</code></pre>
 
+    </div>
+</div>
 
-                
-              </div>
-    
-              
-    
-            </article>
-          
-        </div>
+      </article>
+
+      
         
-      </div>
+      
+
     </div>
   </div>
+</div>
 
     <footer>
   <div class="container">

@@ -23,8 +23,7 @@ The main inspiration is the <b>C#</b> library [DOTween](http://dotween.demigiant
 * **Speed and efficiency** : Not only very fast, but also very efficient
 * **Open source & Easy to read**
 
-
-<div style="text-align: center">
+<div style="text-align: center; margin-top: 30px;">
     <a class="btn btn-primary" href="https://github.com/kefniark/Fatina/" target="_blank">Github</a>
     <a class="btn btn-info" href="https://github.com/kefniark/Fatina/releases" target="_blank">Releases</a>
     <a class="btn btn-success" href="https://github.com/kefniark/Fatina/issues" target="_blank">Issues</a>

@@ -17,12 +17,22 @@
   </url>
   
   <url>
-    <loc>https://kefniark.github.io/Fatina/basics/api/</loc>
+    <loc>https://kefniark.github.io/Fatina/api/basic/</loc>
     <lastmod>2017-05-21T13:06:37+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://kefniark.github.io/Fatina/samples/advanced/</loc>
+    <lastmod>2017-05-21T13:06:37+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://kefniark.github.io/Fatina/api/tween/</loc>
+    <lastmod>2017-05-21T13:06:37+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://kefniark.github.io/Fatina/api/sequence/</loc>
     <lastmod>2017-05-21T13:06:37+09:00</lastmod>
   </url>
   
@@ -39,6 +49,12 @@
   <url>
     <loc>https://kefniark.github.io/Fatina/basics/about/</loc>
     <lastmod>2017-05-21T13:06:37+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://kefniark.github.io/Fatina/api/</loc>
+    <lastmod>2017-05-21T13:06:37+09:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>

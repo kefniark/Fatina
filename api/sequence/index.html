@@ -5,9 +5,15 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <title>Categories</title>
-  <meta property="og:title" content="Categories" />
-  <meta name="twitter:title" content="Categories" />
+  <title>Sequence API</title>
+  <meta property="og:title" content="Sequence API" />
+  <meta name="twitter:title" content="Sequence API" />
+  <meta name="description" content="Fatina Tween Sequence   A Sequence is special tween that, instead of taking control of a value, takes control of other tweens and animates them as a group.
+ Properties  elapsed: number number of ms. elapsed for this sequence (affected by pause &amp; timescale)  Controls  Start(): Sequence By default new tween are not started. Don&rsquo;t forget to call .Start() Pause(): void Resume(): void Kill(): void  Callbacks  OnStart(cb: () =&gt; void): Sequence; OnStepStart(cb: (tween: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween start OnStepEnd(cb: (index: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween is completed.">
+  <meta property="og:description" content="Fatina Tween Sequence   A Sequence is special tween that, instead of taking control of a value, takes control of other tweens and animates them as a group.
+ Properties  elapsed: number number of ms. elapsed for this sequence (affected by pause &amp; timescale)  Controls  Start(): Sequence By default new tween are not started. Don&rsquo;t forget to call .Start() Pause(): void Resume(): void Kill(): void  Callbacks  OnStart(cb: () =&gt; void): Sequence; OnStepStart(cb: (tween: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween start OnStepEnd(cb: (index: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween is completed.">
+  <meta name="twitter:description" content="Fatina Tween Sequence   A Sequence is special tween that, instead of taking control of a value, takes control of other tweens and animates them as a group.
+ Properties  elapsed: number number of ms. …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -15,12 +21,12 @@
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@kefniark" />
   <meta name="twitter:creator" content="@kefniark" />
-  <meta property="og:url" content="https://kefniark.github.io/Fatina/categories/" />
+  <meta property="og:url" content="https://kefniark.github.io/Fatina/api/sequence/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Fatina" />
 
   <meta name="generator" content="Hugo 0.20.7" />
-  <link rel="canonical" href="https://kefniark.github.io/Fatina/categories/" />
+  <link rel="canonical" href="https://kefniark.github.io/Fatina/api/sequence/" />
   <link rel="alternate" href="https://kefniark.github.io/Fatina/index.xml" type="application/rss+xml" title="Fatina">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -136,8 +142,8 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="page-heading">
-              <h1>Categories</h1>
+            <div class="api-heading">
+              <h1>Sequence API</h1>
                 
                 
             </div>
@@ -149,14 +155,93 @@
 
 
     
-  
-  <div class="container" role="main">
-    <article class="post-preview">
-      <div class="list-group col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        
+
+<div style="text-align: center">
+    <a class="btn btn-default" href="/Fatina/api/basic/">Fatina</a>
+    <a class="btn btn-default" href="/Fatina/api/tween/">Tween</a>
+    <a class="btn btn-primary" href="/Fatina/api/sequence/">Sequence</a>
+</div>
+
+<blockquote>
+    <p>A <b>Sequence</b> is special tween that, instead of taking control of a value, takes control of other tweens and animates them as a group.</p>
+</blockquote>
+
+<h3 id="properties">Properties</h3>
+
+<ul>
+<li><strong>elapsed</strong>: <code>number</code> number of ms. elapsed for this sequence <small>(affected by pause &amp; timescale)</small></li>
+</ul>
+
+<h3 id="controls">Controls</h3>
+
+<ul>
+<li><strong>Start</strong>(): <code>Sequence</code> By default new tween are not started. Don&rsquo;t forget to call <strong>.Start()</strong></li>
+<li><strong>Pause</strong>(): <code>void</code></li>
+<li><strong>Resume</strong>(): <code>void</code></li>
+<li><strong>Kill</strong>(): <code>void</code></li>
+</ul>
+
+<h3 id="callbacks">Callbacks</h3>
+
+<ul>
+<li><strong>OnStart</strong>(cb: () =&gt; void): <code>Sequence</code>;</li>
+<li><strong>OnStepStart</strong>(cb: (tween: ITween | IPlayable) =&gt; void): <code>Sequence</code> <small>Emitted when a tween start</small></li>
+<li><strong>OnStepEnd</strong>(cb: (index: ITween | IPlayable) =&gt; void): <code>Sequence</code> <small>Emitted when a tween is completed.</small></li>
+<li><strong>OnUpdate</strong>(cb: (dt: number, progress: number) =&gt; void): <code>Sequence</code></li>
+<li><strong>OnKilled</strong>(cb: () =&gt; void): <code>Sequence</code></li>
+<li><strong>OnComplete</strong>(cb: () =&gt; void): <code>Sequence</code></li>
+</ul>
+
+<h3 id="methods">Methods</h3>
+
+<ul>
+<li><strong>SetTimescale</strong>(scale: number): <code>Sequence</code></li>
+<li><strong>SetLoop</strong>(loop: number): <code>Sequence</code></li>
+<li><strong>Append</strong>(tween: ITween | ISequence): <code>Sequence</code> <small>Adds the given tween to the end of the Sequence.</small></li>
+<li><strong>AppendCallback</strong>(cb: () =&gt; void): <code>Sequence</code></li>
+<li><strong>AppendInterval</strong>(duration: number): <code>Sequence</code></li>
+<li><strong>Prepend</strong>(tween: ITween| ISequence): <code>Sequence</code> <small>Adds the given tween to the beginning of the Sequence, pushing forward in time the rest of the contents.</small></li>
+<li><strong>PrependCallback</strong>(cb: () =&gt; void): <code>Sequence</code></li>
+<li><strong>PrependInterval</strong>(duration: number): <code>Sequence</code></li>
+<li><strong>Join</strong>(tween: ITween | ISequence): <code>Sequence</code> <small>Inserts the given tween at the same time position of the last tween or callback added to the Sequence.</small></li>
+</ul>
+
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<span class="btn btn-default">
+    	
+    	See More
+    	
+    	</span>
+		<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">// Wait 200ms and play 2 tween in parallel
+Fatina.Sequence()
+    .AppendInterval(200)
+    .Append(Fatina.Tween(star, ['alpha']).To({ alpha: 0 }, 950).SetEasing('outSine'))
+    .Join(Fatina.Tween(star, ['x', 'y', 'rotation']).SetRelative(true).To({ x: 0, y: 0, rotation: 12}, 1600))
+    .OnComplete(() =&gt; console.log('Sequence finished !'))
+    .Start();
+</code></pre>
+
+    </div>
+</div>
+
+      </article>
+
       
-      </div>
-    </article>
+        
+      
+
+    </div>
   </div>
+</div>
 
     <footer>
   <div class="container">

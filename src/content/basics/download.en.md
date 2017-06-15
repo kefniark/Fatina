@@ -13,13 +13,8 @@ Download the [library](https://github.com/kefniark/Fatina/releases) and include 
 ```html
 <script src="fatina.min.js"></script>
 ```
-<!--
-You can also reference a CDN-hosted version in your code, thanks to cdnjs. For example:
 
-```html
-<script src="..."></script>
-```
--->
+<br>
 
 ### More advanced users might want to use `npm`
 
@@ -35,6 +30,10 @@ var Fatina = require('fatina');
 
 And you can use Fatina as in all other samples :
 ```javascript
-var t = new Fatina.Tween( /* etc */ );
-t.start();
+Fatina.Tween( /* etc */ ).Start();
 ```
+<br>
+<div style="text-align: center">
+    <a class="btn btn-success" href="/Fatina/api/basic/">API Doc</a>
+    <a class="btn btn-info" href="/Fatina/samples/advanced/">Samples</a>
+</div>

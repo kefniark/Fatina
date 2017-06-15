@@ -5,9 +5,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <title>Basics</title>
-  <meta property="og:title" content="Basics" />
-  <meta name="twitter:title" content="Basics" />
+  <title>Apis</title>
+  <meta property="og:title" content="Apis" />
+  <meta name="twitter:title" content="Apis" />
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -15,12 +15,12 @@
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@kefniark" />
   <meta name="twitter:creator" content="@kefniark" />
-  <meta property="og:url" content="https://kefniark.github.io/Fatina/basics/" />
+  <meta property="og:url" content="https://kefniark.github.io/Fatina/api/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Fatina" />
 
   <meta name="generator" content="Hugo 0.20.7" />
-  <link rel="canonical" href="https://kefniark.github.io/Fatina/basics/" />
+  <link rel="canonical" href="https://kefniark.github.io/Fatina/api/" />
   <link rel="alternate" href="https://kefniark.github.io/Fatina/index.xml" type="application/rss+xml" title="Fatina">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -126,7 +126,7 @@
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
             <div class="page-heading">
-              <h1>Basics</h1>
+              <h1>Apis</h1>
               <hr class="small">
             </div>
           </div>
@@ -143,8 +143,8 @@
         <div class="posts-list">
           
             <article class="post-preview">
-              <a href="https://kefniark.github.io/Fatina/basics/benchmark/">
-                <h2 class="post-title">Benchmark</h2>
+              <a href="https://kefniark.github.io/Fatina/api/basic/">
+                <h2 class="post-title">Fatina API</h2>
     
                 
               </a>
@@ -154,8 +154,8 @@
               </p>
               <div class="post-entry">
                 
-                  Tween counter: ~0kRun AllWhat is happening here:Bellow, 4 scenario are tested over different configuration / libraries:1. Normal usage : 200 tween over 100 frames x 50 times2. Medium usage : 5000 tween over 100 frames x 10 times3. Heavy usage : 20000 tween over 100 frames x 5 times (to test many concurrent tween)4. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC)Each scenario run 5 times to have more accurate estimation.
-                  <a href="https://kefniark.github.io/Fatina/basics/benchmark/" class="post-read-more">[Read More]</a>
+                  Fatina Tween Sequence  Fatina Init The first time you create a tween, DOTween will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .Init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  Pause() / Resume(): void SetTimescale(scale: number): void  Methods  Init(): void This method has to be called once to initialize Fatina Update(dt: number): void Tween(obj, properties): Tween Method used to create new tween Sequence(): Sequence Method used to create new sequence Ticker(name: string): ITicker  See MoreFor normal usage
+                  <a href="https://kefniark.github.io/Fatina/api/basic/" class="post-read-more">[Read More]</a>
                 
               </div>
     
@@ -164,8 +164,8 @@
             </article>
           
             <article class="post-preview">
-              <a href="https://kefniark.github.io/Fatina/basics/download/">
-                <h2 class="post-title">Getting Started</h2>
+              <a href="https://kefniark.github.io/Fatina/api/tween/">
+                <h2 class="post-title">Tween API</h2>
     
                 
               </a>
@@ -175,38 +175,9 @@
               </p>
               <div class="post-entry">
                 
-                  
-
-<h2 id="installation">Installation</h2>
-
-<p>Download the <a href="https://github.com/kefniark/Fatina/releases">library</a> and include it in your code:</p>
-
-<pre><code class="language-html">&lt;script src=&quot;fatina.min.js&quot;&gt;&lt;/script&gt;
-</code></pre>
-
-<p><br></p>
-
-<h3 id="more-advanced-users-might-want-to-use-npm">More advanced users might want to use <code>npm</code></h3>
-
-<pre><code class="language-bash">npm install fatina
-</code></pre>
-
-<p>Then include the Fatina module with the standard node.js <code>require</code>:</p>
-
-<pre><code class="language-javascript">var Fatina = require('fatina');
-</code></pre>
-
-<p>And you can use Fatina as in all other samples :</p>
-
-<pre><code class="language-javascript">Fatina.Tween( /* etc */ ).Start();
-</code></pre>
-
-<p><br>
-<div style="text-align: center">
-    <a class="btn btn-success" href="/Fatina/api/basic/">API Doc</a>
-    <a class="btn btn-info" href="/Fatina/samples/advanced/">Samples</a>
-</div></p>
-
+                  Fatina Tween Sequence   A Tween that takes control of values and animates them.
+ Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp; timescale) duration: number duration of this tween in ms.  Controls  Start(): Tween By default new tween are not started. Don&rsquo;t forget to call .Start() Pause(): void Resume(): void Skip(): void Kill(): void  See More// Create a tween let tween = Fatina.
+                  <a href="https://kefniark.github.io/Fatina/api/tween/" class="post-read-more">[Read More]</a>
                 
               </div>
     
@@ -215,8 +186,8 @@
             </article>
           
             <article class="post-preview">
-              <a href="https://kefniark.github.io/Fatina/basics/about/">
-                <h2 class="post-title">About</h2>
+              <a href="https://kefniark.github.io/Fatina/api/sequence/">
+                <h2 class="post-title">Sequence API</h2>
     
                 
               </a>
@@ -226,33 +197,9 @@
               </p>
               <div class="post-entry">
                 
-                  
-
-<h2 id="license">License</h2>
-
-<p><a href="https://github.com/kefniark/Fatina/blob/master/LICENSE.md">MIT License</a>
-A short and simple permissive license with conditions only requiring preservation of copyright and license notices. Licensed works, modifications, and larger works may be distributed under different terms and without source code.</p>
-
-<h2 id="thanks-to">Thanks to</h2>
-
-<ul>
-<li><a href="http://unity-chan.com/">Unity-chan</a> because cute samples &hellip;</li>
-</ul>
-
-<h2 id="why-this-name">Why this name ?</h2>
-
-<ul>
-<li><strong>F* Tina</strong>: No comment &hellip;</li>
-<li><strong>Fat</strong> Tina: Because everyone know that typescript is heavy and slow</li>
-<li>Reference to <strong>Fatina</strong> from <a href="https://en.wikipedia.org/wiki/The_Tower_of_Druaga_(anime)">Tower of Druaga</a></li>
-</ul>
-
-
-<div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;">
-  <iframe src="//www.youtube.com/embed/Nu6A-hG5J5E" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" allowfullscreen frameborder="0"></iframe>
- </div>
-
-
+                  Fatina Tween Sequence   A Sequence is special tween that, instead of taking control of a value, takes control of other tweens and animates them as a group.
+ Properties  elapsed: number number of ms. elapsed for this sequence (affected by pause &amp; timescale)  Controls  Start(): Sequence By default new tween are not started. Don&rsquo;t forget to call .Start() Pause(): void Resume(): void Kill(): void  Callbacks  OnStart(cb: () =&gt; void): Sequence; OnStepStart(cb: (tween: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween start OnStepEnd(cb: (index: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween is completed.
+                  <a href="https://kefniark.github.io/Fatina/api/sequence/" class="post-read-more">[Read More]</a>
                 
               </div>
     
