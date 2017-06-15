@@ -83,6 +83,7 @@
 
     AddTickListener(cb: (dt: number) => void): void;
     RemoveTickListener(cb: (dt: number) => void): void;
+    SetTimescale(scale: number): void;
 }
 
     Default(): void;

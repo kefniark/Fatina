@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return tickerManager.elapsed;
 	}
 	exports.Elapsed = Elapsed;
-	function Init(disableAutoTick, poolSize) {
+	function Init(disableAutoTick) {
 	    if (initialized) {
 	        return false;
 	    }
