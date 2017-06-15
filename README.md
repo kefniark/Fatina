@@ -4,7 +4,7 @@
 Small & Light tweening library for **Games** / **Web**
 
 * **Website**: [Here](https://kefniark.github.io/Fatina/)
-* **API**: [Here](https://kefniark.github.io/Fatina/basics/api/)
+* **API**: [Here](https://kefniark.github.io/Fatina/api/basic/)
 * **Samples**: [Here](https://kefniark.github.io/Fatina/samples/generic/)
 
 ## Description
@@ -33,7 +33,7 @@ var Fatina = require('fatina');
 
 ### Usage
 ```ts
-Fatina.Tween(obj, properties).To(destination, duration).start();
+Fatina.Tween(obj, properties).To(destination, duration).Start();
 ```
-* [Documentation](https://kefniark.github.io/Fatina/basics/api/)
+* [Documentation](https://kefniark.github.io/Fatina/api/basic/)
 * [Samples](https://kefniark.github.io/Fatina/samples/generic/)
