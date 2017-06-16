@@ -373,3 +373,23 @@ test('[Fatina.Sequence] Sequence Looping relative tween', function (t: any) {
 
 	t.end();
 });
+
+test('[Fatina.Sequence] Test Sequence with broken callback', function (t: any) {
+	let ticker = new Ticker();
+	ticker.Start();
+
+	let obj = { x: 22 };
+	let sequence = new Sequence()
+		.SetParent(ticker)
+		.SetLoop(-1)
+		.AppendInterval(1)
+		.Append(new Tween(obj, ['x']).SetParent(ticker).To({ x: 44}, 1))
+		.Start();
+
+	ticker.Tick(3);
+	console.log(sequence);
+	ticker.Tick(3);
+	console.log(sequence);
+
+	t.end();
+});

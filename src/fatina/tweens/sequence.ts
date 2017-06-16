@@ -26,6 +26,10 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 	public currentTween: (ITween | IPlayable)[] | undefined;
 	private sequenceIndex = 0;
 
+	public get Count(): number {
+		return this.tweens.length;
+	}
+
 	constructor() {
 		super();
 		this.tickCb = this.Tick.bind(this);
@@ -199,20 +203,17 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 	}
 
 	public Kill(): void {
-		if (this.state === State.Killed || this.state === State.Finished) {
-			console.warn('cant kill this tween', this.state);
+		if (this.state === State.Killed) {
 			return;
 		}
+
 		for (let i = 0; i < this.tweens.length; i++) {
 			let tweenArray = this.tweens[i];
 			for (let j = 0; j < tweenArray.length; j++) {
-				let tween = tweenArray[j];
-				if (tween.state === State.Killed || tween.state === State.Finished) {
-					continue;
-				}
-				tween.Kill();
+				tweenArray[j].Kill();
 			}
 		}
+
 		super.Kill();
 	}
 
