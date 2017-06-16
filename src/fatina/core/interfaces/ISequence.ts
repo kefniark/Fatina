@@ -11,6 +11,7 @@ import { IPlayable } from './IPlayable';
  * @extends {IControl}
  */
 export interface ISequence extends IControl {
+	Count: number;
 	Default(): void;
 	Start(): ISequence;
 	SetParent(ticker: ITicker): ISequence;

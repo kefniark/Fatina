@@ -4,6 +4,7 @@ import { Ticker as ticker } from './ticker';
 import { ITween } from './core/interfaces/ITween';
 import { ISequence } from './core/interfaces/ISequence';
 import { ITicker } from './core/interfaces/ITicker';
+import { EasingType } from './easing/easingType';
 
 let tickerManager: ticker;
 let initialized = false;
@@ -11,6 +12,9 @@ let isFirstUpdate = true;
 let lastFrame: any;
 let lastTime = 0;
 let tickers: {[id: string]: ITicker } = {};
+
+// Expose the easing enum
+export { EasingType as Easing };
 
 // real time of Fatina (not affected by timescale, pause, ...)
 export let time = 0;
@@ -53,6 +57,9 @@ export function Init(disableAutoTick?: boolean): boolean {
  * @param {number} scale
  */
 export function SetTimescale(scale: number): void {
+	if (!initialized) {
+		Init();
+	}
 	tickerManager.SetTimescale(scale);
 }
 
@@ -62,6 +69,9 @@ export function SetTimescale(scale: number): void {
  * @export
  */
 export function Pause(): void {
+	if (!initialized) {
+		Init();
+	}
 	tickerManager.Pause();
 }
 
@@ -71,6 +81,9 @@ export function Pause(): void {
  * @export
  */
 export function Resume(): void {
+	if (!initialized) {
+		Init();
+	}
 	tickerManager.Resume();
 }
 

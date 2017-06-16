@@ -119,8 +119,7 @@ export abstract class BaseTween {
 	}
 
 	public Kill(): void {
-		if (this.state === State.Killed || this.state === State.Finished) {
-			console.warn('cant kill this tween', this.state);
+		if (this.state === State.Killed) {
 			return;
 		}
 

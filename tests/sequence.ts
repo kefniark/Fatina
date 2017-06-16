@@ -155,7 +155,11 @@ test('[Fatina.Sequence] Test Join', function (t: any) {
 	}
 
 	// t.equal(6, duration, 'check OnUpdate was trigger the right amount of time');
-	t.equal(1, complete, 'check both tween are executed')
+	t.equal(1, complete, 'check both tween are executed');
+
+	sequence.Default();
+	t.equal(0, sequence.elapsed, 'check the sequence elapsed after Default');
+	t.equal(0, sequence.duration, 'check the sequence duration after Default');
 
 	t.end();
 });
@@ -370,6 +374,26 @@ test('[Fatina.Sequence] Sequence Looping relative tween', function (t: any) {
 		ticker.Tick(0.2);
 	}
 	t.deepEqual({ x: 0, y: 0 }, obj, 'Check the object is back at his original position : micro update duration');
+
+	t.end();
+});
+
+test('[Fatina.Sequence] Test Sequence with broken callback', function (t: any) {
+	let ticker = new Ticker();
+	ticker.Start();
+
+	let obj = { x: 22 };
+	let sequence = new Sequence()
+		.SetParent(ticker)
+		.SetLoop(-1)
+		.AppendInterval(1)
+		.Append(new Tween(obj, ['x']).SetParent(ticker).To({ x: 44}, 1))
+		.Start();
+
+	ticker.Tick(3);
+	console.log(sequence);
+	ticker.Tick(3);
+	console.log(sequence);
 
 	t.end();
 });

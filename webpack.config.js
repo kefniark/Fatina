@@ -2,7 +2,6 @@
 
 const path = require('path');
 const webpack = require('webpack');
-const dtsBundlerPlugin = require('dtsbundler-webpack-plugin');
 const optimizeJsPlugin = require("optimize-js-plugin");
 
 // Object passed to webpack compiler
@@ -33,13 +32,31 @@ module.exports = {
 			sourceMap: true,
 			include: /\.min\.js$/,
 		}),
-		new dtsBundlerPlugin({
-            out:'./fatina.d.ts',
-        })
+		new DtsBundlePlugin()
 	],
 	devServer: {
 		contentBase: [path.join(__dirname, 'samples'), path.join(__dirname, 'build'), path.join(__dirname)],
 		compress: true,
 		port: 8000
 	}
+};
+
+function DtsBundlePlugin(){}
+DtsBundlePlugin.prototype.apply = function (compiler) {
+	compiler.plugin('done', function () {
+		var dts = require('dts-bundle');
+
+		dts.bundle({
+			name: 'Fatina',
+			baseDir: 'lib',
+			main: './lib/src/fatina/index.d.ts',
+			out: '../build/fatina.d.ts',
+			exclude: function(file, external) {
+				return file.indexOf('tests') !== -1;
+			},
+			removeSource: true,
+			verbose: false,
+			outputAsModuleFolder: true // to use npm in-package typings
+		});
+	});
 };
