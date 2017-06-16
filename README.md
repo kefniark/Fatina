@@ -25,9 +25,14 @@ If you use directly the minified version
 Or if you use NPM
 ```ts
 > npm install fatina
-
-// and after load it with
+```
+And load it with
+```ts
+// standard node.js require
 var Fatina = require('fatina');
+// OR
+// standard import with typescript (typed version)
+import * as Fatina from 'fatina';
 ```
 * [More Information](https://kefniark.github.io/Fatina/basics/download/)
 

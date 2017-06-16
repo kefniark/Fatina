@@ -139,9 +139,11 @@ export class Tween extends BaseTween implements ITween {
 			this.elapsed += this.remainsDt;
 			let progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
 			let val = this.ease(progress);
-			for (let i = 0; i < this.properties.length; i++) {
-				let prop = this.properties[i];
-				this.object[prop] = this.currentFrom[prop] + (this.currentTo[prop] - this.currentFrom[prop]) * val;
+			if (this.object) {
+				for (let i = 0; i < this.properties.length; i++) {
+					let prop = this.properties[i];
+					this.object[prop] = this.currentFrom[prop] + (this.currentTo[prop] - this.currentFrom[prop]) * val;
+				}
 			}
 			this.EmitEvent(this.eventUpdate, [this.remainsDt, progress]);
 

@@ -754,9 +754,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.elapsed += this.remainsDt;
 	            var progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
 	            var val = this.ease(progress);
-	            for (var i = 0; i < this.properties.length; i++) {
-	                var prop = this.properties[i];
-	                this.object[prop] = this.currentFrom[prop] + (this.currentTo[prop] - this.currentFrom[prop]) * val;
+	            if (this.object) {
+	                for (var i = 0; i < this.properties.length; i++) {
+	                    var prop = this.properties[i];
+	                    this.object[prop] = this.currentFrom[prop] + (this.currentTo[prop] - this.currentFrom[prop]) * val;
+	                }
 	            }
 	            this.EmitEvent(this.eventUpdate, [this.remainsDt, progress]);
 	            if (this.elapsed < this.duration) {
