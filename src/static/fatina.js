@@ -59,6 +59,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var sequence_1 = __webpack_require__(1);
 	var tween_1 = __webpack_require__(6);
 	var ticker_1 = __webpack_require__(9);
+	var easingType_1 = __webpack_require__(8);
+	exports.Easing = easingType_1.EasingType;
 	var tickerManager;
 	var initialized = false;
 	var isFirstUpdate = true;
@@ -70,7 +72,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return tickerManager.elapsed;
 	}
 	exports.Elapsed = Elapsed;
-	function Init(disableAutoTick, poolSize) {
+	function Init(disableAutoTick) {
 	    if (initialized) {
 	        return false;
 	    }
@@ -86,14 +88,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	exports.Init = Init;
 	function SetTimescale(scale) {
+	    if (!initialized) {
+	        Init();
+	    }
 	    tickerManager.SetTimescale(scale);
 	}
 	exports.SetTimescale = SetTimescale;
 	function Pause() {
+	    if (!initialized) {
+	        Init();
+	    }
 	    tickerManager.Pause();
 	}
 	exports.Pause = Pause;
 	function Resume() {
+	    if (!initialized) {
+	        Init();
+	    }
 	    tickerManager.Resume();
 	}
 	exports.Resume = Resume;
@@ -196,6 +207,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.tickCb = _this.Tick.bind(_this);
 	        return _this;
 	    }
+	    Object.defineProperty(Sequence.prototype, "Count", {
+	        get: function () {
+	            return this.tweens.length;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
 	    Sequence.prototype.Start = function () {
 	        _super.prototype.Start.call(this);
 	        return this;
@@ -336,18 +354,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _super.prototype.Skip.call(this);
 	    };
 	    Sequence.prototype.Kill = function () {
-	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
-	            console.warn('cant kill this tween', this.state);
+	        if (this.state === state_1.State.Killed) {
 	            return;
 	        }
 	        for (var i = 0; i < this.tweens.length; i++) {
 	            var tweenArray = this.tweens[i];
 	            for (var j = 0; j < tweenArray.length; j++) {
-	                var tween = tweenArray[j];
-	                if (tween.state === state_1.State.Killed || tween.state === state_1.State.Finished) {
-	                    continue;
-	                }
-	                tween.Kill();
+	                tweenArray[j].Kill();
 	            }
 	        }
 	        _super.prototype.Kill.call(this);
@@ -511,8 +524,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.EmitEvent(this.eventComplete);
 	    };
 	    BaseTween.prototype.Kill = function () {
-	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
-	            console.warn('cant kill this tween', this.state);
+	        if (this.state === state_1.State.Killed) {
 	            return;
 	        }
 	        if (this.parent) {
