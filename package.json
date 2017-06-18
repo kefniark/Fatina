@@ -68,6 +68,9 @@
     "include": [
       "src/**/*.ts"
     ],
+    "exclude": [
+      "src/fatina/index.ts"
+    ],
     "extension": [
       ".ts"
     ]
