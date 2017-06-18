@@ -7,6 +7,10 @@ Small & Light tweening library for **Games** / **Web**
 * **API**: [Here](https://kefniark.github.io/Fatina/api/basic/)
 * **Samples**: [Here](https://kefniark.github.io/Fatina/samples/generic/)
 
+[![NPM Version](https://img.shields.io/npm/v/fatina.svg)](https://npmjs.org/package/@tweenjs/tween.js)
+[![NPM Downloads](https://img.shields.io/npm/dm/fatina.svg)](https://npmjs.org/package/@tweenjs/tween.js)
+[![Build Status](https://img.shields.io/travis/kefniark/Fatina.svg)](https://travis-ci.org/kefniark/Fatina)
+
 ## Description
 A comprehensive and easy to use animation library for **Typescript** / **Javascript**
 
