@@ -7,8 +7,8 @@ Small & Light tweening library for **Games** / **Web**
 * **API**: [Here](https://kefniark.github.io/Fatina/api/basic/)
 * **Samples**: [Here](https://kefniark.github.io/Fatina/samples/generic/)
 
-[![NPM Version](https://img.shields.io/npm/v/fatina.svg)](https://npmjs.org/package/@tweenjs/tween.js)
-[![NPM Downloads](https://img.shields.io/npm/dm/fatina.svg)](https://npmjs.org/package/@tweenjs/tween.js)
+[![NPM Version](https://img.shields.io/npm/v/fatina.svg)](https://npmjs.org/package/fatina)
+[![NPM Downloads](https://img.shields.io/npm/dm/fatina.svg)](https://npmjs.org/package/fatina)
 [![Build Status](https://img.shields.io/travis/kefniark/Fatina.svg)](https://travis-ci.org/kefniark/Fatina)
 
 ## Description
