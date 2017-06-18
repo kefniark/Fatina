@@ -39,11 +39,13 @@
     "test:unittest": "ts-node node_modules/tape/bin/tape ./tests/**/*.ts | tspec",
     "docs": "npm run typedoc -- --options typedoc.json ./src/",
     "typedoc": "typedoc",
-    "coverage": "nyc --all --reporter=html --reporter=text npm run test:unittest"
+    "coverage": "nyc --all --reporter=html --reporter=text npm run test:unittest",
+    "coveralls": "nyc --all --reporter=text-lcov npm run test:unittest | coveralls"
   },
   "devDependencies": {
     "@types/node": "7.0.18",
     "@types/tape": "^4.2.29",
+    "coveralls": "2.13.1",
     "dts-bundle": "0.7.2",
     "npm-run-all": "4.0.2",
     "nyc": "10.3.2",
