@@ -57,10 +57,15 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 		return <any> this;
 	}
 
-	public Reset(): void {
+	/**
+	 * To Reset a Tween already finished (example looping sequence)
+	 *
+	 * @memberOf BaseTween
+	 */
+	public Reset(skipParent?: boolean): void {
 		this.state = State.Idle;
 
-		if (this.parent) {
+		if (!skipParent && this.parent) {
 			this.parent.RemoveTickListener(this.tickCb);
 		}
 
@@ -69,6 +74,14 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 		this.EmitEvent(this.eventRestart);
 	}
 
+	/**
+	 * To immediately Reset a tween without stopping/restarting it
+	 * This is faster than calling manually Reset() & Start() & Tick()
+	 *
+	 * @param {number} dtRemains
+	 *
+	 * @memberOf BaseTween
+	 */
 	public ResetAndStart(dtRemains: number) {
 		this.LoopInit();
 		this.EmitEvent(this.eventRestart);

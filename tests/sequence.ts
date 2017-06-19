@@ -182,6 +182,7 @@ test('[Fatina.Sequence] Sequence loop', function (t: any) {
 		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 4))
 		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 4))
 		.AppendCallback(() => sequenceCb++)
+		.OnRestart(() => {})
 		.OnRestart(() => restart += 1)
 		.OnStart(() => start += 1)
 		.OnStepStart(() => step += 1)

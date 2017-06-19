@@ -19,6 +19,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	private properties: string[];
 	private from: any;
 	private to: any;
+	private yoyo = 0;
 	private currentFrom: any;
 	private currentTo: any;
 	private remainsDt: number;
@@ -139,6 +140,16 @@ export class Tween extends BaseTween<Tween> implements ITween {
 			}
 
 			this.remainsDt = this.elapsed - this.duration;
+
+			// Yoyo effect ( A -> B -> A )
+			if (this.yoyo > 0) {
+				this.Reverse();
+				this.ResetAndStart(0);
+				this.yoyo--;
+				continue;
+			}
+
+			// Loop management
 			this.loop--;
 			if (this.loop === 0) {
 				this.Complete();
@@ -212,6 +223,42 @@ export class Tween extends BaseTween<Tween> implements ITween {
 				this.currentFrom[prop] += diff[prop];
 			}
 		}
+	}
+
+	/**
+	 * Method used to reverse the tween
+	 *
+	 * @memberOf Tween
+	 */
+	public Reverse(): void {
+		let previous = this.currentFrom;
+		this.currentFrom = this.currentTo;
+		this.currentTo = previous;
+
+		previous = this.from;
+		this.from = this.to;
+		this.to = previous;
+
+		let elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
+		this.elapsed = Math.round(elapsed * 1000) / 1000;
+
+		if (this.state === State.Finished) {
+			this.Reset(true);
+			this.Start();
+		}
+	}
+
+	/**
+	 * Method used to reverse the tween N times at the end
+	 *
+	 * @param {number} time
+	 * @returns {ITween}
+	 *
+	 * @memberOf Tween
+	 */
+	public Yoyo(time: number): ITween {
+		this.yoyo = time;
+		return this;
 	}
 
 	/**

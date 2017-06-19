@@ -450,6 +450,72 @@ test('[Fatina.Tween] Test Skip', function (t: any) {
 	t.end();
 });
 
+test('[Fatina.Tween] Test Reverse', function (t: any) {
+	let ticker = new Ticker();
+	ticker.Start();
+
+	let obj = {x: 0};
+	let complete = 0;
+	let tween = new Tween(obj, ['x'])
+		.To({ x: 10}, 5)
+		.SetParent(ticker)
+		.OnComplete(() => complete++)
+		.Start();
+
+	ticker.Tick(4);
+	t.equal(8, obj.x, 'check the object position');
+	t.equal(4, tween.elapsed, 'check this tween is started');
+
+	tween.Reverse();
+	t.equal(8, obj.x, 'check the object didnt moved');
+	t.equal(1, tween.elapsed, 'check the elapsed value is fine');
+
+	ticker.Tick(4);
+
+	t.equal(0, obj.x, 'check the object went back to the original position');
+	t.equal(5, tween.elapsed, 'check the elapsed value is fine');
+	t.equal(1, complete, 'check the onComplete callback is emitted');
+
+	tween.Reverse();
+	ticker.Tick(5);
+
+	t.equal(10, obj.x, 'check the object went back to the original destination');
+	t.equal(5, tween.elapsed, 'check the elapsed value is fine');
+	t.equal(2, complete, 'check the onComplete callback is emitted');
+
+	t.end();
+});
+
+test('[Fatina.Tween] Test Yoyo', function (t: any) {
+	let ticker = new Ticker();
+	ticker.Start();
+
+	let obj = {x: 0};
+	let complete = 0;
+	new Tween(obj, ['x'])
+		.To({ x: 10}, 5)
+		.Yoyo(2)
+		.SetParent(ticker)
+		.OnComplete(() => complete++)
+		.Start();
+
+	ticker.Tick(4);
+	t.equal(8, obj.x, 'check the object position');
+
+	ticker.Tick(4);
+	t.equal(4, obj.x, 'check the object position');
+
+	ticker.Tick(4);
+	t.equal(4, obj.x, 'check the object position');
+	t.equal(0, complete, 'check the onComplete callback is not emitted yet');
+
+	ticker.Tick(4);
+	t.equal(10, obj.x, 'check the object position');
+	t.equal(1, complete, 'check the onComplete callback is emitted');
+
+	t.end();
+});
+
 test('[Fatina.Tween] Test Modify', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();

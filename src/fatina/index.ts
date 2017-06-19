@@ -169,6 +169,7 @@ export function Delay(duration: number): IPlayable {
 
 /**
  * Helper used to replace usage of normal js setTimeout() by a tween
+ * https://www.w3schools.com/jsref/met_win_settimeout.asp
  *
  * @export
  * @param {() => void} fn
@@ -180,10 +181,7 @@ export function SetTimeout(fn: () => void, duration: number): IPlayable {
 		Init();
 	}
 
-	return new delay(duration)
-		.SetParent(tickerManager as ITicker)
-		.OnComplete(fn)
-		.Start();
+	return new delay(duration).SetParent(tickerManager as ITicker).OnComplete(fn).Start();
 }
 
 /**
@@ -200,11 +198,7 @@ export function SetInterval(fn: () => void, duration: number): IPlayable {
 		Init();
 	}
 
-	return new delay(duration)
-		.SetParent(tickerManager as ITicker)
-		.OnRestart(fn)
-		.SetLoop(-1)
-		.Start();
+	return new delay(duration).SetParent(tickerManager as ITicker).OnRestart(fn).SetLoop(-1).Start();
 }
 
 /**
