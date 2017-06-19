@@ -17,4 +17,8 @@ export interface IControl {
 	Kill(): void;
 	Reset(): void;
 	Skip(): void;
+
+	IsRunning(): boolean;
+	IsFinished(): boolean;
+	IsPaused(): boolean;
 }

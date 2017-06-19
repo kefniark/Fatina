@@ -67,6 +67,7 @@ test('[Fatina.Sequence] Create a basic Sequence', function (t: any) {
 		ticker.Tick(1);
 	}
 
+	t.equal(10, sequence.Count);
 	t.equal(1, start, 'check OnStart was trigger once');
 	t.equal(10, stepStart, 'check OnStepStart was trigger the right amount of time');
 	t.equal(10, stepEnd, 'check OnStepEnd was trigger the right amount of time');
@@ -174,14 +175,18 @@ test('[Fatina.Sequence] Sequence loop', function (t: any) {
 	let stepEnd = 0;
 	let complete = 0;
 	let sequenceCb = 0;
+	let restart = 0;
 	let sequence = new Sequence()
 		.SetParent(ticker)
 		.PrependInterval(1)
 		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 4))
 		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 4))
 		.AppendCallback(() => sequenceCb++)
+		.OnRestart(() => {})
+		.OnRestart(() => restart += 1)
 		.OnStart(() => start += 1)
 		.OnStepStart(() => step += 1)
+		.OnStepEnd(() => {})
 		.OnStepEnd(() => stepEnd += 1)
 		.OnComplete(() => complete += 1)
 		.SetLoop(3);
@@ -196,6 +201,7 @@ test('[Fatina.Sequence] Sequence loop', function (t: any) {
 	t.equal(12, step, 'check OnStepStart was emitted 2 x 3 times');
 	t.equal(12, stepEnd, 'check OnStepEnd was emitted 2 x 3 times');
 	t.equal(3, sequenceCb, 'check that an appended callback is called 3 times');
+	t.equal(2, restart, 'check OnRestart was emitted 2 times');
 	t.equal(1, complete, 'check OnComplete was emitted once');
 	t.end();
 });
@@ -222,6 +228,8 @@ test('[Fatina.Sequence] Sequence timescale & kill', function (t: any) {
 	t.ok(tween.state === State.Killed, 'check the tween is marked as killed');
 	t.equal(1, killed, 'check the onKilled event is emitted');
 
+	sequence.Kill();
+	t.equal(1, killed, 'check the onKilled event is emitted once');
 	t.end();
 });
 
@@ -230,7 +238,7 @@ test('[Fatina.Sequence] Test Sequence with broken callback', function (t: any) {
 	ticker.Start();
 
 	let obj = { x: 22 };
-	new Sequence()
+	let sequence = new Sequence()
 		.SetParent(ticker)
 		.Append(new Tween(obj, ['x']).SetParent(ticker).To({ x: 44}, 1))
 		.OnStepStart((step) => {
@@ -243,6 +251,7 @@ test('[Fatina.Sequence] Test Sequence with broken callback', function (t: any) {
 
 	ticker.Tick(2);
 	t.equal(44, obj.x, 'tween finished properly');
+	sequence.Skip();
 	t.end();
 });
 

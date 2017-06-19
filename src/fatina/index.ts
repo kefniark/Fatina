@@ -1,10 +1,12 @@
 import { Sequence as sequence } from './tweens/sequence';
 import { Tween as tween } from './tweens/tween';
+import { Delay as delay } from './tweens/delay';
 import { Ticker as ticker } from './ticker';
 import { ITween } from './core/interfaces/ITween';
 import { ISequence } from './core/interfaces/ISequence';
 import { ITicker } from './core/interfaces/ITicker';
 import { EasingType } from './easing/easingType';
+import { IPlayable } from './core/interfaces/IPlayable';
 
 let tickerManager: ticker;
 let initialized = false;
@@ -22,6 +24,13 @@ export let time = 0;
 // time updated internally (affected by timescale, pause, ...)
 export function Elapsed() {
 	return tickerManager.elapsed;
+}
+
+export function MainTicker() {
+	if (!initialized) {
+		Init();
+	}
+	return tickerManager;
 }
 
 /**
@@ -148,6 +157,55 @@ export function Sequence(): ISequence {
 	}
 
 	return new sequence().SetParent(tickerManager as ITicker);
+}
+
+/**
+ * Helper to create a Delay
+ *
+ * @export
+ * @param {number} duration
+ * @returns {IPlayable}
+ */
+export function Delay(duration: number): IPlayable {
+	if (!initialized) {
+		Init();
+	}
+
+	return new delay(duration).SetParent(tickerManager as ITicker);
+}
+
+/**
+ * Helper used to replace usage of normal js setTimeout() by a tween
+ * https://www.w3schools.com/jsref/met_win_settimeout.asp
+ *
+ * @export
+ * @param {() => void} fn
+ * @param {number} duration
+ * @returns {IPlayable}
+ */
+export function SetTimeout(fn: () => void, duration: number): IPlayable {
+	if (!initialized) {
+		Init();
+	}
+
+	return new delay(duration).SetParent(tickerManager as ITicker).OnComplete(fn).Start();
+}
+
+/**
+ * Helper used to replace usage of normal js setInterval() by a tween
+ * https://www.w3schools.com/jsref/met_win_setinterval.asp
+ *
+ * @export
+ * @param {() => void} fn
+ * @param {number} duration
+ * @returns {IPlayable}
+ */
+export function SetInterval(fn: () => void, duration: number): IPlayable {
+	if (!initialized) {
+		Init();
+	}
+
+	return new delay(duration).SetParent(tickerManager as ITicker).OnRestart(fn).SetLoop(-1).Start();
 }
 
 /**

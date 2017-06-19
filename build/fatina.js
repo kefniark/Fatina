@@ -58,6 +58,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", { value: true });
 	var sequence_1 = __webpack_require__(1);
 	var tween_1 = __webpack_require__(6);
+	var delay_1 = __webpack_require__(5);
 	var ticker_1 = __webpack_require__(9);
 	var easingType_1 = __webpack_require__(8);
 	exports.Easing = easingType_1.EasingType;
@@ -72,6 +73,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return tickerManager.elapsed;
 	}
 	exports.Elapsed = Elapsed;
+	function MainTicker() {
+	    if (!initialized) {
+	        Init();
+	    }
+	    return tickerManager;
+	}
+	exports.MainTicker = MainTicker;
 	function Init(disableAutoTick) {
 	    if (initialized) {
 	        return false;
@@ -140,6 +148,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return new sequence_1.Sequence().SetParent(tickerManager);
 	}
 	exports.Sequence = Sequence;
+	function Delay(duration) {
+	    if (!initialized) {
+	        Init();
+	    }
+	    return new delay_1.Delay(duration).SetParent(tickerManager);
+	}
+	exports.Delay = Delay;
+	function SetTimeout(fn, duration) {
+	    if (!initialized) {
+	        Init();
+	    }
+	    return new delay_1.Delay(duration).SetParent(tickerManager).OnComplete(fn).Start();
+	}
+	exports.SetTimeout = SetTimeout;
+	function SetInterval(fn, duration) {
+	    if (!initialized) {
+	        Init();
+	    }
+	    return new delay_1.Delay(duration).SetParent(tickerManager).OnRestart(fn).SetLoop(-1).Start();
+	}
+	exports.SetInterval = SetInterval;
 	function Ticker(name) {
 	    if (!initialized) {
 	        Init();
@@ -214,23 +243,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        enumerable: true,
 	        configurable: true
 	    });
-	    Sequence.prototype.Start = function () {
-	        _super.prototype.Start.call(this);
-	        return this;
-	    };
 	    Sequence.prototype.LoopInit = function () {
 	        this.sequenceIndex = 0;
 	        for (var i = 0; i < this.tweens.length; i++) {
 	            var tweenArray = this.tweens[i];
 	            for (var j = 0; j < tweenArray.length; j++) {
-	                var tween = tweenArray[j];
-	                tween.Reset();
+	                tweenArray[j].Reset();
 	            }
 	        }
-	    };
-	    Sequence.prototype.SetParent = function (ticker) {
-	        _super.prototype.SetParent.call(this, ticker);
-	        return this;
 	    };
 	    Sequence.prototype.AddTickListener = function (cb) {
 	        this.eventTick.unshift(cb);
@@ -373,47 +393,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.tweens[this.tweens.length - 1].push(tween);
 	        return this;
 	    };
-	    Sequence.prototype.SetTimescale = function (scale) {
-	        this.timescale = scale;
-	        return this;
-	    };
-	    Sequence.prototype.SetLoop = function (loop) {
-	        this.loop = Math.round(loop);
-	        return this;
-	    };
 	    Sequence.prototype.Default = function () {
 	        _super.prototype.Default.call(this);
 	        this.tweens.length = 0;
 	        this.currentTween = undefined;
 	        this.sequenceIndex = 0;
-	    };
-	    Sequence.prototype.OnStart = function (cb) {
-	        if (!this.eventStart) {
-	            this.eventStart = new Array(0);
-	        }
-	        this.eventStart[this.eventStart.length] = cb;
-	        return this;
-	    };
-	    Sequence.prototype.OnUpdate = function (cb) {
-	        if (!this.eventUpdate) {
-	            this.eventUpdate = new Array(0);
-	        }
-	        this.eventUpdate[this.eventUpdate.length] = cb;
-	        return this;
-	    };
-	    Sequence.prototype.OnKilled = function (cb) {
-	        if (!this.eventKill) {
-	            this.eventKill = new Array(0);
-	        }
-	        this.eventKill[this.eventKill.length] = cb;
-	        return this;
-	    };
-	    Sequence.prototype.OnComplete = function (cb) {
-	        if (!this.eventComplete) {
-	            this.eventComplete = new Array(0);
-	        }
-	        this.eventComplete[this.eventComplete.length] = cb;
-	        return this;
 	    };
 	    Sequence.prototype.OnStepStart = function (cb) {
 	        if (!this.eventStepStart) {
@@ -453,7 +437,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    BaseTween.prototype.Start = function () {
 	        if (this.state !== state_1.State.Idle) {
 	            console.warn('cant start this tween', this.state);
-	            return;
+	            return this;
 	        }
 	        if (this.firstStart) {
 	            this.Validate();
@@ -467,21 +451,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.EmitEvent(this.eventStart);
 	            this.firstStart = false;
 	        }
+	        return this;
 	    };
-	    BaseTween.prototype.Reset = function () {
+	    BaseTween.prototype.Reset = function (skipParent) {
 	        this.state = state_1.State.Idle;
-	        if (this.parent) {
+	        if (!skipParent && this.parent) {
 	            this.parent.RemoveTickListener(this.tickCb);
 	        }
 	        this.loop = 1;
 	        this.LoopInit();
+	        this.EmitEvent(this.eventRestart);
 	    };
 	    BaseTween.prototype.ResetAndStart = function (dtRemains) {
 	        this.LoopInit();
+	        this.EmitEvent(this.eventRestart);
 	        this.state = state_1.State.Run;
 	        if (dtRemains > 0) {
 	            this.tickCb(dtRemains);
 	        }
+	    };
+	    BaseTween.prototype.SetParent = function (ticker) {
+	        if (this.parent) {
+	            this.parent.RemoveTickListener(this.tickCb);
+	        }
+	        this.parent = ticker;
+	        return this;
+	    };
+	    BaseTween.prototype.SetTimescale = function (scale) {
+	        this.timescale = scale;
+	        return this;
 	    };
 	    BaseTween.prototype.Pause = function () {
 	        if (this.state !== state_1.State.Run) {
@@ -512,6 +510,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.elapsed = this.duration;
 	        this.Complete();
 	    };
+	    BaseTween.prototype.Kill = function () {
+	        if (this.state === state_1.State.Killed) {
+	            return;
+	        }
+	        if (this.parent) {
+	            this.parent.RemoveTickListener(this.tickCb);
+	        }
+	        this.state = state_1.State.Killed;
+	        this.EmitEvent(this.eventKill);
+	    };
+	    BaseTween.prototype.SetLoop = function (loop) {
+	        this.loop = Math.round(loop);
+	        return this;
+	    };
+	    BaseTween.prototype.IsRunning = function () {
+	        return this.state === state_1.State.Run;
+	    };
+	    BaseTween.prototype.IsFinished = function () {
+	        return this.state === state_1.State.Killed || this.state === state_1.State.Finished;
+	    };
+	    BaseTween.prototype.IsPaused = function () {
+	        return this.state === state_1.State.Pause;
+	    };
 	    BaseTween.prototype.Complete = function () {
 	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
 	            console.warn('cant complete this tween', this.state);
@@ -523,26 +544,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.state = state_1.State.Finished;
 	        this.EmitEvent(this.eventComplete);
 	    };
-	    BaseTween.prototype.Kill = function () {
-	        if (this.state === state_1.State.Killed) {
-	            return;
-	        }
-	        if (this.parent) {
-	            this.parent.RemoveTickListener(this.tickCb);
-	        }
-	        this.state = state_1.State.Killed;
-	        this.EmitEvent(this.eventKill);
-	    };
 	    BaseTween.prototype.CheckPosition = function () { };
 	    BaseTween.prototype.Validate = function () { };
 	    BaseTween.prototype.LoopInit = function () {
 	        this.elapsed = 0;
-	    };
-	    BaseTween.prototype.SetParent = function (ticker) {
-	        if (this.parent) {
-	            this.parent.RemoveTickListener(this.tickCb);
-	        }
-	        this.parent = ticker;
 	    };
 	    BaseTween.prototype.Default = function () {
 	        this.elapsed = 0;
@@ -567,6 +572,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	        for (var i = 0; i < listeners.length; i++) {
 	            this.Emit(listeners[i], args);
 	        }
+	    };
+	    BaseTween.prototype.OnStart = function (cb) {
+	        if (!this.eventStart) {
+	            this.eventStart = new Array(0);
+	        }
+	        this.eventStart[this.eventStart.length] = cb;
+	        return this;
+	    };
+	    BaseTween.prototype.OnRestart = function (cb) {
+	        if (!this.eventRestart) {
+	            this.eventRestart = new Array(0);
+	        }
+	        this.eventRestart[this.eventRestart.length] = cb;
+	        return this;
+	    };
+	    BaseTween.prototype.OnUpdate = function (cb) {
+	        if (!this.eventUpdate) {
+	            this.eventUpdate = new Array(0);
+	        }
+	        this.eventUpdate[this.eventUpdate.length] = cb;
+	        return this;
+	    };
+	    BaseTween.prototype.OnKilled = function (cb) {
+	        if (!this.eventKill) {
+	            this.eventKill = new Array(0);
+	        }
+	        this.eventKill[this.eventKill.length] = cb;
+	        return this;
+	    };
+	    BaseTween.prototype.OnComplete = function (cb) {
+	        if (!this.eventComplete) {
+	            this.eventComplete = new Array(0);
+	        }
+	        this.eventComplete[this.eventComplete.length] = cb;
+	        return this;
 	    };
 	    return BaseTween;
 	}());
@@ -652,11 +692,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _this;
 	    }
 	    Delay.prototype.Tick = function (dt) {
-	        this.elapsed += dt;
-	        var progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
-	        this.EmitEvent(this.eventUpdate, [dt, progress]);
-	        if (this.elapsed >= this.duration) {
-	            this.Complete();
+	        this.remainsDt = dt * this.timescale;
+	        while (this.remainsDt > 0) {
+	            this.elapsed += this.remainsDt;
+	            var progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
+	            this.EmitEvent(this.eventUpdate, [this.remainsDt, progress]);
+	            if (this.elapsed < this.duration) {
+	                return;
+	            }
+	            this.remainsDt = this.elapsed - this.duration;
+	            this.loop--;
+	            if (this.loop === 0) {
+	                this.Complete();
+	                return;
+	            }
+	            this.ResetAndStart(0);
 	        }
 	    };
 	    return Delay;
@@ -689,6 +739,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __extends(Tween, _super);
 	    function Tween(object, properties) {
 	        var _this = _super.call(this) || this;
+	        _this.yoyo = 0;
+	        _this.steps = 0;
 	        _this.relative = false;
 	        _this.object = object;
 	        _this.properties = properties;
@@ -698,10 +750,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Tween.prototype.Init = function (object, properties) {
 	        this.object = object;
 	        this.properties = properties;
-	    };
-	    Tween.prototype.Start = function () {
-	        _super.prototype.Start.call(this);
-	        return this;
 	    };
 	    Tween.prototype.Validate = function () {
 	        if (!this.object) {
@@ -754,6 +802,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.elapsed += this.remainsDt;
 	            var progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
 	            var val = this.ease(progress);
+	            if (this.steps !== 0) {
+	                val = Math.round(val * this.steps) / this.steps;
+	            }
 	            if (this.object) {
 	                for (var i = 0; i < this.properties.length; i++) {
 	                    var prop = this.properties[i];
@@ -765,6 +816,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return;
 	            }
 	            this.remainsDt = this.elapsed - this.duration;
+	            if (this.yoyo > 0) {
+	                this.Reverse();
+	                this.ResetAndStart(0);
+	                this.yoyo--;
+	                continue;
+	            }
 	            this.loop--;
 	            if (this.loop === 0) {
 	                this.Complete();
@@ -773,10 +830,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.CheckPosition();
 	            this.ResetAndStart(0);
 	        }
-	    };
-	    Tween.prototype.SetParent = function (ticker) {
-	        _super.prototype.SetParent.call(this, ticker);
-	        return this;
 	    };
 	    Tween.prototype.From = function (from) {
 	        this.from = from;
@@ -787,16 +840,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.duration = duration;
 	        return this;
 	    };
-	    Tween.prototype.SetLoop = function (loop) {
-	        this.loop = Math.round(loop);
-	        return this;
-	    };
 	    Tween.prototype.SetRelative = function (relative) {
 	        this.relative = relative;
-	        return this;
-	    };
-	    Tween.prototype.SetTimescale = function (scale) {
-	        this.timescale = scale;
 	        return this;
 	    };
 	    Tween.prototype.Modify = function (diff, updateTo) {
@@ -813,6 +858,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.currentFrom[prop] += diff[prop];
 	            }
 	        }
+	    };
+	    Tween.prototype.Reverse = function () {
+	        var previous = this.currentFrom;
+	        this.currentFrom = this.currentTo;
+	        this.currentTo = previous;
+	        previous = this.from;
+	        this.from = this.to;
+	        this.to = previous;
+	        var elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
+	        this.elapsed = Math.round(elapsed * 1000) / 1000;
+	        if (this.state === state_1.State.Finished) {
+	            this.Reset(true);
+	            this.Start();
+	        }
+	    };
+	    Tween.prototype.Yoyo = function (time) {
+	        this.yoyo = time;
+	        return this;
+	    };
+	    Tween.prototype.SetSteps = function (steps) {
+	        this.steps = steps;
+	        return this;
 	    };
 	    Tween.prototype.ToSequence = function () {
 	        if (!this.parent) {
@@ -850,34 +917,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.currentFrom = undefined;
 	        this.currentTo = undefined;
 	        this.relative = false;
-	    };
-	    Tween.prototype.OnStart = function (cb) {
-	        if (!this.eventStart) {
-	            this.eventStart = new Array(0);
-	        }
-	        this.eventStart[this.eventStart.length] = cb;
-	        return this;
-	    };
-	    Tween.prototype.OnUpdate = function (cb) {
-	        if (!this.eventUpdate) {
-	            this.eventUpdate = new Array(0);
-	        }
-	        this.eventUpdate[this.eventUpdate.length] = cb;
-	        return this;
-	    };
-	    Tween.prototype.OnKilled = function (cb) {
-	        if (!this.eventKill) {
-	            this.eventKill = new Array(0);
-	        }
-	        this.eventKill[this.eventKill.length] = cb;
-	        return this;
-	    };
-	    Tween.prototype.OnComplete = function (cb) {
-	        if (!this.eventComplete) {
-	            this.eventComplete = new Array(0);
-	        }
-	        this.eventComplete[this.eventComplete.length] = cb;
-	        return this;
 	    };
 	    return Tween;
 	}(baseTween_1.BaseTween));
@@ -1216,6 +1255,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    Ticker.prototype.Reset = function () {
 	        this.state = state_1.State.Idle;
+	    };
+	    Ticker.prototype.IsRunning = function () {
+	        return this.state === state_1.State.Run;
+	    };
+	    Ticker.prototype.IsFinished = function () {
+	        return this.state === state_1.State.Killed || this.state === state_1.State.Finished;
+	    };
+	    Ticker.prototype.IsPaused = function () {
+	        return this.state === state_1.State.Pause;
 	    };
 	    return Ticker;
 	}(eventList_1.EventList));

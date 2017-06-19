@@ -3,6 +3,7 @@
 export { EasingType as Easing };
 export let time: number;
 export function Elapsed(): number;
+export function MainTicker(): ticker;
 export function Init(disableAutoTick?: boolean): boolean;
 export function SetTimescale(scale: number): void;
 export function Pause(): void;
@@ -11,7 +12,35 @@ export function Destroy(): void;
 export function Update(timestamp: number): any;
 export function Tween(obj: any, properties: string[]): ITween;
 export function Sequence(): ISequence;
+export function Delay(duration: number): IPlayable;
+export function SetTimeout(fn: () => void, duration: number): IPlayable;
+export function SetInterval(fn: () => void, duration: number): IPlayable;
 export function Ticker(name: string): ITicker;
+
+export class Ticker extends EventList implements ITicker {
+    state: State;
+    elapsed: number;
+    duration: number;
+    tick: {
+        (dt: number): void;
+    } | undefined;
+    SetParent(parent: ITicker, tick: {
+        (dt: number): void;
+    }): void;
+    SetTimescale(scale: number): void;
+    AddTickListener(cb: (dt: number) => void): void;
+    RemoveTickListener(cb: (dt: number) => void): void;
+    Tick(dt: number): void;
+    Start(): void;
+    Pause(): void;
+    Resume(): void;
+    Kill(): void;
+    Skip(): void;
+    Reset(): void;
+    IsRunning(): boolean;
+    IsFinished(): boolean;
+    IsPaused(): boolean;
+}
 
 export interface ITween extends IControl {
     Default(): void;
@@ -20,14 +49,18 @@ export interface ITween extends IControl {
     From(from: any): ITween;
     To(to: any, duration: number): ITween;
     Modify(diff: any, updateTo: boolean): void;
+    Reverse(): void;
+    Yoyo(time: number): ITween;
     SetParent(ticker: ITicker): ITween;
     SetLoop(loop: number): ITween;
+    SetSteps(steps: number): ITween;
     SetRelative(relative: boolean): ITween;
     SetEasing(type: EasingType | string): ITween;
     SetTimescale(scale: number): ITween;
     ToSequence(): ISequence;
     OnStart(cb: () => void): ITween;
     OnUpdate(cb: (dt: number, progress: number) => void): ITween;
+    OnRestart(cb: () => void): ITween;
     OnKilled(cb: () => void): ITween;
     OnComplete(cb: () => void): ITween;
 }
@@ -47,6 +80,7 @@ export interface ISequence extends IControl {
     PrependInterval(duration: number): ISequence;
     Join(tween: ITween | ISequence): ISequence;
     OnStart(cb: () => void): ISequence;
+    OnRestart(cb: () => void): ISequence;
     OnStepStart(cb: (tween: ITween | IPlayable) => void): ISequence;
     OnStepEnd(cb: (index: ITween | IPlayable) => void): ISequence;
     OnUpdate(cb: (dt: number, progress: number) => void): ISequence;
@@ -94,6 +128,40 @@ export enum EasingType {
     InOutBounce = 30,
 }
 
+export interface IPlayable extends IControl {
+    state: State;
+    SetParent(ticker: ITicker): IPlayable;
+    Start(): IPlayable;
+    SetLoop(loop: number): IPlayable;
+    OnStart(cb: () => void): IPlayable;
+    OnRestart(cb: () => void): IPlayable;
+    OnUpdate(cb: (dt: number, progress: number) => void): IPlayable;
+    OnKilled(cb: () => void): IPlayable;
+    OnComplete(cb: () => void): IPlayable;
+}
+
+export enum State {
+    Idle = 0,
+    Run = 1,
+    Pause = 2,
+    Finished = 3,
+    Killed = 4,
+}
+
+export abstract class EventList {
+    first: INode | undefined;
+    last: INode | undefined;
+    length: number;
+    Add(obj: any): void;
+    Remove(obj: any): void;
+}
+export interface INode {
+    node_valid: boolean;
+    node_previous: INode | undefined;
+    node_next: INode | undefined;
+    node_list: EventList | undefined;
+}
+
 export interface IControl {
     elapsed: number;
     duration: number;
@@ -104,17 +172,8 @@ export interface IControl {
     Kill(): void;
     Reset(): void;
     Skip(): void;
-}
-
-export interface IPlayable extends IControl {
-    state: State;
-}
-
-export enum State {
-    Idle = 0,
-    Run = 1,
-    Pause = 2,
-    Finished = 3,
-    Killed = 4,
+    IsRunning(): boolean;
+    IsFinished(): boolean;
+    IsPaused(): boolean;
 }
 

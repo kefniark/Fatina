@@ -9,7 +9,7 @@ import { IPlayable } from '../core/interfaces/IPlayable';
  * @extends {BaseTween}
  * @implements {IPlayable}
  */
-export class Callback extends BaseTween implements IPlayable {
+export class Callback extends BaseTween<Callback> implements IPlayable {
 	private callback: () => void;
 
 	constructor(cb: () => void) {

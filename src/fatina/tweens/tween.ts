@@ -1,6 +1,5 @@
 import { BaseTween } from './baseTween';
 import { ITween } from '../core/interfaces/ITween';
-import { ITicker } from '../core/interfaces/ITicker';
 import { easeNames, easeTypes } from '../easing/easing';
 import { Sequence } from './sequence';
 import { ISequence } from '../core/interfaces/ISequence';
@@ -15,11 +14,13 @@ import { EasingType } from '../easing/easingType';
  * @extends {BaseTween}
  * @implements {ITween}
  */
-export class Tween extends BaseTween implements ITween {
+export class Tween extends BaseTween<Tween> implements ITween {
 	private object: any;
 	private properties: string[];
 	private from: any;
 	private to: any;
+	private yoyo = 0;
+	private steps = 0;
 	private currentFrom: any;
 	private currentTo: any;
 	private remainsDt: number;
@@ -45,18 +46,6 @@ export class Tween extends BaseTween implements ITween {
 	public Init(object: any, properties: string[]) {
 		this.object = object;
 		this.properties = properties;
-	}
-
-	/**
-	 * Method used to start a tween
-	 *
-	 * @returns {ITween}
-	 *
-	 * @memberOf Tween
-	 */
-	public Start(): ITween {
-		super.Start();
-		return this;
 	}
 
 	/**
@@ -139,6 +128,9 @@ export class Tween extends BaseTween implements ITween {
 			this.elapsed += this.remainsDt;
 			let progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
 			let val = this.ease(progress);
+			if (this.steps !== 0) {
+				val = Math.round(val * this.steps) / this.steps;
+			}
 			if (this.object) {
 				for (let i = 0; i < this.properties.length; i++) {
 					let prop = this.properties[i];
@@ -152,6 +144,16 @@ export class Tween extends BaseTween implements ITween {
 			}
 
 			this.remainsDt = this.elapsed - this.duration;
+
+			// Yoyo effect ( A -> B -> A )
+			if (this.yoyo > 0) {
+				this.Reverse();
+				this.ResetAndStart(0);
+				this.yoyo--;
+				continue;
+			}
+
+			// Loop management
 			this.loop--;
 			if (this.loop === 0) {
 				this.Complete();
@@ -161,20 +163,6 @@ export class Tween extends BaseTween implements ITween {
 			this.CheckPosition();
 			this.ResetAndStart(0);
 		}
-	}
-
-	/**
-	 * Method used to define the ticker of this tween
-	 * When Fatina.Tween is used, the main ticker is automatically defined as parent
-	 *
-	 * @param {ITicker} ticker
-	 * @returns {ITween}
-	 *
-	 * @memberOf Tween
-	 */
-	public SetParent(ticker: ITicker): ITween {
-		super.SetParent(ticker);
-		return this;
 	}
 
 	/**
@@ -206,20 +194,6 @@ export class Tween extends BaseTween implements ITween {
 	}
 
 	/**
-	 * Method used to define how many time the tween has to loop
-	 * Extra: if -1 the tween will loop forever
-	 *
-	 * @param {number} loop
-	 * @returns {ITween}
-	 *
-	 * @memberOf Tween
-	 */
-	public SetLoop(loop: number): ITween {
-		this.loop = Math.round(loop);
-		return this;
-	}
-
-	/**
 	 * Method used to define if the tween as to work in relative or not
 	 *
 	 * @param {boolean} relative
@@ -229,19 +203,6 @@ export class Tween extends BaseTween implements ITween {
 	 */
 	public SetRelative(relative: boolean): ITween {
 		this.relative = relative;
-		return this;
-	}
-
-	/**
-	 * Method used to change the timescale of the tween
-	 *
-	 * @param {number} scale
-	 * @returns {ITween}
-	 *
-	 * @memberOf Tween
-	 */
-	public SetTimescale(scale: number): ITween {
-		this.timescale = scale;
 		return this;
 	}
 
@@ -266,6 +227,55 @@ export class Tween extends BaseTween implements ITween {
 				this.currentFrom[prop] += diff[prop];
 			}
 		}
+	}
+
+	/**
+	 * Method used to reverse the tween
+	 *
+	 * @memberOf Tween
+	 */
+	public Reverse(): void {
+		let previous = this.currentFrom;
+		this.currentFrom = this.currentTo;
+		this.currentTo = previous;
+
+		previous = this.from;
+		this.from = this.to;
+		this.to = previous;
+
+		let elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
+		this.elapsed = Math.round(elapsed * 1000) / 1000;
+
+		if (this.state === State.Finished) {
+			this.Reset(true);
+			this.Start();
+		}
+	}
+
+	/**
+	 * Method used to reverse the tween N times at the end
+	 *
+	 * @param {number} time
+	 * @returns {ITween}
+	 *
+	 * @memberOf Tween
+	 */
+	public Yoyo(time: number): ITween {
+		this.yoyo = time;
+		return this;
+	}
+
+	/**
+	 * Method used to Quantify the tween value to a certain amount of steps
+	 *
+	 * @param {number} steps
+	 * @returns {ITween}
+	 *
+	 * @memberOf Tween
+	 */
+	public SetSteps(steps: number): ITween {
+		this.steps = steps;
+		return this;
 	}
 
 	/**
@@ -340,37 +350,5 @@ export class Tween extends BaseTween implements ITween {
 		this.currentFrom = undefined;
 		this.currentTo = undefined;
 		this.relative = false;
-	}
-
-	public OnStart(cb: () => void): ITween {
-		if (!this.eventStart) {
-			this.eventStart = new Array(0);
-		}
-		this.eventStart[this.eventStart.length] = cb;
-		return this;
-	}
-
-	public OnUpdate(cb: (dt: number, progress: number) => void): ITween {
-		if (!this.eventUpdate) {
-			this.eventUpdate = new Array(0);
-		}
-		this.eventUpdate[this.eventUpdate.length] = cb;
-		return this;
-	}
-
-	public OnKilled(cb: () => void): ITween {
-		if (!this.eventKill) {
-			this.eventKill = new Array(0);
-		}
-		this.eventKill[this.eventKill.length] = cb;
-		return this;
-	}
-
-	public OnComplete(cb: () => void): ITween {
-		if (!this.eventComplete) {
-			this.eventComplete = new Array(0);
-		}
-		this.eventComplete[this.eventComplete.length] = cb;
-		return this;
 	}
 }

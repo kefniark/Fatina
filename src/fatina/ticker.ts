@@ -146,4 +146,16 @@ export class Ticker extends EventList implements ITicker {
 	public Reset(): void {
 		this.state = State.Idle;
 	}
+
+	public IsRunning(): boolean {
+		return this.state === State.Run;
+	}
+
+	public IsFinished(): boolean {
+		return this.state === State.Killed || this.state === State.Finished;
+	}
+
+	public IsPaused(): boolean {
+		return this. state === State.Pause;
+	}
 }

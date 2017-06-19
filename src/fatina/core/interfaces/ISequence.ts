@@ -27,6 +27,7 @@ export interface ISequence extends IControl {
 	Join(tween: ITween | ISequence): ISequence;
 
 	OnStart(cb: () => void): ISequence;
+	OnRestart(cb: () => void): ISequence;
 	OnStepStart(cb: (tween: ITween | IPlayable) => void): ISequence;
 	OnStepEnd(cb: (index: ITween | IPlayable) => void): ISequence;
 	OnUpdate(cb: (dt: number, progress: number) => void): ISequence;
