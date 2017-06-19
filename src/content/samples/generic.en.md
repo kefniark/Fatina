@@ -84,6 +84,28 @@ The following example are moving html elements but you can tween almost any kind
 ```
 {{% /expand %}}
 
+<hr/>
+
+<h3>Steps</h3>
+
+{{% code "static/samples/generic7.html" %}}
+{{%expand "See Code" %}}
+```js
+{{% snippet "static/samples/generic7.html" %}}
+```
+{{% /expand %}}
+
+<hr/>
+
+<h3>Yoyo <small>(aka pingpong, reverse the tween 5 times)</small></h3>
+
+{{% code "static/samples/generic8.html" %}}
+{{%expand "See Code" %}}
+```js
+{{% snippet "static/samples/generic8.html" %}}
+```
+{{% /expand %}}
+
 <script>
     function playAll() {
         sample1();
@@ -92,9 +114,12 @@ The following example are moving html elements but you can tween almost any kind
         sample4();
         sample5();
         sample6();
+        sample7();
+        sample8();
     }
 
     (function() {
         setTimeout(() => playAll(), 500);
     })();
 </script>
+

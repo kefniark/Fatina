@@ -342,7 +342,7 @@ The following example are moving html elements but you can tween almost any kind
 </div>
 <hr/></p>
 
-<p><h3>Pause / Resume</h3>
+<h3>Pause / Resume</h3>
 <img id="sample4" class="imgTest" src="/Fatina/Yuko_Blink_2.png"/>
 <script>
     function sample4() {
@@ -401,9 +401,9 @@ The following example are moving html elements but you can tween almost any kind
 
     </div>
 </div>
-<hr/></p>
+<hr/>
 
-<p><h3>Timescale <small>(on both sequence &amp; tween)</small></h3>
+<h3>Timescale <small>(on both sequence &amp; tween)</small></h3>
 <img id="sample5" class="imgTest" src="/Fatina/Yuko_Blink_2.png"/>
 <script>
     function sample5() {
@@ -458,9 +458,9 @@ The following example are moving html elements but you can tween almost any kind
 
     </div>
 </div>
-<hr/></p>
+<hr/>
 
-<p><h3>Loop <small>(on both sequence &amp; tween)</small></h3>
+<h3>Loop <small>(on both sequence &amp; tween)</small></h3>
 <img id="sample6" class="imgTest" src="/Fatina/Yuko_Blink_2.png"/>
 <script>
     function sample6() {
@@ -544,6 +544,116 @@ The following example are moving html elements but you can tween almost any kind
 </code></pre>
 
     </div>
+</div>
+
+<hr/>
+
+<h3>Steps</h3>
+
+<p><img id="sample7" class="imgTest" src="/Fatina/Yuko_Blink_2.png"/>
+<script>
+    function sample7() {
+        var elem7 = document.getElementById("sample7");
+
+        var obj7 = { x: 0, y: 0 };
+        Fatina.Tween(obj7, ['x'])
+            .To({x: 500}, 2500)
+            .SetEasing('inOutSine')
+            .SetSteps(15)
+            .OnStart(() => console.log("tween7 start"))
+            .OnUpdate((dt, progress) => {
+                elem7.style.left = obj7.x + "px";
+            })
+            .OnComplete(() => console.log("tween7 complete"))
+            .Start();
+    }
+</script>
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<span class="btn btn-default">
+    	
+    	See Code
+    	
+    	</span>
+		<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">&amp;lt;img id=&amp;#34;sample7&amp;#34; class=&amp;#34;imgTest&amp;#34; src=&amp;#34;/Fatina/Yuko_Blink_2.png&amp;#34;/&amp;gt;
+&amp;lt;script&amp;gt;
+    function sample7() {
+        var elem7 = document.getElementById(&amp;#34;sample7&amp;#34;);
+
+        var obj7 = { x: 0, y: 0 };
+        Fatina.Tween(obj7, [&amp;#39;x&amp;#39;])
+            .To({x: 500}, 2500)
+            .SetEasing(&amp;#39;inOutSine&amp;#39;)
+            .SetSteps(15)
+            .OnStart(() =&amp;gt; console.log(&amp;#34;tween7 start&amp;#34;))
+            .OnUpdate((dt, progress) =&amp;gt; {
+                elem7.style.left = obj7.x &amp;#43; &amp;#34;px&amp;#34;;
+            })
+            .OnComplete(() =&amp;gt; console.log(&amp;#34;tween7 complete&amp;#34;))
+            .Start();
+    }
+&amp;lt;/script&amp;gt;
+</code></pre>
+
+    </div>
+</div></p>
+
+<hr/>
+
+<h3>Yoyo <small>(aka pingpong, reverse the tween 5 times)</small></h3>
+
+<p><img id="sample8" class="imgTest" src="/Fatina/Yuko_Blink_2.png"/>
+<script>
+    function sample8() {
+        var elem8 = document.getElementById("sample8");
+
+        var obj8 = { x: 0, y: 0 };
+        Fatina.Tween(obj8, ['x'])
+            .To({x: 500}, 2500)
+            .SetEasing('inOutSine')
+            .Yoyo(5)
+            .OnStart(() => console.log("tween8 start"))
+            .OnUpdate((dt, progress) => {
+                elem8.style.left = obj8.x + "px";
+            })
+            .OnComplete(() => console.log("tween8 complete"))
+            .Start();
+    }
+</script>
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<span class="btn btn-default">
+    	
+    	See Code
+    	
+    	</span>
+		<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">&amp;lt;img id=&amp;#34;sample8&amp;#34; class=&amp;#34;imgTest&amp;#34; src=&amp;#34;/Fatina/Yuko_Blink_2.png&amp;#34;/&amp;gt;
+&amp;lt;script&amp;gt;
+    function sample8() {
+        var elem8 = document.getElementById(&amp;#34;sample8&amp;#34;);
+
+        var obj8 = { x: 0, y: 0 };
+        Fatina.Tween(obj8, [&amp;#39;x&amp;#39;])
+            .To({x: 500}, 2500)
+            .SetEasing(&amp;#39;inOutSine&amp;#39;)
+            .Yoyo(5)
+            .OnStart(() =&amp;gt; console.log(&amp;#34;tween8 start&amp;#34;))
+            .OnUpdate((dt, progress) =&amp;gt; {
+                elem8.style.left = obj8.x &amp;#43; &amp;#34;px&amp;#34;;
+            })
+            .OnComplete(() =&amp;gt; console.log(&amp;#34;tween8 complete&amp;#34;))
+            .Start();
+    }
+&amp;lt;/script&amp;gt;
+</code></pre>
+
+    </div>
 </div></p>
 
 <script>
@@ -554,6 +664,8 @@ The following example are moving html elements but you can tween almost any kind
         sample4();
         sample5();
         sample6();
+        sample7();
+        sample8();
     }
 
     (function() {

@@ -1,0 +1,18 @@
+<img id="sample8" class="imgTest" src="/Fatina/Yuko_Blink_2.png"/>
+<script>
+    function sample8() {
+        var elem8 = document.getElementById("sample8");
+
+        var obj8 = { x: 0, y: 0 };
+        Fatina.Tween(obj8, ['x'])
+            .To({x: 500}, 2500)
+            .SetEasing('inOutSine')
+            .Yoyo(5)
+            .OnStart(() => console.log("tween8 start"))
+            .OnUpdate((dt, progress) => {
+                elem8.style.left = obj8.x + "px";
+            })
+            .OnComplete(() => console.log("tween8 complete"))
+            .Start();
+    }
+</script>
