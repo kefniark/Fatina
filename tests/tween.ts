@@ -455,9 +455,9 @@ test('[Fatina.Tween] Test Modify', function (t: any) {
 	ticker.Start();
 
 	let complete = 0;
-	let obj = { x: 0 };
-	let tween = new Tween(obj, ['x'])
-		.To({ x: 1 }, 2)
+	let obj = { x: 0, y: 0 };
+	let tween = new Tween(obj, ['x', 'y'])
+		.To({ x: 1, y: 1 }, 2)
 		.SetParent(ticker)
 		.OnComplete(() => complete++)
 		.Start();

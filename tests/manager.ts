@@ -79,6 +79,76 @@ test('[Fatina.Manager] Create sequence', function (t: any) {
 	t.end();
 });
 
+test('[Fatina.Manager] Create Delay', function (t: any) {
+	let started = 0;
+	let updated = 0;
+	let killed = 0;
+	let completed = 0;
+	let elapsed = 0;
+
+	let delay = fatina.Delay(20)
+		.OnStart(() => {})
+		.OnStart(() => started++)
+		.OnUpdate(() => {})
+		.OnUpdate((dt: number, progress: number) => {
+			updated++;
+			elapsed += dt;
+		})
+		.OnUpdate(() => {})
+		.OnKilled(() => {})
+		.OnKilled(() => killed++)
+		.OnKilled(() => {})
+		.OnComplete(() => {})
+		.OnComplete(() => completed++)
+		.OnComplete(() => {})
+		.Start();
+	fatina.Update(10);
+
+	t.equal(1, started)
+	t.equal(10, elapsed)
+	t.equal(0, completed)
+
+	fatina.Update(10);
+
+	t.equal(1, started)
+	t.equal(20, elapsed)
+	t.equal(1, completed)
+
+	delay.Skip();
+	delay.Kill();
+
+	t.end();
+});
+
+test('[Fatina.Manager] Use SetTimeout', function (t: any) {
+	let called = 0;
+	fatina.SetTimeout(function() { called++; }, 10);
+
+	fatina.Update(6);
+	t.equal(0, called);
+
+	fatina.Update(6);
+	t.equal(1, called);
+
+	t.end();
+});
+
+test('[Fatina.Manager] Use SetInterval', function (t: any) {
+	let called = 0;
+	fatina.SetInterval(function() { called++; }, 2);
+
+	fatina.Update(1);
+	t.equal(0, called);
+
+	fatina.Update(1);
+	t.equal(1, called);
+
+	fatina.Update(6);
+	t.equal(4, called);
+
+	t.end();
+});
+
 test('[Fatina.Manager] Create ticker', function (t: any) {
 	let obj = { x: 0, y: 0, z: 0 };
 	let gameTicker = fatina.Ticker('game');

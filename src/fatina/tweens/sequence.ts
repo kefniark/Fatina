@@ -18,7 +18,7 @@ import { State } from '../core/enum/state';
  * @implements {ITicker}
  * @implements {IPlayable}
  */
-export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable {
+export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker, IPlayable {
 	private eventTick: {(dt: number): void}[] = [];
 	private tweens: ((ITween | IPlayable)[])[] = [];
 	private eventStepStart: {(tween: ITween | IPlayable): void}[] | undefined;
@@ -35,25 +35,14 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 		this.tickCb = this.Tick.bind(this);
 	}
 
-	public Start(): ISequence {
-		super.Start();
-		return this;
-	}
-
 	protected LoopInit() {
 		this.sequenceIndex = 0;
 		for (let i = 0; i < this.tweens.length; i++) {
 			let tweenArray = this.tweens[i];
 			for (let j = 0; j < tweenArray.length; j++) {
-				let tween = tweenArray[j];
-				(tween as BaseTween).Reset();
+				tweenArray[j].Reset();
 			}
 		}
-	}
-
-	public SetParent(ticker: ITicker): ISequence {
-		super.SetParent(ticker);
-		return this;
 	}
 
 	public AddTickListener(cb: (dt: number) => void): void {
@@ -226,53 +215,11 @@ export class Sequence extends BaseTween implements ISequence, ITicker, IPlayable
 		return this;
 	}
 
-	public SetTimescale(scale: number): ISequence {
-		this.timescale = scale;
-		return this;
-	}
-
-	public SetLoop(loop: number): ISequence {
-		this.loop = Math.round(loop);
-		return this;
-	}
-
 	public Default() {
 		super.Default();
 		this.tweens.length = 0;
 		this.currentTween = undefined;
 		this.sequenceIndex = 0;
-	}
-
-	public OnStart(cb: () => void): ISequence {
-		if (!this.eventStart) {
-			this.eventStart = new Array(0);
-		}
-		this.eventStart[this.eventStart.length] = cb;
-		return this;
-	}
-
-	public OnUpdate(cb: (dt: number, progress: number) => void): ISequence {
-		if (!this.eventUpdate) {
-			this.eventUpdate = new Array(0);
-		}
-		this.eventUpdate[this.eventUpdate.length] = cb;
-		return this;
-	}
-
-	public OnKilled(cb: () => void): ISequence {
-		if (!this.eventKill) {
-			this.eventKill = new Array(0);
-		}
-		this.eventKill[this.eventKill.length] = cb;
-		return this;
-	}
-
-	public OnComplete(cb: () => void): ISequence {
-		if (!this.eventComplete) {
-			this.eventComplete = new Array(0);
-		}
-		this.eventComplete[this.eventComplete.length] = cb;
-		return this;
 	}
 
 	public OnStepStart(cb: (index: ITween | IPlayable) => void): ISequence {

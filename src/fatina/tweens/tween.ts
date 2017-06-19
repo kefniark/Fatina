@@ -1,6 +1,5 @@
 import { BaseTween } from './baseTween';
 import { ITween } from '../core/interfaces/ITween';
-import { ITicker } from '../core/interfaces/ITicker';
 import { easeNames, easeTypes } from '../easing/easing';
 import { Sequence } from './sequence';
 import { ISequence } from '../core/interfaces/ISequence';
@@ -15,7 +14,7 @@ import { EasingType } from '../easing/easingType';
  * @extends {BaseTween}
  * @implements {ITween}
  */
-export class Tween extends BaseTween implements ITween {
+export class Tween extends BaseTween<Tween> implements ITween {
 	private object: any;
 	private properties: string[];
 	private from: any;
@@ -45,18 +44,6 @@ export class Tween extends BaseTween implements ITween {
 	public Init(object: any, properties: string[]) {
 		this.object = object;
 		this.properties = properties;
-	}
-
-	/**
-	 * Method used to start a tween
-	 *
-	 * @returns {ITween}
-	 *
-	 * @memberOf Tween
-	 */
-	public Start(): ITween {
-		super.Start();
-		return this;
 	}
 
 	/**
@@ -164,20 +151,6 @@ export class Tween extends BaseTween implements ITween {
 	}
 
 	/**
-	 * Method used to define the ticker of this tween
-	 * When Fatina.Tween is used, the main ticker is automatically defined as parent
-	 *
-	 * @param {ITicker} ticker
-	 * @returns {ITween}
-	 *
-	 * @memberOf Tween
-	 */
-	public SetParent(ticker: ITicker): ITween {
-		super.SetParent(ticker);
-		return this;
-	}
-
-	/**
 	 * Method used to set the values at the beginning of the tween
 	 *
 	 * @param {*} from
@@ -206,20 +179,6 @@ export class Tween extends BaseTween implements ITween {
 	}
 
 	/**
-	 * Method used to define how many time the tween has to loop
-	 * Extra: if -1 the tween will loop forever
-	 *
-	 * @param {number} loop
-	 * @returns {ITween}
-	 *
-	 * @memberOf Tween
-	 */
-	public SetLoop(loop: number): ITween {
-		this.loop = Math.round(loop);
-		return this;
-	}
-
-	/**
 	 * Method used to define if the tween as to work in relative or not
 	 *
 	 * @param {boolean} relative
@@ -229,19 +188,6 @@ export class Tween extends BaseTween implements ITween {
 	 */
 	public SetRelative(relative: boolean): ITween {
 		this.relative = relative;
-		return this;
-	}
-
-	/**
-	 * Method used to change the timescale of the tween
-	 *
-	 * @param {number} scale
-	 * @returns {ITween}
-	 *
-	 * @memberOf Tween
-	 */
-	public SetTimescale(scale: number): ITween {
-		this.timescale = scale;
 		return this;
 	}
 
@@ -340,37 +286,5 @@ export class Tween extends BaseTween implements ITween {
 		this.currentFrom = undefined;
 		this.currentTo = undefined;
 		this.relative = false;
-	}
-
-	public OnStart(cb: () => void): ITween {
-		if (!this.eventStart) {
-			this.eventStart = new Array(0);
-		}
-		this.eventStart[this.eventStart.length] = cb;
-		return this;
-	}
-
-	public OnUpdate(cb: (dt: number, progress: number) => void): ITween {
-		if (!this.eventUpdate) {
-			this.eventUpdate = new Array(0);
-		}
-		this.eventUpdate[this.eventUpdate.length] = cb;
-		return this;
-	}
-
-	public OnKilled(cb: () => void): ITween {
-		if (!this.eventKill) {
-			this.eventKill = new Array(0);
-		}
-		this.eventKill[this.eventKill.length] = cb;
-		return this;
-	}
-
-	public OnComplete(cb: () => void): ITween {
-		if (!this.eventComplete) {
-			this.eventComplete = new Array(0);
-		}
-		this.eventComplete[this.eventComplete.length] = cb;
-		return this;
 	}
 }

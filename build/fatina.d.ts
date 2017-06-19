@@ -11,6 +11,9 @@ export function Destroy(): void;
 export function Update(timestamp: number): any;
 export function Tween(obj: any, properties: string[]): ITween;
 export function Sequence(): ISequence;
+export function Delay(duration: number): IPlayable;
+export function SetTimeout(fn: () => void, duration: number): IPlayable;
+export function SetInterval(fn: () => void, duration: number): IPlayable;
 export function Ticker(name: string): ITicker;
 
 export interface ITween extends IControl {
@@ -28,6 +31,7 @@ export interface ITween extends IControl {
     ToSequence(): ISequence;
     OnStart(cb: () => void): ITween;
     OnUpdate(cb: (dt: number, progress: number) => void): ITween;
+    OnRestart(cb: () => void): ITween;
     OnKilled(cb: () => void): ITween;
     OnComplete(cb: () => void): ITween;
 }
@@ -47,6 +51,7 @@ export interface ISequence extends IControl {
     PrependInterval(duration: number): ISequence;
     Join(tween: ITween | ISequence): ISequence;
     OnStart(cb: () => void): ISequence;
+    OnRestart(cb: () => void): ISequence;
     OnStepStart(cb: (tween: ITween | IPlayable) => void): ISequence;
     OnStepEnd(cb: (index: ITween | IPlayable) => void): ISequence;
     OnUpdate(cb: (dt: number, progress: number) => void): ISequence;
@@ -94,6 +99,18 @@ export enum EasingType {
     InOutBounce = 30,
 }
 
+export interface IPlayable extends IControl {
+    state: State;
+    SetParent(ticker: ITicker): IPlayable;
+    Start(): IPlayable;
+    SetLoop(loop: number): IPlayable;
+    OnStart(cb: () => void): IPlayable;
+    OnRestart(cb: () => void): IPlayable;
+    OnUpdate(cb: (dt: number, progress: number) => void): IPlayable;
+    OnKilled(cb: () => void): IPlayable;
+    OnComplete(cb: () => void): IPlayable;
+}
+
 export interface IControl {
     elapsed: number;
     duration: number;
@@ -104,10 +121,6 @@ export interface IControl {
     Kill(): void;
     Reset(): void;
     Skip(): void;
-}
-
-export interface IPlayable extends IControl {
-    state: State;
 }
 
 export enum State {
