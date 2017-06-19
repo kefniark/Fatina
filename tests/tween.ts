@@ -588,8 +588,6 @@ test('[Fatina.Tween] Test Steps', function (t: any) {
 	ticker.Tick(2);
 	t.equal(10, obj1.x);
 
-
-
 	t.ok(tween1.IsFinished());
 	t.ok(tween2.IsFinished());
 	t.notOk(tween3.IsFinished());
