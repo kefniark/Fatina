@@ -9,9 +9,9 @@
   <meta property="og:title" content="Tween API" />
   <meta name="twitter:title" content="Tween API" />
   <meta name="description" content="Fatina Tween Sequence   A Tween that takes control of values and animates them.
- Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp; timescale) duration: number duration of this tween in ms.  Controls  Start(): Tween By default new tween are not started. Don&rsquo;t forget to call .Start() Pause(): void Resume(): void Skip(): void Kill(): void  See More// Create a tween let tween = Fatina.">
+ Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp; timescale) duration: number duration of this tween in ms.  Controls  Start(): Tween By default new tween are not started. Don&rsquo;t forget to call .Start() Pause(): void Resume(): void Skip(): void Kill(): void IsRunning(): boolean IsFinished(): boolean IsPaused(): boolean  See More// Create a tween let tween = Fatina.">
   <meta property="og:description" content="Fatina Tween Sequence   A Tween that takes control of values and animates them.
- Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp; timescale) duration: number duration of this tween in ms.  Controls  Start(): Tween By default new tween are not started. Don&rsquo;t forget to call .Start() Pause(): void Resume(): void Skip(): void Kill(): void  See More// Create a tween let tween = Fatina.">
+ Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp; timescale) duration: number duration of this tween in ms.  Controls  Start(): Tween By default new tween are not started. Don&rsquo;t forget to call .Start() Pause(): void Resume(): void Skip(): void Kill(): void IsRunning(): boolean IsFinished(): boolean IsPaused(): boolean  See More// Create a tween let tween = Fatina.">
   <meta name="twitter:description" content="Fatina Tween Sequence   A Tween that takes control of values and animates them.
  Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp; timescale) duration: number …">
   <meta name="author" content="Kevin Destrem"/>
@@ -186,6 +186,9 @@
 <li><strong>Resume</strong>(): <code>void</code></li>
 <li><strong>Skip</strong>(): <code>void</code></li>
 <li><strong>Kill</strong>(): <code>void</code></li>
+<li><strong>IsRunning</strong>(): <code>boolean</code></li>
+<li><strong>IsFinished</strong>(): <code>boolean</code></li>
+<li><strong>IsPaused</strong>(): <code>boolean</code></li>
 </ul>
 
 <div class="expand">
@@ -217,6 +220,7 @@ tween.Kill();
 <li><strong>OnUpdate</strong>(cb: (dt: number, progress: number) =&gt; void): <code>Tween</code></li>
 <li><strong>OnKilled</strong>(cb: () =&gt; void): <code>Tween</code></li>
 <li><strong>OnComplete</strong>(cb: () =&gt; void): <code>Tween</code></li>
+<li><strong>OnRestart</strong>(cb: () =&gt; void): <code>Tween</code></li>
 </ul>
 
 <div class="expand">
@@ -253,6 +257,9 @@ Fatina.Tween(obj, ['x'])
 <li><strong>SetRelative</strong>(relative: boolean): <code>Tween</code>;</li>
 <li><strong>SetEasing</strong>(type: EasingType | string): <code>Tween</code>;</li>
 <li><strong>SetTimescale</strong>(scale: number): <code>Tween</code>;</li>
+<li><strong>SetSteps</strong>(steps: number): <code>Tween</code>;</li>
+<li><strong>Yoyo</strong>(times: number): <code>Tween</code>;</li>
+<li><strong>Reverse</strong>(): <code>void</code>;</li>
 <li><strong>ToSequence</strong>(): <code>Sequence</code>;</li>
 </ul>
 

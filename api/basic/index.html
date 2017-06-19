@@ -8,8 +8,8 @@
   <title>Fatina API</title>
   <meta property="og:title" content="Fatina API" />
   <meta name="twitter:title" content="Fatina API" />
-  <meta name="description" content="Fatina Tween Sequence  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .Init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  Pause() / Resume(): void SetTimescale(scale: number): void  Methods  Init(): void This method has to be called once to initialize Fatina Update(dt: number): void Tween(obj, properties): Tween Method used to create new tween Sequence(): Sequence Method used to create new sequence Ticker(name: string): ITicker  See MoreFor normal usage">
-  <meta property="og:description" content="Fatina Tween Sequence  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .Init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  Pause() / Resume(): void SetTimescale(scale: number): void  Methods  Init(): void This method has to be called once to initialize Fatina Update(dt: number): void Tween(obj, properties): Tween Method used to create new tween Sequence(): Sequence Method used to create new sequence Ticker(name: string): ITicker  See MoreFor normal usage">
+  <meta name="description" content="Fatina Tween Sequence  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .Init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  Pause() / Resume(): void SetTimescale(scale: number): void  Methods  Init(): void This method has to be called once to initialize Fatina Update(dt: number): void Tween(obj, properties): Tween Method used to create new tween Sequence(): Sequence Method used to create new sequence Delay(duration) Delay SetTimeout(fn, duration): void This is just a simple helper around Fatina.">
+  <meta property="og:description" content="Fatina Tween Sequence  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .Init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  Pause() / Resume(): void SetTimescale(scale: number): void  Methods  Init(): void This method has to be called once to initialize Fatina Update(dt: number): void Tween(obj, properties): Tween Method used to create new tween Sequence(): Sequence Method used to create new sequence Delay(duration) Delay SetTimeout(fn, duration): void This is just a simple helper around Fatina.">
   <meta name="twitter:description" content="Fatina Tween Sequence  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
@@ -185,6 +185,9 @@ If instead you prefer to initialize it yourself (recommended), call the method <
 <li><strong>Update</strong>(dt: number): <code>void</code></li>
 <li><strong>Tween</strong>(obj, properties): <code>Tween</code> <small>Method used to create new tween</small></li>
 <li><strong>Sequence</strong>(): <code>Sequence</code> <small>Method used to create new sequence</small></li>
+<li><strong>Delay</strong>(duration) <code>Delay</code></li>
+<li><strong>SetTimeout</strong>(fn, duration): <code>void</code> This is just a simple helper around Fatina.Delay</li>
+<li><strong>SetInterval</strong>(fn, duration): <code>void</code> This is just a simple helper around Fatina.Delay</li>
 <li><strong>Ticker</strong>(name: string): <code>ITicker</code></li>
 </ul>
 
@@ -235,6 +238,8 @@ By default, all the tweens are childs of the same default Ticker, but it's possi
 <li><strong>Pause</strong>() / <strong>Resume</strong>(): <code>void</code></li>
 <li><strong>SetTimescale</strong>(scale: number): <code>void</code></li>
 <li><strong>Kill</strong>(): <code>void</code></li>
+<li><strong>IsRunning</strong>(): <code>boolean</code></li>
+<li><strong>IsPaused</strong>(): <code>boolean</code></li>
 </ul>
 
 <h3 id="methods-1">Methods</h3>

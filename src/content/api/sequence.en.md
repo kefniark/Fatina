@@ -24,6 +24,9 @@ weight = 4
 * **Pause**(): `void`
 * **Resume**(): `void`
 * **Kill**(): `void`
+* **IsRunning**(): `boolean`
+* **IsFinished**(): `boolean`
+* **IsPaused**(): `boolean`
 
 ### Callbacks
 * **OnStart**(cb: () => void): `Sequence`;
@@ -32,6 +35,7 @@ weight = 4
 * **OnUpdate**(cb: (dt: number, progress: number) => void): `Sequence`
 * **OnKilled**(cb: () => void): `Sequence`
 * **OnComplete**(cb: () => void): `Sequence`
+* **OnRestart**(cb: () => void): `Sequence`
 
 ### Methods
 * **SetTimescale**(scale: number): `Sequence`

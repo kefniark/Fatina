@@ -26,6 +26,9 @@ weight = 3
 * **Resume**(): `void`
 * **Skip**(): `void`
 * **Kill**(): `void`
+* **IsRunning**(): `boolean`
+* **IsFinished**(): `boolean`
+* **IsPaused**(): `boolean`
 
 {{%expand "See More" %}}
 ```js
@@ -44,6 +47,7 @@ tween.Kill();
 * **OnUpdate**(cb: (dt: number, progress: number) => void): `Tween`
 * **OnKilled**(cb: () => void): `Tween`
 * **OnComplete**(cb: () => void): `Tween`
+* **OnRestart**(cb: () => void): `Tween`
 
 {{%expand "See More" %}}
 ```js
@@ -67,6 +71,9 @@ Fatina.Tween(obj, ['x'])
 * **SetRelative**(relative: boolean): `Tween`;
 * **SetEasing**(type: EasingType | string): `Tween`;
 * **SetTimescale**(scale: number): `Tween`;
+* **SetSteps**(steps: number): `Tween`;
+* **Yoyo**(times: number): `Tween`;
+* **Reverse**(): `void`;
 * **ToSequence**(): `Sequence`;
 
 {{%expand "See More" %}}

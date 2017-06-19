@@ -9,9 +9,9 @@
   <meta property="og:title" content="Sequence API" />
   <meta name="twitter:title" content="Sequence API" />
   <meta name="description" content="Fatina Tween Sequence   A Sequence is special tween that, instead of taking control of a value, takes control of other tweens and animates them as a group.
- Properties  elapsed: number number of ms. elapsed for this sequence (affected by pause &amp; timescale)  Controls  Start(): Sequence By default new tween are not started. Don&rsquo;t forget to call .Start() Pause(): void Resume(): void Kill(): void  Callbacks  OnStart(cb: () =&gt; void): Sequence; OnStepStart(cb: (tween: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween start OnStepEnd(cb: (index: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween is completed.">
+ Properties  elapsed: number number of ms. elapsed for this sequence (affected by pause &amp; timescale)  Controls  Start(): Sequence By default new tween are not started. Don&rsquo;t forget to call .Start() Pause(): void Resume(): void Kill(): void IsRunning(): boolean IsFinished(): boolean IsPaused(): boolean  Callbacks  OnStart(cb: () =&gt; void): Sequence; OnStepStart(cb: (tween: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween start OnStepEnd(cb: (index: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween is completed.">
   <meta property="og:description" content="Fatina Tween Sequence   A Sequence is special tween that, instead of taking control of a value, takes control of other tweens and animates them as a group.
- Properties  elapsed: number number of ms. elapsed for this sequence (affected by pause &amp; timescale)  Controls  Start(): Sequence By default new tween are not started. Don&rsquo;t forget to call .Start() Pause(): void Resume(): void Kill(): void  Callbacks  OnStart(cb: () =&gt; void): Sequence; OnStepStart(cb: (tween: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween start OnStepEnd(cb: (index: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween is completed.">
+ Properties  elapsed: number number of ms. elapsed for this sequence (affected by pause &amp; timescale)  Controls  Start(): Sequence By default new tween are not started. Don&rsquo;t forget to call .Start() Pause(): void Resume(): void Kill(): void IsRunning(): boolean IsFinished(): boolean IsPaused(): boolean  Callbacks  OnStart(cb: () =&gt; void): Sequence; OnStepStart(cb: (tween: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween start OnStepEnd(cb: (index: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween is completed.">
   <meta name="twitter:description" content="Fatina Tween Sequence   A Sequence is special tween that, instead of taking control of a value, takes control of other tweens and animates them as a group.
  Properties  elapsed: number number of ms. …">
   <meta name="author" content="Kevin Destrem"/>
@@ -184,6 +184,9 @@
 <li><strong>Pause</strong>(): <code>void</code></li>
 <li><strong>Resume</strong>(): <code>void</code></li>
 <li><strong>Kill</strong>(): <code>void</code></li>
+<li><strong>IsRunning</strong>(): <code>boolean</code></li>
+<li><strong>IsFinished</strong>(): <code>boolean</code></li>
+<li><strong>IsPaused</strong>(): <code>boolean</code></li>
 </ul>
 
 <h3 id="callbacks">Callbacks</h3>
@@ -195,6 +198,7 @@
 <li><strong>OnUpdate</strong>(cb: (dt: number, progress: number) =&gt; void): <code>Sequence</code></li>
 <li><strong>OnKilled</strong>(cb: () =&gt; void): <code>Sequence</code></li>
 <li><strong>OnComplete</strong>(cb: () =&gt; void): <code>Sequence</code></li>
+<li><strong>OnRestart</strong>(cb: () =&gt; void): <code>Sequence</code></li>
 </ul>
 
 <h3 id="methods">Methods</h3>

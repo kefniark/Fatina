@@ -26,6 +26,9 @@ If instead you prefer to initialize it yourself (recommended), call the method <
 * **Update**(dt: number): `void`
 * **Tween**(obj, properties): `Tween` <small>Method used to create new tween</small>
 * **Sequence**(): `Sequence` <small>Method used to create new sequence</small>
+* **Delay**(duration) `Delay`
+* **SetTimeout**(fn, duration): `void` This is just a simple helper around Fatina.Delay
+* **SetInterval**(fn, duration): `void` This is just a simple helper around Fatina.Delay
 * **Ticker**(name: string): `ITicker`
 
 {{%expand "See More" %}}
@@ -61,6 +64,8 @@ By default, all the tweens are childs of the same default Ticker, but it's possi
 * **Pause**() / **Resume**(): `void`
 * **SetTimescale**(scale: number): `void`
 * **Kill**(): `void`
+* **IsRunning**(): `boolean`
+* **IsPaused**(): `boolean`
 
 ### Methods
 * **AddTickListener**(listener: (dt: number) => void): `void`;
