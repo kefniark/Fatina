@@ -26,6 +26,13 @@ export function Elapsed() {
 	return tickerManager.elapsed;
 }
 
+export function MainTicker() {
+	if (!initialized) {
+		Init();
+	}
+	return tickerManager;
+}
+
 /**
  * Method used when Fatina is used for the first time.
  * Can take few ms. (pool initialization & object creation)

@@ -20,6 +20,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	private from: any;
 	private to: any;
 	private yoyo = 0;
+	private steps = 0;
 	private currentFrom: any;
 	private currentTo: any;
 	private remainsDt: number;
@@ -127,6 +128,9 @@ export class Tween extends BaseTween<Tween> implements ITween {
 			this.elapsed += this.remainsDt;
 			let progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
 			let val = this.ease(progress);
+			if (this.steps !== 0) {
+				val = Math.round(val * this.steps) / this.steps;
+			}
 			if (this.object) {
 				for (let i = 0; i < this.properties.length; i++) {
 					let prop = this.properties[i];
@@ -258,6 +262,19 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 */
 	public Yoyo(time: number): ITween {
 		this.yoyo = time;
+		return this;
+	}
+
+	/**
+	 * Method used to Quantify the tween value to a certain amount of steps
+	 *
+	 * @param {number} steps
+	 * @returns {ITween}
+	 *
+	 * @memberOf Tween
+	 */
+	public SetSteps(steps: number): ITween {
+		this.steps = steps;
 		return this;
 	}
 

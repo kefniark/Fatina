@@ -213,6 +213,18 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 		return <any> this;
 	}
 
+	public IsRunning(): boolean {
+		return this.state === State.Run;
+	}
+
+	public IsFinished(): boolean {
+		return this.state === State.Killed || this.state === State.Finished;
+	}
+
+	public IsPaused(): boolean {
+		return this. state === State.Pause;
+	}
+
 	protected Complete(): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
 			console.warn('cant complete this tween', this.state);

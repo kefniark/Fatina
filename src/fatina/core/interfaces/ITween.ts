@@ -22,6 +22,7 @@ export interface ITween extends IControl {
 
 	SetParent(ticker: ITicker): ITween;
 	SetLoop(loop: number): ITween;
+	SetSteps(steps: number): ITween;
 	SetRelative(relative: boolean): ITween;
 	SetEasing(type: EasingType | string): ITween;
 	SetTimescale(scale: number): ITween;

@@ -73,6 +73,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return tickerManager.elapsed;
 	}
 	exports.Elapsed = Elapsed;
+	function MainTicker() {
+	    if (!initialized) {
+	        Init();
+	    }
+	    return tickerManager;
+	}
+	exports.MainTicker = MainTicker;
 	function Init(disableAutoTick) {
 	    if (initialized) {
 	        return false;
@@ -152,21 +159,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (!initialized) {
 	        Init();
 	    }
-	    return new delay_1.Delay(duration)
-	        .SetParent(tickerManager)
-	        .OnComplete(fn)
-	        .Start();
+	    return new delay_1.Delay(duration).SetParent(tickerManager).OnComplete(fn).Start();
 	}
 	exports.SetTimeout = SetTimeout;
 	function SetInterval(fn, duration) {
 	    if (!initialized) {
 	        Init();
 	    }
-	    return new delay_1.Delay(duration)
-	        .SetParent(tickerManager)
-	        .OnRestart(fn)
-	        .SetLoop(-1)
-	        .Start();
+	    return new delay_1.Delay(duration).SetParent(tickerManager).OnRestart(fn).SetLoop(-1).Start();
 	}
 	exports.SetInterval = SetInterval;
 	function Ticker(name) {
@@ -453,9 +453,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return this;
 	    };
-	    BaseTween.prototype.Reset = function () {
+	    BaseTween.prototype.Reset = function (skipParent) {
 	        this.state = state_1.State.Idle;
-	        if (this.parent) {
+	        if (!skipParent && this.parent) {
 	            this.parent.RemoveTickListener(this.tickCb);
 	        }
 	        this.loop = 1;
@@ -523,6 +523,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    BaseTween.prototype.SetLoop = function (loop) {
 	        this.loop = Math.round(loop);
 	        return this;
+	    };
+	    BaseTween.prototype.IsRunning = function () {
+	        return this.state === state_1.State.Run;
+	    };
+	    BaseTween.prototype.IsFinished = function () {
+	        return this.state === state_1.State.Killed || this.state === state_1.State.Finished;
+	    };
+	    BaseTween.prototype.IsPaused = function () {
+	        return this.state === state_1.State.Pause;
 	    };
 	    BaseTween.prototype.Complete = function () {
 	        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
@@ -730,6 +739,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __extends(Tween, _super);
 	    function Tween(object, properties) {
 	        var _this = _super.call(this) || this;
+	        _this.yoyo = 0;
+	        _this.steps = 0;
 	        _this.relative = false;
 	        _this.object = object;
 	        _this.properties = properties;
@@ -791,6 +802,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.elapsed += this.remainsDt;
 	            var progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
 	            var val = this.ease(progress);
+	            if (this.steps !== 0) {
+	                val = Math.round(val * this.steps) / this.steps;
+	            }
 	            if (this.object) {
 	                for (var i = 0; i < this.properties.length; i++) {
 	                    var prop = this.properties[i];
@@ -802,6 +816,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return;
 	            }
 	            this.remainsDt = this.elapsed - this.duration;
+	            if (this.yoyo > 0) {
+	                this.Reverse();
+	                this.ResetAndStart(0);
+	                this.yoyo--;
+	                continue;
+	            }
 	            this.loop--;
 	            if (this.loop === 0) {
 	                this.Complete();
@@ -838,6 +858,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.currentFrom[prop] += diff[prop];
 	            }
 	        }
+	    };
+	    Tween.prototype.Reverse = function () {
+	        var previous = this.currentFrom;
+	        this.currentFrom = this.currentTo;
+	        this.currentTo = previous;
+	        previous = this.from;
+	        this.from = this.to;
+	        this.to = previous;
+	        var elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
+	        this.elapsed = Math.round(elapsed * 1000) / 1000;
+	        if (this.state === state_1.State.Finished) {
+	            this.Reset(true);
+	            this.Start();
+	        }
+	    };
+	    Tween.prototype.Yoyo = function (time) {
+	        this.yoyo = time;
+	        return this;
+	    };
+	    Tween.prototype.SetSteps = function (steps) {
+	        this.steps = steps;
+	        return this;
 	    };
 	    Tween.prototype.ToSequence = function () {
 	        if (!this.parent) {
@@ -1213,6 +1255,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    Ticker.prototype.Reset = function () {
 	        this.state = state_1.State.Idle;
+	    };
+	    Ticker.prototype.IsRunning = function () {
+	        return this.state === state_1.State.Run;
+	    };
+	    Ticker.prototype.IsFinished = function () {
+	        return this.state === state_1.State.Killed || this.state === state_1.State.Finished;
+	    };
+	    Ticker.prototype.IsPaused = function () {
+	        return this.state === state_1.State.Pause;
 	    };
 	    return Ticker;
 	}(eventList_1.EventList));

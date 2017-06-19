@@ -546,6 +546,60 @@ test('[Fatina.Tween] Test Modify', function (t: any) {
 	t.end();
 });
 
+test('[Fatina.Tween] Test Steps', function (t: any) {
+	let ticker = new Ticker();
+	ticker.Start();
+
+	let obj1 = { x: 0 };
+	let obj2 = { x: 0 };
+	let obj3 = { x: 0 };
+	let tween1 = new Tween(obj1, ['x']).SetParent(ticker).To({ x: 10 }, 10).SetSteps(5).Start();
+	let tween2 = new Tween(obj2, ['x']).SetParent(ticker).To({ x: 10 }, 10).SetSteps(10).Start();
+	let tween3 = new Tween(obj3, ['x']).SetParent(ticker).To({ x: 10 }, 10).SetSteps(4).Start();
+
+	ticker.Tick(1);
+	t.equal(2, obj1.x);
+	t.equal(1, obj2.x);
+	t.equal(0, obj3.x);
+	ticker.Tick(0.5);
+	t.equal(2, obj1.x);
+	t.equal(2, obj2.x);
+	t.equal(2.5, obj3.x);
+	ticker.Tick(1.5);
+	t.equal(4, obj1.x);
+	t.equal(3, obj2.x);
+	t.equal(2.5, obj3.x);
+
+	t.ok(tween1.IsRunning());
+	t.ok(tween2.IsRunning());
+	t.ok(tween3.IsRunning());
+
+	ticker.Tick(1);
+	t.equal(4, obj1.x);
+	t.equal(4, obj2.x);
+	t.equal(5, obj3.x);
+	ticker.Tick(2);
+	t.equal(6, obj1.x);
+	t.equal(6, obj2.x);
+	ticker.Tick(2);
+	t.equal(8, obj1.x);
+
+	tween3.Pause();
+	ticker.Tick(2);
+	t.equal(10, obj1.x);
+
+
+
+	t.ok(tween1.IsFinished());
+	t.ok(tween2.IsFinished());
+	t.notOk(tween3.IsFinished());
+	t.notOk(tween1.IsRunning());
+	t.notOk(tween2.IsRunning());
+	t.ok(tween3.IsPaused());
+
+	t.end();
+});
+
 test('[Fatina.Tween] Looping relative tween', function (t: any) {
 	let ticker = new Ticker();
 	ticker.Start();

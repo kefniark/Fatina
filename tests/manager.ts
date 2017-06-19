@@ -149,6 +149,28 @@ test('[Fatina.Manager] Use SetInterval', function (t: any) {
 	t.end();
 });
 
+test('[Fatina.Manager] Ticker Helpers', function (t: any) {
+	let ticker = fatina.MainTicker();
+
+	ticker.Start();
+
+	t.ok(ticker.IsRunning());
+	t.notOk(ticker.IsFinished());
+	t.notOk(ticker.IsPaused());
+
+	fatina.Pause();
+	fatina.Pause();
+
+	t.notOk(ticker.IsRunning());
+	t.notOk(ticker.IsFinished());
+	t.ok(ticker.IsPaused());
+
+	fatina.Resume();
+	fatina.Resume();
+
+	t.end();
+});
+
 test('[Fatina.Manager] Create ticker', function (t: any) {
 	let obj = { x: 0, y: 0, z: 0 };
 	let gameTicker = fatina.Ticker('game');
