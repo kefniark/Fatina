@@ -119,13 +119,13 @@ test('[Fatina.Sequence] Test Prepend', function (t: any) {
 			}
 			first = false;
 		}))
-		.OnComplete(() => complete++)
+		.OnComplete(() => complete++);
 
 	sequence.Start();
 
 	ticker.Tick(5);
 
-	t.equal(1, complete, 'check both tween are executed')
+	t.equal(1, complete, 'check both tween are executed');
 	t.end();
 });
 
@@ -147,7 +147,7 @@ test('[Fatina.Sequence] Test Join', function (t: any) {
 		}))
 		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 2))
 		.OnUpdate((dt) => duration += dt)
-		.OnComplete(() => complete++)
+		.OnComplete(() => complete++);
 
 	sequence.Start();
 

@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const path = require('path');
-const webpack = require('webpack');
+const path = require("path");
+const webpack = require("webpack");
 const optimizeJsPlugin = require("optimize-js-plugin");
 
 // Generate the description file d.ts
