@@ -192,8 +192,8 @@ test('[Fatina.Manager] Create ticker', function (t: any) {
 	gameTicker.SetTimescale(0.5);
 	uiTicker.SetTimescale(0.25);
 
-	uiTicker.AddTickListener(() => console.log('add event'));
-	uiTicker.RemoveTickListener(() => console.log('remove event'));
+	uiTicker.AddTickListener(() => {});
+	uiTicker.RemoveTickListener(() => {});
 	uiTicker.Remove(undefined);
 
 	fatina.Update(1);

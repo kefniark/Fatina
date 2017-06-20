@@ -27,9 +27,7 @@
     "name": "Kevin destrem",
     "email": "kef1@free.fr"
   },
-  "dependencies": {
-    "codacy-coverage": "2.0.2"
-  },
+  "dependencies": {},
   "scripts": {
     "all": "npm run deps && npm run build && npm run dev",
     "deps": "npm install .",
@@ -46,8 +44,7 @@
     "docs": "npm run typedoc -- --options typedoc.json ./src/",
     "typedoc": "typedoc",
     "coverage": "nyc --all --reporter=html --reporter=text npm run test:unittest",
-    "coveralls": "nyc --all --reporter=text-lcov npm run test:unittest | coveralls",
-    "codacy": "nyc --all --reporter=lcovonly npm run test:unittest | codacy-coverage --language typescript"
+    "coveralls": "nyc --all --reporter=text-lcov npm run test:unittest | coveralls"
   },
   "devDependencies": {
     "@types/node": "7.0.18",

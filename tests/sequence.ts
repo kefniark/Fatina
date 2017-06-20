@@ -36,14 +36,12 @@ test('[Fatina.Sequence] Create a basic Sequence', function (t: any) {
 			start++;
 		})
 		.OnStepStart((tween) => {
-			// console.log(' > Step Start ', stepStart, tween);
 			if (start === 0 || complete > 0) {
 				t.fail('OnStep() - event order issue');
 			}
 			stepStart++;
 		})
 		.OnStepStart((tween) => {
-			// console.log(' > Step End ', stepEnd, tween);
 			if (start === 0 || complete > 0) {
 				t.fail('OnStep() - event order issue');
 			}
@@ -52,7 +50,6 @@ test('[Fatina.Sequence] Create a basic Sequence', function (t: any) {
 		.OnUpdate((dt) => {
 			update++;
 			duration += dt;
-			// console.log('sequence update', update, dt)
 		})
 		.OnComplete(() => {
 			if (start === 0 || stepStart === 0 || stepEnd === 0 || update === 0) {
@@ -392,7 +389,7 @@ test('[Fatina.Sequence] Test Sequence with broken callback', function (t: any) {
 	ticker.Start();
 
 	let obj = { x: 22 };
-	let sequence = new Sequence()
+	new Sequence()
 		.SetParent(ticker)
 		.SetLoop(-1)
 		.AppendInterval(1)
@@ -400,9 +397,7 @@ test('[Fatina.Sequence] Test Sequence with broken callback', function (t: any) {
 		.Start();
 
 	ticker.Tick(3);
-	console.log(sequence);
 	ticker.Tick(3);
-	console.log(sequence);
 
 	t.end();
 });

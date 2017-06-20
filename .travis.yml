@@ -1,7 +1,4 @@
 language: node_js
 node_js:
   - "stable"
-after_success:
-  - export CODACY_PROJECT_TOKEN="598f30805644476db575d3be8d8effad"
-  - npm run coveralls
-  - npm run codacy
+after_success: npm run coveralls
