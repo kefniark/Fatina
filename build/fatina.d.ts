@@ -3,7 +3,7 @@
 export { EasingType as Easing };
 export let time: number;
 export function Elapsed(): number;
-export function MainTicker(): ticker;
+export function MainTicker(): ITicker;
 export function Init(disableAutoTick?: boolean): boolean;
 export function SetTimescale(scale: number): void;
 export function Pause(): void;
@@ -16,31 +16,6 @@ export function Delay(duration: number): IPlayable;
 export function SetTimeout(fn: () => void, duration: number): IPlayable;
 export function SetInterval(fn: () => void, duration: number): IPlayable;
 export function Ticker(name: string): ITicker;
-
-export class Ticker extends EventList implements ITicker {
-    state: State;
-    elapsed: number;
-    duration: number;
-    tick: {
-        (dt: number): void;
-    } | undefined;
-    SetParent(parent: ITicker, tick: {
-        (dt: number): void;
-    }): void;
-    SetTimescale(scale: number): void;
-    AddTickListener(cb: (dt: number) => void): void;
-    RemoveTickListener(cb: (dt: number) => void): void;
-    Tick(dt: number): void;
-    Start(): void;
-    Pause(): void;
-    Resume(): void;
-    Kill(): void;
-    Skip(): void;
-    Reset(): void;
-    IsRunning(): boolean;
-    IsFinished(): boolean;
-    IsPaused(): boolean;
-}
 
 export interface ITween extends IControl {
     Default(): void;
@@ -140,28 +115,6 @@ export interface IPlayable extends IControl {
     OnComplete(cb: () => void): IPlayable;
 }
 
-export enum State {
-    Idle = 0,
-    Run = 1,
-    Pause = 2,
-    Finished = 3,
-    Killed = 4,
-}
-
-export abstract class EventList {
-    first: INode | undefined;
-    last: INode | undefined;
-    length: number;
-    Add(obj: any): void;
-    Remove(obj: any): void;
-}
-export interface INode {
-    node_valid: boolean;
-    node_previous: INode | undefined;
-    node_next: INode | undefined;
-    node_list: EventList | undefined;
-}
-
 export interface IControl {
     elapsed: number;
     duration: number;
@@ -175,5 +128,13 @@ export interface IControl {
     IsRunning(): boolean;
     IsFinished(): boolean;
     IsPaused(): boolean;
+}
+
+export enum State {
+    Idle = 0,
+    Run = 1,
+    Pause = 2,
+    Finished = 3,
+    Killed = 4,
 }
 

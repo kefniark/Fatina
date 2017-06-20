@@ -376,8 +376,8 @@ test('[Fatina.Tween] Test Tween Kill', function (t: any) {
 	t.notOk(tween.state === State.Finished);
 	tween.Kill();
 
-	t.equal(1, killed)
-	t.equal(0, complete)
+	t.equal(1, killed);
+	t.equal(0, complete);
 
 	t.end();
 });
@@ -414,13 +414,13 @@ test('[Fatina.Tween] Test Tween with broken callback', function (t: any) {
 		.To({ x: 44 }, 2)
 		.SetParent(ticker)
 		.OnStart(() => {
-			throw new Error('Test Random User Exception')
+			throw new Error('Test Random User Exception');
 		})
 		.OnUpdate(() => {
-			throw new Error('Test Random User Exception')
+			throw new Error('Test Random User Exception');
 		})
 		.OnComplete(() => {
-			throw new Error('Test Random User Exception')
+			throw new Error('Test Random User Exception');
 		})
 		.Start();
 

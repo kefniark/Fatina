@@ -11,6 +11,8 @@ Small & Light tweening library for **Games** / **Web**
 [![NPM Downloads](https://img.shields.io/npm/dm/fatina.svg)](https://npmjs.org/package/fatina)
 [![Build Status](https://img.shields.io/travis/kefniark/Fatina.svg)](https://travis-ci.org/kefniark/Fatina)
 [![Coverage Status](https://coveralls.io/repos/github/kefniark/Fatina/badge.svg?branch=develop)](https://coveralls.io/github/kefniark/Fatina?branch=develop)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f0451df42a9d43fa810f32f20005f9aa)](https://www.codacy.com/app/kefniark/Fatina?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=kefniark/Fatina&amp;utm_campaign=Badge_Grade)
+[![License](https://img.shields.io/npm/l/fatina.svg)](https://npmjs.org/package/fatina)
 
 ## Description
 A comprehensive and easy to use animation library for **Typescript** / **Javascript**

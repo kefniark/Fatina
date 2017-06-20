@@ -104,15 +104,15 @@ test('[Fatina.Manager] Create Delay', function (t: any) {
 		.Start();
 	fatina.Update(10);
 
-	t.equal(1, started)
-	t.equal(10, elapsed)
-	t.equal(0, completed)
+	t.equal(1, started);
+	t.equal(10, elapsed);
+	t.equal(0, completed);
 
 	fatina.Update(10);
 
-	t.equal(1, started)
-	t.equal(20, elapsed)
-	t.equal(1, completed)
+	t.equal(1, started);
+	t.equal(20, elapsed);
+	t.equal(1, completed);
 
 	delay.Skip();
 	delay.Kill();
@@ -208,7 +208,7 @@ test('[Fatina.Manager] Create ticker', function (t: any) {
 	uiTicker.Kill();
 	fatina.Update(1);
 	t.equal(2, obj.x, 'check the game ticker is paused');
-	t.equal(1.5, obj.y, 'check the ui ticker is killed')
+	t.equal(1.5, obj.y, 'check the ui ticker is killed');
 
 	gameTicker.Resume();
 	fatina.Update(1);

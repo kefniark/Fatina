@@ -88,14 +88,14 @@ test('[Fatina.Sequence] Test Lagging Tick', function (t: any) {
 		.SetParent(ticker)
 		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 5))
 		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 5))
-		.OnComplete(() => complete++)
+		.OnComplete(() => complete++);
 
 	sequence.Start();
 
 	ticker.Tick(6);
 	ticker.Tick(4);
 
-	t.equal(1, complete, 'check the remains of the first tick was propagated to the second tween')
+	t.equal(1, complete, 'check the remains of the first tick was propagated to the second tween');
 	t.end();
 });
 

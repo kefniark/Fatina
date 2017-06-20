@@ -320,7 +320,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 * @memberOf Tween
 	 */
 	public SetEasing(type: EasingType | string): ITween {
-		this.ease = this.Easing(type)
+		this.ease = this.Easing(type);
 		return this;
 	}
 

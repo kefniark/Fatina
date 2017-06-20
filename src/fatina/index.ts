@@ -22,11 +22,11 @@ export { EasingType as Easing };
 export let time = 0;
 
 // time updated internally (affected by timescale, pause, ...)
-export function Elapsed() {
+export function Elapsed(): number {
 	return tickerManager.elapsed;
 }
 
-export function MainTicker() {
+export function MainTicker(): ITicker {
 	if (!initialized) {
 		Init();
 	}

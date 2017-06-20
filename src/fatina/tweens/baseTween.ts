@@ -195,7 +195,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.parent.RemoveTickListener(this.tickCb);
 		}
 
-		this.state = State.Killed
+		this.state = State.Killed;
 		this.EmitEvent(this.eventKill);
 	}
 
