@@ -7,6 +7,7 @@ import { ISequence } from './core/interfaces/ISequence';
 import { ITicker } from './core/interfaces/ITicker';
 import { EasingType } from './easing/easingType';
 import { IPlayable } from './core/interfaces/IPlayable';
+import { IPlugin } from './core/interfaces/IPlugin';
 
 let tickerManager: ticker;
 let initialized = false;
@@ -14,6 +15,10 @@ let isFirstUpdate = true;
 let lastFrame: any;
 let lastTime = 0;
 let tickers: {[id: string]: ITicker } = {};
+let loadedPlugins: IPlugin[] = [];
+
+// Area for plugins to add helpers / dynamic method
+export let plugin: any = {};
 
 // Expose the easing enum
 export { EasingType as Easing };
@@ -233,6 +238,17 @@ export function Ticker(name: string): ITicker {
 	}
 
 	return tickers[name];
+}
+
+/**
+ * Initialize a plugin by passing fatina object to it
+ *
+ * @export
+ * @param {IPlugin} newPlugin
+ */
+export function LoadPlugin(newPlugin: IPlugin) {
+	newPlugin.Init(this);
+	loadedPlugins.push(newPlugin);
 }
 
 /**

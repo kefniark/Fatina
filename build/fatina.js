@@ -68,6 +68,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var lastFrame;
 	var lastTime = 0;
 	var tickers = {};
+	var loadedPlugins = [];
+	exports.plugin = {};
 	exports.time = 0;
 	function Elapsed() {
 	    return tickerManager.elapsed;
@@ -184,6 +186,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return tickers[name];
 	}
 	exports.Ticker = Ticker;
+	function LoadPlugin(plugin) {
+	    plugin.Init(this);
+	    loadedPlugins.push(plugin);
+	}
+	exports.LoadPlugin = LoadPlugin;
 	var requestFrame;
 	var cancelFrame;
 	if (typeof (window) !== 'undefined') {
