@@ -17,7 +17,7 @@ export function Delay(duration: number): IPlayable;
 export function SetTimeout(fn: () => void, duration: number): IPlayable;
 export function SetInterval(fn: () => void, duration: number): IPlayable;
 export function Ticker(name: string): ITicker;
-export function LoadPlugin(plugin: IPlugin): void;
+export function LoadPlugin(newPlugin: IPlugin): void;
 
 export interface ITween extends IControl {
     Default(): void;

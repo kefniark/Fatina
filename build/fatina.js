@@ -186,9 +186,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return tickers[name];
 	}
 	exports.Ticker = Ticker;
-	function LoadPlugin(plugin) {
-	    plugin.Init(this);
-	    loadedPlugins.push(plugin);
+	function LoadPlugin(newPlugin) {
+	    newPlugin.Init(this);
+	    loadedPlugins.push(newPlugin);
 	}
 	exports.LoadPlugin = LoadPlugin;
 	var requestFrame;
