@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Plugins on Fatina</title>
+    <link>https://kefniark.github.io/Fatina/plugins/</link>
+    <description>Recent content in Plugins on Fatina</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sun, 21 May 2017 13:06:37 +0900</lastBuildDate>
+    
+	<atom:link href="https://kefniark.github.io/Fatina/plugins/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Helpers Plugin</title>
+      <link>https://kefniark.github.io/Fatina/plugins/helpers/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>https://kefniark.github.io/Fatina/plugins/helpers/</guid>
+      <description>Description This plugin is a set of helpers to provide a better integration of Fatina with javascript games library like PixiJs or Phaser. It provides helpers to animate:
+ Position: Move, Shake, PunchPosition Rotation: Rotate, PunchRotate Scale: Scale, PunchScale Alpha: Fade Color: Color, PunchColor  This make the code smaller and easier to read
+// normal fatina tween fatina.Tween(sprite.position, [&#39;x&#39;]).To({&#39;x&#39;: 50 }, 1000); // same operation with the helper sprite.</description>
+    </item>
+    
+  </channel>
+</rss>
