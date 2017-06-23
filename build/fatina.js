@@ -103,13 +103,12 @@ var BaseTween = (function () {
         this.elapsed = 0;
         this.duration = 0;
         this.timescale = 1;
-        this.loop = 1;
         this.state = state_1.State.Idle;
+        this.loop = 1;
         this.firstStart = true;
     }
     BaseTween.prototype.Start = function () {
         if (this.state !== state_1.State.Idle) {
-            console.warn('cant start this tween', this.state);
             return this;
         }
         if (this.firstStart) {
@@ -128,8 +127,8 @@ var BaseTween = (function () {
     };
     BaseTween.prototype.Reset = function (skipParent) {
         this.state = state_1.State.Idle;
-        if (!skipParent && this.parent) {
-            this.parent.RemoveTickListener(this.tickCb);
+        if (!skipParent) {
+            this.RemoveParentListener();
         }
         this.loop = 1;
         this.LoopInit();
@@ -144,9 +143,7 @@ var BaseTween = (function () {
         }
     };
     BaseTween.prototype.SetParent = function (ticker) {
-        if (this.parent) {
-            this.parent.RemoveTickListener(this.tickCb);
-        }
+        this.RemoveParentListener();
         this.parent = ticker;
         return this;
     };
@@ -156,17 +153,13 @@ var BaseTween = (function () {
     };
     BaseTween.prototype.Pause = function () {
         if (this.state !== state_1.State.Run) {
-            console.warn('cant pause this tween', this.state);
             return;
         }
         this.state = state_1.State.Pause;
-        if (this.parent) {
-            this.parent.RemoveTickListener(this.tickCb);
-        }
+        this.RemoveParentListener();
     };
     BaseTween.prototype.Resume = function () {
         if (this.state !== state_1.State.Pause) {
-            console.warn('cant resume this tween', this.state);
             return;
         }
         this.state = state_1.State.Run;
@@ -174,7 +167,6 @@ var BaseTween = (function () {
     };
     BaseTween.prototype.Skip = function () {
         if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
-            console.warn('cant skip this tween', this.state);
             return;
         }
         if (this.state === state_1.State.Idle) {
@@ -187,10 +179,8 @@ var BaseTween = (function () {
         if (this.state === state_1.State.Killed) {
             return;
         }
-        if (this.parent) {
-            this.parent.RemoveTickListener(this.tickCb);
-        }
         this.state = state_1.State.Killed;
+        this.RemoveParentListener();
         this.EmitEvent(this.eventKill);
     };
     BaseTween.prototype.SetLoop = function (loop) {
@@ -208,14 +198,16 @@ var BaseTween = (function () {
     };
     BaseTween.prototype.Complete = function () {
         if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
-            console.warn('cant complete this tween', this.state);
             return;
         }
+        this.state = state_1.State.Finished;
+        this.RemoveParentListener();
+        this.EmitEvent(this.eventComplete);
+    };
+    BaseTween.prototype.RemoveParentListener = function () {
         if (this.parent) {
             this.parent.RemoveTickListener(this.tickCb);
         }
-        this.state = state_1.State.Finished;
-        this.EmitEvent(this.eventComplete);
     };
     BaseTween.prototype.CheckPosition = function () { };
     BaseTween.prototype.Validate = function () { };
@@ -527,7 +519,6 @@ var Sequence = (function (_super) {
     };
     Sequence.prototype.Skip = function () {
         if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
-            console.warn('cant skip this tween', this.state);
             return;
         }
         for (var i = 0; i < this.tweens.length; i++) {
@@ -897,7 +888,6 @@ var EventList = (function () {
     EventList.prototype.Remove = function (obj) {
         var node = obj;
         if (node === undefined) {
-            console.log('Trying to remove an object which is not a node');
             return;
         }
         if (node.node_list !== this) {
@@ -998,7 +988,7 @@ var baseTween_1 = __webpack_require__(1);
 var sequence_1 = __webpack_require__(4);
 var Tween = (function (_super) {
     __extends(Tween, _super);
-    function Tween(object, properties) {
+    function Tween(object, properties, data) {
         var _this = _super.call(this) || this;
         _this.yoyo = 0;
         _this.steps = 0;
@@ -1006,11 +996,52 @@ var Tween = (function (_super) {
         _this.object = object;
         _this.properties = properties;
         _this.tickCb = _this.Tick.bind(_this);
+        if (data) {
+            _this.Unserialize(data);
+        }
         return _this;
     }
     Tween.prototype.Init = function (object, properties) {
         this.object = object;
         this.properties = properties;
+    };
+    Tween.prototype.Serialize = function () {
+        return {
+            elapsed: this.elapsed,
+            duration: this.duration,
+            loop: this.loop,
+            timescale: this.timescale,
+            properties: this.properties,
+            from: this.from,
+            to: this.to,
+            yoyo: this.yoyo,
+            steps: this.steps,
+            relative: this.relative,
+            ease: this.easeId,
+            eventStart: this.eventStart,
+            eventRestart: this.eventRestart,
+            eventUpdate: this.eventUpdate,
+            eventKill: this.eventKill,
+            eventComplete: this.eventComplete
+        };
+    };
+    Tween.prototype.Unserialize = function (data) {
+        this.elapsed = data.elapsed || 0;
+        this.duration = data.duration || 0;
+        this.loop = data.loop || 1,
+            this.timescale = data.timescale || 1;
+        this.properties = data.properties || [];
+        this.from = data.from;
+        this.to = data.to;
+        this.yoyo = data.yoyo || 0;
+        this.steps = data.steps || 0;
+        this.relative = data.relative || false;
+        this.SetEasing(data.ease || easingType_1.EasingType.Linear);
+        this.eventStart = data.eventStart;
+        this.eventRestart = data.eventRestart;
+        this.eventUpdate = data.eventUpdate;
+        this.eventKill = data.eventKill;
+        this.eventComplete = data.eventComplete;
     };
     Tween.prototype.Validate = function () {
         if (!this.object) {
@@ -1026,6 +1057,7 @@ var Tween = (function (_super) {
             throw new Error('Cant Start a tween without ticker');
         }
         if (!this.ease) {
+            this.easeId = easingType_1.EasingType.Linear;
             this.ease = easing_1.easeTypes[easingType_1.EasingType.Linear];
         }
         this.CheckPosition();
@@ -1163,6 +1195,7 @@ var Tween = (function (_super) {
         throw new Error('Unknown ease method ' + type);
     };
     Tween.prototype.SetEasing = function (type) {
+        this.easeId = type;
         this.ease = this.Easing(type);
         return this;
     };

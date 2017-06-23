@@ -2,6 +2,7 @@ import * as test from 'tape';
 import { Test } from 'tape';
 import { State } from '../src/fatina/core/enum/state';
 import { ITween } from '../src/fatina/core/interfaces/ITween';
+import { EasingType } from '../src/fatina/easing/easingType';
 import { Ticker } from '../src/fatina/ticker';
 import { Tween } from '../src/fatina/tweens/tween';
 
@@ -656,6 +657,44 @@ test('[Fatina.Tween] Tween destroyed object/properties', (t: Test) => {
 
 	tween.Init(undefined, []);
 	t.equal(3, obj.x, 'Check the object moved');
+
+	t.end();
+});
+
+test('[Fatina.Tween] Serialize / Unserialize tween to apply the same tween on 2 objects', (t: Test) => {
+	const ticker = new Ticker();
+	ticker.Start();
+
+	const obj1 = { x: 1 };
+	const obj2 = { x: 1 };
+	let started = 0;
+	let completed = 0;
+
+	const tween1 = new Tween(obj1, [ 'x' ])
+		.SetParent(ticker)
+		.To({ x: 5 }, 5)
+		.SetTimescale(0.95)
+		.SetRelative(true)
+		.SetLoop(2)
+		.SetEasing(EasingType.InOutBounce)
+		.OnStart(() => started++)
+		.OnComplete(() => completed++)
+		.Start();
+
+	// Create a new tween with the data of the other one
+	const tween2 = new Tween(obj2, ['x'], tween1.Serialize()).SetParent(ticker).Start();
+
+	ticker.Tick(1);
+	t.equal(obj1.x, obj2.x, 'Check the object are in sync');
+
+	ticker.Tick(8);
+	t.equal(obj1.x, obj2.x, 'Check the object are in sync');
+
+	ticker.Tick(4);
+
+	t.deepEqual(tween1.Serialize(), tween2.Serialize());
+	t.equal(started, 2);
+	t.equal(completed, 2);
 
 	t.end();
 });

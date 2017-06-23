@@ -13,19 +13,23 @@ import { ITicker } from '../core/interfaces/ITicker';
  * @class BaseTween
  */
 export abstract class BaseTween<T extends BaseTween<any>>  {
-	public elapsed = 0;
-	public duration = 0;
-	public timescale = 1;
-	protected loop = 1;
-	protected parent: ITicker;
-	protected tickCb: (dt: number) => void;
-	public state: State = State.Idle;
-
+	// events
 	protected eventStart: {(): void}[] | undefined;
 	protected eventRestart: {(): void}[] | undefined;
 	protected eventUpdate: {(dt: number, progress: number): void}[] | undefined;
 	protected eventKill: {(): void}[] | undefined;
 	protected eventComplete: {(): void}[] | undefined;
+
+	// public properties
+	public elapsed = 0;
+	public duration = 0;
+	public timescale = 1;
+	public state: State = State.Idle;
+
+	// private properties
+	protected loop = 1;
+	protected parent: ITicker;
+	protected tickCb: (dt: number) => void;
 	private firstStart = true;
 
 	/**
@@ -37,7 +41,6 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 */
 	public Start(): T {
 		if (this.state !== State.Idle) {
-			console.warn('cant start this tween', this.state);
 			return this as any;
 		}
 
@@ -129,7 +132,6 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 */
 	public Pause(): void {
 		if (this.state !== State.Run) {
-			console.warn('cant pause this tween', this.state);
 			return;
 		}
 
@@ -146,7 +148,6 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 */
 	public Resume(): void {
 		if (this.state !== State.Pause) {
-			console.warn('cant resume this tween', this.state);
 			return;
 		}
 
@@ -163,7 +164,6 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 */
 	public Skip(): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
-			console.warn('cant skip this tween', this.state);
 			return;
 		}
 
@@ -220,7 +220,6 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 
 	protected Complete(): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
-			console.warn('cant complete this tween', this.state);
 			return;
 		}
 

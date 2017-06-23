@@ -27,6 +27,7 @@ export interface ITween extends IControl {
 	SetEasing(type: EasingType | string): ITween;
 	SetTimescale(scale: number): ITween;
 	ToSequence(): ISequence;
+	Serialize(): any;
 
 	OnStart(cb: () => void): ITween;
 	OnUpdate(cb: (dt: number, progress: number) => void): ITween;

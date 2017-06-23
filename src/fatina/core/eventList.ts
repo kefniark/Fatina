@@ -1,6 +1,6 @@
 /**
- * Simple doublylist used for events management
- * Optimized to apeend, remove and iterate
+ * Simple DoublyList used for events management
+ * Not really reusable, optimized only to append, remove and iterate
  *
  * @export
  * @abstract

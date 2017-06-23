@@ -19,11 +19,16 @@ import { Delay } from './delay';
  * @implements {IPlayable}
  */
 export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker, IPlayable {
-	private eventTick: {(dt: number): void}[] = [];
-	private tweens: ((ITween | IPlayable)[])[] = [];
+	// events
 	private eventStepStart: {(tween: ITween | IPlayable): void}[] | undefined;
 	private eventStepEnd: {(tween: ITween | IPlayable): void}[] | undefined;
+
+	// public properties
 	public currentTween: (ITween | IPlayable)[] | undefined;
+
+	// private properties
+	private eventTick: {(dt: number): void}[] = [];
+	private tweens: ((ITween | IPlayable)[])[] = [];
 	private sequenceIndex = 0;
 
 	public get Count(): number {
@@ -171,9 +176,9 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 
 	public Skip(): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
-			console.warn('cant skip this tween', this.state);
 			return;
 		}
+
 		for (let i = 0; i < this.tweens.length; i++) {
 			const tweenArray = this.tweens[i];
 			for (let j = 0; j < tweenArray.length; j++) {

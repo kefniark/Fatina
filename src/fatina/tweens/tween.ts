@@ -26,13 +26,18 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	private remainsDt: number;
 	private relative = false;
 	private ease: (t: number) => number;
+	private easeId: EasingType | string;
 
-	constructor(object: any, properties: string[]) {
+	constructor(object: any, properties: string[], data?: any) {
 		super();
 
 		this.object = object;
 		this.properties = properties;
 		this.tickCb = this.Tick.bind(this);
+
+		if (data) {
+			this.Unserialize(data);
+		}
 	}
 
 	/**
@@ -46,6 +51,60 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	public Init(object: any, properties: string[]) {
 		this.object = object;
 		this.properties = properties;
+	}
+
+	/**
+	 * Method used to serialize the tween properties
+	 *
+	 * @returns
+	 *
+	 * @memberOf Tween
+	 */
+	public Serialize(): any {
+		return {
+			elapsed: this.elapsed,
+			duration: this.duration,
+			loop: this.loop,
+			timescale: this.timescale,
+			properties: this.properties,
+			from: this.from,
+			to: this.to,
+			yoyo: this.yoyo,
+			steps: this.steps,
+			relative: this.relative,
+			ease: this.easeId,
+			eventStart: this.eventStart,
+			eventRestart: this.eventRestart,
+			eventUpdate: this.eventUpdate,
+			eventKill: this.eventKill,
+			eventComplete: this.eventComplete
+		}
+	}
+
+	/**
+	 * Method used to set the tween settings from a properties object
+	 *
+	 * @param {*} data
+	 *
+	 * @memberOf Tween
+	 */
+	public Unserialize(data: any): void {
+		this.elapsed = data.elapsed || 0;
+		this.duration = data.duration || 0;
+		this.loop = data.loop || 1,
+		this.timescale = data.timescale || 1;
+		this.properties = data.properties || [];
+		this.from = data.from;
+		this.to = data.to;
+		this.yoyo = data.yoyo || 0;
+		this.steps = data.steps || 0;
+		this.relative = data.relative || false;
+		this.SetEasing(data.ease || EasingType.Linear);
+		this.eventStart = data.eventStart;
+		this.eventRestart = data.eventRestart;
+		this.eventUpdate = data.eventUpdate;
+		this.eventKill = data.eventKill;
+		this.eventComplete = data.eventComplete;
 	}
 
 	/**
@@ -76,6 +135,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 
 		// Easing
 		if (!this.ease) {
+			this.easeId = EasingType.Linear;
 			this.ease = easeTypes[EasingType.Linear];
 		}
 
@@ -320,6 +380,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 * @memberOf Tween
 	 */
 	public SetEasing(type: EasingType | string): ITween {
+		this.easeId = type;
 		this.ease = this.Easing(type);
 		return this;
 	}
