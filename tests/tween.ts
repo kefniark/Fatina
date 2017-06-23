@@ -667,6 +667,7 @@ test('[Fatina.Tween] Serialize / Unserialize tween to apply the same tween on 2 
 
 	const obj1 = { x: 1 };
 	const obj2 = { x: 1 };
+	const obj3 = { x: 3 };
 	let started = 0;
 	let completed = 0;
 
@@ -683,6 +684,8 @@ test('[Fatina.Tween] Serialize / Unserialize tween to apply the same tween on 2 
 
 	// Create a new tween with the data of the other one
 	const tween2 = new Tween(obj2, ['x'], tween1.Serialize()).SetParent(ticker).Start();
+
+	new Tween(obj3, ['x'], {}).SetParent(ticker).Start();
 
 	ticker.Tick(1);
 	t.equal(obj1.x, obj2.x, 'Check the object are in sync');
