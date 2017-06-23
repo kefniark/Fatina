@@ -1,7 +1,7 @@
 import { IControl } from './IControl';
+import { IPlayable } from './IPlayable';
 import { ITicker } from './ITicker';
 import { ITween } from './ITween';
-import { IPlayable } from './IPlayable';
 
 /**
  * Interface used by Sequence

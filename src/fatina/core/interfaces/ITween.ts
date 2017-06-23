@@ -1,7 +1,7 @@
-import { IControl } from './IControl';
-import { ITicker } from './ITicker';
-import { ISequence } from './ISequence';
 import { EasingType } from '../../easing/easingType';
+import { IControl } from './IControl';
+import { ISequence } from './ISequence';
+import { ITicker } from './ITicker';
 
 /**
  * Interface used by tweens

@@ -19,27 +19,21 @@ export function SetInterval(fn: () => void, duration: number): IPlayable;
 export function Ticker(name: string): ITicker;
 export function LoadPlugin(newPlugin: IPlugin): void;
 
-export interface ITween extends IControl {
-    Default(): void;
-    Init(object: any, properties: string[]): void;
-    Start(): ITween;
-    From(from: any): ITween;
-    To(to: any, duration: number): ITween;
-    Modify(diff: any, updateTo: boolean): void;
-    Reverse(): void;
-    Yoyo(time: number): ITween;
-    SetParent(ticker: ITicker): ITween;
-    SetLoop(loop: number): ITween;
-    SetSteps(steps: number): ITween;
-    SetRelative(relative: boolean): ITween;
-    SetEasing(type: EasingType | string): ITween;
-    SetTimescale(scale: number): ITween;
-    ToSequence(): ISequence;
-    OnStart(cb: () => void): ITween;
-    OnUpdate(cb: (dt: number, progress: number) => void): ITween;
-    OnRestart(cb: () => void): ITween;
-    OnKilled(cb: () => void): ITween;
-    OnComplete(cb: () => void): ITween;
+export interface IPlayable extends IControl {
+    state: State;
+    SetParent(ticker: ITicker): IPlayable;
+    Start(): IPlayable;
+    SetLoop(loop: number): IPlayable;
+    OnStart(cb: () => void): IPlayable;
+    OnRestart(cb: () => void): IPlayable;
+    OnUpdate(cb: (dt: number, progress: number) => void): IPlayable;
+    OnKilled(cb: () => void): IPlayable;
+    OnComplete(cb: () => void): IPlayable;
+}
+
+export interface IPlugin {
+    readonly name: string;
+    Init(fatina: any): void;
 }
 
 export interface ISequence extends IControl {
@@ -69,6 +63,29 @@ export interface ITicker extends IControl {
     AddTickListener(cb: (dt: number) => void): void;
     RemoveTickListener(cb: (dt: number) => void): void;
     SetTimescale(scale: number): void;
+}
+
+export interface ITween extends IControl {
+    Default(): void;
+    Init(object: any, properties: string[]): void;
+    Start(): ITween;
+    From(from: any): ITween;
+    To(to: any, duration: number): ITween;
+    Modify(diff: any, updateTo: boolean): void;
+    Reverse(): void;
+    Yoyo(time: number): ITween;
+    SetParent(ticker: ITicker): ITween;
+    SetLoop(loop: number): ITween;
+    SetSteps(steps: number): ITween;
+    SetRelative(relative: boolean): ITween;
+    SetEasing(type: EasingType | string): ITween;
+    SetTimescale(scale: number): ITween;
+    ToSequence(): ISequence;
+    OnStart(cb: () => void): ITween;
+    OnUpdate(cb: (dt: number, progress: number) => void): ITween;
+    OnRestart(cb: () => void): ITween;
+    OnKilled(cb: () => void): ITween;
+    OnComplete(cb: () => void): ITween;
 }
 
 export enum EasingType {
@@ -105,21 +122,12 @@ export enum EasingType {
     InOutBounce = 30,
 }
 
-export interface IPlayable extends IControl {
-    state: State;
-    SetParent(ticker: ITicker): IPlayable;
-    Start(): IPlayable;
-    SetLoop(loop: number): IPlayable;
-    OnStart(cb: () => void): IPlayable;
-    OnRestart(cb: () => void): IPlayable;
-    OnUpdate(cb: (dt: number, progress: number) => void): IPlayable;
-    OnKilled(cb: () => void): IPlayable;
-    OnComplete(cb: () => void): IPlayable;
-}
-
-export interface IPlugin {
-    readonly name: string;
-    Init(fatina: any): void;
+export enum State {
+    Idle = 0,
+    Run = 1,
+    Pause = 2,
+    Finished = 3,
+    Killed = 4,
 }
 
 export interface IControl {
@@ -135,13 +143,5 @@ export interface IControl {
     IsRunning(): boolean;
     IsFinished(): boolean;
     IsPaused(): boolean;
-}
-
-export enum State {
-    Idle = 0,
-    Run = 1,
-    Pause = 2,
-    Finished = 3,
-    Killed = 4,
 }
 

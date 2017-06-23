@@ -1,11 +1,11 @@
-import { BaseTween } from './baseTween';
-import { ITicker } from '../core/interfaces/ITicker';
-import { ISequence } from '../core/interfaces/ISequence';
-import { ITween } from '../core/interfaces/ITween';
+import { State } from '../core/enum/state';
 import { IPlayable } from '../core/interfaces/IPlayable';
+import { ISequence } from '../core/interfaces/ISequence';
+import { ITicker } from '../core/interfaces/ITicker';
+import { ITween } from '../core/interfaces/ITween';
+import { BaseTween } from './baseTween';
 import { Callback } from './callback';
 import { Delay } from './delay';
-import { State } from '../core/enum/state';
 
 /**
  * Sequence: used to animate other tweens or sequence
@@ -38,7 +38,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 	protected LoopInit() {
 		this.sequenceIndex = 0;
 		for (let i = 0; i < this.tweens.length; i++) {
-			let tweenArray = this.tweens[i];
+			const tweenArray = this.tweens[i];
 			for (let j = 0; j < tweenArray.length; j++) {
 				tweenArray[j].Reset();
 			}
@@ -50,7 +50,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 	}
 
 	public RemoveTickListener(cb: (dt: number) => void): void {
-		let index = this.eventTick.indexOf(cb);
+		const index = this.eventTick.indexOf(cb);
 		if (index !== -1) {
 			this.eventTick.splice(index, 1);
 		}
@@ -60,7 +60,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		if (this.state === State.Finished || this.state === State.Killed) {
 			return;
 		}
-		let localDt = dt * this.timescale;
+		const localDt = dt * this.timescale;
 		this.elapsed += localDt;
 		this.LocalTick(localDt);
 	}
@@ -93,7 +93,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 				}
 			}
 
-			let first = this.currentTween[0];
+			const first = this.currentTween[0];
 			remainsDt = first.elapsed - first.duration;
 
 			this.EmitEvent(this.eventStepEnd, [this.currentTween[0]]);
@@ -121,7 +121,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		this.currentTween = this.tweens[this.sequenceIndex];
 		if (this.currentTween) {
 			for (let i = 0; i < this.currentTween.length; i++) {
-				let tween = this.currentTween[i];
+				const tween = this.currentTween[i];
 				tween.Start();
 			}
 
@@ -136,14 +136,14 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 	}
 
 	public AppendCallback(cb: () => void): ISequence {
-		let playable = new Callback(cb);
+		const playable = new Callback(cb);
 		playable.SetParent(this);
 		this.tweens[this.tweens.length] = [playable];
 		return this;
 	}
 
 	public AppendInterval(duration: number): ISequence {
-		let playable = new Delay(duration);
+		const playable = new Delay(duration);
 		playable.SetParent(this);
 		this.tweens[this.tweens.length] = [playable];
 		return this;
@@ -156,14 +156,14 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 	}
 
 	public PrependCallback(cb: () => void): ISequence {
-		let playable = new Callback(cb);
+		const playable = new Callback(cb);
 		playable.SetParent(this);
 		this.tweens.unshift([playable]);
 		return this;
 	}
 
 	public PrependInterval(duration: number): ISequence {
-		let playable = new Delay(duration);
+		const playable = new Delay(duration);
 		playable.SetParent(this);
 		this.tweens.unshift([playable]);
 		return this;
@@ -175,9 +175,9 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 			return;
 		}
 		for (let i = 0; i < this.tweens.length; i++) {
-			let tweenArray = this.tweens[i];
+			const tweenArray = this.tweens[i];
 			for (let j = 0; j < tweenArray.length; j++) {
-				let tween = tweenArray[j];
+				const tween = tweenArray[j];
 				if (tween.state === State.Killed || tween.state === State.Finished) {
 					continue;
 				}
@@ -197,7 +197,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		}
 
 		for (let i = 0; i < this.tweens.length; i++) {
-			let tweenArray = this.tweens[i];
+			const tweenArray = this.tweens[i];
 			for (let j = 0; j < tweenArray.length; j++) {
 				tweenArray[j].Kill();
 			}

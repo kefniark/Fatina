@@ -1,5 +1,5 @@
-import { ITicker } from '../core/interfaces/ITicker';
 import { State } from '../core/enum/state';
+import { ITicker } from '../core/interfaces/ITicker';
 
 /**
  * Shared behaviors between different types of tweens and sequence
@@ -38,7 +38,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	public Start(): T {
 		if (this.state !== State.Idle) {
 			console.warn('cant start this tween', this.state);
-			return <any> this;
+			return this as any;
 		}
 
 		if (this.firstStart) {
@@ -54,7 +54,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.EmitEvent(this.eventStart);
 			this.firstStart = false;
 		}
-		return <any> this;
+		return this as any;
 	}
 
 	/**
@@ -106,7 +106,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.parent.RemoveTickListener(this.tickCb);
 		}
 		this.parent = ticker;
-		return <any> this;
+		return this as any;
 	}
 
 	/**
@@ -119,7 +119,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 */
 	public SetTimescale(scale: number): T {
 		this.timescale = scale;
-		return <any> this;
+		return this as any;
 	}
 
 	/**
@@ -210,7 +210,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 */
 	public SetLoop(loop: number): T {
 		this.loop = Math.round(loop);
-		return <any> this;
+		return this as any;
 	}
 
 	public IsRunning(): boolean {
@@ -285,7 +285,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.eventStart = new Array(0);
 		}
 		this.eventStart[this.eventStart.length] = cb;
-		return <any> this;
+		return this as any;
 	}
 
 	/**
@@ -301,7 +301,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.eventRestart = new Array(0);
 		}
 		this.eventRestart[this.eventRestart.length] = cb;
-		return <any> this;
+		return this as any;
 	}
 
 	/**
@@ -317,7 +317,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.eventUpdate = new Array(0);
 		}
 		this.eventUpdate[this.eventUpdate.length] = cb;
-		return <any> this;
+		return this as any;
 	}
 
 	/**
@@ -333,7 +333,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.eventKill = new Array(0);
 		}
 		this.eventKill[this.eventKill.length] = cb;
-		return <any> this;
+		return this as any;
 	}
 
 	/**
@@ -349,6 +349,6 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.eventComplete = new Array(0);
 		}
 		this.eventComplete[this.eventComplete.length] = cb;
-		return <any> this;
+		return this as any;
 	}
 }

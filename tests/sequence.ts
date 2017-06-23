@@ -1,13 +1,14 @@
 import * as test from 'tape';
+import { Test } from 'tape';
+import { State } from '../src/fatina/core/enum/state';
+import { Ticker } from '../src/fatina/ticker';
 import { Sequence } from '../src/fatina/tweens/sequence';
 import { Tween } from '../src/fatina/tweens/tween';
-import { Ticker } from '../src/fatina/ticker';
-import { State } from '../src/fatina/core/enum/state';
 
-test('[Fatina.Sequence] Create a basic Sequence', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Sequence] Create a basic Sequence', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
-	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 
 	let start = 0;
 	let stepStart = 0;
@@ -17,7 +18,7 @@ test('[Fatina.Sequence] Create a basic Sequence', function (t: any) {
 	let duration = 0;
 	let cb = 0;
 
-	let sequence = new Sequence()
+	const sequence = new Sequence()
 		.SetParent(ticker)
 		.PrependInterval(1)
 		.PrependCallback(() => {})
@@ -75,13 +76,13 @@ test('[Fatina.Sequence] Create a basic Sequence', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Sequence] Test Lagging Tick', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Sequence] Test Lagging Tick', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
-	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 
 	let complete = 0;
-	let sequence = new Sequence()
+	const sequence = new Sequence()
 		.SetParent(ticker)
 		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 5))
 		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 5))
@@ -96,14 +97,14 @@ test('[Fatina.Sequence] Test Lagging Tick', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Sequence] Test Prepend', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Sequence] Test Prepend', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
-	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 
 	let first = true;
 	let complete = 0;
-	let sequence = new Sequence()
+	const sequence = new Sequence()
 		.SetParent(ticker)
 		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 2).OnComplete(() => {
 			if (first) {
@@ -126,18 +127,18 @@ test('[Fatina.Sequence] Test Prepend', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Sequence] Test Join', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Sequence] Test Join', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
-	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 	let duration = 0;
 	let complete = 0;
-	let sequence = new Sequence()
+	const sequence = new Sequence()
 		.SetParent(ticker)
 		.Join(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 1.5))
 		.Prepend(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 2))
 		.Join(new Tween(obj, [ 'alpha' ]).To({ alpha: 0 }, 2).OnStart(() => {
-			let current = (sequence as Sequence).currentTween;
+			const current = (sequence as Sequence).currentTween;
 			if (current) {
 				t.equal(2, current.length, 'check 2 tween are running at the same time');
 			}
@@ -162,10 +163,10 @@ test('[Fatina.Sequence] Test Join', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Sequence] Sequence loop', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Sequence] Sequence loop', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
-	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 
 	let start = 0;
 	let step = 0;
@@ -173,7 +174,7 @@ test('[Fatina.Sequence] Sequence loop', function (t: any) {
 	let complete = 0;
 	let sequenceCb = 0;
 	let restart = 0;
-	let sequence = new Sequence()
+	const sequence = new Sequence()
 		.SetParent(ticker)
 		.PrependInterval(1)
 		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 4))
@@ -203,13 +204,13 @@ test('[Fatina.Sequence] Sequence loop', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Sequence] Sequence timescale & kill', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Sequence] Sequence timescale & kill', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
 
 	let killed = 0;
-	let tween = new Tween({}, []).SetParent(ticker).To({}, 4).SetTimescale(0.5);
-	let sequence = tween.ToSequence().SetTimescale(0.5).OnKilled(() => killed++);
+	const tween = new Tween({}, []).SetParent(ticker).To({}, 4).SetTimescale(0.5);
+	const sequence = tween.ToSequence().SetTimescale(0.5).OnKilled(() => killed++);
 	sequence.Start();
 
 	for (let i = 0; i < 6; i++) {
@@ -230,12 +231,12 @@ test('[Fatina.Sequence] Sequence timescale & kill', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Sequence] Test Sequence with broken callback', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Sequence] Test Sequence with broken callback', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let obj = { x: 22 };
-	let sequence = new Sequence()
+	const obj = { x: 22 };
+	const sequence = new Sequence()
 		.SetParent(ticker)
 		.Append(new Tween(obj, ['x']).SetParent(ticker).To({ x: 44}, 1))
 		.OnStepStart((step) => {
@@ -252,20 +253,20 @@ test('[Fatina.Sequence] Test Sequence with broken callback', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Sequence] Sequence of Sequence', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Sequence] Sequence of Sequence', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let obj = { x: 0, y: 0 };
+	const obj = { x: 0, y: 0 };
 	let complete = 0;
 
-	let sequence1 = new Sequence()
+	const sequence1 = new Sequence()
 		.SetParent(ticker)
 		.Append(new Tween(obj, [ 'x' ]).To({ x: 11 }, 1))
 		.AppendInterval(1)
 		.Append(new Tween(obj, [ 'x' ]).To({ x: 22 }, 1));
 
-	let sequence2 = new Sequence()
+	const sequence2 = new Sequence()
 		.SetParent(ticker)
 		.PrependInterval(1)
 		.Append(new Tween(obj, [ 'y' ]).To({ y: 11 }, 1))
@@ -292,11 +293,11 @@ test('[Fatina.Sequence] Sequence of Sequence', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Sequence] Sequence Skip', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Sequence] Sequence Skip', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 
 	let tweenStart = 0;
 	let tweenComplete = 0;
@@ -304,7 +305,7 @@ test('[Fatina.Sequence] Sequence Skip', function (t: any) {
 	let sequenceStepComplete = 0;
 	let complete = 0;
 
-	let sequence = new Sequence()
+	const sequence = new Sequence()
 		.SetParent(ticker)
 		.PrependInterval(1)
 		.Append(new Tween(obj, [ 'x', 'y' ])
@@ -336,11 +337,11 @@ test('[Fatina.Sequence] Sequence Skip', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Sequence] Sequence Looping relative tween', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Sequence] Sequence Looping relative tween', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let obj = { x: 0, y: 0 };
+	const obj = { x: 0, y: 0 };
 
 	new Sequence()
 		.SetParent(ticker)
@@ -384,11 +385,11 @@ test('[Fatina.Sequence] Sequence Looping relative tween', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Sequence] Test Sequence with broken callback', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Sequence] Test Sequence with broken callback', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let obj = { x: 22 };
+	const obj = { x: 22 };
 	new Sequence()
 		.SetParent(ticker)
 		.SetLoop(-1)

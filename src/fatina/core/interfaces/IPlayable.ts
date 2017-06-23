@@ -1,5 +1,5 @@
-import { IControl } from './IControl';
 import { State } from '../enum/state';
+import { IControl } from './IControl';
 import { ITicker } from './ITicker';
 
 /**

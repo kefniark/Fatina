@@ -12,7 +12,7 @@ export abstract class EventList {
 	public length = 0;
 
 	public Add(obj: any): void {
-		let newNode = this.GetNode(obj, this.last, undefined, this);
+		const newNode = this.GetNode(obj, this.last, undefined, this);
 		if (this.first === undefined) {
 			this.first = newNode;
 			this.last = newNode;
@@ -24,7 +24,7 @@ export abstract class EventList {
 	}
 
 	public Remove(obj: any): void {
-		let node = obj as INode;
+		const node = obj as INode;
 		if (node === undefined) {
 			console.log('Trying to remove an object which is not a node');
 			return;
@@ -58,7 +58,7 @@ export abstract class EventList {
 	}
 
 	private GetNode(obj: any, previous: INode | undefined, next: INode | undefined, list: EventList): INode {
-		let node = obj as INode;
+		const node = obj as INode;
 		if (!node.node_valid) {
 			node.node_valid = true;
 			node.node_previous = previous;

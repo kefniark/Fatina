@@ -1,6 +1,6 @@
 
 /**
- * List of all easing's methods
+ * List of all easing methods
  *
  * @export
  * @enum {number}

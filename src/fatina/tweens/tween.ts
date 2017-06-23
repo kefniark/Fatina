@@ -1,10 +1,10 @@
-import { BaseTween } from './baseTween';
+import { State } from '../core/enum/state';
+import { ISequence } from '../core/interfaces/ISequence';
 import { ITween } from '../core/interfaces/ITween';
 import { easeNames, easeTypes } from '../easing/easing';
-import { Sequence } from './sequence';
-import { ISequence } from '../core/interfaces/ISequence';
-import { State } from '../core/enum/state';
 import { EasingType } from '../easing/easingType';
+import { BaseTween } from './baseTween';
+import { Sequence } from './sequence';
 
 /**
  * Tween: Used to animate values of an object
@@ -63,7 +63,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 
 		// Check the properties of that object
 		for (let i = 0; i < this.properties.length; i++) {
-			let prop = this.properties[i];
+			const prop = this.properties[i];
 			if (!(prop in this.object)) {
 				throw new Error('Cant Tween an unknown property' + prop);
 			}
@@ -98,7 +98,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 		}
 
 		for (let i = 0; i < this.properties.length; i++) {
-			let prop = this.properties[i];
+			const prop = this.properties[i];
 
 			// From
 			if (!this.from) {
@@ -126,14 +126,14 @@ export class Tween extends BaseTween<Tween> implements ITween {
 
 		while (this.remainsDt > 0) {
 			this.elapsed += this.remainsDt;
-			let progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
+			const progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
 			let val = this.ease(progress);
 			if (this.steps !== 0) {
 				val = Math.round(val * this.steps) / this.steps;
 			}
 			if (this.object) {
 				for (let i = 0; i < this.properties.length; i++) {
-					let prop = this.properties[i];
+					const prop = this.properties[i];
 					this.object[prop] = this.currentFrom[prop] + (this.currentTo[prop] - this.currentFrom[prop]) * val;
 				}
 			}
@@ -216,7 +216,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 */
 	public Modify(diff: any, updateTo: boolean): void {
 		for (let i = 0; i < this.properties.length; i++) {
-			let prop = this.properties[i];
+			const prop = this.properties[i];
 			if (!diff.hasOwnProperty(prop)) {
 				continue;
 			}
@@ -243,7 +243,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 		this.from = this.to;
 		this.to = previous;
 
-		let elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
+		const elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
 		this.elapsed = Math.round(elapsed * 1000) / 1000;
 
 		if (this.state === State.Finished) {
@@ -294,11 +294,11 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	}
 
 	private Easing(type: EasingType | string): (t: number) => number {
-		let name = type as string;
-		let isNumber = !isNaN(parseFloat(name));
+		const name = type as string;
+		const isNumber = !isNaN(parseFloat(name));
 
 		if (isNumber) {
-			let index = parseInt(name, 10);
+			const index = parseInt(name, 10);
 			if (index in easeTypes) {
 				return easeTypes[index];
 			}

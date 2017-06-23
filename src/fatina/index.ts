@@ -1,21 +1,21 @@
-import { Sequence as sequence } from './tweens/sequence';
-import { Tween as tween } from './tweens/tween';
-import { Delay as delay } from './tweens/delay';
-import { Ticker as ticker } from './ticker';
-import { ITween } from './core/interfaces/ITween';
-import { ISequence } from './core/interfaces/ISequence';
-import { ITicker } from './core/interfaces/ITicker';
-import { EasingType } from './easing/easingType';
 import { IPlayable } from './core/interfaces/IPlayable';
 import { IPlugin } from './core/interfaces/IPlugin';
+import { ISequence } from './core/interfaces/ISequence';
+import { ITicker } from './core/interfaces/ITicker';
+import { ITween } from './core/interfaces/ITween';
+import { EasingType } from './easing/easingType';
+import { Ticker as ticker } from './ticker';
+import { Delay as delay } from './tweens/delay';
+import { Sequence as sequence } from './tweens/sequence';
+import { Tween as tween } from './tweens/tween';
 
 let tickerManager: ticker;
 let initialized = false;
 let isFirstUpdate = true;
 let lastFrame: any;
 let lastTime = 0;
-let tickers: {[id: string]: ITicker } = {};
-let loadedPlugins: IPlugin[] = [];
+const tickers: {[id: string]: ITicker } = {};
+const loadedPlugins: IPlugin[] = [];
 
 // Area for plugins to add helpers / dynamic method
 export let plugin: any = {};
@@ -228,8 +228,8 @@ export function Ticker(name: string): ITicker {
 
 	// Create a ticker with that name
 	if (!(name in tickers)) {
-		let tick = new ticker();
-		let handler = tick.Tick.bind(tick);
+		const tick = new ticker();
+		const handler = tick.Tick.bind(tick);
 		tick.SetParent(tickerManager, handler);
 		tickerManager.AddTickListener(handler);
 		tick.Start();
