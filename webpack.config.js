@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-const path = require('path');
-const webpack = require('webpack');
+const path = require("path");
+const webpack = require("webpack");
 
 // Generate the description file d.ts
-function DtsBundlePlugin(){}
+function DtsBundlePlugin() { }
 DtsBundlePlugin.prototype.apply = function (compiler) {
 	compiler.plugin("done", function () {
 		var dts = require("dts-bundle");
@@ -52,6 +52,6 @@ module.exports = {
 			sourceMap: true,
 			include: /\.min\.js$/
 		}),
- 		new DtsBundlePlugin()
+		new DtsBundlePlugin()
 	]
 };
