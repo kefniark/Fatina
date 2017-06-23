@@ -26,7 +26,6 @@ export abstract class EventList {
 	public Remove(obj: any): void {
 		const node = obj as INode;
 		if (node === undefined) {
-			console.log('Trying to remove an object which is not a node');
 			return;
 		}
 

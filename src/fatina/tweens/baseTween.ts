@@ -65,8 +65,8 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	public Reset(skipParent?: boolean): void {
 		this.state = State.Idle;
 
-		if (!skipParent && this.parent) {
-			this.parent.RemoveTickListener(this.tickCb);
+		if (!skipParent) {
+			this.RemoveParentListener();
 		}
 
 		this.loop = 1;
@@ -102,9 +102,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 * @memberOf BaseTween
 	 */
 	public SetParent(ticker: ITicker): T {
-		if (this.parent) {
-			this.parent.RemoveTickListener(this.tickCb);
-		}
+		this.RemoveParentListener();
 		this.parent = ticker;
 		return this as any;
 	}
@@ -136,9 +134,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 		}
 
 		this.state = State.Pause;
-		if (this.parent) {
-			this.parent.RemoveTickListener(this.tickCb);
-		}
+		this.RemoveParentListener();
 	}
 
 	/**
@@ -191,11 +187,8 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			return;
 		}
 
-		if (this.parent) {
-			this.parent.RemoveTickListener(this.tickCb);
-		}
-
 		this.state = State.Killed;
+		this.RemoveParentListener();
 		this.EmitEvent(this.eventKill);
 	}
 
@@ -231,12 +224,15 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			return;
 		}
 
+		this.state = State.Finished;
+		this.RemoveParentListener();
+		this.EmitEvent(this.eventComplete);
+	}
+
+	protected RemoveParentListener() {
 		if (this.parent) {
 			this.parent.RemoveTickListener(this.tickCb);
 		}
-
-		this.state = State.Finished;
-		this.EmitEvent(this.eventComplete);
 	}
 
 	protected CheckPosition(): void {}
