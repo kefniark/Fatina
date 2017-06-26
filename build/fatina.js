@@ -97,7 +97,7 @@ var State;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var log_1 = __webpack_require__(3);
+var log_1 = __webpack_require__(2);
 var state_1 = __webpack_require__(0);
 var BaseTween = (function () {
     function BaseTween() {
@@ -107,6 +107,8 @@ var BaseTween = (function () {
         this.state = state_1.State.Idle;
         this.loopOriginal = 1;
         this.loop = 1;
+        this.yoyoOriginal = 0;
+        this.yoyo = 0;
         this.firstStart = true;
         this.recycled = false;
         this.safe = true;
@@ -171,6 +173,7 @@ var BaseTween = (function () {
     };
     BaseTween.prototype.Pause = function () {
         if (this.state !== state_1.State.Run) {
+            this.Info(log_1.Log.Info, 'Cannot pause this tween ', this.state);
             return;
         }
         this.state = state_1.State.Pause;
@@ -178,6 +181,7 @@ var BaseTween = (function () {
     };
     BaseTween.prototype.Resume = function () {
         if (this.state !== state_1.State.Pause) {
+            this.Info(log_1.Log.Info, 'Cannot resume this tween ', this.state);
             return;
         }
         this.state = state_1.State.Run;
@@ -185,13 +189,14 @@ var BaseTween = (function () {
     };
     BaseTween.prototype.Skip = function (finalValue) {
         if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
+            this.Info(log_1.Log.Info, 'Cannot skip this tween ', this.state);
             return;
         }
         if (this.state === state_1.State.Idle) {
             this.EmitEvent(this.eventStart);
         }
         if (finalValue) {
-            this.tickCb(this.duration - this.elapsed);
+            this.tickCb(this.duration - this.elapsed + (this.yoyo * this.duration));
             return;
         }
         this.elapsed = this.duration;
@@ -199,6 +204,7 @@ var BaseTween = (function () {
     };
     BaseTween.prototype.Kill = function () {
         if (this.state === state_1.State.Killed) {
+            this.Info(log_1.Log.Info, 'Cannot kill this tween ', this.state);
             return;
         }
         this.state = state_1.State.Killed;
@@ -209,6 +215,9 @@ var BaseTween = (function () {
         this.loopOriginal = Math.round(loop);
         this.loop = this.loopOriginal;
         return this;
+    };
+    BaseTween.prototype.IsIdle = function () {
+        return this.state === state_1.State.Idle;
     };
     BaseTween.prototype.IsRunning = function () {
         return this.state === state_1.State.Run;
@@ -221,6 +230,7 @@ var BaseTween = (function () {
     };
     BaseTween.prototype.Complete = function () {
         if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
+            this.Info(log_1.Log.Info, 'Cannot complete this tween ', this.state);
             return;
         }
         this.state = state_1.State.Finished;
@@ -237,14 +247,6 @@ var BaseTween = (function () {
     BaseTween.prototype.LoopInit = function () {
         this.elapsed = 0;
     };
-    BaseTween.prototype.Default = function () {
-        this.elapsed = 0;
-        this.duration = 0;
-        this.timescale = 1;
-        this.loop = 1;
-        this.firstStart = true;
-        this.state = state_1.State.Idle;
-    };
     BaseTween.prototype.SetSafe = function (safe) {
         this.safe = safe;
         return this;
@@ -252,6 +254,17 @@ var BaseTween = (function () {
     BaseTween.prototype.SetLog = function (level) {
         this.logLevel = level;
         return this;
+    };
+    BaseTween.prototype.Info = function (level, message, data) {
+        if (level > this.logLevel) {
+            return;
+        }
+        if (data) {
+            console.log(message, data);
+        }
+        else {
+            console.log(message);
+        }
     };
     BaseTween.prototype.Emit = function (func, args) {
         if (!this.safe) {
@@ -277,6 +290,7 @@ var BaseTween = (function () {
             this.eventStart = new Array(0);
         }
         this.eventStart[this.eventStart.length] = cb;
+        this.Info(log_1.Log.Debug, 'onStart', this);
         return this;
     };
     BaseTween.prototype.OnRestart = function (cb) {
@@ -284,6 +298,7 @@ var BaseTween = (function () {
             this.eventRestart = new Array(0);
         }
         this.eventRestart[this.eventRestart.length] = cb;
+        this.Info(log_1.Log.Debug, 'onRestart', this);
         return this;
     };
     BaseTween.prototype.OnUpdate = function (cb) {
@@ -298,6 +313,7 @@ var BaseTween = (function () {
             this.eventKill = new Array(0);
         }
         this.eventKill[this.eventKill.length] = cb;
+        this.Info(log_1.Log.Debug, 'onKilled', this);
         return this;
     };
     BaseTween.prototype.OnComplete = function (cb) {
@@ -305,6 +321,7 @@ var BaseTween = (function () {
             this.eventComplete = new Array(0);
         }
         this.eventComplete[this.eventComplete.length] = cb;
+        this.Info(log_1.Log.Debug, 'onComplete', this);
         return this;
     };
     return BaseTween;
@@ -314,6 +331,21 @@ exports.BaseTween = BaseTween;
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Log;
+(function (Log) {
+    Log[Log["None"] = 0] = "None";
+    Log[Log["Info"] = 1] = "Info";
+    Log[Log["Debug"] = 2] = "Debug";
+})(Log = exports.Log || (exports.Log = {}));
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -353,21 +385,6 @@ var EasingType;
     EasingType[EasingType["OutBounce"] = 29] = "OutBounce";
     EasingType[EasingType["InOutBounce"] = 30] = "InOutBounce";
 })(EasingType = exports.EasingType || (exports.EasingType = {}));
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Log;
-(function (Log) {
-    Log[Log["None"] = 0] = "None";
-    Log[Log["Info"] = 1] = "Info";
-    Log[Log["Debug"] = 2] = "Debug";
-})(Log = exports.Log || (exports.Log = {}));
 
 
 /***/ }),
@@ -436,9 +453,10 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+var log_1 = __webpack_require__(2);
 var state_1 = __webpack_require__(0);
 var baseTween_1 = __webpack_require__(1);
-var callback_1 = __webpack_require__(13);
+var callback_1 = __webpack_require__(9);
 var delay_1 = __webpack_require__(4);
 var Sequence = (function (_super) {
     __extends(Sequence, _super);
@@ -571,6 +589,7 @@ var Sequence = (function (_super) {
     };
     Sequence.prototype.Skip = function (finalValue) {
         if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
+            this.Info(log_1.Log.Info, 'Cannot skip this tween ', this.state);
             return;
         }
         for (var i = 0; i < this.tweens.length; i++) {
@@ -591,6 +610,7 @@ var Sequence = (function (_super) {
     };
     Sequence.prototype.Kill = function () {
         if (this.state === state_1.State.Killed) {
+            this.Info(log_1.Log.Info, 'Cannot kill this tween ', this.state);
             return;
         }
         for (var i = 0; i < this.tweens.length; i++) {
@@ -608,12 +628,6 @@ var Sequence = (function (_super) {
         tween.SetParent(this);
         this.tweens[this.tweens.length - 1].push(tween);
         return this;
-    };
-    Sequence.prototype.Default = function () {
-        _super.prototype.Default.call(this);
-        this.tweens.length = 0;
-        this.currentTween = undefined;
-        this.sequenceIndex = 0;
     };
     Sequence.prototype.OnStepStart = function (cb) {
         if (!this.eventStepStart) {
@@ -641,14 +655,13 @@ exports.Sequence = Sequence;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var index_1 = __webpack_require__(7);
-var log_1 = __webpack_require__(3);
-var easingType_1 = __webpack_require__(2);
+var log_1 = __webpack_require__(2);
+var easingType_1 = __webpack_require__(3);
 exports.Easing = easingType_1.EasingType;
-var ticker_1 = __webpack_require__(11);
+var ticker_1 = __webpack_require__(7);
 var delay_1 = __webpack_require__(4);
 var sequence_1 = __webpack_require__(5);
-var tween_1 = __webpack_require__(14);
+var tween_1 = __webpack_require__(10);
 var tickerManager;
 var initialized = false;
 var isFirstUpdate = true;
@@ -777,10 +790,6 @@ function SetInterval(fn, duration) {
     return interval;
 }
 exports.SetInterval = SetInterval;
-function GetPlugin() {
-    return new index_1.FatinaPluginAnimator();
-}
-exports.GetPlugin = GetPlugin;
 function Ticker() {
     if (!initialized) {
         Init();
@@ -839,266 +848,6 @@ function updateLoop(timestamp) {
 
 "use strict";
 
-Object.defineProperty(exports, "__esModule", { value: true });
-var animatorManager_1 = __webpack_require__(8);
-var tickerManager_1 = __webpack_require__(10);
-function Get() {
-    return new FatinaPluginAnimator();
-}
-exports.Get = Get;
-var FatinaPluginAnimator = (function () {
-    function FatinaPluginAnimator() {
-        this.name = 'fatina-plugin-animator';
-        this.init = false;
-    }
-    Object.defineProperty(FatinaPluginAnimator.prototype, "TickerManager", {
-        get: function () {
-            return this.fatina.plugin.TickerManager;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FatinaPluginAnimator.prototype, "AnimatorManager", {
-        get: function () {
-            return this.fatina.plugin.AnimatorManager;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    FatinaPluginAnimator.prototype.Init = function (fatina) {
-        if (this.init) {
-            throw new Error('Try to init the plugin twice : ' + name);
-        }
-        if (fatina === undefined || fatina === null || fatina.plugin === null) {
-            throw new Error('Try to init the plugin without fatina : ' + name);
-        }
-        this.fatina = fatina;
-        this.init = true;
-        fatina.plugin.AnimatorManager = new animatorManager_1.AnimatorManager(this);
-        fatina.plugin.TickerManager = new tickerManager_1.TickerManager(this);
-    };
-    return FatinaPluginAnimator;
-}());
-exports.FatinaPluginAnimator = FatinaPluginAnimator;
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var animator_1 = __webpack_require__(9);
-var AnimatorManager = (function () {
-    function AnimatorManager(plugin) {
-        this.animations = {};
-        this.tickerMap = {};
-        this.plugin = plugin;
-    }
-    Object.defineProperty(AnimatorManager.prototype, "Animations", {
-        get: function () {
-            return Object.keys(this.animations);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(AnimatorManager.prototype, "Labels", {
-        get: function () {
-            var _this = this;
-            return Object.keys(this.tickerMap).map(function (x) { return _this.tickerMap[x]; }).filter(function (piece, index, self) { return self.indexOf(piece) === index; });
-        },
-        enumerable: true,
-        configurable: true
-    });
-    AnimatorManager.prototype.Register = function (name, onCreate, label) {
-        if (this.animations[name] && this.tickerMap[name]) {
-            delete this.tickerMap[name];
-        }
-        this.animations[name] = onCreate;
-        if (label) {
-            this.tickerMap[name] = label;
-        }
-        return this;
-    };
-    AnimatorManager.prototype.Instantiate = function (name, object, params) {
-        if (!(name in this.animations)) {
-            throw new Error('this animation doesnt exist ' + name);
-        }
-        var tween = this.animations[name](object, params);
-        if (this.tickerMap[name]) {
-            tween.SetParent(this.plugin.TickerManager.Get(this.tickerMap[name]));
-        }
-        return tween;
-    };
-    AnimatorManager.prototype.AddAnimatorTo = function (obj) {
-        if (!obj.Animator) {
-            obj.Animator = new animator_1.Animator(obj, this);
-        }
-        return obj.Animator;
-    };
-    return AnimatorManager;
-}());
-exports.AnimatorManager = AnimatorManager;
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Animator = (function () {
-    function Animator(obj, animatorManager) {
-        this.animations = {};
-        this.current = {};
-        this.layers = ['default'];
-        this.layerMap = {};
-        this.skipMap = {};
-        this.lastAnimName = {};
-        this.object = obj;
-        this.animatorManager = animatorManager;
-    }
-    Animator.prototype.AddAnimation = function (name, animationName, finalValue, layer, params) {
-        var _this = this;
-        var anim = this.animatorManager.Instantiate(animationName, this.object, params);
-        anim.OnStart(function () { return console.log('OnStart', name, animationName, _this.object.name, _this.object.position); });
-        anim.OnComplete(function () { return console.log('OnComplete', name, animationName, _this.object.name, _this.object.position); });
-        anim.OnKilled(function () { return anim.Recycle(); });
-        anim.OnComplete(function () { return anim.Recycle(); });
-        this.animations[name] = anim;
-        this.skipMap[name] = !!finalValue;
-        this.layerMap[name] = !layer ? 'default' : layer;
-        if (this.layers.indexOf(this.layerMap[name]) === -1) {
-            this.layers.push(this.layerMap[name]);
-        }
-        return this;
-    };
-    Animator.prototype.Play = function (name) {
-        if (!(name in this.animations)) {
-            throw new Error('this animation doesnt exist ' + name);
-        }
-        var layerName = this.layerMap[name];
-        var current = this.current[layerName];
-        if (current && !current.IsFinished()) {
-            var currentAnimName = this.lastAnimName[layerName];
-            current.Skip(this.skipMap[currentAnimName]);
-            this.current[layerName] = undefined;
-        }
-        current = this.animations[name];
-        this.current[layerName] = current;
-        this.lastAnimName[layerName] = name;
-        current.Start();
-        return current;
-    };
-    Animator.prototype.Pause = function (layer) {
-        var layerName = !layer ? 'default' : layer;
-        var current = this.current[layerName];
-        if (current && current.IsRunning()) {
-            current.Pause();
-        }
-    };
-    Animator.prototype.PauseAll = function () {
-        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
-            var layerId = _a[_i];
-            this.Pause(layerId);
-        }
-    };
-    Animator.prototype.Resume = function (layer) {
-        var layerName = !layer ? 'default' : layer;
-        var current = this.current[layerName];
-        if (current && current.IsPaused()) {
-            current.Resume();
-        }
-    };
-    Animator.prototype.ResumeAll = function () {
-        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
-            var layerId = _a[_i];
-            this.Resume(layerId);
-        }
-    };
-    Animator.prototype.Stop = function (layer) {
-        var layerName = !layer ? 'default' : layer;
-        var current = this.current[layerName];
-        if (current && !current.IsFinished()) {
-            var currentAnimName = this.lastAnimName[layerName];
-            current.Skip(this.skipMap[currentAnimName]);
-            this.current[layerName] = undefined;
-        }
-    };
-    Animator.prototype.StopAll = function () {
-        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
-            var layerId = _a[_i];
-            this.Stop(layerId);
-        }
-    };
-    Animator.prototype.Destroy = function () {
-        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
-            var layerId = _a[_i];
-            var current = this.current[layerId];
-            if (current && !current.IsFinished()) {
-                current.Kill();
-            }
-        }
-        this.animations = {};
-        this.layerMap = {};
-        this.skipMap = {};
-        this.current = {};
-        this.lastAnimName = {};
-        delete this.object.Animator;
-    };
-    return Animator;
-}());
-exports.Animator = Animator;
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var TickerManager = (function () {
-    function TickerManager(plugin) {
-        this.tickers = {};
-        this.plugin = plugin;
-    }
-    TickerManager.prototype.Get = function (name) {
-        if (this.tickers[name]) {
-            return this.tickers[name];
-        }
-        this.tickers[name] = this.plugin.fatina.Ticker();
-        return this.tickers[name];
-    };
-    TickerManager.prototype.PauseAll = function (name) {
-        if (this.tickers[name]) {
-            this.tickers[name].Pause();
-        }
-    };
-    TickerManager.prototype.ResumeAll = function (name) {
-        if (this.tickers[name]) {
-            this.tickers[name].Resume();
-        }
-    };
-    TickerManager.prototype.KillAll = function (name) {
-        if (this.tickers[name]) {
-            this.tickers[name].Kill();
-            delete this.tickers[name];
-        }
-    };
-    return TickerManager;
-}());
-exports.TickerManager = TickerManager;
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -1111,7 +860,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var state_1 = __webpack_require__(0);
-var eventList_1 = __webpack_require__(12);
+var eventList_1 = __webpack_require__(8);
 var Ticker = (function (_super) {
     __extends(Ticker, _super);
     function Ticker() {
@@ -1206,6 +955,9 @@ var Ticker = (function (_super) {
     Ticker.prototype.Reset = function () {
         this.state = state_1.State.Idle;
     };
+    Ticker.prototype.IsIdle = function () {
+        return this.state === state_1.State.Idle;
+    };
     Ticker.prototype.IsRunning = function () {
         return this.state === state_1.State.Run;
     };
@@ -1221,7 +973,7 @@ exports.Ticker = Ticker;
 
 
 /***/ }),
-/* 12 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1285,7 +1037,7 @@ exports.EventList = EventList;
 
 
 /***/ }),
-/* 13 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1323,7 +1075,7 @@ exports.Callback = Callback;
 
 
 /***/ }),
-/* 14 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1340,66 +1092,24 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var state_1 = __webpack_require__(0);
-var easing_1 = __webpack_require__(15);
-var easingType_1 = __webpack_require__(2);
+var easing_1 = __webpack_require__(11);
+var easingType_1 = __webpack_require__(3);
 var baseTween_1 = __webpack_require__(1);
 var sequence_1 = __webpack_require__(5);
 var Tween = (function (_super) {
     __extends(Tween, _super);
-    function Tween(object, properties, data) {
+    function Tween(object, properties) {
         var _this = _super.call(this) || this;
-        _this.yoyo = 0;
         _this.steps = 0;
         _this.relative = false;
         _this.object = object;
         _this.properties = properties;
         _this.tickCb = _this.Tick.bind(_this);
-        if (data) {
-            _this.Unserialize(data);
-        }
         return _this;
     }
     Tween.prototype.Init = function (object, properties) {
         this.object = object;
         this.properties = properties;
-    };
-    Tween.prototype.Serialize = function () {
-        return {
-            elapsed: this.elapsed,
-            duration: this.duration,
-            loop: this.loop,
-            timescale: this.timescale,
-            properties: this.properties,
-            from: this.from,
-            to: this.to,
-            yoyo: this.yoyo,
-            steps: this.steps,
-            relative: this.relative,
-            ease: this.easeId,
-            eventStart: this.eventStart,
-            eventRestart: this.eventRestart,
-            eventUpdate: this.eventUpdate,
-            eventKill: this.eventKill,
-            eventComplete: this.eventComplete
-        };
-    };
-    Tween.prototype.Unserialize = function (data) {
-        this.elapsed = data.elapsed || 0;
-        this.duration = data.duration || 0;
-        this.loop = data.loop || 1,
-            this.timescale = data.timescale || 1;
-        this.properties = data.properties || [];
-        this.from = data.from;
-        this.to = data.to;
-        this.yoyo = data.yoyo || 0;
-        this.steps = data.steps || 0;
-        this.relative = data.relative || false;
-        this.SetEasing(data.ease || easingType_1.EasingType.Linear);
-        this.eventStart = data.eventStart;
-        this.eventRestart = data.eventRestart;
-        this.eventUpdate = data.eventUpdate;
-        this.eventKill = data.eventKill;
-        this.eventComplete = data.eventComplete;
     };
     Tween.prototype.Validate = function () {
         if (!this.object) {
@@ -1453,6 +1163,9 @@ var Tween = (function (_super) {
             this.elapsed += this.remainsDt;
             var progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
             var val = this.ease(progress);
+            if ((this.yoyoOriginal - this.yoyo) % 2 === 1) {
+                val = 1 - this.ease(1 - progress);
+            }
             if (this.steps !== 0) {
                 val = Math.round(val * this.steps) / this.steps;
             }
@@ -1510,6 +1223,20 @@ var Tween = (function (_super) {
             }
         }
     };
+    Tween.prototype.Reset = function (skipParent) {
+        if ((this.yoyoOriginal - this.yoyo) % 2 === 1) {
+            var previous = this.currentFrom;
+            this.currentFrom = this.currentTo;
+            this.currentTo = previous;
+            previous = this.from;
+            this.from = this.to;
+            this.to = previous;
+            var elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
+            this.elapsed = Math.round(elapsed * 1000) / 1000;
+        }
+        this.yoyo = this.yoyoOriginal;
+        _super.prototype.Reset.call(this, skipParent);
+    };
     Tween.prototype.Reverse = function () {
         var previous = this.currentFrom;
         this.currentFrom = this.currentTo;
@@ -1525,6 +1252,7 @@ var Tween = (function (_super) {
         }
     };
     Tween.prototype.Yoyo = function (time) {
+        this.yoyoOriginal = time;
         this.yoyo = time;
         return this;
     };
@@ -1560,29 +1288,19 @@ var Tween = (function (_super) {
     Tween.prototype.LoopInit = function () {
         this.elapsed = 0;
     };
-    Tween.prototype.Default = function () {
-        _super.prototype.Default.call(this);
-        this.object = undefined;
-        this.properties.length = 0;
-        this.from = undefined;
-        this.to = undefined;
-        this.currentFrom = undefined;
-        this.currentTo = undefined;
-        this.relative = false;
-    };
     return Tween;
 }(baseTween_1.BaseTween));
 exports.Tween = Tween;
 
 
 /***/ }),
-/* 15 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var easingType_1 = __webpack_require__(2);
+var easingType_1 = __webpack_require__(3);
 var PI = Math.PI;
 var PI_OVER_TWO = Math.PI / 2;
 var BACK = 1.70158;

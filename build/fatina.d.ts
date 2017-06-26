@@ -18,7 +18,6 @@ export function Sequence(): ISequence;
 export function Delay(duration: number): IPlayable;
 export function SetTimeout(fn: () => void, duration: number): IPlayable;
 export function SetInterval(fn: () => void, duration: number): IPlayable;
-export function GetPlugin(): IPlugin;
 export function Ticker(): ITicker;
 export function LoadPlugin(newPlugin: IPlugin): void;
 
@@ -49,7 +48,6 @@ export interface IPlugin {
 
 export interface ISequence extends IControl {
     Count: number;
-    Default(): void;
     Start(): ISequence;
     SetParent(ticker: ITicker): ISequence;
     SetTimescale(scale: number): ISequence;
@@ -80,7 +78,6 @@ export interface ITicker extends IControl {
 }
 
 export interface ITween extends IControl {
-    Default(): void;
     Init(object: any, properties: string[]): void;
     Start(): ITween;
     From(from: any): ITween;
@@ -95,7 +92,6 @@ export interface ITween extends IControl {
     SetEasing(type: EasingType | string): ITween;
     SetTimescale(scale: number): ITween;
     ToSequence(): ISequence;
-    Serialize(): any;
     SetSafe(safe: boolean): ITween;
     SetLog(level: Log): ITween;
     OnStart(cb: () => void): ITween;
@@ -157,6 +153,7 @@ export interface IControl {
     Kill(): void;
     Reset(): void;
     Skip(finalValue?: boolean): void;
+    IsIdle(): boolean;
     IsRunning(): boolean;
     IsFinished(): boolean;
     IsPaused(): boolean;

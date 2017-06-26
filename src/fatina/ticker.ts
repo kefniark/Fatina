@@ -166,6 +166,10 @@ export class Ticker extends EventList implements ITicker {
 		this.state = State.Idle;
 	}
 
+	public IsIdle(): boolean {
+		return this.state === State.Idle;
+	}
+
 	public IsRunning(): boolean {
 		return this.state === State.Run;
 	}

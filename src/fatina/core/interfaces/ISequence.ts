@@ -13,7 +13,7 @@ import { ITween } from './ITween';
  */
 export interface ISequence extends IControl {
 	Count: number;
-	Default(): void;
+	// Default(): void;
 	Start(): ISequence;
 	SetParent(ticker: ITicker): ISequence;
 	SetTimescale(scale: number): ISequence;

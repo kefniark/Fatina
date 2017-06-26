@@ -19,7 +19,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	private properties: string[];
 	private from: any;
 	private to: any;
-	private yoyo = 0;
 	private steps = 0;
 	private currentFrom: any;
 	private currentTo: any;
@@ -28,16 +27,12 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	private ease: (t: number) => number;
 	private easeId: EasingType | string;
 
-	constructor(object: any, properties: string[], data?: any) {
+	constructor(object: any, properties: string[]) {
 		super();
 
 		this.object = object;
 		this.properties = properties;
 		this.tickCb = this.Tick.bind(this);
-
-		if (data) {
-			this.Unserialize(data);
-		}
 	}
 
 	/**
@@ -60,26 +55,26 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @memberOf Tween
 	 */
-	public Serialize(): any {
-		return {
-			elapsed: this.elapsed,
-			duration: this.duration,
-			loop: this.loop,
-			timescale: this.timescale,
-			properties: this.properties,
-			from: this.from,
-			to: this.to,
-			yoyo: this.yoyo,
-			steps: this.steps,
-			relative: this.relative,
-			ease: this.easeId,
-			eventStart: this.eventStart,
-			eventRestart: this.eventRestart,
-			eventUpdate: this.eventUpdate,
-			eventKill: this.eventKill,
-			eventComplete: this.eventComplete
-		}
-	}
+	// public Serialize(): any {
+	// 	return {
+	// 		elapsed: this.elapsed,
+	// 		duration: this.duration,
+	// 		loop: this.loop,
+	// 		timescale: this.timescale,
+	// 		properties: this.properties,
+	// 		from: this.from,
+	// 		to: this.to,
+	// 		yoyo: this.yoyo,
+	// 		steps: this.steps,
+	// 		relative: this.relative,
+	// 		ease: this.easeId,
+	// 		eventStart: this.eventStart,
+	// 		eventRestart: this.eventRestart,
+	// 		eventUpdate: this.eventUpdate,
+	// 		eventKill: this.eventKill,
+	// 		eventComplete: this.eventComplete
+	// 	}
+	// }
 
 	/**
 	 * Method used to set the tween settings from a properties object
@@ -88,24 +83,24 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @memberOf Tween
 	 */
-	public Unserialize(data: any): void {
-		this.elapsed = data.elapsed || 0;
-		this.duration = data.duration || 0;
-		this.loop = data.loop || 1,
-		this.timescale = data.timescale || 1;
-		this.properties = data.properties || [];
-		this.from = data.from;
-		this.to = data.to;
-		this.yoyo = data.yoyo || 0;
-		this.steps = data.steps || 0;
-		this.relative = data.relative || false;
-		this.SetEasing(data.ease || EasingType.Linear);
-		this.eventStart = data.eventStart;
-		this.eventRestart = data.eventRestart;
-		this.eventUpdate = data.eventUpdate;
-		this.eventKill = data.eventKill;
-		this.eventComplete = data.eventComplete;
-	}
+	// public Unserialize(data: any): void {
+	// 	this.elapsed = data.elapsed || 0;
+	// 	this.duration = data.duration || 0;
+	// 	this.loop = data.loop || 1,
+	// 	this.timescale = data.timescale || 1;
+	// 	this.properties = data.properties || [];
+	// 	this.from = data.from;
+	// 	this.to = data.to;
+	// 	this.yoyo = data.yoyo || 0;
+	// 	this.steps = data.steps || 0;
+	// 	this.relative = data.relative || false;
+	// 	this.SetEasing(data.ease || EasingType.Linear);
+	// 	this.eventStart = data.eventStart;
+	// 	this.eventRestart = data.eventRestart;
+	// 	this.eventUpdate = data.eventUpdate;
+	// 	this.eventKill = data.eventKill;
+	// 	this.eventComplete = data.eventComplete;
+	// }
 
 	/**
 	 * Method used on start to check the values of this tween
@@ -188,6 +183,9 @@ export class Tween extends BaseTween<Tween> implements ITween {
 			this.elapsed += this.remainsDt;
 			const progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
 			let val = this.ease(progress);
+			if ((this.yoyoOriginal - this.yoyo) % 2 === 1) {
+				val = 1 - this.ease(1 - progress);
+			}
 			if (this.steps !== 0) {
 				val = Math.round(val * this.steps) / this.steps;
 			}
@@ -290,6 +288,29 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	}
 
 	/**
+	 * Overwrite the Reset (just for yoyo)
+	 *
+	 * @param {boolean} [skipParent]
+	 * @memberOf Tween
+	 */
+	public Reset(skipParent?: boolean): void {
+		if ((this.yoyoOriginal - this.yoyo) % 2 === 1) {
+			let previous = this.currentFrom;
+			this.currentFrom = this.currentTo;
+			this.currentTo = previous;
+
+			previous = this.from;
+			this.from = this.to;
+			this.to = previous;
+
+			const elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
+			this.elapsed = Math.round(elapsed * 1000) / 1000;
+		}
+		this.yoyo = this.yoyoOriginal;
+		super.Reset(skipParent);
+	}
+
+	/**
 	 * Method used to reverse the tween
 	 *
 	 * @memberOf Tween
@@ -321,6 +342,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 * @memberOf Tween
 	 */
 	public Yoyo(time: number): ITween {
+		this.yoyoOriginal = time;
 		this.yoyo = time;
 		return this;
 	}
@@ -402,14 +424,14 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @memberOf Tween
 	 */
-	public Default() {
-		super.Default();
-		this.object = undefined;
-		this.properties.length = 0;
-		this.from = undefined;
-		this.to = undefined;
-		this.currentFrom = undefined;
-		this.currentTo = undefined;
-		this.relative = false;
-	}
+	// public Default() {
+	// 	super.Default();
+	// 	this.object = undefined;
+	// 	this.properties.length = 0;
+	// 	this.from = undefined;
+	// 	this.to = undefined;
+	// 	this.currentFrom = undefined;
+	// 	this.currentTo = undefined;
+	// 	this.relative = false;
+	// }
 }

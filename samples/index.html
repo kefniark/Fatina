@@ -45,11 +45,11 @@
                 console.log('init Jump Anim', params);
                 let proxy = { dy: 0 };
                 return Fatina.Tween(object.position, ['y'])
-                    .SetRelative(true)
+                    .From({ y: app.renderer.height  / 2 })
                     .OnStart(() => console.log(object.position.y))
                     .OnUpdate(() => console.log(object.position.y))
                     .OnComplete(() => console.log(object.position.y))
-                    .To({y: -150}, 400)
+                    .To({y: app.renderer.height  / 2 - 150}, 400)
                     .SetEasing('outSine')
                     .Yoyo(1);
             }, 'character');

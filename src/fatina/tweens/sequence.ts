@@ -1,3 +1,4 @@
+import { Log } from '../core/enum/log';
 import { State } from '../core/enum/state';
 import { IPlayable } from '../core/interfaces/IPlayable';
 import { ISequence } from '../core/interfaces/ISequence';
@@ -180,6 +181,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 
 	public Skip(finalValue?: boolean): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
+			this.Info(Log.Info, 'Cannot skip this tween ', this.state);
 			return;
 		}
 
@@ -202,6 +204,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 
 	public Kill(): void {
 		if (this.state === State.Killed) {
+			this.Info(Log.Info, 'Cannot kill this tween ', this.state);
 			return;
 		}
 
@@ -224,12 +227,12 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		return this;
 	}
 
-	public Default() {
-		super.Default();
-		this.tweens.length = 0;
-		this.currentTween = undefined;
-		this.sequenceIndex = 0;
-	}
+	// public Default() {
+	// 	super.Default();
+	// 	this.tweens.length = 0;
+	// 	this.currentTween = undefined;
+	// 	this.sequenceIndex = 0;
+	// }
 
 	public OnStepStart(cb: (index: ITween | IPlayable) => void): ISequence {
 		if (!this.eventStepStart) {
