@@ -28,10 +28,12 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	public state: State = State.Idle;
 
 	// private properties
+	protected loopOriginal = 1;
 	protected loop = 1;
 	protected parent: ITicker;
 	protected tickCb: (dt: number) => void;
 	private firstStart = true;
+	private recycled = false;
 	private safe = true;
 	private logLevel = Log.None;
 
@@ -54,7 +56,14 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 		}
 
 		this.state = State.Run;
-		this.parent.AddTickListener(this.tickCb);
+		if (this.recycled) {
+			if (!this.parent.CheckTickListener(this.tickCb)) {
+				this.parent.AddTickListener(this.tickCb);
+			}
+			this.recycled = false;
+		} else {
+			this.parent.AddTickListener(this.tickCb);
+		}
 
 		if (this.firstStart) {
 			this.EmitEvent(this.eventStart);
@@ -63,8 +72,15 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 		return this as any;
 	}
 
-	public Reuse() {
+	/**
+	 * Reset a tween to be reusable (with start)
+	 *
+	 * @memberOf BaseTween
+	 */
+	public Recycle() {
+		this.Reset(true);
 		this.firstStart = true;
+		this.recycled = true;
 	}
 
 	/**
@@ -79,7 +95,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.RemoveParentListener();
 		}
 
-		this.loop = 1;
+		this.loop = this.loopOriginal;
 		this.LoopInit();
 		this.EmitEvent(this.eventRestart);
 	}
@@ -214,7 +230,8 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 * @memberOf Tween
 	 */
 	public SetLoop(loop: number): T {
-		this.loop = Math.round(loop);
+		this.loopOriginal = Math.round(loop);
+		this.loop = this.loopOriginal;
 		return this as any;
 	}
 

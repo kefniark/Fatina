@@ -61,6 +61,25 @@ export class Ticker extends EventList implements ITicker {
 	}
 
 	/**
+	 * Internal method used to cancel a stop (restart in the same frame)
+	 *
+	 * @param {(dt: number) => void} cb
+	 *
+	 * @memberOf Ticker
+	 */
+	public CheckTickListener(cb: (dt: number) => void): boolean {
+		let found = false;
+		while (true) {
+			const index = this.eventToRemove.indexOf(cb);
+			if (index === -1) {
+				return found;
+			}
+			this.eventToRemove.splice(index, 1);
+			found = true;
+		}
+	}
+
+	/**
 	 * Method used to update the array of listener
 	 * This is mostly for performance reason, being able to batch this operation in the updateLoop
 	 *

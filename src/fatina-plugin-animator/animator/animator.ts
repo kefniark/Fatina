@@ -26,24 +26,11 @@ export class Animator {
 
 	public AddAnimation(name: string, animationName: string, finalValue?: boolean, layer?: string, params?: any): Animator {
 		const anim: any = this.animatorManager.Instantiate(animationName, this.object, params);
-		/*
-		anim.OnStart(() => {
-			console.log('OnStart', name, animationName, this.object.name, this.object.position);
-		});
-		anim.OnUpdate((dt: number, progress: number) => {
-			console.log('OnUpdate', dt, progress, name, animationName, this.object.name, this.object.position);
-		});
-		*/
-		anim.OnKilled(() => {
-			// console.log('OnKilled', name, animationName, this.object.name, this.object.position);
-			anim.Reset();
-			anim.Reuse();
-		});
-		anim.OnComplete(() => {
-			// console.log('OnComplete', name, animationName, this.object.name, this.object.position);
-			anim.Reset();
-			anim.Reuse();
-		});
+		anim.OnStart(() => console.log('OnStart', name, animationName, this.object.name, this.object.position));
+		anim.OnComplete(() => console.log('OnComplete', name, animationName, this.object.name, this.object.position));
+		anim.OnKilled(() => anim.Recycle());
+		anim.OnComplete(() => anim.Recycle());
+
 		this.animations[name] = anim;
 		this.skipMap[name] = !!finalValue;
 		this.layerMap[name] = !layer ? 'default' : layer;

@@ -1,3 +1,4 @@
+import { FatinaPluginAnimator } from '../fatina-plugin-animator/index';
 import { Log } from './core/enum/log';
 import { IPlayable } from './core/interfaces/IPlayable';
 import { IPlugin } from './core/interfaces/IPlugin';
@@ -244,6 +245,10 @@ export function SetInterval(fn: () => void, duration: number): IPlayable {
 	const interval = new delay(duration).SetLog(logLevel).SetSafe(safe).SetParent(tickerManager as ITicker).OnRestart(fn).SetLoop(-1).Start();
 	Info(Log.Debug, '[Fatina.Manager] SetInterval Instantiated', interval);
 	return interval;
+}
+
+export function GetPlugin(): IPlugin {
+	return new FatinaPluginAnimator();
 }
 
 /**

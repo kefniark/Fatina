@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -97,6 +97,7 @@ var State;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var log_1 = __webpack_require__(3);
 var state_1 = __webpack_require__(0);
 var BaseTween = (function () {
     function BaseTween() {
@@ -104,8 +105,12 @@ var BaseTween = (function () {
         this.duration = 0;
         this.timescale = 1;
         this.state = state_1.State.Idle;
+        this.loopOriginal = 1;
         this.loop = 1;
         this.firstStart = true;
+        this.recycled = false;
+        this.safe = true;
+        this.logLevel = log_1.Log.None;
     }
     BaseTween.prototype.Start = function () {
         if (this.state !== state_1.State.Idle) {
@@ -118,19 +123,32 @@ var BaseTween = (function () {
             this.CheckPosition();
         }
         this.state = state_1.State.Run;
-        this.parent.AddTickListener(this.tickCb);
+        if (this.recycled) {
+            if (!this.parent.CheckTickListener(this.tickCb)) {
+                this.parent.AddTickListener(this.tickCb);
+            }
+            this.recycled = false;
+        }
+        else {
+            this.parent.AddTickListener(this.tickCb);
+        }
         if (this.firstStart) {
             this.EmitEvent(this.eventStart);
             this.firstStart = false;
         }
         return this;
     };
+    BaseTween.prototype.Recycle = function () {
+        this.Reset(true);
+        this.firstStart = true;
+        this.recycled = true;
+    };
     BaseTween.prototype.Reset = function (skipParent) {
         this.state = state_1.State.Idle;
         if (!skipParent) {
             this.RemoveParentListener();
         }
-        this.loop = 1;
+        this.loop = this.loopOriginal;
         this.LoopInit();
         this.EmitEvent(this.eventRestart);
     };
@@ -165,12 +183,16 @@ var BaseTween = (function () {
         this.state = state_1.State.Run;
         this.parent.AddTickListener(this.tickCb);
     };
-    BaseTween.prototype.Skip = function () {
+    BaseTween.prototype.Skip = function (finalValue) {
         if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
             return;
         }
         if (this.state === state_1.State.Idle) {
             this.EmitEvent(this.eventStart);
+        }
+        if (finalValue) {
+            this.tickCb(this.duration - this.elapsed);
+            return;
         }
         this.elapsed = this.duration;
         this.Complete();
@@ -184,7 +206,8 @@ var BaseTween = (function () {
         this.EmitEvent(this.eventKill);
     };
     BaseTween.prototype.SetLoop = function (loop) {
-        this.loop = Math.round(loop);
+        this.loopOriginal = Math.round(loop);
+        this.loop = this.loopOriginal;
         return this;
     };
     BaseTween.prototype.IsRunning = function () {
@@ -222,7 +245,18 @@ var BaseTween = (function () {
         this.firstStart = true;
         this.state = state_1.State.Idle;
     };
+    BaseTween.prototype.SetSafe = function (safe) {
+        this.safe = safe;
+        return this;
+    };
+    BaseTween.prototype.SetLog = function (level) {
+        this.logLevel = level;
+        return this;
+    };
     BaseTween.prototype.Emit = function (func, args) {
+        if (!this.safe) {
+            return func.apply(this, args);
+        }
         try {
             func.apply(this, args);
         }
@@ -327,6 +361,21 @@ var EasingType;
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", { value: true });
+var Log;
+(function (Log) {
+    Log[Log["None"] = 0] = "None";
+    Log[Log["Info"] = 1] = "Info";
+    Log[Log["Debug"] = 2] = "Debug";
+})(Log = exports.Log || (exports.Log = {}));
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -371,7 +420,7 @@ exports.Delay = Delay;
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -389,8 +438,8 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var state_1 = __webpack_require__(0);
 var baseTween_1 = __webpack_require__(1);
-var callback_1 = __webpack_require__(8);
-var delay_1 = __webpack_require__(3);
+var callback_1 = __webpack_require__(13);
+var delay_1 = __webpack_require__(4);
 var Sequence = (function (_super) {
     __extends(Sequence, _super);
     function Sequence() {
@@ -425,6 +474,9 @@ var Sequence = (function (_super) {
         if (index !== -1) {
             this.eventTick.splice(index, 1);
         }
+    };
+    Sequence.prototype.CheckTickListener = function (cb) {
+        return false;
     };
     Sequence.prototype.Tick = function (dt) {
         if (this.state === state_1.State.Finished || this.state === state_1.State.Killed) {
@@ -517,7 +569,7 @@ var Sequence = (function (_super) {
         this.tweens.unshift([playable]);
         return this;
     };
-    Sequence.prototype.Skip = function () {
+    Sequence.prototype.Skip = function (finalValue) {
         if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
             return;
         }
@@ -531,7 +583,7 @@ var Sequence = (function (_super) {
                 if (tween.elapsed === 0) {
                     this.EmitEvent(this.eventStepStart, [tween]);
                 }
-                tween.Skip();
+                tween.Skip(finalValue);
                 this.EmitEvent(this.eventStepEnd, [tween]);
             }
         }
@@ -583,24 +635,27 @@ exports.Sequence = Sequence;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var index_1 = __webpack_require__(7);
+var log_1 = __webpack_require__(3);
 var easingType_1 = __webpack_require__(2);
 exports.Easing = easingType_1.EasingType;
-var ticker_1 = __webpack_require__(6);
-var delay_1 = __webpack_require__(3);
-var sequence_1 = __webpack_require__(4);
-var tween_1 = __webpack_require__(9);
+var ticker_1 = __webpack_require__(11);
+var delay_1 = __webpack_require__(4);
+var sequence_1 = __webpack_require__(5);
+var tween_1 = __webpack_require__(14);
 var tickerManager;
 var initialized = false;
 var isFirstUpdate = true;
 var lastFrame;
 var lastTime = 0;
-var tickers = {};
+var logLevel = log_1.Log.None;
+var safe = true;
 var loadedPlugins = [];
 exports.plugin = {};
 exports.time = 0;
@@ -651,6 +706,14 @@ function Resume() {
     tickerManager.Resume();
 }
 exports.Resume = Resume;
+function SetLog(level) {
+    logLevel = level;
+}
+exports.SetLog = SetLog;
+function SetSafe(isSafe) {
+    safe = isSafe;
+}
+exports.SetSafe = SetSafe;
 function Destroy() {
     if (tickerManager) {
         tickerManager.Kill();
@@ -673,57 +736,81 @@ function Tween(obj, properties) {
     if (!initialized) {
         Init();
     }
-    return new tween_1.Tween(obj, properties).SetParent(tickerManager);
+    var t = new tween_1.Tween(obj, properties).SetLog(logLevel).SetSafe(safe).SetParent(tickerManager);
+    Info(log_1.Log.Debug, '[Fatina.Manager] Tween Instantiated', t);
+    return t;
 }
 exports.Tween = Tween;
 function Sequence() {
     if (!initialized) {
         Init();
     }
-    return new sequence_1.Sequence().SetParent(tickerManager);
+    var s = new sequence_1.Sequence().SetLog(logLevel).SetSafe(safe).SetParent(tickerManager);
+    Info(log_1.Log.Debug, '[Fatina.Manager] Sequence Instantiated', s);
+    return s;
 }
 exports.Sequence = Sequence;
 function Delay(duration) {
     if (!initialized) {
         Init();
     }
-    return new delay_1.Delay(duration).SetParent(tickerManager);
+    var d = new delay_1.Delay(duration).SetLog(logLevel).SetSafe(safe).SetParent(tickerManager);
+    Info(log_1.Log.Debug, '[Fatina.Manager] Sequence Instantiated', d);
+    return d;
 }
 exports.Delay = Delay;
 function SetTimeout(fn, duration) {
     if (!initialized) {
         Init();
     }
-    return new delay_1.Delay(duration).SetParent(tickerManager).OnComplete(fn).Start();
+    var timeout = new delay_1.Delay(duration).SetLog(logLevel).SetSafe(safe).SetParent(tickerManager).OnComplete(fn).Start();
+    Info(log_1.Log.Debug, '[Fatina.Manager] SetTimeout Instantiated', timeout);
+    return timeout;
 }
 exports.SetTimeout = SetTimeout;
 function SetInterval(fn, duration) {
     if (!initialized) {
         Init();
     }
-    return new delay_1.Delay(duration).SetParent(tickerManager).OnRestart(fn).SetLoop(-1).Start();
+    var interval = new delay_1.Delay(duration).SetLog(logLevel).SetSafe(safe).SetParent(tickerManager).OnRestart(fn).SetLoop(-1).Start();
+    Info(log_1.Log.Debug, '[Fatina.Manager] SetInterval Instantiated', interval);
+    return interval;
 }
 exports.SetInterval = SetInterval;
-function Ticker(name) {
+function GetPlugin() {
+    return new index_1.FatinaPluginAnimator();
+}
+exports.GetPlugin = GetPlugin;
+function Ticker() {
     if (!initialized) {
         Init();
     }
-    if (!(name in tickers)) {
-        var tick = new ticker_1.Ticker();
-        var handler = tick.Tick.bind(tick);
-        tick.SetParent(tickerManager, handler);
-        tickerManager.AddTickListener(handler);
-        tick.Start();
-        tickers[name] = tick;
-    }
-    return tickers[name];
+    var tick = new ticker_1.Ticker();
+    var handler = tick.Tick.bind(tick);
+    tick.SetParent(tickerManager, handler);
+    tickerManager.AddTickListener(handler);
+    tick.Start();
+    Info(log_1.Log.Debug, '[Fatina.Manager] Ticker Instantiated', tick);
+    return tick;
 }
 exports.Ticker = Ticker;
 function LoadPlugin(newPlugin) {
     newPlugin.Init(this);
     loadedPlugins.push(newPlugin);
+    Info(log_1.Log.Debug, '[Fatina.Manager] Plugin Loaded', newPlugin.name);
 }
 exports.LoadPlugin = LoadPlugin;
+function Info(level, message, data) {
+    if (level > logLevel) {
+        return;
+    }
+    if (data) {
+        console.log(message, data);
+    }
+    else {
+        console.log(message);
+    }
+}
 var requestFrame;
 var cancelFrame;
 if (typeof (window) !== 'undefined') {
@@ -747,7 +834,267 @@ function updateLoop(timestamp) {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var animatorManager_1 = __webpack_require__(8);
+var tickerManager_1 = __webpack_require__(10);
+function Get() {
+    return new FatinaPluginAnimator();
+}
+exports.Get = Get;
+var FatinaPluginAnimator = (function () {
+    function FatinaPluginAnimator() {
+        this.name = 'fatina-plugin-animator';
+        this.init = false;
+    }
+    Object.defineProperty(FatinaPluginAnimator.prototype, "TickerManager", {
+        get: function () {
+            return this.fatina.plugin.TickerManager;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FatinaPluginAnimator.prototype, "AnimatorManager", {
+        get: function () {
+            return this.fatina.plugin.AnimatorManager;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    FatinaPluginAnimator.prototype.Init = function (fatina) {
+        if (this.init) {
+            throw new Error('Try to init the plugin twice : ' + name);
+        }
+        if (fatina === undefined || fatina === null || fatina.plugin === null) {
+            throw new Error('Try to init the plugin without fatina : ' + name);
+        }
+        this.fatina = fatina;
+        this.init = true;
+        fatina.plugin.AnimatorManager = new animatorManager_1.AnimatorManager(this);
+        fatina.plugin.TickerManager = new tickerManager_1.TickerManager(this);
+    };
+    return FatinaPluginAnimator;
+}());
+exports.FatinaPluginAnimator = FatinaPluginAnimator;
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var animator_1 = __webpack_require__(9);
+var AnimatorManager = (function () {
+    function AnimatorManager(plugin) {
+        this.animations = {};
+        this.tickerMap = {};
+        this.plugin = plugin;
+    }
+    Object.defineProperty(AnimatorManager.prototype, "Animations", {
+        get: function () {
+            return Object.keys(this.animations);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(AnimatorManager.prototype, "Labels", {
+        get: function () {
+            var _this = this;
+            return Object.keys(this.tickerMap).map(function (x) { return _this.tickerMap[x]; }).filter(function (piece, index, self) { return self.indexOf(piece) === index; });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    AnimatorManager.prototype.Register = function (name, onCreate, label) {
+        if (this.animations[name] && this.tickerMap[name]) {
+            delete this.tickerMap[name];
+        }
+        this.animations[name] = onCreate;
+        if (label) {
+            this.tickerMap[name] = label;
+        }
+        return this;
+    };
+    AnimatorManager.prototype.Instantiate = function (name, object, params) {
+        if (!(name in this.animations)) {
+            throw new Error('this animation doesnt exist ' + name);
+        }
+        var tween = this.animations[name](object, params);
+        if (this.tickerMap[name]) {
+            tween.SetParent(this.plugin.TickerManager.Get(this.tickerMap[name]));
+        }
+        return tween;
+    };
+    AnimatorManager.prototype.AddAnimatorTo = function (obj) {
+        if (!obj.Animator) {
+            obj.Animator = new animator_1.Animator(obj, this);
+        }
+        return obj.Animator;
+    };
+    return AnimatorManager;
+}());
+exports.AnimatorManager = AnimatorManager;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Animator = (function () {
+    function Animator(obj, animatorManager) {
+        this.animations = {};
+        this.current = {};
+        this.layers = ['default'];
+        this.layerMap = {};
+        this.skipMap = {};
+        this.lastAnimName = {};
+        this.object = obj;
+        this.animatorManager = animatorManager;
+    }
+    Animator.prototype.AddAnimation = function (name, animationName, finalValue, layer, params) {
+        var _this = this;
+        var anim = this.animatorManager.Instantiate(animationName, this.object, params);
+        anim.OnStart(function () { return console.log('OnStart', name, animationName, _this.object.name, _this.object.position); });
+        anim.OnComplete(function () { return console.log('OnComplete', name, animationName, _this.object.name, _this.object.position); });
+        anim.OnKilled(function () { return anim.Recycle(); });
+        anim.OnComplete(function () { return anim.Recycle(); });
+        this.animations[name] = anim;
+        this.skipMap[name] = !!finalValue;
+        this.layerMap[name] = !layer ? 'default' : layer;
+        if (this.layers.indexOf(this.layerMap[name]) === -1) {
+            this.layers.push(this.layerMap[name]);
+        }
+        return this;
+    };
+    Animator.prototype.Play = function (name) {
+        if (!(name in this.animations)) {
+            throw new Error('this animation doesnt exist ' + name);
+        }
+        var layerName = this.layerMap[name];
+        var current = this.current[layerName];
+        if (current && !current.IsFinished()) {
+            var currentAnimName = this.lastAnimName[layerName];
+            current.Skip(this.skipMap[currentAnimName]);
+            this.current[layerName] = undefined;
+        }
+        current = this.animations[name];
+        this.current[layerName] = current;
+        this.lastAnimName[layerName] = name;
+        current.Start();
+        return current;
+    };
+    Animator.prototype.Pause = function (layer) {
+        var layerName = !layer ? 'default' : layer;
+        var current = this.current[layerName];
+        if (current && current.IsRunning()) {
+            current.Pause();
+        }
+    };
+    Animator.prototype.PauseAll = function () {
+        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
+            var layerId = _a[_i];
+            this.Pause(layerId);
+        }
+    };
+    Animator.prototype.Resume = function (layer) {
+        var layerName = !layer ? 'default' : layer;
+        var current = this.current[layerName];
+        if (current && current.IsPaused()) {
+            current.Resume();
+        }
+    };
+    Animator.prototype.ResumeAll = function () {
+        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
+            var layerId = _a[_i];
+            this.Resume(layerId);
+        }
+    };
+    Animator.prototype.Stop = function (layer) {
+        var layerName = !layer ? 'default' : layer;
+        var current = this.current[layerName];
+        if (current && !current.IsFinished()) {
+            var currentAnimName = this.lastAnimName[layerName];
+            current.Skip(this.skipMap[currentAnimName]);
+            this.current[layerName] = undefined;
+        }
+    };
+    Animator.prototype.StopAll = function () {
+        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
+            var layerId = _a[_i];
+            this.Stop(layerId);
+        }
+    };
+    Animator.prototype.Destroy = function () {
+        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
+            var layerId = _a[_i];
+            var current = this.current[layerId];
+            if (current && !current.IsFinished()) {
+                current.Kill();
+            }
+        }
+        this.animations = {};
+        this.layerMap = {};
+        this.skipMap = {};
+        this.current = {};
+        this.lastAnimName = {};
+        delete this.object.Animator;
+    };
+    return Animator;
+}());
+exports.Animator = Animator;
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var TickerManager = (function () {
+    function TickerManager(plugin) {
+        this.tickers = {};
+        this.plugin = plugin;
+    }
+    TickerManager.prototype.Get = function (name) {
+        if (this.tickers[name]) {
+            return this.tickers[name];
+        }
+        this.tickers[name] = this.plugin.fatina.Ticker();
+        return this.tickers[name];
+    };
+    TickerManager.prototype.PauseAll = function (name) {
+        if (this.tickers[name]) {
+            this.tickers[name].Pause();
+        }
+    };
+    TickerManager.prototype.ResumeAll = function (name) {
+        if (this.tickers[name]) {
+            this.tickers[name].Resume();
+        }
+    };
+    TickerManager.prototype.KillAll = function (name) {
+        if (this.tickers[name]) {
+            this.tickers[name].Kill();
+            delete this.tickers[name];
+        }
+    };
+    return TickerManager;
+}());
+exports.TickerManager = TickerManager;
+
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -764,7 +1111,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var state_1 = __webpack_require__(0);
-var eventList_1 = __webpack_require__(7);
+var eventList_1 = __webpack_require__(12);
 var Ticker = (function (_super) {
     __extends(Ticker, _super);
     function Ticker() {
@@ -790,6 +1137,17 @@ var Ticker = (function (_super) {
     };
     Ticker.prototype.RemoveTickListener = function (cb) {
         this.eventToRemove.push(cb);
+    };
+    Ticker.prototype.CheckTickListener = function (cb) {
+        var found = false;
+        while (true) {
+            var index = this.eventToRemove.indexOf(cb);
+            if (index === -1) {
+                return found;
+            }
+            this.eventToRemove.splice(index, 1);
+            found = true;
+        }
     };
     Ticker.prototype.UpdateListener = function () {
         if (this.eventToAdd.length > 0) {
@@ -863,7 +1221,7 @@ exports.Ticker = Ticker;
 
 
 /***/ }),
-/* 7 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -927,7 +1285,7 @@ exports.EventList = EventList;
 
 
 /***/ }),
-/* 8 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -965,7 +1323,7 @@ exports.Callback = Callback;
 
 
 /***/ }),
-/* 9 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -982,10 +1340,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var state_1 = __webpack_require__(0);
-var easing_1 = __webpack_require__(10);
+var easing_1 = __webpack_require__(15);
 var easingType_1 = __webpack_require__(2);
 var baseTween_1 = __webpack_require__(1);
-var sequence_1 = __webpack_require__(4);
+var sequence_1 = __webpack_require__(5);
 var Tween = (function (_super) {
     __extends(Tween, _super);
     function Tween(object, properties, data) {
@@ -1218,7 +1576,7 @@ exports.Tween = Tween;
 
 
 /***/ }),
-/* 10 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

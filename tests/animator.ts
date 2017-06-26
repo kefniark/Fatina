@@ -211,3 +211,37 @@ test('[Fatina.Animator] Test TickManager label', (t: Test) => {
 
 	t.end();
 });
+
+test('[Fatina.Animator] Test Double Animation', (t: Test) => {
+	let started = 0;
+	let updated = 0;
+	let killed = 0;
+	let completed = 0;
+
+	animatorPlugin.AnimatorManager.Register('move', (obj: any, params: any) => {
+		return fatina.Tween(obj.position, ['x']).SetRelative(true).To({ x: params }, 500)
+			.OnStart(() => started++)
+			.OnUpdate(() => updated++)
+			.OnKilled(() => killed++)
+			.OnComplete(() => completed++);
+	});
+
+	const sprite1: any = GetSprite('testDouble');
+	const anim1 = animatorPlugin.AnimatorManager.AddAnimatorTo(sprite1)
+		.AddAnimation('moveRight', 'move', false, 'move', 5)
+		.AddAnimation('moveLeft', 'move', false, 'move', -5);
+
+	anim1.Play('moveLeft');
+	fatina.Update(50);
+	anim1.Play('moveLeft');
+	fatina.Update(500);
+	fatina.Update(1);
+
+	t.equal(started, 2);
+	t.equal(killed, 0);
+	t.equal(updated, 2);
+	t.equal(completed, 2);
+	t.equal(sprite1.position.x, -5.5, 'check the final position');
+
+	t.end();
+});
