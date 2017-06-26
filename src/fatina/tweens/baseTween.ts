@@ -1,3 +1,4 @@
+import { Log } from '../core/enum/log';
 import { State } from '../core/enum/state';
 import { ITicker } from '../core/interfaces/ITicker';
 
@@ -31,6 +32,8 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	protected parent: ITicker;
 	protected tickCb: (dt: number) => void;
 	private firstStart = true;
+	private safe = true;
+	private logLevel = Log.None;
 
 	/**
 	 * Method used to start a tween
@@ -58,6 +61,10 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.firstStart = false;
 		}
 		return this as any;
+	}
+
+	public Reuse() {
+		this.firstStart = true;
 	}
 
 	/**
@@ -158,17 +165,22 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	/**
 	 * Method used to Skip this tween or sequence and directly finish it
 	 *
+	 * @param {boolean} [finalValue]
 	 * @returns {void}
-	 *
-	 * @memberOf BaseTween
+	 * @memberof BaseTween
 	 */
-	public Skip(): void {
+	public Skip(finalValue?: boolean): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
 			return;
 		}
 
 		if (this.state === State.Idle) {
 			this.EmitEvent(this.eventStart);
+		}
+
+		if (finalValue) {
+			this.tickCb(this.duration - this.elapsed);
+			return;
 		}
 
 		this.elapsed = this.duration;
@@ -249,7 +261,20 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 		this.state = State.Idle;
 	}
 
+	public SetSafe(safe: boolean): T {
+		this.safe = safe;
+		return this as any;
+	}
+
+	public SetLog(level: Log): T {
+		this.logLevel = level;
+		return this as any;
+	}
+
 	private Emit(func: any, args: any) {
+		if (!this.safe) {
+			return func.apply(this, args);
+		}
 		try {
 			func.apply(this, args);
 		} catch (e) {

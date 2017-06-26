@@ -1,3 +1,4 @@
+import { Log } from '../enum/log';
 import { IControl } from './IControl';
 import { IPlayable } from './IPlayable';
 import { ITicker } from './ITicker';
@@ -17,6 +18,8 @@ export interface ISequence extends IControl {
 	SetParent(ticker: ITicker): ISequence;
 	SetTimescale(scale: number): ISequence;
 	SetLoop(loop: number): ISequence;
+	SetSafe(safe: boolean): ISequence;
+	SetLog(level: Log): ISequence;
 
 	Append(tween: ITween | ISequence): ISequence;
 	AppendCallback(cb: () => void): ISequence;

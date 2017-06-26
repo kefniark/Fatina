@@ -1,3 +1,4 @@
+import { Log } from './core/enum/log';
 import { IPlayable } from './core/interfaces/IPlayable';
 import { IPlugin } from './core/interfaces/IPlugin';
 import { ISequence } from './core/interfaces/ISequence';
@@ -14,7 +15,9 @@ let initialized = false;
 let isFirstUpdate = true;
 let lastFrame: any;
 let lastTime = 0;
-const tickers: {[id: string]: ITicker } = {};
+let logLevel = Log.None;
+let safe = true;
+
 const loadedPlugins: IPlugin[] = [];
 
 // Area for plugins to add helpers / dynamic method
@@ -102,6 +105,26 @@ export function Resume(): void {
 }
 
 /**
+ * This method is used to change the log level
+ *
+ * @export
+ * @param {Log} level
+ */
+export function SetLog(level: Log) {
+	logLevel = level;
+}
+
+/**
+ * This method is used to enable / disable the callback try/catch
+ *
+ * @export
+ * @param {boolean} isSafe
+ */
+export function SetSafe(isSafe: boolean) {
+	safe = isSafe;
+}
+
+/**
  * This method kill the main ticker, the pool of tween and stop any requestAnimationFrame
  *
  * @export
@@ -147,7 +170,9 @@ export function Tween(obj: any, properties: string[]): ITween {
 		Init();
 	}
 
-	return new tween(obj, properties).SetParent(tickerManager as ITicker);
+	const t = new tween(obj, properties).SetLog(logLevel).SetSafe(safe).SetParent(tickerManager as ITicker);
+	Info(Log.Debug, '[Fatina.Manager] Tween Instantiated', t);
+	return t;
 }
 
 /**
@@ -161,7 +186,9 @@ export function Sequence(): ISequence {
 		Init();
 	}
 
-	return new sequence().SetParent(tickerManager as ITicker);
+	const s = new sequence().SetLog(logLevel).SetSafe(safe).SetParent(tickerManager as ITicker);
+	Info(Log.Debug, '[Fatina.Manager] Sequence Instantiated', s);
+	return s;
 }
 
 /**
@@ -176,7 +203,9 @@ export function Delay(duration: number): IPlayable {
 		Init();
 	}
 
-	return new delay(duration).SetParent(tickerManager as ITicker);
+	const d = new delay(duration).SetLog(logLevel).SetSafe(safe).SetParent(tickerManager as ITicker);
+	Info(Log.Debug, '[Fatina.Manager] Sequence Instantiated', d);
+	return d;
 }
 
 /**
@@ -193,7 +222,9 @@ export function SetTimeout(fn: () => void, duration: number): IPlayable {
 		Init();
 	}
 
-	return new delay(duration).SetParent(tickerManager as ITicker).OnComplete(fn).Start();
+	const timeout = new delay(duration).SetLog(logLevel).SetSafe(safe).SetParent(tickerManager as ITicker).OnComplete(fn).Start();
+	Info(Log.Debug, '[Fatina.Manager] SetTimeout Instantiated', timeout);
+	return timeout;
 }
 
 /**
@@ -210,7 +241,9 @@ export function SetInterval(fn: () => void, duration: number): IPlayable {
 		Init();
 	}
 
-	return new delay(duration).SetParent(tickerManager as ITicker).OnRestart(fn).SetLoop(-1).Start();
+	const interval = new delay(duration).SetLog(logLevel).SetSafe(safe).SetParent(tickerManager as ITicker).OnRestart(fn).SetLoop(-1).Start();
+	Info(Log.Debug, '[Fatina.Manager] SetInterval Instantiated', interval);
+	return interval;
 }
 
 /**
@@ -219,25 +252,21 @@ export function SetInterval(fn: () => void, duration: number): IPlayable {
  *
  * @export
  * @param {string} name
- * @returns {(ITicker | undefined)}
+ * @returns {ITicker}
  */
-export function Ticker(name: string): ITicker {
+export function Ticker(): ITicker {
 	if (!initialized) {
 		Init();
 	}
 
-	// Create a ticker with that name
-	if (!(name in tickers)) {
-		const tick = new ticker();
-		const handler = tick.Tick.bind(tick);
-		tick.SetParent(tickerManager, handler);
-		tickerManager.AddTickListener(handler);
-		tick.Start();
+	const tick = new ticker();
+	const handler = tick.Tick.bind(tick);
+	tick.SetParent(tickerManager, handler);
+	tickerManager.AddTickListener(handler);
+	tick.Start();
 
-		tickers[name] = tick;
-	}
-
-	return tickers[name];
+	Info(Log.Debug, '[Fatina.Manager] Ticker Instantiated', tick);
+	return tick;
 }
 
 /**
@@ -249,6 +278,18 @@ export function Ticker(name: string): ITicker {
 export function LoadPlugin(newPlugin: IPlugin) {
 	newPlugin.Init(this);
 	loadedPlugins.push(newPlugin);
+	Info(Log.Debug, '[Fatina.Manager] Plugin Loaded', newPlugin.name);
+}
+
+function Info(level: Log, message: string, data?: any) {
+	if (level > logLevel) {
+		return;
+	}
+	if (data) {
+		console.log(message, data);
+	} else {
+		console.log(message);
+	}
 }
 
 /**

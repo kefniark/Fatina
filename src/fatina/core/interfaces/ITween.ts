@@ -1,4 +1,5 @@
 import { EasingType } from '../../easing/easingType';
+import { Log } from '../enum/log';
 import { IControl } from './IControl';
 import { ISequence } from './ISequence';
 import { ITicker } from './ITicker';
@@ -28,6 +29,8 @@ export interface ITween extends IControl {
 	SetTimescale(scale: number): ITween;
 	ToSequence(): ISequence;
 	Serialize(): any;
+	SetSafe(safe: boolean): ITween;
+	SetLog(level: Log): ITween;
 
 	OnStart(cb: () => void): ITween;
 	OnUpdate(cb: (dt: number, progress: number) => void): ITween;

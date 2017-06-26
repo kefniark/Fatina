@@ -174,7 +174,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		return this;
 	}
 
-	public Skip(): void {
+	public Skip(finalValue?: boolean): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
 			return;
 		}
@@ -189,7 +189,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 				if (tween.elapsed === 0) {
 					this.EmitEvent(this.eventStepStart, [tween]);
 				}
-				tween.Skip();
+				tween.Skip(finalValue);
 				this.EmitEvent(this.eventStepEnd, [tween]);
 			}
 		}
