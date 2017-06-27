@@ -59,7 +59,7 @@
     "ts-node": "^3.1.0",
     "tslint": "^5.4.3",
     "typedoc": "^0.7.1",
-    "typescript": "^2.3.4",
+    "typescript": "^2.4.0",
     "webpack": "3.0.0"
   },
   "nyc": {

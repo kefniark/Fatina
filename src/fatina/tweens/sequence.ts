@@ -1,3 +1,4 @@
+import { Log } from '../core/enum/log';
 import { State } from '../core/enum/state';
 import { IPlayable } from '../core/interfaces/IPlayable';
 import { ISequence } from '../core/interfaces/ISequence';
@@ -59,6 +60,10 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		if (index !== -1) {
 			this.eventTick.splice(index, 1);
 		}
+	}
+
+	public CheckTickListener(cb: (dt: number) => void): boolean {
+		return false;
 	}
 
 	private Tick(dt: number) {
@@ -174,8 +179,9 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		return this;
 	}
 
-	public Skip(): void {
+	public Skip(finalValue?: boolean): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
+			this.Info(Log.Info, 'Cannot skip this tween ', this.state);
 			return;
 		}
 
@@ -183,13 +189,10 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 			const tweenArray = this.tweens[i];
 			for (let j = 0; j < tweenArray.length; j++) {
 				const tween = tweenArray[j];
-				if (tween.state === State.Killed || tween.state === State.Finished) {
-					continue;
-				}
 				if (tween.elapsed === 0) {
 					this.EmitEvent(this.eventStepStart, [tween]);
 				}
-				tween.Skip();
+				tween.Skip(finalValue);
 				this.EmitEvent(this.eventStepEnd, [tween]);
 			}
 		}
@@ -198,6 +201,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 
 	public Kill(): void {
 		if (this.state === State.Killed) {
+			this.Info(Log.Info, 'Cannot kill this tween ', this.state);
 			return;
 		}
 
@@ -220,18 +224,12 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		return this;
 	}
 
-	public Default() {
-		super.Default();
-		this.tweens.length = 0;
-		this.currentTween = undefined;
-		this.sequenceIndex = 0;
-	}
-
 	public OnStepStart(cb: (index: ITween | IPlayable) => void): ISequence {
 		if (!this.eventStepStart) {
 			this.eventStepStart = new Array(0);
 		}
 		this.eventStepStart[this.eventStepStart.length] = cb;
+		this.Info(Log.Debug, 'OnStepStart', this);
 		return this;
 	}
 
@@ -240,6 +238,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 			this.eventStepEnd = new Array(0);
 		}
 		this.eventStepEnd[this.eventStepEnd.length] = cb;
+		this.Info(Log.Debug, 'OnStepEnd', this);
 		return this;
 	}
 }

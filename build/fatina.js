@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -97,6 +97,7 @@ var State;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var log_1 = __webpack_require__(2);
 var state_1 = __webpack_require__(0);
 var BaseTween = (function () {
     function BaseTween() {
@@ -104,8 +105,14 @@ var BaseTween = (function () {
         this.duration = 0;
         this.timescale = 1;
         this.state = state_1.State.Idle;
+        this.loopOriginal = 1;
         this.loop = 1;
+        this.yoyoOriginal = 0;
+        this.yoyo = 0;
         this.firstStart = true;
+        this.recycled = false;
+        this.safe = true;
+        this.logLevel = log_1.Log.None;
     }
     BaseTween.prototype.Start = function () {
         if (this.state !== state_1.State.Idle) {
@@ -118,19 +125,32 @@ var BaseTween = (function () {
             this.CheckPosition();
         }
         this.state = state_1.State.Run;
-        this.parent.AddTickListener(this.tickCb);
+        if (this.recycled) {
+            if (!this.parent.CheckTickListener(this.tickCb)) {
+                this.parent.AddTickListener(this.tickCb);
+            }
+            this.recycled = false;
+        }
+        else {
+            this.parent.AddTickListener(this.tickCb);
+        }
         if (this.firstStart) {
             this.EmitEvent(this.eventStart);
             this.firstStart = false;
         }
         return this;
     };
+    BaseTween.prototype.Recycle = function () {
+        this.Reset(true);
+        this.firstStart = true;
+        this.recycled = true;
+    };
     BaseTween.prototype.Reset = function (skipParent) {
         this.state = state_1.State.Idle;
         if (!skipParent) {
             this.RemoveParentListener();
         }
-        this.loop = 1;
+        this.loop = this.loopOriginal;
         this.LoopInit();
         this.EmitEvent(this.eventRestart);
     };
@@ -153,6 +173,7 @@ var BaseTween = (function () {
     };
     BaseTween.prototype.Pause = function () {
         if (this.state !== state_1.State.Run) {
+            this.Info(log_1.Log.Info, 'Cannot pause this tween ', this.state);
             return;
         }
         this.state = state_1.State.Pause;
@@ -160,23 +181,30 @@ var BaseTween = (function () {
     };
     BaseTween.prototype.Resume = function () {
         if (this.state !== state_1.State.Pause) {
+            this.Info(log_1.Log.Info, 'Cannot resume this tween ', this.state);
             return;
         }
         this.state = state_1.State.Run;
         this.parent.AddTickListener(this.tickCb);
     };
-    BaseTween.prototype.Skip = function () {
+    BaseTween.prototype.Skip = function (finalValue) {
         if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
+            this.Info(log_1.Log.Info, 'Cannot skip this tween ', this.state);
             return;
         }
         if (this.state === state_1.State.Idle) {
             this.EmitEvent(this.eventStart);
+        }
+        if (finalValue) {
+            this.tickCb(this.duration - this.elapsed + (this.yoyo * this.duration));
+            return;
         }
         this.elapsed = this.duration;
         this.Complete();
     };
     BaseTween.prototype.Kill = function () {
         if (this.state === state_1.State.Killed) {
+            this.Info(log_1.Log.Info, 'Cannot kill this tween ', this.state);
             return;
         }
         this.state = state_1.State.Killed;
@@ -184,8 +212,12 @@ var BaseTween = (function () {
         this.EmitEvent(this.eventKill);
     };
     BaseTween.prototype.SetLoop = function (loop) {
-        this.loop = Math.round(loop);
+        this.loopOriginal = Math.round(loop);
+        this.loop = this.loopOriginal;
         return this;
+    };
+    BaseTween.prototype.IsIdle = function () {
+        return this.state === state_1.State.Idle;
     };
     BaseTween.prototype.IsRunning = function () {
         return this.state === state_1.State.Run;
@@ -198,6 +230,7 @@ var BaseTween = (function () {
     };
     BaseTween.prototype.Complete = function () {
         if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
+            this.Info(log_1.Log.Info, 'Cannot complete this tween ', this.state);
             return;
         }
         this.state = state_1.State.Finished;
@@ -214,15 +247,29 @@ var BaseTween = (function () {
     BaseTween.prototype.LoopInit = function () {
         this.elapsed = 0;
     };
-    BaseTween.prototype.Default = function () {
-        this.elapsed = 0;
-        this.duration = 0;
-        this.timescale = 1;
-        this.loop = 1;
-        this.firstStart = true;
-        this.state = state_1.State.Idle;
+    BaseTween.prototype.SetSafe = function (safe) {
+        this.safe = safe;
+        return this;
+    };
+    BaseTween.prototype.SetLog = function (level) {
+        this.logLevel = level;
+        return this;
+    };
+    BaseTween.prototype.Info = function (level, message, data) {
+        if (level > this.logLevel) {
+            return;
+        }
+        if (data) {
+            console.log(message, data);
+        }
+        else {
+            console.log(message);
+        }
     };
     BaseTween.prototype.Emit = function (func, args) {
+        if (!this.safe) {
+            return func.apply(this, args);
+        }
         try {
             func.apply(this, args);
         }
@@ -243,6 +290,7 @@ var BaseTween = (function () {
             this.eventStart = new Array(0);
         }
         this.eventStart[this.eventStart.length] = cb;
+        this.Info(log_1.Log.Debug, 'onStart', this);
         return this;
     };
     BaseTween.prototype.OnRestart = function (cb) {
@@ -250,6 +298,7 @@ var BaseTween = (function () {
             this.eventRestart = new Array(0);
         }
         this.eventRestart[this.eventRestart.length] = cb;
+        this.Info(log_1.Log.Debug, 'onRestart', this);
         return this;
     };
     BaseTween.prototype.OnUpdate = function (cb) {
@@ -264,6 +313,7 @@ var BaseTween = (function () {
             this.eventKill = new Array(0);
         }
         this.eventKill[this.eventKill.length] = cb;
+        this.Info(log_1.Log.Debug, 'onKilled', this);
         return this;
     };
     BaseTween.prototype.OnComplete = function (cb) {
@@ -271,6 +321,7 @@ var BaseTween = (function () {
             this.eventComplete = new Array(0);
         }
         this.eventComplete[this.eventComplete.length] = cb;
+        this.Info(log_1.Log.Debug, 'onComplete', this);
         return this;
     };
     return BaseTween;
@@ -285,44 +336,59 @@ exports.BaseTween = BaseTween;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var EasingType;
-(function (EasingType) {
-    EasingType[EasingType["Linear"] = 0] = "Linear";
-    EasingType[EasingType["InQuad"] = 1] = "InQuad";
-    EasingType[EasingType["OutQuad"] = 2] = "OutQuad";
-    EasingType[EasingType["InOutQuad"] = 3] = "InOutQuad";
-    EasingType[EasingType["InCubic"] = 4] = "InCubic";
-    EasingType[EasingType["OutCubic"] = 5] = "OutCubic";
-    EasingType[EasingType["InOutCubic"] = 6] = "InOutCubic";
-    EasingType[EasingType["InQuart"] = 7] = "InQuart";
-    EasingType[EasingType["OutQuart"] = 8] = "OutQuart";
-    EasingType[EasingType["InOutQuart"] = 9] = "InOutQuart";
-    EasingType[EasingType["InSine"] = 10] = "InSine";
-    EasingType[EasingType["OutSine"] = 11] = "OutSine";
-    EasingType[EasingType["InOutSine"] = 12] = "InOutSine";
-    EasingType[EasingType["InCirc"] = 13] = "InCirc";
-    EasingType[EasingType["OutCirc"] = 14] = "OutCirc";
-    EasingType[EasingType["InOutCirc"] = 15] = "InOutCirc";
-    EasingType[EasingType["InQuint"] = 16] = "InQuint";
-    EasingType[EasingType["OutQuint"] = 17] = "OutQuint";
-    EasingType[EasingType["InOutQuint"] = 18] = "InOutQuint";
-    EasingType[EasingType["InExponential"] = 19] = "InExponential";
-    EasingType[EasingType["OutExponential"] = 20] = "OutExponential";
-    EasingType[EasingType["InOutExponential"] = 21] = "InOutExponential";
-    EasingType[EasingType["InElastic"] = 22] = "InElastic";
-    EasingType[EasingType["OutElastic"] = 23] = "OutElastic";
-    EasingType[EasingType["InOutElastic"] = 24] = "InOutElastic";
-    EasingType[EasingType["InBack"] = 25] = "InBack";
-    EasingType[EasingType["OutBack"] = 26] = "OutBack";
-    EasingType[EasingType["InOutBack"] = 27] = "InOutBack";
-    EasingType[EasingType["InBounce"] = 28] = "InBounce";
-    EasingType[EasingType["OutBounce"] = 29] = "OutBounce";
-    EasingType[EasingType["InOutBounce"] = 30] = "InOutBounce";
-})(EasingType = exports.EasingType || (exports.EasingType = {}));
+var Log;
+(function (Log) {
+    Log[Log["None"] = 0] = "None";
+    Log[Log["Info"] = 1] = "Info";
+    Log[Log["Debug"] = 2] = "Debug";
+})(Log = exports.Log || (exports.Log = {}));
 
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var EasingType;
+(function (EasingType) {
+    EasingType["Linear"] = "linear";
+    EasingType["InQuad"] = "inQuad";
+    EasingType["OutQuad"] = "outQuad";
+    EasingType["InOutQuad"] = "inOutQuad";
+    EasingType["InCubic"] = "inCubic";
+    EasingType["OutCubic"] = "outCubic";
+    EasingType["InOutCubic"] = "inOutCubic";
+    EasingType["InQuart"] = "inQuart";
+    EasingType["OutQuart"] = "outQuart";
+    EasingType["InOutQuart"] = "inOutQuart";
+    EasingType["InSine"] = "inSine";
+    EasingType["OutSine"] = "outSine";
+    EasingType["InOutSine"] = "inOutSine";
+    EasingType["InCirc"] = "inCirc";
+    EasingType["OutCirc"] = "outCirc";
+    EasingType["InOutCirc"] = "inOutCirc";
+    EasingType["InQuint"] = "inQuint";
+    EasingType["OutQuint"] = "outQuint";
+    EasingType["InOutQuint"] = "inOutQuint";
+    EasingType["InExponential"] = "inExponential";
+    EasingType["OutExponential"] = "outExponential";
+    EasingType["InOutExponential"] = "inOutExponential";
+    EasingType["InElastic"] = "inElastic";
+    EasingType["OutElastic"] = "outElastic";
+    EasingType["InOutElastic"] = "inOutElastic";
+    EasingType["InBack"] = "inBack";
+    EasingType["OutBack"] = "outBack";
+    EasingType["InOutBack"] = "inOutBack";
+    EasingType["InBounce"] = "inBounce";
+    EasingType["OutBounce"] = "outBounce";
+    EasingType["InOutBounce"] = "inOutBounce";
+})(EasingType = exports.EasingType || (exports.EasingType = {}));
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -371,7 +437,7 @@ exports.Delay = Delay;
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -387,10 +453,11 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+var log_1 = __webpack_require__(2);
 var state_1 = __webpack_require__(0);
 var baseTween_1 = __webpack_require__(1);
-var callback_1 = __webpack_require__(8);
-var delay_1 = __webpack_require__(3);
+var callback_1 = __webpack_require__(9);
+var delay_1 = __webpack_require__(4);
 var Sequence = (function (_super) {
     __extends(Sequence, _super);
     function Sequence() {
@@ -425,6 +492,9 @@ var Sequence = (function (_super) {
         if (index !== -1) {
             this.eventTick.splice(index, 1);
         }
+    };
+    Sequence.prototype.CheckTickListener = function (cb) {
+        return false;
     };
     Sequence.prototype.Tick = function (dt) {
         if (this.state === state_1.State.Finished || this.state === state_1.State.Killed) {
@@ -517,21 +587,19 @@ var Sequence = (function (_super) {
         this.tweens.unshift([playable]);
         return this;
     };
-    Sequence.prototype.Skip = function () {
+    Sequence.prototype.Skip = function (finalValue) {
         if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
+            this.Info(log_1.Log.Info, 'Cannot skip this tween ', this.state);
             return;
         }
         for (var i = 0; i < this.tweens.length; i++) {
             var tweenArray = this.tweens[i];
             for (var j = 0; j < tweenArray.length; j++) {
                 var tween = tweenArray[j];
-                if (tween.state === state_1.State.Killed || tween.state === state_1.State.Finished) {
-                    continue;
-                }
                 if (tween.elapsed === 0) {
                     this.EmitEvent(this.eventStepStart, [tween]);
                 }
-                tween.Skip();
+                tween.Skip(finalValue);
                 this.EmitEvent(this.eventStepEnd, [tween]);
             }
         }
@@ -539,6 +607,7 @@ var Sequence = (function (_super) {
     };
     Sequence.prototype.Kill = function () {
         if (this.state === state_1.State.Killed) {
+            this.Info(log_1.Log.Info, 'Cannot kill this tween ', this.state);
             return;
         }
         for (var i = 0; i < this.tweens.length; i++) {
@@ -557,17 +626,12 @@ var Sequence = (function (_super) {
         this.tweens[this.tweens.length - 1].push(tween);
         return this;
     };
-    Sequence.prototype.Default = function () {
-        _super.prototype.Default.call(this);
-        this.tweens.length = 0;
-        this.currentTween = undefined;
-        this.sequenceIndex = 0;
-    };
     Sequence.prototype.OnStepStart = function (cb) {
         if (!this.eventStepStart) {
             this.eventStepStart = new Array(0);
         }
         this.eventStepStart[this.eventStepStart.length] = cb;
+        this.Info(log_1.Log.Debug, 'OnStepStart', this);
         return this;
     };
     Sequence.prototype.OnStepEnd = function (cb) {
@@ -575,6 +639,7 @@ var Sequence = (function (_super) {
             this.eventStepEnd = new Array(0);
         }
         this.eventStepEnd[this.eventStepEnd.length] = cb;
+        this.Info(log_1.Log.Debug, 'OnStepEnd', this);
         return this;
     };
     return Sequence;
@@ -583,24 +648,26 @@ exports.Sequence = Sequence;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var easingType_1 = __webpack_require__(2);
+var log_1 = __webpack_require__(2);
+var easingType_1 = __webpack_require__(3);
 exports.Easing = easingType_1.EasingType;
-var ticker_1 = __webpack_require__(6);
-var delay_1 = __webpack_require__(3);
-var sequence_1 = __webpack_require__(4);
-var tween_1 = __webpack_require__(9);
+var ticker_1 = __webpack_require__(7);
+var delay_1 = __webpack_require__(4);
+var sequence_1 = __webpack_require__(5);
+var tween_1 = __webpack_require__(10);
 var tickerManager;
 var initialized = false;
 var isFirstUpdate = true;
 var lastFrame;
 var lastTime = 0;
-var tickers = {};
+var logLevel = log_1.Log.None;
+var safe = true;
 var loadedPlugins = [];
 exports.plugin = {};
 exports.time = 0;
@@ -651,6 +718,14 @@ function Resume() {
     tickerManager.Resume();
 }
 exports.Resume = Resume;
+function SetLog(level) {
+    logLevel = level;
+}
+exports.SetLog = SetLog;
+function SetSafe(isSafe) {
+    safe = isSafe;
+}
+exports.SetSafe = SetSafe;
 function Destroy() {
     if (tickerManager) {
         tickerManager.Kill();
@@ -670,60 +745,82 @@ function Update(timestamp) {
 }
 exports.Update = Update;
 function Tween(obj, properties) {
-    if (!initialized) {
-        Init();
-    }
-    return new tween_1.Tween(obj, properties).SetParent(tickerManager);
+    var t = new tween_1.Tween(obj, properties);
+    AddContext(t);
+    Info(log_1.Log.Debug, '[Fatina.Manager] Tween Instantiated', t);
+    return t;
 }
 exports.Tween = Tween;
 function Sequence() {
-    if (!initialized) {
-        Init();
-    }
-    return new sequence_1.Sequence().SetParent(tickerManager);
+    var s = new sequence_1.Sequence();
+    AddContext(s);
+    Info(log_1.Log.Debug, '[Fatina.Manager] Sequence Instantiated', s);
+    return s;
 }
 exports.Sequence = Sequence;
 function Delay(duration) {
-    if (!initialized) {
-        Init();
-    }
-    return new delay_1.Delay(duration).SetParent(tickerManager);
+    var d = new delay_1.Delay(duration);
+    AddContext(d);
+    Info(log_1.Log.Debug, '[Fatina.Manager] Sequence Instantiated', d);
+    return d;
 }
 exports.Delay = Delay;
 function SetTimeout(fn, duration) {
-    if (!initialized) {
-        Init();
-    }
-    return new delay_1.Delay(duration).SetParent(tickerManager).OnComplete(fn).Start();
+    var timeout = new delay_1.Delay(duration).OnComplete(fn);
+    AddContext(timeout);
+    Info(log_1.Log.Debug, '[Fatina.Manager] SetTimeout Instantiated', timeout);
+    return timeout.Start();
 }
 exports.SetTimeout = SetTimeout;
 function SetInterval(fn, duration) {
-    if (!initialized) {
-        Init();
-    }
-    return new delay_1.Delay(duration).SetParent(tickerManager).OnRestart(fn).SetLoop(-1).Start();
+    var interval = new delay_1.Delay(duration).OnRestart(fn).SetLoop(-1);
+    AddContext(interval);
+    Info(log_1.Log.Debug, '[Fatina.Manager] SetInterval Instantiated', interval);
+    return interval.Start();
 }
 exports.SetInterval = SetInterval;
-function Ticker(name) {
+function AddContext(obj) {
     if (!initialized) {
         Init();
     }
-    if (!(name in tickers)) {
-        var tick = new ticker_1.Ticker();
-        var handler = tick.Tick.bind(tick);
-        tick.SetParent(tickerManager, handler);
-        tickerManager.AddTickListener(handler);
-        tick.Start();
-        tickers[name] = tick;
+    obj.SetParent(tickerManager);
+    if (logLevel !== log_1.Log.None) {
+        obj.SetLog(logLevel);
     }
-    return tickers[name];
+    if (!safe) {
+        obj.SetSafe(safe);
+    }
+}
+function Ticker() {
+    if (!initialized) {
+        Init();
+    }
+    var tick = new ticker_1.Ticker();
+    var handler = tick.Tick.bind(tick);
+    tick.SetParent(tickerManager, handler);
+    tickerManager.AddTickListener(handler);
+    tick.Start();
+    Info(log_1.Log.Debug, '[Fatina.Manager] Ticker Instantiated', tick);
+    return tick;
 }
 exports.Ticker = Ticker;
 function LoadPlugin(newPlugin) {
     newPlugin.Init(this);
     loadedPlugins.push(newPlugin);
+    Info(log_1.Log.Debug, '[Fatina.Manager] Plugin Loaded', newPlugin.name);
 }
 exports.LoadPlugin = LoadPlugin;
+function Info(level, message, data) {
+    if (level > logLevel) {
+        return;
+    }
+    if (data) {
+        console.log(message, data);
+    }
+    else {
+        console.log(message);
+    }
+}
 var requestFrame;
 var cancelFrame;
 if (typeof (window) !== 'undefined') {
@@ -747,7 +844,7 @@ function updateLoop(timestamp) {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -764,7 +861,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var state_1 = __webpack_require__(0);
-var eventList_1 = __webpack_require__(7);
+var eventList_1 = __webpack_require__(8);
 var Ticker = (function (_super) {
     __extends(Ticker, _super);
     function Ticker() {
@@ -790,6 +887,17 @@ var Ticker = (function (_super) {
     };
     Ticker.prototype.RemoveTickListener = function (cb) {
         this.eventToRemove.push(cb);
+    };
+    Ticker.prototype.CheckTickListener = function (cb) {
+        var found = false;
+        while (true) {
+            var index = this.eventToRemove.indexOf(cb);
+            if (index === -1) {
+                return found;
+            }
+            this.eventToRemove.splice(index, 1);
+            found = true;
+        }
     };
     Ticker.prototype.UpdateListener = function () {
         if (this.eventToAdd.length > 0) {
@@ -848,6 +956,9 @@ var Ticker = (function (_super) {
     Ticker.prototype.Reset = function () {
         this.state = state_1.State.Idle;
     };
+    Ticker.prototype.IsIdle = function () {
+        return this.state === state_1.State.Idle;
+    };
     Ticker.prototype.IsRunning = function () {
         return this.state === state_1.State.Run;
     };
@@ -863,7 +974,7 @@ exports.Ticker = Ticker;
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -927,7 +1038,7 @@ exports.EventList = EventList;
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -965,7 +1076,7 @@ exports.Callback = Callback;
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -982,66 +1093,24 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var state_1 = __webpack_require__(0);
-var easing_1 = __webpack_require__(10);
-var easingType_1 = __webpack_require__(2);
+var easing_1 = __webpack_require__(11);
+var easingType_1 = __webpack_require__(3);
 var baseTween_1 = __webpack_require__(1);
-var sequence_1 = __webpack_require__(4);
+var sequence_1 = __webpack_require__(5);
 var Tween = (function (_super) {
     __extends(Tween, _super);
-    function Tween(object, properties, data) {
+    function Tween(object, properties) {
         var _this = _super.call(this) || this;
-        _this.yoyo = 0;
         _this.steps = 0;
         _this.relative = false;
         _this.object = object;
         _this.properties = properties;
         _this.tickCb = _this.Tick.bind(_this);
-        if (data) {
-            _this.Unserialize(data);
-        }
         return _this;
     }
     Tween.prototype.Init = function (object, properties) {
         this.object = object;
         this.properties = properties;
-    };
-    Tween.prototype.Serialize = function () {
-        return {
-            elapsed: this.elapsed,
-            duration: this.duration,
-            loop: this.loop,
-            timescale: this.timescale,
-            properties: this.properties,
-            from: this.from,
-            to: this.to,
-            yoyo: this.yoyo,
-            steps: this.steps,
-            relative: this.relative,
-            ease: this.easeId,
-            eventStart: this.eventStart,
-            eventRestart: this.eventRestart,
-            eventUpdate: this.eventUpdate,
-            eventKill: this.eventKill,
-            eventComplete: this.eventComplete
-        };
-    };
-    Tween.prototype.Unserialize = function (data) {
-        this.elapsed = data.elapsed || 0;
-        this.duration = data.duration || 0;
-        this.loop = data.loop || 1,
-            this.timescale = data.timescale || 1;
-        this.properties = data.properties || [];
-        this.from = data.from;
-        this.to = data.to;
-        this.yoyo = data.yoyo || 0;
-        this.steps = data.steps || 0;
-        this.relative = data.relative || false;
-        this.SetEasing(data.ease || easingType_1.EasingType.Linear);
-        this.eventStart = data.eventStart;
-        this.eventRestart = data.eventRestart;
-        this.eventUpdate = data.eventUpdate;
-        this.eventKill = data.eventKill;
-        this.eventComplete = data.eventComplete;
     };
     Tween.prototype.Validate = function () {
         if (!this.object) {
@@ -1058,7 +1127,7 @@ var Tween = (function (_super) {
         }
         if (!this.ease) {
             this.easeId = easingType_1.EasingType.Linear;
-            this.ease = easing_1.easeTypes[easingType_1.EasingType.Linear];
+            this.ease = easing_1.easeNames[easingType_1.EasingType.Linear];
         }
         this.CheckPosition();
     };
@@ -1095,6 +1164,9 @@ var Tween = (function (_super) {
             this.elapsed += this.remainsDt;
             var progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
             var val = this.ease(progress);
+            if ((this.yoyoOriginal - this.yoyo) % 2 === 1) {
+                val = 1 - this.ease(1 - progress);
+            }
             if (this.steps !== 0) {
                 val = Math.round(val * this.steps) / this.steps;
             }
@@ -1152,6 +1224,20 @@ var Tween = (function (_super) {
             }
         }
     };
+    Tween.prototype.Reset = function (skipParent) {
+        if ((this.yoyoOriginal - this.yoyo) % 2 === 1) {
+            var previous = this.currentFrom;
+            this.currentFrom = this.currentTo;
+            this.currentTo = previous;
+            previous = this.from;
+            this.from = this.to;
+            this.to = previous;
+            var elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
+            this.elapsed = Math.round(elapsed * 1000) / 1000;
+        }
+        this.yoyo = this.yoyoOriginal;
+        _super.prototype.Reset.call(this, skipParent);
+    };
     Tween.prototype.Reverse = function () {
         var previous = this.currentFrom;
         this.currentFrom = this.currentTo;
@@ -1167,6 +1253,7 @@ var Tween = (function (_super) {
         }
     };
     Tween.prototype.Yoyo = function (time) {
+        this.yoyoOriginal = time;
         this.yoyo = time;
         return this;
     };
@@ -1182,13 +1269,6 @@ var Tween = (function (_super) {
     };
     Tween.prototype.Easing = function (type) {
         var name = type;
-        var isNumber = !isNaN(parseFloat(name));
-        if (isNumber) {
-            var index = parseInt(name, 10);
-            if (index in easing_1.easeTypes) {
-                return easing_1.easeTypes[index];
-            }
-        }
         if (name in easing_1.easeNames) {
             return easing_1.easeNames[name];
         }
@@ -1202,44 +1282,33 @@ var Tween = (function (_super) {
     Tween.prototype.LoopInit = function () {
         this.elapsed = 0;
     };
-    Tween.prototype.Default = function () {
-        _super.prototype.Default.call(this);
-        this.object = undefined;
-        this.properties.length = 0;
-        this.from = undefined;
-        this.to = undefined;
-        this.currentFrom = undefined;
-        this.currentTo = undefined;
-        this.relative = false;
-    };
     return Tween;
 }(baseTween_1.BaseTween));
 exports.Tween = Tween;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var easingType_1 = __webpack_require__(2);
+var easingType_1 = __webpack_require__(3);
 var PI = Math.PI;
 var PI_OVER_TWO = Math.PI / 2;
 var BACK = 1.70158;
-var easingByType = [];
 var easingByName = {};
-easingByType[easingType_1.EasingType.Linear] = easingByName['linear'] = function (t) {
+easingByName[easingType_1.EasingType.Linear] = function (t) {
     return t;
 };
-easingByType[easingType_1.EasingType.InQuad] = easingByName['inQuad'] = function (t) {
+easingByName[easingType_1.EasingType.InQuad] = function (t) {
     return t * t;
 };
-easingByType[easingType_1.EasingType.OutQuad] = easingByName['outQuad'] = function (t) {
+easingByName[easingType_1.EasingType.OutQuad] = function (t) {
     return 2 * t - t * t;
 };
-easingByType[easingType_1.EasingType.InOutQuad] = easingByName['inOutQuad'] = function (t) {
+easingByName[easingType_1.EasingType.InOutQuad] = function (t) {
     if (t < 0.5) {
         return 2 * t * t;
     }
@@ -1247,13 +1316,13 @@ easingByType[easingType_1.EasingType.InOutQuad] = easingByName['inOutQuad'] = fu
         return 2 * (2 * t - t * t) - 1;
     }
 };
-easingByType[easingType_1.EasingType.InCubic] = easingByName['inCubic'] = function (t) {
+easingByName[easingType_1.EasingType.InCubic] = function (t) {
     return t * t * t;
 };
-easingByType[easingType_1.EasingType.OutCubic] = easingByName['outCubic'] = function (t) {
+easingByName[easingType_1.EasingType.OutCubic] = function (t) {
     return 3 * t - 3 * t * t + t * t * t;
 };
-easingByType[easingType_1.EasingType.InOutCubic] = easingByName['inOutCubic'] = function (t) {
+easingByName[easingType_1.EasingType.InOutCubic] = function (t) {
     if (t < 0.5) {
         return 4 * t * t * t;
     }
@@ -1261,14 +1330,14 @@ easingByType[easingType_1.EasingType.InOutCubic] = easingByName['inOutCubic'] = 
         return 4 * (3 * t - 3 * t * t + t * t * t) - 3;
     }
 };
-easingByType[easingType_1.EasingType.InQuart] = easingByName['inQuart'] = function (t) {
+easingByName[easingType_1.EasingType.InQuart] = function (t) {
     return t * t * t * t;
 };
-easingByType[easingType_1.EasingType.OutQuart] = easingByName['outQuart'] = function (t) {
+easingByName[easingType_1.EasingType.OutQuart] = function (t) {
     var t2 = t * t;
     return 4 * t - 6 * t2 + 4 * t2 * t - t2 * t2;
 };
-easingByType[easingType_1.EasingType.InOutQuart] = easingByName['inOutQuart'] = function (t) {
+easingByName[easingType_1.EasingType.InOutQuart] = function (t) {
     if (t < 0.5) {
         return 8 * t * t * t * t;
     }
@@ -1277,16 +1346,16 @@ easingByType[easingType_1.EasingType.InOutQuart] = easingByName['inOutQuart'] = 
         return 8 * (4 * t - 6 * t2 + 4 * t2 * t - t2 * t2) - 7;
     }
 };
-easingByType[easingType_1.EasingType.InSine] = easingByName['inSine'] = function (t) {
+easingByName[easingType_1.EasingType.InSine] = function (t) {
     if (t === 1) {
         return 1;
     }
     return 1 - Math.cos(PI_OVER_TWO * t);
 };
-easingByType[easingType_1.EasingType.OutSine] = easingByName['outSine'] = function (t) {
+easingByName[easingType_1.EasingType.OutSine] = function (t) {
     return Math.sin(PI_OVER_TWO * t);
 };
-easingByType[easingType_1.EasingType.InOutSine] = easingByName['inOutSine'] = function (t) {
+easingByName[easingType_1.EasingType.InOutSine] = function (t) {
     if (t < 0.5) {
         return (1 - Math.cos(PI * t)) / 2;
     }
@@ -1294,13 +1363,13 @@ easingByType[easingType_1.EasingType.InOutSine] = easingByName['inOutSine'] = fu
         return (1 + Math.sin(PI * (t - 0.5))) / 2;
     }
 };
-easingByType[easingType_1.EasingType.InCirc] = easingByName['inCirc'] = function (t) {
+easingByName[easingType_1.EasingType.InCirc] = function (t) {
     return 1 - Math.sqrt(1 - Math.pow(t, 2));
 };
-easingByType[easingType_1.EasingType.OutCirc] = easingByName['outCirc'] = function (t) {
+easingByName[easingType_1.EasingType.OutCirc] = function (t) {
     return Math.sqrt(1 - Math.pow(1 - t, 2));
 };
-easingByType[easingType_1.EasingType.InOutCirc] = easingByName['inOutCirc'] = function (t) {
+easingByName[easingType_1.EasingType.InOutCirc] = function (t) {
     if (t < 0.5) {
         return (1 - Math.sqrt(1 - 4 * t * t)) / 2;
     }
@@ -1308,29 +1377,29 @@ easingByType[easingType_1.EasingType.InOutCirc] = easingByName['inOutCirc'] = fu
         return (1 + Math.sqrt(-3 + 8 * t - 4 * t * t)) / 2;
     }
 };
-easingByType[easingType_1.EasingType.InQuint] = easingByName['inQuint'] = function (t) {
+easingByName[easingType_1.EasingType.InQuint] = function (t) {
     return t * t * t * t * t;
 };
-easingByType[easingType_1.EasingType.OutQuint] = easingByName['outQuint'] = function (t) {
+easingByName[easingType_1.EasingType.OutQuint] = function (t) {
     return --t * t * t * t * t + 1;
 };
-easingByType[easingType_1.EasingType.InOutQuint] = easingByName['inOutQuint'] = function (t) {
+easingByName[easingType_1.EasingType.InOutQuint] = function (t) {
     t *= 2;
     if (t < 1) {
         return 0.5 * t * t * t * t * t;
     }
     return 0.5 * ((t -= 2) * t * t * t * t + 2);
 };
-easingByType[easingType_1.EasingType.InExponential] = easingByName['inExponential'] = function (t) {
+easingByName[easingType_1.EasingType.InExponential] = function (t) {
     if (t === 1) {
         return 1;
     }
     return t === 0 ? 0 : Math.pow(1024, t - 1);
 };
-easingByType[easingType_1.EasingType.OutExponential] = easingByName['outExponential'] = function (t) {
+easingByName[easingType_1.EasingType.OutExponential] = function (t) {
     return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
 };
-easingByType[easingType_1.EasingType.InOutExponential] = easingByName['inOutExponential'] = function (t) {
+easingByName[easingType_1.EasingType.InOutExponential] = function (t) {
     if (t === 0) {
         return 0;
     }
@@ -1343,19 +1412,19 @@ easingByType[easingType_1.EasingType.InOutExponential] = easingByName['inOutExpo
     }
     return 0.5 * (-Math.pow(2, -10 * (t - 1)) + 2);
 };
-easingByType[easingType_1.EasingType.InElastic] = easingByName['inElastic'] = function (t) {
+easingByName[easingType_1.EasingType.InElastic] = function (t) {
     if (t === 0) {
         return 0;
     }
     return -Math.pow(2, 10 * (t - 1)) * Math.sin((t - 1.1) * 5 * Math.PI);
 };
-easingByType[easingType_1.EasingType.OutElastic] = easingByName['outElastic'] = function (t) {
+easingByName[easingType_1.EasingType.OutElastic] = function (t) {
     if (t === 1) {
         return 1;
     }
     return Math.pow(2, -10 * t) * Math.sin((t - 0.1) * 5 * Math.PI) + 1;
 };
-easingByType[easingType_1.EasingType.InOutElastic] = easingByName['inOutElastic'] = function (t) {
+easingByName[easingType_1.EasingType.InOutElastic] = function (t) {
     if (t === 0) {
         return 0;
     }
@@ -1368,15 +1437,15 @@ easingByType[easingType_1.EasingType.InOutElastic] = easingByName['inOutElastic'
     }
     return 0.5 * Math.pow(2, -10 * (t - 1)) * Math.sin((t - 1.1) * 5 * Math.PI) + 1;
 };
-easingByType[easingType_1.EasingType.InBack] = easingByName['inBack'] = function (t) {
+easingByName[easingType_1.EasingType.InBack] = function (t) {
     var s = BACK;
     return t === 1 ? 1 : t * t * ((s + 1) * t - s);
 };
-easingByType[easingType_1.EasingType.OutBack] = easingByName['outBack'] = function (t) {
+easingByName[easingType_1.EasingType.OutBack] = function (t) {
     var s = BACK;
     return t === 0 ? 0 : --t * t * ((s + 1) * t + s) + 1;
 };
-easingByType[easingType_1.EasingType.InOutBack] = easingByName['inOutBack'] = function (t) {
+easingByName[easingType_1.EasingType.InOutBack] = function (t) {
     var s = BACK * 1.525;
     t *= 2;
     if (t < 1) {
@@ -1384,7 +1453,7 @@ easingByType[easingType_1.EasingType.InOutBack] = easingByName['inOutBack'] = fu
     }
     return 0.5 * ((t -= 2) * t * ((s + 1) * t + s) + 2);
 };
-easingByType[easingType_1.EasingType.OutBounce] = easingByName['outBounce'] = function (t) {
+easingByName[easingType_1.EasingType.OutBounce] = function (t) {
     if (t < (1 / 2.75)) {
         return 7.5625 * t * t;
     }
@@ -1398,16 +1467,15 @@ easingByType[easingType_1.EasingType.OutBounce] = easingByName['outBounce'] = fu
         return 7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375;
     }
 };
-easingByType[easingType_1.EasingType.InBounce] = easingByName['inBounce'] = function (t) {
-    return 1 - easingByType[easingType_1.EasingType.OutBounce](1 - t);
+easingByName[easingType_1.EasingType.InBounce] = function (t) {
+    return 1 - easingByName[easingType_1.EasingType.OutBounce](1 - t);
 };
-easingByType[easingType_1.EasingType.InOutBounce] = easingByName['inOutBounce'] = function (t) {
+easingByName[easingType_1.EasingType.InOutBounce] = function (t) {
     if (t < 0.5) {
-        return easingByType[easingType_1.EasingType.InBounce](t * 2) * 0.5;
+        return easingByName[easingType_1.EasingType.InBounce](t * 2) * 0.5;
     }
-    return easingByType[easingType_1.EasingType.OutBounce](t * 2 - 1) * 0.5 + 0.5;
+    return easingByName[easingType_1.EasingType.OutBounce](t * 2 - 1) * 0.5 + 0.5;
 };
-exports.easeTypes = easingByType;
 exports.easeNames = easingByName;
 
 

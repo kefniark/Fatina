@@ -9,6 +9,8 @@ export function Init(disableAutoTick?: boolean): boolean;
 export function SetTimescale(scale: number): void;
 export function Pause(): void;
 export function Resume(): void;
+export function SetLog(level: Log): void;
+export function SetSafe(isSafe: boolean): void;
 export function Destroy(): void;
 export function Update(timestamp: number): any;
 export function Tween(obj: any, properties: string[]): ITween;
@@ -16,14 +18,22 @@ export function Sequence(): ISequence;
 export function Delay(duration: number): IPlayable;
 export function SetTimeout(fn: () => void, duration: number): IPlayable;
 export function SetInterval(fn: () => void, duration: number): IPlayable;
-export function Ticker(name: string): ITicker;
+export function Ticker(): ITicker;
 export function LoadPlugin(newPlugin: IPlugin): void;
+
+export enum Log {
+    None = 0,
+    Info = 1,
+    Debug = 2,
+}
 
 export interface IPlayable extends IControl {
     state: State;
     SetParent(ticker: ITicker): IPlayable;
     Start(): IPlayable;
     SetLoop(loop: number): IPlayable;
+    SetSafe(safe: boolean): IPlayable;
+    SetLog(level: Log): IPlayable;
     OnStart(cb: () => void): IPlayable;
     OnRestart(cb: () => void): IPlayable;
     OnUpdate(cb: (dt: number, progress: number) => void): IPlayable;
@@ -38,11 +48,12 @@ export interface IPlugin {
 
 export interface ISequence extends IControl {
     Count: number;
-    Default(): void;
     Start(): ISequence;
     SetParent(ticker: ITicker): ISequence;
     SetTimescale(scale: number): ISequence;
     SetLoop(loop: number): ISequence;
+    SetSafe(safe: boolean): ISequence;
+    SetLog(level: Log): ISequence;
     Append(tween: ITween | ISequence): ISequence;
     AppendCallback(cb: () => void): ISequence;
     AppendInterval(duration: number): ISequence;
@@ -62,11 +73,11 @@ export interface ISequence extends IControl {
 export interface ITicker extends IControl {
     AddTickListener(cb: (dt: number) => void): void;
     RemoveTickListener(cb: (dt: number) => void): void;
+    CheckTickListener(cb: (dt: number) => void): boolean;
     SetTimescale(scale: number): void;
 }
 
 export interface ITween extends IControl {
-    Default(): void;
     Init(object: any, properties: string[]): void;
     Start(): ITween;
     From(from: any): ITween;
@@ -81,7 +92,8 @@ export interface ITween extends IControl {
     SetEasing(type: EasingType | string): ITween;
     SetTimescale(scale: number): ITween;
     ToSequence(): ISequence;
-    Serialize(): any;
+    SetSafe(safe: boolean): ITween;
+    SetLog(level: Log): ITween;
     OnStart(cb: () => void): ITween;
     OnUpdate(cb: (dt: number, progress: number) => void): ITween;
     OnRestart(cb: () => void): ITween;
@@ -90,37 +102,37 @@ export interface ITween extends IControl {
 }
 
 export enum EasingType {
-    Linear = 0,
-    InQuad = 1,
-    OutQuad = 2,
-    InOutQuad = 3,
-    InCubic = 4,
-    OutCubic = 5,
-    InOutCubic = 6,
-    InQuart = 7,
-    OutQuart = 8,
-    InOutQuart = 9,
-    InSine = 10,
-    OutSine = 11,
-    InOutSine = 12,
-    InCirc = 13,
-    OutCirc = 14,
-    InOutCirc = 15,
-    InQuint = 16,
-    OutQuint = 17,
-    InOutQuint = 18,
-    InExponential = 19,
-    OutExponential = 20,
-    InOutExponential = 21,
-    InElastic = 22,
-    OutElastic = 23,
-    InOutElastic = 24,
-    InBack = 25,
-    OutBack = 26,
-    InOutBack = 27,
-    InBounce = 28,
-    OutBounce = 29,
-    InOutBounce = 30,
+    Linear = "linear",
+    InQuad = "inQuad",
+    OutQuad = "outQuad",
+    InOutQuad = "inOutQuad",
+    InCubic = "inCubic",
+    OutCubic = "outCubic",
+    InOutCubic = "inOutCubic",
+    InQuart = "inQuart",
+    OutQuart = "outQuart",
+    InOutQuart = "inOutQuart",
+    InSine = "inSine",
+    OutSine = "outSine",
+    InOutSine = "inOutSine",
+    InCirc = "inCirc",
+    OutCirc = "outCirc",
+    InOutCirc = "inOutCirc",
+    InQuint = "inQuint",
+    OutQuint = "outQuint",
+    InOutQuint = "inOutQuint",
+    InExponential = "inExponential",
+    OutExponential = "outExponential",
+    InOutExponential = "inOutExponential",
+    InElastic = "inElastic",
+    OutElastic = "outElastic",
+    InOutElastic = "inOutElastic",
+    InBack = "inBack",
+    OutBack = "outBack",
+    InOutBack = "inOutBack",
+    InBounce = "inBounce",
+    OutBounce = "outBounce",
+    InOutBounce = "inOutBounce",
 }
 
 export enum State {
@@ -140,7 +152,8 @@ export interface IControl {
     Resume(): void;
     Kill(): void;
     Reset(): void;
-    Skip(): void;
+    Skip(finalValue?: boolean): void;
+    IsIdle(): boolean;
     IsRunning(): boolean;
     IsFinished(): boolean;
     IsPaused(): boolean;

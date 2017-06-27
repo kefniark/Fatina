@@ -16,8 +16,9 @@ export interface IControl {
 	Resume(): void;
 	Kill(): void;
 	Reset(): void;
-	Skip(): void;
+	Skip(finalValue?: boolean): void;
 
+	IsIdle(): boolean;
 	IsRunning(): boolean;
 	IsFinished(): boolean;
 	IsPaused(): boolean;

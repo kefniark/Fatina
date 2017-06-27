@@ -153,12 +153,7 @@ test('[Fatina.Sequence] Test Join', (t: Test) => {
 		ticker.Tick(0.2);
 	}
 
-	// t.equal(6, duration, 'check OnUpdate was trigger the right amount of time');
 	t.equal(1, complete, 'check both tween are executed');
-
-	sequence.Default();
-	t.equal(0, sequence.elapsed, 'check the sequence elapsed after Default');
-	t.equal(0, sequence.duration, 'check the sequence duration after Default');
 
 	t.end();
 });
@@ -400,5 +395,60 @@ test('[Fatina.Sequence] Test Sequence with broken callback', (t: Test) => {
 	ticker.Tick(3);
 	ticker.Tick(3);
 
+	t.end();
+});
+
+test('[Fatina.Sequence] Test Reuse complexe sequence', (t: Test) => {
+	const ticker = new Ticker();
+	ticker.Start();
+
+	let start = 0;
+	let complete = 0;
+	let callback = 0;
+	let callback2 = 0;
+	const obj = { x: 22 };
+	const sequence = new Tween(obj, ['x'])
+		.SetParent(ticker)
+		.SetRelative(true)
+		.SetEasing('outSine')
+		.Yoyo(1)
+		.To({ x: 44}, 5)
+		.ToSequence()
+		.AppendInterval(5)
+		.Join(
+			new Sequence()
+				.SetParent(ticker)
+				.AppendInterval(5)
+				.AppendCallback(() => callback2++)
+		)
+		.AppendCallback(() => callback++)
+		.SetLog(2)
+		.OnStart(() => start++)
+		.OnComplete(() => complete++)
+		.Start();
+
+	ticker.Tick(16);
+
+	t.equal(callback, 1);
+	t.equal(callback2, 1);
+
+	(sequence as any).Recycle();
+	sequence.Start();
+	ticker.Tick(16);
+
+	t.equal(callback, 2);
+	t.equal(callback2, 2);
+
+	ticker.Tick(12);
+	(sequence as any).Skip(true);
+	(sequence as any).Recycle();
+	sequence.Start();
+
+	ticker.Tick(16);
+
+	t.equal(callback, 3);
+	t.equal(callback2, 3);
+	t.equal(start, 3);
+	t.equal(complete, 3);
 	t.end();
 });

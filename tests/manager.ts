@@ -157,6 +157,7 @@ test('[Fatina.Manager] Ticker Helpers', (t: Test) => {
 
 	t.ok(ticker.IsRunning());
 	t.notOk(ticker.IsFinished());
+	t.notOk(ticker.IsIdle());
 	t.notOk(ticker.IsPaused());
 
 	fatina.Pause();
@@ -174,15 +175,14 @@ test('[Fatina.Manager] Ticker Helpers', (t: Test) => {
 
 test('[Fatina.Manager] Create ticker', (t: Test) => {
 	const obj = { x: 0, y: 0, z: 0 };
-	const gameTicker = fatina.Ticker('game');
-	const uiTicker = fatina.Ticker('ui');
+	const gameTicker = fatina.Ticker();
+	const uiTicker = fatina.Ticker();
 
 	fatina.Tween(obj, ['x']).SetParent(gameTicker).To({x: 5}, 5).Start();
 	fatina.Tween(obj, ['y']).SetParent(uiTicker).To({y: 5}, 5).Start();
 	fatina.Tween(obj, ['z']).To({z: 5}, 5).Start();
 
 	t.notEqual(undefined, gameTicker, 'check a ticker is properly created');
-	t.equal(gameTicker, fatina.Ticker('game'), 'check the same ticker is returned when the same name is used twice');
 
 	fatina.Update(1);
 	t.equal(1, obj.x, 'check the game ticker runs');

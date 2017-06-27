@@ -1,6 +1,6 @@
 import * as test from 'tape';
 import { Test } from 'tape';
-import { easeNames, easeTypes } from '../src/fatina/easing/easing';
+import { easeNames } from '../src/fatina/easing/easing';
 
 test('[Fatina.Easing]', (t: Test) => {
 	for (const name in easeNames) {
@@ -15,7 +15,5 @@ test('[Fatina.Easing]', (t: Test) => {
 		t.ok(ease(0.5), 'intermediate value 0.5');
 		t.ok(ease(0.8), 'intermediate value 0.8');
 	}
-
-	t.equal(Object.keys(easeNames).length, easeTypes.length, 'check same amount of tween is exposed in both array');
 	t.end();
 });

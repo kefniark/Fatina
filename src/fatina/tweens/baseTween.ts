@@ -1,3 +1,4 @@
+import { Log } from '../core/enum/log';
 import { State } from '../core/enum/state';
 import { ITicker } from '../core/interfaces/ITicker';
 
@@ -27,10 +28,16 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	public state: State = State.Idle;
 
 	// private properties
+	protected loopOriginal = 1;
 	protected loop = 1;
+	protected yoyoOriginal = 0;
+	protected yoyo = 0;
 	protected parent: ITicker;
 	protected tickCb: (dt: number) => void;
 	private firstStart = true;
+	private recycled = false;
+	private safe = true;
+	private logLevel = Log.None;
 
 	/**
 	 * Method used to start a tween
@@ -51,13 +58,31 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 		}
 
 		this.state = State.Run;
-		this.parent.AddTickListener(this.tickCb);
+		if (this.recycled) {
+			if (!this.parent.CheckTickListener(this.tickCb)) {
+				this.parent.AddTickListener(this.tickCb);
+			}
+			this.recycled = false;
+		} else {
+			this.parent.AddTickListener(this.tickCb);
+		}
 
 		if (this.firstStart) {
 			this.EmitEvent(this.eventStart);
 			this.firstStart = false;
 		}
 		return this as any;
+	}
+
+	/**
+	 * Reset a tween to be reusable (with start)
+	 *
+	 * @memberOf BaseTween
+	 */
+	public Recycle() {
+		this.Reset(true);
+		this.firstStart = true;
+		this.recycled = true;
 	}
 
 	/**
@@ -72,7 +97,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.RemoveParentListener();
 		}
 
-		this.loop = 1;
+		this.loop = this.loopOriginal;
 		this.LoopInit();
 		this.EmitEvent(this.eventRestart);
 	}
@@ -132,6 +157,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 */
 	public Pause(): void {
 		if (this.state !== State.Run) {
+			this.Info(Log.Info, 'Cannot pause this tween ', this.state);
 			return;
 		}
 
@@ -148,6 +174,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 */
 	public Resume(): void {
 		if (this.state !== State.Pause) {
+			this.Info(Log.Info, 'Cannot resume this tween ', this.state);
 			return;
 		}
 
@@ -158,17 +185,23 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	/**
 	 * Method used to Skip this tween or sequence and directly finish it
 	 *
+	 * @param {boolean} [finalValue]
 	 * @returns {void}
-	 *
 	 * @memberOf BaseTween
 	 */
-	public Skip(): void {
+	public Skip(finalValue?: boolean): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
+			this.Info(Log.Info, 'Cannot skip this tween ', this.state);
 			return;
 		}
 
 		if (this.state === State.Idle) {
 			this.EmitEvent(this.eventStart);
+		}
+
+		if (finalValue) {
+			this.tickCb(this.duration - this.elapsed + (this.yoyo * this.duration));
+			return;
 		}
 
 		this.elapsed = this.duration;
@@ -184,6 +217,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 */
 	public Kill(): void {
 		if (this.state === State.Killed) {
+			this.Info(Log.Info, 'Cannot kill this tween ', this.state);
 			return;
 		}
 
@@ -202,8 +236,13 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 * @memberOf Tween
 	 */
 	public SetLoop(loop: number): T {
-		this.loop = Math.round(loop);
+		this.loopOriginal = Math.round(loop);
+		this.loop = this.loopOriginal;
 		return this as any;
+	}
+
+	public IsIdle(): boolean {
+		return this.state === State.Idle;
 	}
 
 	public IsRunning(): boolean {
@@ -220,6 +259,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 
 	protected Complete(): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
+			this.Info(Log.Info, 'Cannot complete this tween ', this.state);
 			return;
 		}
 
@@ -240,16 +280,31 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 		this.elapsed = 0;
 	}
 
-	public Default() {
-		this.elapsed = 0;
-		this.duration = 0;
-		this.timescale = 1;
-		this.loop = 1;
-		this.firstStart = true;
-		this.state = State.Idle;
+	public SetSafe(safe: boolean): T {
+		this.safe = safe;
+		return this as any;
+	}
+
+	public SetLog(level: Log): T {
+		this.logLevel = level;
+		return this as any;
+	}
+
+	protected Info(level: Log, message: string, data?: any) {
+		if (level > this.logLevel) {
+			return;
+		}
+		if (data) {
+			console.log(message, data);
+		} else {
+			console.log(message);
+		}
 	}
 
 	private Emit(func: any, args: any) {
+		if (!this.safe) {
+			return func.apply(this, args);
+		}
 		try {
 			func.apply(this, args);
 		} catch (e) {
@@ -280,6 +335,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.eventStart = new Array(0);
 		}
 		this.eventStart[this.eventStart.length] = cb;
+		this.Info(Log.Debug, 'onStart', this);
 		return this as any;
 	}
 
@@ -296,6 +352,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.eventRestart = new Array(0);
 		}
 		this.eventRestart[this.eventRestart.length] = cb;
+		this.Info(Log.Debug, 'onRestart', this);
 		return this as any;
 	}
 
@@ -328,6 +385,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.eventKill = new Array(0);
 		}
 		this.eventKill[this.eventKill.length] = cb;
+		this.Info(Log.Debug, 'onKilled', this);
 		return this as any;
 	}
 
@@ -344,6 +402,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.eventComplete = new Array(0);
 		}
 		this.eventComplete[this.eventComplete.length] = cb;
+		this.Info(Log.Debug, 'onComplete', this);
 		return this as any;
 	}
 }
