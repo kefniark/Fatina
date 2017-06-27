@@ -5,10 +5,10 @@
 
         var obj3 = { x: 0, y: 0, rotate:0 };
         Fatina.Sequence()
-            .Append(Fatina.Tween(obj3, ['x']).To({x: 500}, 1250).SetEasing(6))
+            .Append(Fatina.Tween(obj3, ['x']).To({x: 500}, 1250).SetEasing('inOutSine'))
             .AppendInterval(0.2)
-            .Append(Fatina.Tween(obj3, ['x']).To({x: 0}, 1250).SetEasing(6))
-            .Join(Fatina.Tween(obj3, ['rotate']).To({rotate: 360}, 1250).SetEasing(6))
+            .Append(Fatina.Tween(obj3, ['x']).To({x: 0}, 1250).SetEasing('inOutSine'))
+            .Join(Fatina.Tween(obj3, ['rotate']).To({rotate: 360}, 1250).SetEasing('inOutCubic'))
             .OnUpdate(() => {
                 elem3.style.left = obj3.x + "px";
                 elem3.style.transform = "rotate(" + obj3.rotate + "deg)"

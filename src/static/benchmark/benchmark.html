@@ -34,7 +34,6 @@
     }
 </style>
 
-<script src="/Fatina/fatina.min.js"></script>
 <script src="/Fatina/benchmark/tina.min.js"></script>
 <script src="/Fatina/benchmark/tweenjs-0.6.2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
@@ -403,6 +402,7 @@
     <script>
         // default fatina setup
         Fatina.Init(true);
+        Fatina.SetSafe(false);
 
         // default tina setup
         let tinaTimer = new TINA.Timer().useAsDefault();

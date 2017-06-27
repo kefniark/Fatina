@@ -6,7 +6,7 @@
         var obj2 = { x: 0, y: 0 };
         Fatina.Tween(obj2, ['x'])
             .To({x: 500}, 2500)
-            .SetEasing(Math.floor(Math.random()*30))
+            .SetEasing('inOutQuad')
             .OnStart(() => console.log("tween2 start"))
             .OnUpdate((dt, progress) => {
                 elem2.style.left = obj2.x + "px";
