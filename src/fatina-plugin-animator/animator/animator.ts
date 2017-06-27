@@ -1,124 +1,143 @@
-// import { IControl } from '../../fatina/core/interfaces/IControl';
-// import { AnimatorManager } from '../manager/animatorManager';
+import { IControl } from '../../fatina/core/interfaces/IControl';
+import { AnimatorManager } from '../manager/animatorManager';
 
-// /**
-//  * Animator component applied on a object.
-//  * This store a list of animations and manage them for that object
-//  *
-//  * @export
-//  * @class Animator
-//  */
-// export class Animator {
-// 	public animations: { [id: string]: IControl; } = {};
-// 	public current: { [id: string]: IControl | undefined } = {};
-// 	public layers = ['default'];
+export interface IAnimationParams {
+	group?: string;
+	unstoppable?: boolean;
+	finalValue?: boolean;
+}
 
-// 	private object: any;
-// 	private animatorManager: AnimatorManager;
-// 	private layerMap: { [id: string]: string } = {};
-// 	private skipMap: { [id: string]: boolean } = {};
-// 	private lastAnimName: { [id: string]: string } = {};
+/**
+ * Animator component applied on a object.
+ * This store a list of animations and manage them for that object
+ *
+ * @export
+ * @class Animator
+ */
+export class Animator {
+	public animations: { [id: string]: IControl; } = {};
+	public current: { [id: string]: IControl | undefined } = {};
+	public layers = ['default'];
 
-// 	constructor(obj: any, animatorManager: AnimatorManager) {
-// 		this.object = obj;
-// 		this.animatorManager = animatorManager;
-// 	}
+	private object: any;
+	private animatorManager: AnimatorManager;
+	private animGroupMap: { [id: string]: string } = {};
+	private animFinalValueMap: { [id: string]: boolean } = {};
+	private animUnstoppableMap: { [id: string]: boolean } = {};
+	private currentAnimName: { [id: string]: string } = {};
 
-// 	public AddAnimation(name: string, animationName: string, finalValue?: boolean, layer?: string, params?: any): Animator {
-// 		const anim: any = this.animatorManager.Instantiate(animationName, this.object, params);
-// 		// anim.OnStart(() => console.warn('OnStart', name, animationName, this.object.name, this.object.position));
-// 		// anim.OnComplete(() => console.log('OnComplete', name, animationName, this.object.name, this.object.position));
-// 		anim.OnKilled(() => anim.Recycle());
-// 		anim.OnComplete(() => anim.Recycle());
+	constructor(obj: any, animatorManager: AnimatorManager) {
+		this.object = obj;
+		this.animatorManager = animatorManager;
+	}
 
-// 		this.animations[name] = anim;
-// 		this.skipMap[name] = !!finalValue;
-// 		this.layerMap[name] = !layer ? 'default' : layer;
-// 		if (this.layers.indexOf(this.layerMap[name]) === -1) {
-// 			this.layers.push(this.layerMap[name]);
-// 		}
-// 		return this;
-// 	}
+	public AddAnimation(name: string, animationName: string, options?: IAnimationParams | any, params?: any): Animator {
+		const anim: any = this.animatorManager.Instantiate(animationName, this.object, params);
+		return this.AddCustomAnimation(name, options || {}, anim);
+	}
 
-// 	public Play(name: string): IControl {
-// 		if (!(name in this.animations)) {
-// 			throw new Error('this animation doesnt exist ' + name);
-// 		}
+	public AddCustomAnimation(name: string, options: IAnimationParams | any, tween: IControl): Animator {
+		const anim: any = tween;
+		anim.OnKilled(() => anim.Recycle());
+		anim.OnComplete(() => anim.Recycle());
 
-// 		const layerName = this.layerMap[name];
-// 		let current = this.current[layerName];
+		this.animations[name] = anim;
+		this.animFinalValueMap[name] = options ? !!options.finalValue : false;
+		this.animUnstoppableMap[name] = options ? !!options.unstoppable : false;
+		this.animGroupMap[name] = (options && options.group) ? options.group : 'default';
+		if (this.layers.indexOf(this.animGroupMap[name]) === -1) {
+			this.layers.push(this.animGroupMap[name]);
+		}
+		return this;
+	}
 
-// 		// Stop any previous animation on this layer
-// 		if (current && (current.IsRunning() || current.IsPaused())) {
-// 			const currentAnimName = this.lastAnimName[layerName];
-// 			current.Skip(this.skipMap[currentAnimName]);
-// 			this.current[layerName] = undefined;
-// 		}
+	public Play(name: string): IControl {
+		if (!(name in this.animations)) {
+			throw new Error('this animation doesnt exist ' + name);
+		}
 
-// 		// Start the right animation
-// 		current = this.animations[name];
-// 		this.current[layerName] = current;
-// 		this.lastAnimName[layerName] = name;
-// 		current.Start();
-// 		return current;
-// 	}
+		const layerName = this.animGroupMap[name];
+		let current = this.current[layerName];
 
-// 	public Pause(layer?: string): void {
-// 		const layerName = !layer ? 'default' : layer;
-// 		const current = this.current[layerName];
-// 		if (current && current.IsRunning()) {
-// 			current.Pause();
-// 		}
-// 	}
+		// Block any unstoppable running anim
+		if (current && current.IsRunning() && this.animUnstoppableMap[this.currentAnimName[layerName]]) {
+			console.log('This animation already run and is unstoppable', this.currentAnimName[layerName], '->', name);
+			return current;
+		}
 
-// 	public PauseAll() {
-// 		for (const layerId of this.layers) {
-// 			this.Pause(layerId);
-// 		}
-// 	}
+		// Stop any previous animation on this layer
+		if (current && (current.IsRunning() || current.IsPaused())) {
+			const currentAnimName = this.currentAnimName[layerName];
+			current.Skip(this.animFinalValueMap[currentAnimName]);
+			this.current[layerName] = undefined;
+		}
 
-// 	public Resume(layer?: string): void {
-// 		const layerName = !layer ? 'default' : layer;
-// 		const current = this.current[layerName];
-// 		if (current && current.IsPaused()) {
-// 			current.Resume();
-// 		}
-// 	}
+		// Start the right animation
+		current = this.animations[name];
+		this.current[layerName] = current;
+		this.currentAnimName[layerName] = name;
+		current.Start();
+		return current;
+	}
 
-// 	public ResumeAll() {
-// 		for (const layerId of this.layers) {
-// 			this.Resume(layerId);
-// 		}
-// 	}
+	public Pause(layer?: string): void {
+		const layerName = !layer ? 'default' : layer;
+		const current = this.current[layerName];
+		if (current && current.IsRunning()) {
+			current.Pause();
+		}
+	}
 
-// 	public Stop(layer?: string): void {
-// 		const layerName = !layer ? 'default' : layer;
-// 		const current = this.current[layerName];
-// 		if (current && !current.IsFinished()) {
-// 			const currentAnimName = this.lastAnimName[layerName];
-// 			current.Skip(this.skipMap[currentAnimName]);
-// 			this.current[layerName] = undefined;
-// 		}
-// 	}
+	public PauseAll() {
+		for (const layerId of this.layers) {
+			this.Pause(layerId);
+		}
+	}
 
-// 	public StopAll() {
-// 		for (const layerId of this.layers) {
-// 			this.Stop(layerId);
-// 		}
-// 	}
+	public Resume(layer?: string): void {
+		const layerName = !layer ? 'default' : layer;
+		const current = this.current[layerName];
+		if (current && current.IsPaused()) {
+			current.Resume();
+		}
+	}
 
-// 	public Destroy() {
-// 		for (const layerId of this.layers) {
-// 			const current = this.current[layerId];
-// 			if (current && !current.IsFinished()) {
-// 				current.Kill();
-// 			}
-// 		}
-// 		this.animations = {};
-// 		this.layerMap = {};
-// 		this.skipMap = {};
-// 		this.current = {};
-// 		this.lastAnimName = {};
-// 		delete this.object.Animator;
-// 	}
-// }
+	public ResumeAll() {
+		for (const layerId of this.layers) {
+			this.Resume(layerId);
+		}
+	}
+
+	public Stop(layer?: string): void {
+		const layerName = !layer ? 'default' : layer;
+		const current = this.current[layerName];
+		if (current && !current.IsFinished()) {
+			const currentAnimName = this.currentAnimName[layerName];
+			current.Skip(this.animFinalValueMap[currentAnimName]);
+			this.current[layerName] = undefined;
+		}
+	}
+
+	public StopAll() {
+		for (const layerId of this.layers) {
+			this.Stop(layerId);
+		}
+	}
+
+	public Destroy() {
+		for (const layerId of this.layers) {
+			const current = this.current[layerId];
+			if (current && !current.IsFinished()) {
+				current.Kill();
+			}
+		}
+
+		this.animations = {};
+		this.animGroupMap = {};
+		this.animFinalValueMap = {};
+		this.animUnstoppableMap = {};
+		this.current = {};
+		this.currentAnimName = {};
+		delete this.object.Animator;
+	}
+}

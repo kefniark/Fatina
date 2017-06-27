@@ -189,9 +189,6 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 			const tweenArray = this.tweens[i];
 			for (let j = 0; j < tweenArray.length; j++) {
 				const tween = tweenArray[j];
-				if (tween.state === State.Killed || tween.state === State.Finished) {
-					continue;
-				}
 				if (tween.elapsed === 0) {
 					this.EmitEvent(this.eventStepStart, [tween]);
 				}
@@ -227,18 +224,12 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		return this;
 	}
 
-	// public Default() {
-	// 	super.Default();
-	// 	this.tweens.length = 0;
-	// 	this.currentTween = undefined;
-	// 	this.sequenceIndex = 0;
-	// }
-
 	public OnStepStart(cb: (index: ITween | IPlayable) => void): ISequence {
 		if (!this.eventStepStart) {
 			this.eventStepStart = new Array(0);
 		}
 		this.eventStepStart[this.eventStepStart.length] = cb;
+		this.Info(Log.Debug, 'OnStepStart', this);
 		return this;
 	}
 
@@ -247,6 +238,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 			this.eventStepEnd = new Array(0);
 		}
 		this.eventStepEnd[this.eventStepEnd.length] = cb;
+		this.Info(Log.Debug, 'OnStepEnd', this);
 		return this;
 	}
 }

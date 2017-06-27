@@ -12,7 +12,6 @@ import { ITicker } from './ITicker';
  * @extends {IControl}
  */
 export interface ITween extends IControl {
-	// Default(): void;
 	Init(object: any, properties: string[]): void;
 	Start(): ITween;
 	From(from: any): ITween;
@@ -28,7 +27,6 @@ export interface ITween extends IControl {
 	SetEasing(type: EasingType | string): ITween;
 	SetTimescale(scale: number): ITween;
 	ToSequence(): ISequence;
-	// Serialize(): any;
 	SetSafe(safe: boolean): ITween;
 	SetLog(level: Log): ITween;
 

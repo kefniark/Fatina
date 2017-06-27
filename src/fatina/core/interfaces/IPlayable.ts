@@ -18,6 +18,7 @@ export interface IPlayable extends IControl {
 	SetLoop(loop: number): IPlayable;
 	SetSafe(safe: boolean): IPlayable;
 	SetLog(level: Log): IPlayable;
+
 	OnStart(cb: () => void): IPlayable;
 	OnRestart(cb: () => void): IPlayable;
 	OnUpdate(cb: (dt: number, progress: number) => void): IPlayable;

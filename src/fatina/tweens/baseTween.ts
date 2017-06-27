@@ -187,7 +187,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 *
 	 * @param {boolean} [finalValue]
 	 * @returns {void}
-	 * @memberof BaseTween
+	 * @memberOf BaseTween
 	 */
 	public Skip(finalValue?: boolean): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
@@ -279,15 +279,6 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	protected LoopInit(): void {
 		this.elapsed = 0;
 	}
-
-	// public Default() {
-	// 	this.elapsed = 0;
-	// 	this.duration = 0;
-	// 	this.timescale = 1;
-	// 	this.loop = 1;
-	// 	this.firstStart = true;
-	// 	this.state = State.Idle;
-	// }
 
 	public SetSafe(safe: boolean): T {
 		this.safe = safe;

@@ -353,37 +353,37 @@ var Log;
 Object.defineProperty(exports, "__esModule", { value: true });
 var EasingType;
 (function (EasingType) {
-    EasingType[EasingType["Linear"] = 0] = "Linear";
-    EasingType[EasingType["InQuad"] = 1] = "InQuad";
-    EasingType[EasingType["OutQuad"] = 2] = "OutQuad";
-    EasingType[EasingType["InOutQuad"] = 3] = "InOutQuad";
-    EasingType[EasingType["InCubic"] = 4] = "InCubic";
-    EasingType[EasingType["OutCubic"] = 5] = "OutCubic";
-    EasingType[EasingType["InOutCubic"] = 6] = "InOutCubic";
-    EasingType[EasingType["InQuart"] = 7] = "InQuart";
-    EasingType[EasingType["OutQuart"] = 8] = "OutQuart";
-    EasingType[EasingType["InOutQuart"] = 9] = "InOutQuart";
-    EasingType[EasingType["InSine"] = 10] = "InSine";
-    EasingType[EasingType["OutSine"] = 11] = "OutSine";
-    EasingType[EasingType["InOutSine"] = 12] = "InOutSine";
-    EasingType[EasingType["InCirc"] = 13] = "InCirc";
-    EasingType[EasingType["OutCirc"] = 14] = "OutCirc";
-    EasingType[EasingType["InOutCirc"] = 15] = "InOutCirc";
-    EasingType[EasingType["InQuint"] = 16] = "InQuint";
-    EasingType[EasingType["OutQuint"] = 17] = "OutQuint";
-    EasingType[EasingType["InOutQuint"] = 18] = "InOutQuint";
-    EasingType[EasingType["InExponential"] = 19] = "InExponential";
-    EasingType[EasingType["OutExponential"] = 20] = "OutExponential";
-    EasingType[EasingType["InOutExponential"] = 21] = "InOutExponential";
-    EasingType[EasingType["InElastic"] = 22] = "InElastic";
-    EasingType[EasingType["OutElastic"] = 23] = "OutElastic";
-    EasingType[EasingType["InOutElastic"] = 24] = "InOutElastic";
-    EasingType[EasingType["InBack"] = 25] = "InBack";
-    EasingType[EasingType["OutBack"] = 26] = "OutBack";
-    EasingType[EasingType["InOutBack"] = 27] = "InOutBack";
-    EasingType[EasingType["InBounce"] = 28] = "InBounce";
-    EasingType[EasingType["OutBounce"] = 29] = "OutBounce";
-    EasingType[EasingType["InOutBounce"] = 30] = "InOutBounce";
+    EasingType["Linear"] = "linear";
+    EasingType["InQuad"] = "inQuad";
+    EasingType["OutQuad"] = "outQuad";
+    EasingType["InOutQuad"] = "inOutQuad";
+    EasingType["InCubic"] = "inCubic";
+    EasingType["OutCubic"] = "outCubic";
+    EasingType["InOutCubic"] = "inOutCubic";
+    EasingType["InQuart"] = "inQuart";
+    EasingType["OutQuart"] = "outQuart";
+    EasingType["InOutQuart"] = "inOutQuart";
+    EasingType["InSine"] = "inSine";
+    EasingType["OutSine"] = "outSine";
+    EasingType["InOutSine"] = "inOutSine";
+    EasingType["InCirc"] = "inCirc";
+    EasingType["OutCirc"] = "outCirc";
+    EasingType["InOutCirc"] = "inOutCirc";
+    EasingType["InQuint"] = "inQuint";
+    EasingType["OutQuint"] = "outQuint";
+    EasingType["InOutQuint"] = "inOutQuint";
+    EasingType["InExponential"] = "inExponential";
+    EasingType["OutExponential"] = "outExponential";
+    EasingType["InOutExponential"] = "inOutExponential";
+    EasingType["InElastic"] = "inElastic";
+    EasingType["OutElastic"] = "outElastic";
+    EasingType["InOutElastic"] = "inOutElastic";
+    EasingType["InBack"] = "inBack";
+    EasingType["OutBack"] = "outBack";
+    EasingType["InOutBack"] = "inOutBack";
+    EasingType["InBounce"] = "inBounce";
+    EasingType["OutBounce"] = "outBounce";
+    EasingType["InOutBounce"] = "inOutBounce";
 })(EasingType = exports.EasingType || (exports.EasingType = {}));
 
 
@@ -456,7 +456,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var log_1 = __webpack_require__(2);
 var state_1 = __webpack_require__(0);
 var baseTween_1 = __webpack_require__(1);
-var callback_1 = __webpack_require__(9);
+var callback_1 = __webpack_require__(13);
 var delay_1 = __webpack_require__(4);
 var Sequence = (function (_super) {
     __extends(Sequence, _super);
@@ -596,9 +596,6 @@ var Sequence = (function (_super) {
             var tweenArray = this.tweens[i];
             for (var j = 0; j < tweenArray.length; j++) {
                 var tween = tweenArray[j];
-                if (tween.state === state_1.State.Killed || tween.state === state_1.State.Finished) {
-                    continue;
-                }
                 if (tween.elapsed === 0) {
                     this.EmitEvent(this.eventStepStart, [tween]);
                 }
@@ -634,6 +631,7 @@ var Sequence = (function (_super) {
             this.eventStepStart = new Array(0);
         }
         this.eventStepStart[this.eventStepStart.length] = cb;
+        this.Info(log_1.Log.Debug, 'OnStepStart', this);
         return this;
     };
     Sequence.prototype.OnStepEnd = function (cb) {
@@ -641,6 +639,7 @@ var Sequence = (function (_super) {
             this.eventStepEnd = new Array(0);
         }
         this.eventStepEnd[this.eventStepEnd.length] = cb;
+        this.Info(log_1.Log.Debug, 'OnStepEnd', this);
         return this;
     };
     return Sequence;
@@ -655,13 +654,14 @@ exports.Sequence = Sequence;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var index_1 = __webpack_require__(7);
 var log_1 = __webpack_require__(2);
 var easingType_1 = __webpack_require__(3);
 exports.Easing = easingType_1.EasingType;
-var ticker_1 = __webpack_require__(7);
+var ticker_1 = __webpack_require__(11);
 var delay_1 = __webpack_require__(4);
 var sequence_1 = __webpack_require__(5);
-var tween_1 = __webpack_require__(10);
+var tween_1 = __webpack_require__(14);
 var tickerManager;
 var initialized = false;
 var isFirstUpdate = true;
@@ -746,50 +746,52 @@ function Update(timestamp) {
 }
 exports.Update = Update;
 function Tween(obj, properties) {
-    if (!initialized) {
-        Init();
-    }
-    var t = new tween_1.Tween(obj, properties).SetLog(logLevel).SetSafe(safe).SetParent(tickerManager);
+    var t = new tween_1.Tween(obj, properties);
+    AddContext(t);
     Info(log_1.Log.Debug, '[Fatina.Manager] Tween Instantiated', t);
     return t;
 }
 exports.Tween = Tween;
 function Sequence() {
-    if (!initialized) {
-        Init();
-    }
-    var s = new sequence_1.Sequence().SetLog(logLevel).SetSafe(safe).SetParent(tickerManager);
+    var s = new sequence_1.Sequence();
+    AddContext(s);
     Info(log_1.Log.Debug, '[Fatina.Manager] Sequence Instantiated', s);
     return s;
 }
 exports.Sequence = Sequence;
 function Delay(duration) {
-    if (!initialized) {
-        Init();
-    }
-    var d = new delay_1.Delay(duration).SetLog(logLevel).SetSafe(safe).SetParent(tickerManager);
+    var d = new delay_1.Delay(duration);
+    AddContext(d);
     Info(log_1.Log.Debug, '[Fatina.Manager] Sequence Instantiated', d);
     return d;
 }
 exports.Delay = Delay;
 function SetTimeout(fn, duration) {
-    if (!initialized) {
-        Init();
-    }
-    var timeout = new delay_1.Delay(duration).SetLog(logLevel).SetSafe(safe).SetParent(tickerManager).OnComplete(fn).Start();
+    var timeout = new delay_1.Delay(duration).OnComplete(fn);
+    AddContext(timeout);
     Info(log_1.Log.Debug, '[Fatina.Manager] SetTimeout Instantiated', timeout);
-    return timeout;
+    return timeout.Start();
 }
 exports.SetTimeout = SetTimeout;
 function SetInterval(fn, duration) {
+    var interval = new delay_1.Delay(duration).OnRestart(fn).SetLoop(-1);
+    AddContext(interval);
+    Info(log_1.Log.Debug, '[Fatina.Manager] SetInterval Instantiated', interval);
+    return interval.Start();
+}
+exports.SetInterval = SetInterval;
+function AddContext(obj) {
     if (!initialized) {
         Init();
     }
-    var interval = new delay_1.Delay(duration).SetLog(logLevel).SetSafe(safe).SetParent(tickerManager).OnRestart(fn).SetLoop(-1).Start();
-    Info(log_1.Log.Debug, '[Fatina.Manager] SetInterval Instantiated', interval);
-    return interval;
+    obj.SetParent(tickerManager);
+    if (logLevel !== log_1.Log.None) {
+        obj.SetLog(logLevel);
+    }
+    if (!safe) {
+        obj.SetSafe(safe);
+    }
 }
-exports.SetInterval = SetInterval;
 function Ticker() {
     if (!initialized) {
         Init();
@@ -809,6 +811,10 @@ function LoadPlugin(newPlugin) {
     Info(log_1.Log.Debug, '[Fatina.Manager] Plugin Loaded', newPlugin.name);
 }
 exports.LoadPlugin = LoadPlugin;
+function GetPlugin() {
+    return new index_1.FatinaPluginAnimator();
+}
+exports.GetPlugin = GetPlugin;
 function Info(level, message, data) {
     if (level > logLevel) {
         return;
@@ -848,6 +854,274 @@ function updateLoop(timestamp) {
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", { value: true });
+var animatorManager_1 = __webpack_require__(8);
+var tickerManager_1 = __webpack_require__(10);
+function Get() {
+    return new FatinaPluginAnimator();
+}
+exports.Get = Get;
+var FatinaPluginAnimator = (function () {
+    function FatinaPluginAnimator() {
+        this.name = 'fatina-plugin-animator';
+        this.init = false;
+    }
+    Object.defineProperty(FatinaPluginAnimator.prototype, "TickerManager", {
+        get: function () {
+            return this.fatina.plugin.TickerManager;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FatinaPluginAnimator.prototype, "AnimatorManager", {
+        get: function () {
+            return this.fatina.plugin.AnimatorManager;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    FatinaPluginAnimator.prototype.Init = function (fatina) {
+        if (this.init) {
+            throw new Error('Try to init the plugin twice : ' + name);
+        }
+        if (fatina === undefined || fatina === null || fatina.plugin === null) {
+            throw new Error('Try to init the plugin without fatina : ' + name);
+        }
+        this.fatina = fatina;
+        this.init = true;
+        fatina.plugin.AnimatorManager = new animatorManager_1.AnimatorManager(this);
+        fatina.plugin.TickerManager = new tickerManager_1.TickerManager(this);
+    };
+    return FatinaPluginAnimator;
+}());
+exports.FatinaPluginAnimator = FatinaPluginAnimator;
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var animator_1 = __webpack_require__(9);
+var AnimatorManager = (function () {
+    function AnimatorManager(plugin) {
+        this.animations = {};
+        this.tickerMap = {};
+        this.plugin = plugin;
+    }
+    Object.defineProperty(AnimatorManager.prototype, "Animations", {
+        get: function () {
+            return Object.keys(this.animations);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(AnimatorManager.prototype, "Labels", {
+        get: function () {
+            var _this = this;
+            return Object.keys(this.tickerMap).map(function (x) { return _this.tickerMap[x]; }).filter(function (piece, index, self) { return self.indexOf(piece) === index; });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    AnimatorManager.prototype.Register = function (name, onCreate, label) {
+        if (this.animations[name] && this.tickerMap[name]) {
+            delete this.tickerMap[name];
+        }
+        this.animations[name] = onCreate;
+        if (label) {
+            this.tickerMap[name] = label;
+        }
+        return this;
+    };
+    AnimatorManager.prototype.Instantiate = function (name, object, params) {
+        if (!(name in this.animations)) {
+            throw new Error('this animation doesnt exist ' + name);
+        }
+        var tween = this.animations[name](object, params);
+        if (this.tickerMap[name]) {
+            tween.SetParent(this.plugin.TickerManager.Get(this.tickerMap[name]));
+        }
+        return tween;
+    };
+    AnimatorManager.prototype.AddAnimatorTo = function (obj) {
+        if (!obj.Animator) {
+            obj.Animator = new animator_1.Animator(obj, this);
+        }
+        return obj.Animator;
+    };
+    return AnimatorManager;
+}());
+exports.AnimatorManager = AnimatorManager;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Animator = (function () {
+    function Animator(obj, animatorManager) {
+        this.animations = {};
+        this.current = {};
+        this.layers = ['default'];
+        this.animGroupMap = {};
+        this.animFinalValueMap = {};
+        this.animUnstoppableMap = {};
+        this.currentAnimName = {};
+        this.object = obj;
+        this.animatorManager = animatorManager;
+    }
+    Animator.prototype.AddAnimation = function (name, animationName, options, params) {
+        var anim = this.animatorManager.Instantiate(animationName, this.object, params);
+        return this.AddCustomAnimation(name, options || {}, anim);
+    };
+    Animator.prototype.AddCustomAnimation = function (name, options, tween) {
+        var anim = tween;
+        anim.OnKilled(function () { return anim.Recycle(); });
+        anim.OnComplete(function () { return anim.Recycle(); });
+        this.animations[name] = anim;
+        this.animFinalValueMap[name] = options ? !!options.finalValue : false;
+        this.animUnstoppableMap[name] = options ? !!options.unstoppable : false;
+        this.animGroupMap[name] = (options && options.group) ? options.group : 'default';
+        if (this.layers.indexOf(this.animGroupMap[name]) === -1) {
+            this.layers.push(this.animGroupMap[name]);
+        }
+        return this;
+    };
+    Animator.prototype.Play = function (name) {
+        if (!(name in this.animations)) {
+            throw new Error('this animation doesnt exist ' + name);
+        }
+        var layerName = this.animGroupMap[name];
+        var current = this.current[layerName];
+        if (current && current.IsRunning() && this.animUnstoppableMap[this.currentAnimName[layerName]]) {
+            console.log('This animation already run and is unstoppable', this.currentAnimName[layerName], '->', name);
+            return current;
+        }
+        if (current && (current.IsRunning() || current.IsPaused())) {
+            var currentAnimName = this.currentAnimName[layerName];
+            current.Skip(this.animFinalValueMap[currentAnimName]);
+            this.current[layerName] = undefined;
+        }
+        current = this.animations[name];
+        this.current[layerName] = current;
+        this.currentAnimName[layerName] = name;
+        current.Start();
+        return current;
+    };
+    Animator.prototype.Pause = function (layer) {
+        var layerName = !layer ? 'default' : layer;
+        var current = this.current[layerName];
+        if (current && current.IsRunning()) {
+            current.Pause();
+        }
+    };
+    Animator.prototype.PauseAll = function () {
+        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
+            var layerId = _a[_i];
+            this.Pause(layerId);
+        }
+    };
+    Animator.prototype.Resume = function (layer) {
+        var layerName = !layer ? 'default' : layer;
+        var current = this.current[layerName];
+        if (current && current.IsPaused()) {
+            current.Resume();
+        }
+    };
+    Animator.prototype.ResumeAll = function () {
+        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
+            var layerId = _a[_i];
+            this.Resume(layerId);
+        }
+    };
+    Animator.prototype.Stop = function (layer) {
+        var layerName = !layer ? 'default' : layer;
+        var current = this.current[layerName];
+        if (current && !current.IsFinished()) {
+            var currentAnimName = this.currentAnimName[layerName];
+            current.Skip(this.animFinalValueMap[currentAnimName]);
+            this.current[layerName] = undefined;
+        }
+    };
+    Animator.prototype.StopAll = function () {
+        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
+            var layerId = _a[_i];
+            this.Stop(layerId);
+        }
+    };
+    Animator.prototype.Destroy = function () {
+        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
+            var layerId = _a[_i];
+            var current = this.current[layerId];
+            if (current && !current.IsFinished()) {
+                current.Kill();
+            }
+        }
+        this.animations = {};
+        this.animGroupMap = {};
+        this.animFinalValueMap = {};
+        this.animUnstoppableMap = {};
+        this.current = {};
+        this.currentAnimName = {};
+        delete this.object.Animator;
+    };
+    return Animator;
+}());
+exports.Animator = Animator;
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var TickerManager = (function () {
+    function TickerManager(plugin) {
+        this.tickers = {};
+        this.plugin = plugin;
+    }
+    TickerManager.prototype.Get = function (name) {
+        if (this.tickers[name]) {
+            return this.tickers[name];
+        }
+        this.tickers[name] = this.plugin.fatina.Ticker();
+        return this.tickers[name];
+    };
+    TickerManager.prototype.PauseAll = function (name) {
+        if (this.tickers[name]) {
+            this.tickers[name].Pause();
+        }
+    };
+    TickerManager.prototype.ResumeAll = function (name) {
+        if (this.tickers[name]) {
+            this.tickers[name].Resume();
+        }
+    };
+    TickerManager.prototype.KillAll = function (name) {
+        if (this.tickers[name]) {
+            this.tickers[name].Kill();
+            delete this.tickers[name];
+        }
+    };
+    return TickerManager;
+}());
+exports.TickerManager = TickerManager;
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -860,7 +1134,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var state_1 = __webpack_require__(0);
-var eventList_1 = __webpack_require__(8);
+var eventList_1 = __webpack_require__(12);
 var Ticker = (function (_super) {
     __extends(Ticker, _super);
     function Ticker() {
@@ -973,7 +1247,7 @@ exports.Ticker = Ticker;
 
 
 /***/ }),
-/* 8 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1037,7 +1311,7 @@ exports.EventList = EventList;
 
 
 /***/ }),
-/* 9 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1075,7 +1349,7 @@ exports.Callback = Callback;
 
 
 /***/ }),
-/* 10 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1092,7 +1366,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var state_1 = __webpack_require__(0);
-var easing_1 = __webpack_require__(11);
+var easing_1 = __webpack_require__(15);
 var easingType_1 = __webpack_require__(3);
 var baseTween_1 = __webpack_require__(1);
 var sequence_1 = __webpack_require__(5);
@@ -1126,7 +1400,7 @@ var Tween = (function (_super) {
         }
         if (!this.ease) {
             this.easeId = easingType_1.EasingType.Linear;
-            this.ease = easing_1.easeTypes[easingType_1.EasingType.Linear];
+            this.ease = easing_1.easeNames[easingType_1.EasingType.Linear];
         }
         this.CheckPosition();
     };
@@ -1268,13 +1542,6 @@ var Tween = (function (_super) {
     };
     Tween.prototype.Easing = function (type) {
         var name = type;
-        var isNumber = !isNaN(parseFloat(name));
-        if (isNumber) {
-            var index = parseInt(name, 10);
-            if (index in easing_1.easeTypes) {
-                return easing_1.easeTypes[index];
-            }
-        }
         if (name in easing_1.easeNames) {
             return easing_1.easeNames[name];
         }
@@ -1294,7 +1561,7 @@ exports.Tween = Tween;
 
 
 /***/ }),
-/* 11 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1304,18 +1571,17 @@ var easingType_1 = __webpack_require__(3);
 var PI = Math.PI;
 var PI_OVER_TWO = Math.PI / 2;
 var BACK = 1.70158;
-var easingByType = [];
 var easingByName = {};
-easingByType[easingType_1.EasingType.Linear] = easingByName['linear'] = function (t) {
+easingByName[easingType_1.EasingType.Linear] = function (t) {
     return t;
 };
-easingByType[easingType_1.EasingType.InQuad] = easingByName['inQuad'] = function (t) {
+easingByName[easingType_1.EasingType.InQuad] = function (t) {
     return t * t;
 };
-easingByType[easingType_1.EasingType.OutQuad] = easingByName['outQuad'] = function (t) {
+easingByName[easingType_1.EasingType.OutQuad] = function (t) {
     return 2 * t - t * t;
 };
-easingByType[easingType_1.EasingType.InOutQuad] = easingByName['inOutQuad'] = function (t) {
+easingByName[easingType_1.EasingType.InOutQuad] = function (t) {
     if (t < 0.5) {
         return 2 * t * t;
     }
@@ -1323,13 +1589,13 @@ easingByType[easingType_1.EasingType.InOutQuad] = easingByName['inOutQuad'] = fu
         return 2 * (2 * t - t * t) - 1;
     }
 };
-easingByType[easingType_1.EasingType.InCubic] = easingByName['inCubic'] = function (t) {
+easingByName[easingType_1.EasingType.InCubic] = function (t) {
     return t * t * t;
 };
-easingByType[easingType_1.EasingType.OutCubic] = easingByName['outCubic'] = function (t) {
+easingByName[easingType_1.EasingType.OutCubic] = function (t) {
     return 3 * t - 3 * t * t + t * t * t;
 };
-easingByType[easingType_1.EasingType.InOutCubic] = easingByName['inOutCubic'] = function (t) {
+easingByName[easingType_1.EasingType.InOutCubic] = function (t) {
     if (t < 0.5) {
         return 4 * t * t * t;
     }
@@ -1337,14 +1603,14 @@ easingByType[easingType_1.EasingType.InOutCubic] = easingByName['inOutCubic'] = 
         return 4 * (3 * t - 3 * t * t + t * t * t) - 3;
     }
 };
-easingByType[easingType_1.EasingType.InQuart] = easingByName['inQuart'] = function (t) {
+easingByName[easingType_1.EasingType.InQuart] = function (t) {
     return t * t * t * t;
 };
-easingByType[easingType_1.EasingType.OutQuart] = easingByName['outQuart'] = function (t) {
+easingByName[easingType_1.EasingType.OutQuart] = function (t) {
     var t2 = t * t;
     return 4 * t - 6 * t2 + 4 * t2 * t - t2 * t2;
 };
-easingByType[easingType_1.EasingType.InOutQuart] = easingByName['inOutQuart'] = function (t) {
+easingByName[easingType_1.EasingType.InOutQuart] = function (t) {
     if (t < 0.5) {
         return 8 * t * t * t * t;
     }
@@ -1353,16 +1619,16 @@ easingByType[easingType_1.EasingType.InOutQuart] = easingByName['inOutQuart'] = 
         return 8 * (4 * t - 6 * t2 + 4 * t2 * t - t2 * t2) - 7;
     }
 };
-easingByType[easingType_1.EasingType.InSine] = easingByName['inSine'] = function (t) {
+easingByName[easingType_1.EasingType.InSine] = function (t) {
     if (t === 1) {
         return 1;
     }
     return 1 - Math.cos(PI_OVER_TWO * t);
 };
-easingByType[easingType_1.EasingType.OutSine] = easingByName['outSine'] = function (t) {
+easingByName[easingType_1.EasingType.OutSine] = function (t) {
     return Math.sin(PI_OVER_TWO * t);
 };
-easingByType[easingType_1.EasingType.InOutSine] = easingByName['inOutSine'] = function (t) {
+easingByName[easingType_1.EasingType.InOutSine] = function (t) {
     if (t < 0.5) {
         return (1 - Math.cos(PI * t)) / 2;
     }
@@ -1370,13 +1636,13 @@ easingByType[easingType_1.EasingType.InOutSine] = easingByName['inOutSine'] = fu
         return (1 + Math.sin(PI * (t - 0.5))) / 2;
     }
 };
-easingByType[easingType_1.EasingType.InCirc] = easingByName['inCirc'] = function (t) {
+easingByName[easingType_1.EasingType.InCirc] = function (t) {
     return 1 - Math.sqrt(1 - Math.pow(t, 2));
 };
-easingByType[easingType_1.EasingType.OutCirc] = easingByName['outCirc'] = function (t) {
+easingByName[easingType_1.EasingType.OutCirc] = function (t) {
     return Math.sqrt(1 - Math.pow(1 - t, 2));
 };
-easingByType[easingType_1.EasingType.InOutCirc] = easingByName['inOutCirc'] = function (t) {
+easingByName[easingType_1.EasingType.InOutCirc] = function (t) {
     if (t < 0.5) {
         return (1 - Math.sqrt(1 - 4 * t * t)) / 2;
     }
@@ -1384,29 +1650,29 @@ easingByType[easingType_1.EasingType.InOutCirc] = easingByName['inOutCirc'] = fu
         return (1 + Math.sqrt(-3 + 8 * t - 4 * t * t)) / 2;
     }
 };
-easingByType[easingType_1.EasingType.InQuint] = easingByName['inQuint'] = function (t) {
+easingByName[easingType_1.EasingType.InQuint] = function (t) {
     return t * t * t * t * t;
 };
-easingByType[easingType_1.EasingType.OutQuint] = easingByName['outQuint'] = function (t) {
+easingByName[easingType_1.EasingType.OutQuint] = function (t) {
     return --t * t * t * t * t + 1;
 };
-easingByType[easingType_1.EasingType.InOutQuint] = easingByName['inOutQuint'] = function (t) {
+easingByName[easingType_1.EasingType.InOutQuint] = function (t) {
     t *= 2;
     if (t < 1) {
         return 0.5 * t * t * t * t * t;
     }
     return 0.5 * ((t -= 2) * t * t * t * t + 2);
 };
-easingByType[easingType_1.EasingType.InExponential] = easingByName['inExponential'] = function (t) {
+easingByName[easingType_1.EasingType.InExponential] = function (t) {
     if (t === 1) {
         return 1;
     }
     return t === 0 ? 0 : Math.pow(1024, t - 1);
 };
-easingByType[easingType_1.EasingType.OutExponential] = easingByName['outExponential'] = function (t) {
+easingByName[easingType_1.EasingType.OutExponential] = function (t) {
     return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
 };
-easingByType[easingType_1.EasingType.InOutExponential] = easingByName['inOutExponential'] = function (t) {
+easingByName[easingType_1.EasingType.InOutExponential] = function (t) {
     if (t === 0) {
         return 0;
     }
@@ -1419,19 +1685,19 @@ easingByType[easingType_1.EasingType.InOutExponential] = easingByName['inOutExpo
     }
     return 0.5 * (-Math.pow(2, -10 * (t - 1)) + 2);
 };
-easingByType[easingType_1.EasingType.InElastic] = easingByName['inElastic'] = function (t) {
+easingByName[easingType_1.EasingType.InElastic] = function (t) {
     if (t === 0) {
         return 0;
     }
     return -Math.pow(2, 10 * (t - 1)) * Math.sin((t - 1.1) * 5 * Math.PI);
 };
-easingByType[easingType_1.EasingType.OutElastic] = easingByName['outElastic'] = function (t) {
+easingByName[easingType_1.EasingType.OutElastic] = function (t) {
     if (t === 1) {
         return 1;
     }
     return Math.pow(2, -10 * t) * Math.sin((t - 0.1) * 5 * Math.PI) + 1;
 };
-easingByType[easingType_1.EasingType.InOutElastic] = easingByName['inOutElastic'] = function (t) {
+easingByName[easingType_1.EasingType.InOutElastic] = function (t) {
     if (t === 0) {
         return 0;
     }
@@ -1444,15 +1710,15 @@ easingByType[easingType_1.EasingType.InOutElastic] = easingByName['inOutElastic'
     }
     return 0.5 * Math.pow(2, -10 * (t - 1)) * Math.sin((t - 1.1) * 5 * Math.PI) + 1;
 };
-easingByType[easingType_1.EasingType.InBack] = easingByName['inBack'] = function (t) {
+easingByName[easingType_1.EasingType.InBack] = function (t) {
     var s = BACK;
     return t === 1 ? 1 : t * t * ((s + 1) * t - s);
 };
-easingByType[easingType_1.EasingType.OutBack] = easingByName['outBack'] = function (t) {
+easingByName[easingType_1.EasingType.OutBack] = function (t) {
     var s = BACK;
     return t === 0 ? 0 : --t * t * ((s + 1) * t + s) + 1;
 };
-easingByType[easingType_1.EasingType.InOutBack] = easingByName['inOutBack'] = function (t) {
+easingByName[easingType_1.EasingType.InOutBack] = function (t) {
     var s = BACK * 1.525;
     t *= 2;
     if (t < 1) {
@@ -1460,7 +1726,7 @@ easingByType[easingType_1.EasingType.InOutBack] = easingByName['inOutBack'] = fu
     }
     return 0.5 * ((t -= 2) * t * ((s + 1) * t + s) + 2);
 };
-easingByType[easingType_1.EasingType.OutBounce] = easingByName['outBounce'] = function (t) {
+easingByName[easingType_1.EasingType.OutBounce] = function (t) {
     if (t < (1 / 2.75)) {
         return 7.5625 * t * t;
     }
@@ -1474,16 +1740,15 @@ easingByType[easingType_1.EasingType.OutBounce] = easingByName['outBounce'] = fu
         return 7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375;
     }
 };
-easingByType[easingType_1.EasingType.InBounce] = easingByName['inBounce'] = function (t) {
-    return 1 - easingByType[easingType_1.EasingType.OutBounce](1 - t);
+easingByName[easingType_1.EasingType.InBounce] = function (t) {
+    return 1 - easingByName[easingType_1.EasingType.OutBounce](1 - t);
 };
-easingByType[easingType_1.EasingType.InOutBounce] = easingByName['inOutBounce'] = function (t) {
+easingByName[easingType_1.EasingType.InOutBounce] = function (t) {
     if (t < 0.5) {
-        return easingByType[easingType_1.EasingType.InBounce](t * 2) * 0.5;
+        return easingByName[easingType_1.EasingType.InBounce](t * 2) * 0.5;
     }
-    return easingByType[easingType_1.EasingType.OutBounce](t * 2 - 1) * 0.5 + 0.5;
+    return easingByName[easingType_1.EasingType.OutBounce](t * 2 - 1) * 0.5 + 0.5;
 };
-exports.easeTypes = easingByType;
 exports.easeNames = easingByName;
 
 

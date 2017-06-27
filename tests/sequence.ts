@@ -153,12 +153,7 @@ test('[Fatina.Sequence] Test Join', (t: Test) => {
 		ticker.Tick(0.2);
 	}
 
-	// t.equal(6, duration, 'check OnUpdate was trigger the right amount of time');
 	t.equal(1, complete, 'check both tween are executed');
-
-	// sequence.Default();
-	// t.equal(0, sequence.elapsed, 'check the sequence elapsed after Default');
-	// t.equal(0, sequence.duration, 'check the sequence duration after Default');
 
 	t.end();
 });
@@ -399,6 +394,25 @@ test('[Fatina.Sequence] Test Sequence with broken callback', (t: Test) => {
 
 	ticker.Tick(3);
 	ticker.Tick(3);
+
+	t.end();
+});
+
+test('[Fatina.Sequence] Test Reuse sequence', (t: Test) => {
+	const ticker = new Ticker();
+	ticker.Start();
+
+	let callback = 0;
+	const obj = { x: 22 };
+	const sequence = new Sequence()
+		.SetParent(ticker)
+		.AppendInterval(5)
+		.Append(new Tween(obj, ['x']).SetParent(ticker).From({ x: 0 }).To({ x: 44}, 5))
+		.AppendCallback(() => callback++)
+		.Start();
+
+	ticker.Tick(11);
+
 
 	t.end();
 });

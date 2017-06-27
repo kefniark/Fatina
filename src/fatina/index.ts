@@ -1,3 +1,4 @@
+import { FatinaPluginAnimator } from '../fatina-plugin-animator/index';
 import { Log } from './core/enum/log';
 import { IPlayable } from './core/interfaces/IPlayable';
 import { IPlugin } from './core/interfaces/IPlugin';
@@ -166,11 +167,8 @@ export function Update(timestamp: number): any {
  * @returns {ITween}
  */
 export function Tween(obj: any, properties: string[]): ITween {
-	if (!initialized) {
-		Init();
-	}
-
-	const t = new tween(obj, properties).SetLog(logLevel).SetSafe(safe).SetParent(tickerManager as ITicker);
+	const t = new tween(obj, properties);
+	AddContext(t);
 	Info(Log.Debug, '[Fatina.Manager] Tween Instantiated', t);
 	return t;
 }
@@ -182,11 +180,8 @@ export function Tween(obj: any, properties: string[]): ITween {
  * @returns {ISequence}
  */
 export function Sequence(): ISequence {
-	if (!initialized) {
-		Init();
-	}
-
-	const s = new sequence().SetLog(logLevel).SetSafe(safe).SetParent(tickerManager as ITicker);
+	const s = new sequence();
+	AddContext(s);
 	Info(Log.Debug, '[Fatina.Manager] Sequence Instantiated', s);
 	return s;
 }
@@ -199,11 +194,8 @@ export function Sequence(): ISequence {
  * @returns {IPlayable}
  */
 export function Delay(duration: number): IPlayable {
-	if (!initialized) {
-		Init();
-	}
-
-	const d = new delay(duration).SetLog(logLevel).SetSafe(safe).SetParent(tickerManager as ITicker);
+	const d = new delay(duration);
+	AddContext(d);
 	Info(Log.Debug, '[Fatina.Manager] Sequence Instantiated', d);
 	return d;
 }
@@ -218,13 +210,10 @@ export function Delay(duration: number): IPlayable {
  * @returns {IPlayable}
  */
 export function SetTimeout(fn: () => void, duration: number): IPlayable {
-	if (!initialized) {
-		Init();
-	}
-
-	const timeout = new delay(duration).SetLog(logLevel).SetSafe(safe).SetParent(tickerManager as ITicker).OnComplete(fn).Start();
+	const timeout = new delay(duration).OnComplete(fn);
+	AddContext(timeout);
 	Info(Log.Debug, '[Fatina.Manager] SetTimeout Instantiated', timeout);
-	return timeout;
+	return timeout.Start();
 }
 
 /**
@@ -237,13 +226,31 @@ export function SetTimeout(fn: () => void, duration: number): IPlayable {
  * @returns {IPlayable}
  */
 export function SetInterval(fn: () => void, duration: number): IPlayable {
+	const interval = new delay(duration).OnRestart(fn).SetLoop(-1);
+	AddContext(interval);
+	Info(Log.Debug, '[Fatina.Manager] SetInterval Instantiated', interval);
+	return interval.Start();
+}
+
+/**
+ * Private method to set common data to every object (the parent ticker, safe mode, verbose mode)
+ *
+ * @param {(IPlayable | ITween | ISequence)} obj
+ */
+function AddContext(obj: IPlayable | ITween | ISequence): void {
 	if (!initialized) {
 		Init();
 	}
 
-	const interval = new delay(duration).SetLog(logLevel).SetSafe(safe).SetParent(tickerManager as ITicker).OnRestart(fn).SetLoop(-1).Start();
-	Info(Log.Debug, '[Fatina.Manager] SetInterval Instantiated', interval);
-	return interval;
+	obj.SetParent(tickerManager as ITicker);
+
+	if (logLevel !== Log.None) {
+		obj.SetLog(logLevel);
+	}
+
+	if (!safe) {
+		obj.SetSafe(safe);
+	}
 }
 
 /**
@@ -279,6 +286,10 @@ export function LoadPlugin(newPlugin: IPlugin) {
 	newPlugin.Init(this);
 	loadedPlugins.push(newPlugin);
 	Info(Log.Debug, '[Fatina.Manager] Plugin Loaded', newPlugin.name);
+}
+
+export function GetPlugin(): IPlugin {
+	return new FatinaPluginAnimator();
 }
 
 function Info(level: Log, message: string, data?: any) {

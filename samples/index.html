@@ -24,10 +24,11 @@
                     CreateYukoCharacter();
                 });
 
+            // Animation Spritesheet
             Fatina.plugin.AnimatorManager.Register('spritesheet', (object, params) => {
                 let proxy = { index: 0 };
                 console.log('init Spritesheet Anim', params);
-                return Fatina.Tween(proxy, ['index'])
+                const tween = Fatina.Tween(proxy, ['index'])
                     .From({index: 0 })
                     .To({index: params.number - 1}, params.duration)
                     .OnStart(() => {
@@ -37,21 +38,34 @@
                         object.scale.x = Math.abs(object.scale.x) * params.direction;
                     })
                     .OnUpdate(() => object.setTexture(params.textures[proxy.index]))
-                    .SetSteps(params.number - 1)
-                    .SetLoop(-1);
+                    .SetSteps(params.number - 1);
+                if (!params.disableLoop) {
+                    tween.SetLoop(-1);
+                }
+                return tween;
             }, 'character');
 
             Fatina.plugin.AnimatorManager.Register('jump', (object, params) => {
-                console.log('init Jump Anim', params);
-                let proxy = { dy: 0 };
+                console.log('init Jump Anim', object.name, object.position, params);
                 return Fatina.Tween(object.position, ['y'])
-                    .From({ y: app.renderer.height  / 2 })
-                    .OnStart(() => console.log(object.position.y))
-                    .OnUpdate(() => console.log(object.position.y))
-                    .OnComplete(() => console.log(object.position.y))
-                    .To({y: app.renderer.height  / 2 - 150}, 400)
+                    .SetRelative(true)
+                    .To({y: - 70}, 400)
                     .SetEasing('outSine')
-                    .Yoyo(1);
+                    .Yoyo(1)
+                    .ToSequence()
+                    .Join(
+                        Fatina.Sequence().AppendCallback(() => {
+                            object.Animator.Play('jump_up').OnComplete(() => {
+                                object.Animator.Play('jump_midair').OnComplete(() => {
+                                    object.Animator.Play('jump_fall').OnComplete(() => {
+                                        object.Animator.Play('jump_landing').OnComplete(() => {
+                                            object.Animator.Play('idle');
+                                        });
+                                    });
+                                });
+                            })
+                        })
+                    );
             }, 'character');
 
             Fatina.plugin.AnimatorManager.Register('fade', (object, params) => {
@@ -69,6 +83,7 @@
 
             function CreateYukoCharacter() {
                 let yukochan = new PIXI.Sprite(PIXI.TextureCache['Yuko_Idle_1']);
+                yukochan.name = "Yuko";
                 yukochan.anchor.set(0.5);
                 yukochan.scale.x = 1.4;
                 yukochan.scale.y = 1.4;
@@ -77,44 +92,68 @@
                 app.stage.addChild(yukochan);
 
                 let anim = Fatina.plugin.AnimatorManager.AddAnimatorTo(yukochan)
-                    .AddAnimation('idle', 'spritesheet', false, 'sprite', {
+                    .AddAnimation('idle', 'spritesheet', { group: 'sprite' }, {
                         number: 4,
                         duration: 1000,
                         textures: GetTextures('Yuko_Idle_')
                     })
-                    .AddAnimation('walk_right', 'spritesheet', false, 'sprite', {
+                    .AddAnimation('walk_right', 'spritesheet', { group: 'sprite' }, {
                         direction: 1,
                         number: 6,
                         duration: 1000,
                         textures: GetTextures('Yuko_Walk_')
                     })
-                    .AddAnimation('run_right', 'spritesheet', false, 'sprite', {
+                    .AddAnimation('run_right', 'spritesheet', { group: 'sprite' }, {
                         direction: 1,
                         number: 8,
                         duration: 1000,
                         textures: GetTextures('Yuko_Run_')
                     })
-                    .AddAnimation('walk_left', 'spritesheet', false, 'sprite', {
+                    .AddAnimation('walk_left', 'spritesheet', { group: 'sprite' }, {
                         direction: -1,
                         number: 6,
                         duration: 1000,
                         textures: GetTextures('Yuko_Walk_')
                     })
-                    .AddAnimation('run_left', 'spritesheet', false, 'sprite', {
+                    .AddAnimation('run_left', 'spritesheet', { group: 'sprite' }, {
                         direction: -1,
                         number: 8,
                         duration: 1000,
                         textures: GetTextures('Yuko_Run_')
                     })
-                    .AddAnimation('fade_in', 'fade', true, 'alpha', {
+                    .AddAnimation('jump_fall', 'spritesheet', { group: 'sprite', unstoppable: true }, {
+                        disableLoop: true,
+                        number: 3,
+                        duration: 240,
+                        textures: GetTextures('Yuko_Jump_Fall_')
+                    })
+                    .AddAnimation('jump_landing', 'spritesheet', { group: 'sprite', unstoppable: true }, {
+                        disableLoop: true,
+                        number: 1,
+                        duration: 80,
+                        textures: GetTextures('Yuko_Jump_Landing')
+                    })
+                    .AddAnimation('jump_midair', 'spritesheet', { group: 'sprite', unstoppable: true }, {
+                        disableLoop: true,
+                        number: 4,
+                        duration: 320,
+                        textures: GetTextures('Yuko_Jump_MidAir_')
+                    })
+                    .AddAnimation('jump_up', 'spritesheet', { group: 'sprite', unstoppable: true }, {
+                        disableLoop: true,
+                        number: 2,
+                        duration: 160,
+                        textures: GetTextures('Yuko_Jump_Up_')
+                    })
+                    .AddAnimation('fade_in', 'fade', { group: 'alpha', finalValue: true }, {
                         value: 1,
                         duration: 800
                     })
-                    .AddAnimation('fade_out', 'fade', true, 'alpha', {
+                    .AddAnimation('fade_out', 'fade', { group: 'alpha', finalValue: true }, {
                         value: 0,
                         duration: 800
                     })
-                    .AddAnimation('jump', 'jump', false, 'move');
+                    .AddAnimation('jump', 'jump', { group: 'move', unstoppable: true });
 
                 anim.Play('idle');
                 window.yuko = anim;
@@ -122,6 +161,7 @@
 
             function CreateUnityCharacter() {
                 let tokochan = new PIXI.Sprite(PIXI.TextureCache['Unitychan_Idle_1']);
+                tokochan.name = "Toko";
                 tokochan.anchor.set(0.5);
                 tokochan.scale.x = 1.4;
                 tokochan.scale.y = 1.4;
@@ -130,37 +170,37 @@
                 app.stage.addChild(tokochan);
 
                 let anim = Fatina.plugin.AnimatorManager.AddAnimatorTo(tokochan)
-                    .AddAnimation('idle', 'spritesheet', false, 'sprite', {
+                    .AddAnimation('idle', 'spritesheet', { group: 'sprite' }, {
                         number: 4,
                         duration: 1000,
                         textures: GetTextures('Unitychan_Idle_')
                     })
-                    .AddAnimation('walk_right', 'spritesheet', false, 'sprite', {
+                    .AddAnimation('walk_right', 'spritesheet', { group: 'sprite' }, {
                         direction: 1,
                         number: 14,
                         duration: 2000,
                         textures: GetTextures('Unitychan_Walk_')
                     })
-                    .AddAnimation('run_right', 'spritesheet', false, 'sprite', {
+                    .AddAnimation('run_right', 'spritesheet', { group: 'sprite' }, {
                         direction: 1,
                         number: 18,
                         duration: 2000,
                         textures: GetTextures('Unitychan_Run_')
                     })
-                    .AddAnimation('walk_left', 'spritesheet', false, 'sprite', {
+                    .AddAnimation('walk_left', 'spritesheet', { group: 'sprite' }, {
                         direction: -1,
                         number: 14,
                         duration: 2000,
                         textures: GetTextures('Unitychan_Walk_')
                     })
-                    .AddAnimation('run_left', 'spritesheet', false, 'sprite', {
+                    .AddAnimation('run_left', 'spritesheet', { group: 'sprite' }, {
                         direction: -1,
                         number: 18,
                         duration: 2000,
                         textures: GetTextures('Unitychan_Run_')
                     });
 
-                anim.Play('idle');
+                // anim.Play('idle');
                 window.unity = anim;
             }
         </script>
