@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>Helpers Plugin</title>
+  <meta property="og:title" content="Helpers Plugin" />
+  <meta name="twitter:title" content="Helpers Plugin" />
+  <meta name="description" content="Description This plugin is a set of helpers to provide a better integration of Fatina with javascript games library like PixiJs or Phaser. It provides helpers to animate:
+ Position: Move, Shake, PunchPosition Rotation: Rotate, PunchRotate Scale: Scale, PunchScale Alpha: Fade Color: Color, PunchColor  This make the code smaller and easier to read
+// normal fatina tween fatina.Tween(sprite.position, [&#39;x&#39;]).To({&#39;x&#39;: 50 }, 1000); // same operation with the helper sprite.">
+  <meta property="og:description" content="Description This plugin is a set of helpers to provide a better integration of Fatina with javascript games library like PixiJs or Phaser. It provides helpers to animate:
+ Position: Move, Shake, PunchPosition Rotation: Rotate, PunchRotate Scale: Scale, PunchScale Alpha: Fade Color: Color, PunchColor  This make the code smaller and easier to read
+// normal fatina tween fatina.Tween(sprite.position, [&#39;x&#39;]).To({&#39;x&#39;: 50 }, 1000); // same operation with the helper sprite.">
+  <meta name="twitter:description" content="Description This plugin is a set of helpers to provide a better integration of Fatina with javascript games library like PixiJs or Phaser. It provides helpers to animate:
+ Position: Move, Shake, …">
+  <meta name="author" content="Kevin Destrem"/>
+  <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
+  <meta name="twitter:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@kefniark" />
+  <meta name="twitter:creator" content="@kefniark" />
+  <meta property="og:url" content="https://kefniark.github.io/Fatina/plugins/helpers/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Fatina" />
+
+  <meta name="generator" content="Hugo 0.20.7" />
+  <link rel="canonical" href="https://kefniark.github.io/Fatina/plugins/helpers/" />
+  <link rel="alternate" href="https://kefniark.github.io/Fatina/index.xml" type="application/rss+xml" title="Fatina">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/main.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/pygment_highlights.css" />
+  <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/highlight.min.css" />
+  <script type="text/javascript" src="https://kefniark.github.io/Fatina/fatina.min.js"></script>
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://kefniark.github.io/Fatina/">Fatina</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Getting Started" href="/Fatina/basics/download/">Getting Started</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">Samples</a>
+              <div class="navlinks-children">
+                
+                  <a href="/Fatina/samples/generic/">Basics</a>
+                
+                  <a href="/Fatina/samples/advanced/">Advanced</a>
+                
+                  <a href="/Fatina/samples/game/">Games</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">API</a>
+              <div class="navlinks-children">
+                
+                  <a href="/Fatina/api/basic/">Fatina</a>
+                
+                  <a href="/Fatina/api/tween/">Tween</a>
+                
+                  <a href="/Fatina/api/sequence/">Sequence</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">Plugins</a>
+              <div class="navlinks-children">
+                
+                  <a href="/Fatina/plugins/helpers/">Helpers</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Benchmark" href="/Fatina/basics/benchmark/">Benchmark</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About" href="/Fatina/basics/about/">About</a>
+            </li>
+          
+        
+
+        
+      </ul>
+    </div>
+
+    <div class="avatar-container">
+      <div class="avatar-img-border">
+        
+          <a title="Fatina" href="https://kefniark.github.io/Fatina/">
+            <img class="avatar-img" src="https://kefniark.github.io/Fatina/img/avatar-icon.png" alt="Fatina" />
+          </a>
+        
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+
+
+    
+  
+  
+  
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="plugins-heading">
+              <h1>Helpers Plugin</h1>
+                
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        
+
+<h3 id="description">Description</h3>
+
+<p>This plugin is a set of helpers to provide a better integration of Fatina with javascript games library like <strong>PixiJs</strong> or <strong>Phaser</strong>.  It provides helpers to animate:</p>
+
+<ul>
+<li><strong>Position</strong>: Move, Shake, PunchPosition</li>
+<li><strong>Rotation</strong>: Rotate, PunchRotate</li>
+<li><strong>Scale</strong>: Scale, PunchScale</li>
+<li><strong>Alpha</strong>: Fade</li>
+<li><strong>Color</strong>: Color, PunchColor</li>
+</ul>
+
+<p>This make the code smaller and easier to read</p>
+
+<pre><code class="language-js">// normal fatina tween
+fatina.Tween(sprite.position, ['x']).To({'x': 50 }, 1000);
+
+// same operation with the helper
+sprite.MoveXTo(50, 1000);
+</code></pre>
+
+<p>This also provides conversion for angle and colors</p>
+
+<pre><code class="language-js">// degree rotation (default rotation are radiant)
+sprite.RotateDegTo(90, 200);
+
+// give a red tint to the sprite (most engine works with hex or rgba number array)
+sprite.ColorRGBTo(&quot;#FF0000&quot;, 200);
+</code></pre>
+
+<div style="text-align: center; margin-top: 30px;">
+    <a class="btn btn-primary" href="https://github.com/kefniark/Fatina-Plugin-Helpers/" target="_blank">Github</a>
+    <a class="btn btn-info" href="https://github.com/kefniark/Fatina-Plugin-Helpers/releases" target="_blank">Download</a>
+    <a class="btn btn-success" href="https://www.npmjs.com/package/fatina-plugin-helpers" target="_blank">NPM</a>
+    <a class="btn btn-success" href="#api">API</a>
+    <a class="btn btn-info" href="#samples">Samples</a>
+</div>
+
+<p><br></p>
+
+<h3 id="1-usage">1. Usage</h3>
+
+<p>The installation process is explained in the <a href="https://github.com/kefniark/Fatina-Plugin-Helpers">README</a>.</p>
+
+<p>After setup, you can use this plugin on any object:</p>
+
+<pre><code class="language-js">Fatina.plugin.AddHelpers(obj);
+</code></pre>
+
+<h3 id="samples">2. Example with Phaser</h3>
+
+<pre><code class="language-js">// require tina
+let fatina = require('fatina');
+let fatinaHelpers = require('fatina-plugin-helpers');
+
+// initialize tina
+fatina.Init();
+fatina.LoadPlugin(fatinaHelpers.Get());
+
+...
+
+// let's create a phaser sprite
+var test = new Phaser.Sprite(this.game, 2, 80, 'hudBg');
+
+// use the plugin on this sprite
+fatina.plugin.AddHelpers(test);
+
+// use one helper function to move horizontaly the sprite to the position x = 50 in 1s.
+test.MoveXTo(50, 1000);
+</code></pre>
+
+<h3 id="3-advanced">3. Advanced</h3>
+
+<p>And all those helpers return <strong>Tweens</strong> or <strong>Sequence</strong>.
+So you can interact and modify them</p>
+
+<pre><code class="language-js">// Create a tween
+var tween = test.MoveXTo(50, 1000);
+
+// you can easily get callback
+tween.OnComplete(() =&gt; console.log('this animation finished'));
+
+// or controls
+tween.Pause();
+
+// and by turning off the autostart parameter, you can even change the tween configuration
+test.MoveXTo(50, 1000, false)
+    .From({x: 0})
+    .Yoyo(1)
+    .OnComplete(() =&gt; console.log('the tween finished'))
+    .ToSequence() // convert to a sequence
+    .PrependInterval(1000)
+    .Append(test.MoveYTo(50, 1000, false))
+    .OnComplete(() =&gt; console.log('the sequence finished'))
+    .Start();
+</code></pre>
+
+<h3 id="api">4. API</h3>
+
+<h3 id="position">Position</h3>
+
+<p>Following methods use <code>.position.x</code> and <code>.position.y</code></p>
+
+<ul>
+<li><strong>MoveTo</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>): Move to an absolute position</li>
+<li><strong>MoveXTo</strong>(x: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>MoveYTo</strong>(y: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>MoveToRel</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>): Move to a relative position</li>
+<li><strong>MoveXToRel</strong>(x: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>MoveYToRel</strong>(y: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>PunchPosition</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>): Oscillate around the current position</li>
+<li><strong>Shake</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>): Shake around the current position</li>
+</ul>
+
+<h3 id="rotation">Rotation</h3>
+
+<p>Following methods use <code>.rotation</code></p>
+
+<ul>
+<li><strong>RotateTo</strong>(rad: <code>number</code>, duration: <code>number</code>) : Rotate to a specific angle in radiant (to PI/2)</li>
+<li><strong>RotateToRel</strong>(rad: <code>number</code>, duration: <code>number</code>) : Rotate by a relative radiant angle (+PI/2)</li>
+<li><strong>RotateDegTo</strong>(deg: <code>number</code>, duration: <code>number</code>) : Rotate to a specific angle in degrees (to 90°)</li>
+<li><strong>RotateDegToRel</strong>(deg: <code>number</code>, duration: <code>number</code>) : Rotate to a specific angle in degrees (+90°)</li>
+<li><strong>PunchRotate</strong>(rad: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>)</li>
+</ul>
+
+<h3 id="alpha">Alpha</h3>
+
+<p>Following method use <code>.alpha</code></p>
+
+<ul>
+<li><strong>FadeTo</strong>(alpha, duration: <code>number</code>) : Alpha is a float between 0 and 1 (1: fadeIn, 0: fadeOut)</li>
+</ul>
+
+<h3 id="scale">Scale</h3>
+
+<p>Following methods use <code>.scale.x</code> and <code>.scale.y</code></p>
+
+<ul>
+<li><strong>ScaleTo</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>) : Scale to a specified value</li>
+<li><strong>ScaleXTo</strong>(x: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>ScaleYTo</strong>(y: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>ScaleToRel</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>ScaleXToRel</strong>(x: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>ScaleYToRel</strong>(y: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>PunchScale</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>)</li>
+</ul>
+
+<h3 id="color-tint">Color / Tint</h3>
+
+<p>Following methods use <code>.tint</code> or <code>.hue</code> (the color API are slightly different between libs)</p>
+
+<ul>
+<li><strong>ColorTo</strong>(r: <code>number</code>, g: <code>number</code>, b: <code>number</code>, duration: <code>number</code>): R,G,B are float between 0-1</li>
+<li><strong>ColorToRel</strong>(r: <code>number</code>, g: <code>number</code>, b: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>ColorRGBTo</strong>(color: <code>string</code>, duration: <code>number</code>): color is a string representation &lsquo;#FFFFFF&rsquo;</li>
+<li><strong>ColorRGBToRel</strong>(color: <code>string</code>, duration: <code>number</code>)</li>
+<li><strong>PunchColor</strong>(r: <code>number</code>, g: <code>number</code>, b: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>)</li>
+</ul>
+
+      </article>
+
+      
+        
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="https://github.com/kefniark/fatina" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://twitter.com/kefniark" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+
+          
+        </ul>
+
+        <p class="credits copyright text-muted">
+          Kevin Destrem
+          &nbsp;&bull;&nbsp;
+          2017
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://kefniark.github.io/Fatina/">Fatina</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.20.7</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://kefniark.github.io/Fatina/js/main.js"></script>
+<script src="https://kefniark.github.io/Fatina/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> renderMathInElement(document.body); </script>
+
+
+
+
+
+  </body>
+</html>
+

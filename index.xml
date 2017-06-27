@@ -61,6 +61,17 @@ Golden Stars Use Modifier for curve and gravity    var app4 = new PIXI.</descrip
     </item>
     
     <item>
+      <title>Helpers Plugin</title>
+      <link>https://kefniark.github.io/Fatina/plugins/helpers/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>https://kefniark.github.io/Fatina/plugins/helpers/</guid>
+      <description>Description This plugin is a set of helpers to provide a better integration of Fatina with javascript games library like PixiJs or Phaser. It provides helpers to animate:
+ Position: Move, Shake, PunchPosition Rotation: Rotate, PunchRotate Scale: Scale, PunchScale Alpha: Fade Color: Color, PunchColor  This make the code smaller and easier to read
+// normal fatina tween fatina.Tween(sprite.position, [&#39;x&#39;]).To({&#39;x&#39;: 50 }, 1000); // same operation with the helper sprite.</description>
+    </item>
+    
+    <item>
       <title>Tween API</title>
       <link>https://kefniark.github.io/Fatina/api/tween/</link>
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>

@@ -19,9 +19,11 @@ The main inspiration is the <b>C#</b> library [DOTween](http://dotween.demigiant
 ## Fatina Features
 
 * **Logical and easy to use API** : An API made to boost efficiency, intuitiveness and ease of use.
+* **Plugin system** to add or extend features
 * **Lightweight** no extra dependencies and a minified file < 25KB
-* **Speed and efficiency** : Not only very fast, but also very efficient
-* **Open source & Easy to read**
+* **Fast and efficient**
+* **Free & Open source**
+* **Good code coverage and lot of tests**
 
 <div style="text-align: center; margin-top: 30px;">
     <a class="btn btn-primary" href="https://github.com/kefniark/Fatina/" target="_blank">Github</a>

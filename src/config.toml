@@ -112,11 +112,23 @@ theme = "beautifulhugo"
     weight = 6
 
 [[menu.main]]
+    name = "Plugins"
+    identifier = "plugins"
+    url = "plugins/helpers/"
+    weight = 7
+
+[[menu.main]]
+    name = "Helpers"
+    parent = "plugins"
+    url = "plugins/helpers/"
+    weight = 8
+
+[[menu.main]]
     name = "Benchmark"
     url = "basics/benchmark/"
-    weight = 7
+    weight = 9
 
 [[menu.main]]
     name = "About"
     url = "basics/about/"
-    weight = 8
+    weight = 10
