@@ -1,19 +1,27 @@
-import { Sequence as sequence } from './tweens/sequence';
-import { Tween as tween } from './tweens/tween';
-import { Delay as delay } from './tweens/delay';
-import { Ticker as ticker } from './ticker';
-import { ITween } from './core/interfaces/ITween';
+import { Log } from './core/enum/log';
+import { IPlayable } from './core/interfaces/IPlayable';
+import { IPlugin } from './core/interfaces/IPlugin';
 import { ISequence } from './core/interfaces/ISequence';
 import { ITicker } from './core/interfaces/ITicker';
+import { ITween } from './core/interfaces/ITween';
 import { EasingType } from './easing/easingType';
-import { IPlayable } from './core/interfaces/IPlayable';
+import { Ticker as ticker } from './ticker';
+import { Delay as delay } from './tweens/delay';
+import { Sequence as sequence } from './tweens/sequence';
+import { Tween as tween } from './tweens/tween';
 
 let tickerManager: ticker;
 let initialized = false;
 let isFirstUpdate = true;
 let lastFrame: any;
 let lastTime = 0;
-let tickers: {[id: string]: ITicker } = {};
+let logLevel = Log.None;
+let safe = true;
+
+const loadedPlugins: IPlugin[] = [];
+
+// Area for plugins to add helpers / dynamic method
+export let plugin: any = {};
 
 // Expose the easing enum
 export { EasingType as Easing };
@@ -97,6 +105,26 @@ export function Resume(): void {
 }
 
 /**
+ * This method is used to change the log level
+ *
+ * @export
+ * @param {Log} level
+ */
+export function SetLog(level: Log) {
+	logLevel = level;
+}
+
+/**
+ * This method is used to enable / disable the callback try/catch
+ *
+ * @export
+ * @param {boolean} isSafe
+ */
+export function SetSafe(isSafe: boolean) {
+	safe = isSafe;
+}
+
+/**
  * This method kill the main ticker, the pool of tween and stop any requestAnimationFrame
  *
  * @export
@@ -138,11 +166,10 @@ export function Update(timestamp: number): any {
  * @returns {ITween}
  */
 export function Tween(obj: any, properties: string[]): ITween {
-	if (!initialized) {
-		Init();
-	}
-
-	return new tween(obj, properties).SetParent(tickerManager as ITicker);
+	const t = new tween(obj, properties);
+	AddContext(t);
+	Info(Log.Debug, '[Fatina.Manager] Tween Instantiated', t);
+	return t;
 }
 
 /**
@@ -152,11 +179,10 @@ export function Tween(obj: any, properties: string[]): ITween {
  * @returns {ISequence}
  */
 export function Sequence(): ISequence {
-	if (!initialized) {
-		Init();
-	}
-
-	return new sequence().SetParent(tickerManager as ITicker);
+	const s = new sequence();
+	AddContext(s);
+	Info(Log.Debug, '[Fatina.Manager] Sequence Instantiated', s);
+	return s;
 }
 
 /**
@@ -167,11 +193,10 @@ export function Sequence(): ISequence {
  * @returns {IPlayable}
  */
 export function Delay(duration: number): IPlayable {
-	if (!initialized) {
-		Init();
-	}
-
-	return new delay(duration).SetParent(tickerManager as ITicker);
+	const d = new delay(duration);
+	AddContext(d);
+	Info(Log.Debug, '[Fatina.Manager] Sequence Instantiated', d);
+	return d;
 }
 
 /**
@@ -184,11 +209,10 @@ export function Delay(duration: number): IPlayable {
  * @returns {IPlayable}
  */
 export function SetTimeout(fn: () => void, duration: number): IPlayable {
-	if (!initialized) {
-		Init();
-	}
-
-	return new delay(duration).SetParent(tickerManager as ITicker).OnComplete(fn).Start();
+	const timeout = new delay(duration).OnComplete(fn);
+	AddContext(timeout);
+	Info(Log.Debug, '[Fatina.Manager] SetTimeout Instantiated', timeout);
+	return timeout.Start();
 }
 
 /**
@@ -201,11 +225,31 @@ export function SetTimeout(fn: () => void, duration: number): IPlayable {
  * @returns {IPlayable}
  */
 export function SetInterval(fn: () => void, duration: number): IPlayable {
+	const interval = new delay(duration).OnRestart(fn).SetLoop(-1);
+	AddContext(interval);
+	Info(Log.Debug, '[Fatina.Manager] SetInterval Instantiated', interval);
+	return interval.Start();
+}
+
+/**
+ * Private method to set common data to every object (the parent ticker, safe mode, verbose mode)
+ *
+ * @param {(IPlayable | ITween | ISequence)} obj
+ */
+function AddContext(obj: IPlayable | ITween | ISequence): void {
 	if (!initialized) {
 		Init();
 	}
 
-	return new delay(duration).SetParent(tickerManager as ITicker).OnRestart(fn).SetLoop(-1).Start();
+	obj.SetParent(tickerManager as ITicker);
+
+	if (logLevel !== Log.None) {
+		obj.SetLog(logLevel);
+	}
+
+	if (!safe) {
+		obj.SetSafe(safe);
+	}
 }
 
 /**
@@ -214,25 +258,44 @@ export function SetInterval(fn: () => void, duration: number): IPlayable {
  *
  * @export
  * @param {string} name
- * @returns {(ITicker | undefined)}
+ * @returns {ITicker}
  */
-export function Ticker(name: string): ITicker {
+export function Ticker(): ITicker {
 	if (!initialized) {
 		Init();
 	}
 
-	// Create a ticker with that name
-	if (!(name in tickers)) {
-		let tick = new ticker();
-		let handler = tick.Tick.bind(tick);
-		tick.SetParent(tickerManager, handler);
-		tickerManager.AddTickListener(handler);
-		tick.Start();
+	const tick = new ticker();
+	const handler = tick.Tick.bind(tick);
+	tick.SetParent(tickerManager, handler);
+	tickerManager.AddTickListener(handler);
+	tick.Start();
 
-		tickers[name] = tick;
+	Info(Log.Debug, '[Fatina.Manager] Ticker Instantiated', tick);
+	return tick;
+}
+
+/**
+ * Initialize a plugin by passing fatina object to it
+ *
+ * @export
+ * @param {IPlugin} newPlugin
+ */
+export function LoadPlugin(newPlugin: IPlugin) {
+	newPlugin.Init(this);
+	loadedPlugins.push(newPlugin);
+	Info(Log.Debug, '[Fatina.Manager] Plugin Loaded', newPlugin.name);
+}
+
+function Info(level: Log, message: string, data?: any) {
+	if (level > logLevel) {
+		return;
 	}
-
-	return tickers[name];
+	if (data) {
+		console.log(message, data);
+	} else {
+		console.log(message);
+	}
 }
 
 /**

@@ -1,10 +1,11 @@
 import * as test from 'tape';
-let fatina = require('../src/fatina/index');
+import { Test } from 'tape';
+import * as fatina from '../src/fatina/index';
 
-fatina.Init(false, 2);
+fatina.Init(false);
 
-test('[Fatina.Manager] Update manually', function (t: any) {
-	let previousTime = fatina.time;
+test('[Fatina.Manager] Update manually', (t: Test) => {
+	const previousTime = fatina.time;
 	fatina.Update(1);
 
 	t.equal(previousTime + 1, fatina.time, 'Check the global time was properly updated');
@@ -13,9 +14,9 @@ test('[Fatina.Manager] Update manually', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Manager] Set timescale', function (t: any) {
-	let previousTime = fatina.time;
-	let previousElapsed = fatina.Elapsed();
+test('[Fatina.Manager] Set timescale', (t: Test) => {
+	const previousTime = fatina.time;
+	const previousElapsed = fatina.Elapsed();
 
 	fatina.SetTimescale(0.5);
 	fatina.Update(1);
@@ -27,9 +28,9 @@ test('[Fatina.Manager] Set timescale', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Manager] Pause / Resume', function (t: any) {
-	let previousTime = fatina.time;
-	let previousElapsed = fatina.Elapsed();
+test('[Fatina.Manager] Pause / Resume', (t: Test) => {
+	const previousTime = fatina.time;
+	const previousElapsed = fatina.Elapsed();
 
 	fatina.Pause();
 	fatina.Update(1);
@@ -46,9 +47,9 @@ test('[Fatina.Manager] Pause / Resume', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Manager] Create tween', function (t: any) {
-	let obj = { x: 0 };
-	let tween = fatina.Tween(obj, ['x']).To({ x: 1 }, 1);
+test('[Fatina.Manager] Create tween', (t: Test) => {
+	const obj = { x: 0 };
+	const tween = fatina.Tween(obj, ['x']).To({ x: 1 }, 1);
 	tween.Start();
 
 	t.equal(0, obj.x, 'check the tween is not starting magically');
@@ -63,9 +64,9 @@ test('[Fatina.Manager] Create tween', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Manager] Create sequence', function (t: any) {
-	let obj = { x: 0 };
-	let sequence = fatina.Sequence();
+test('[Fatina.Manager] Create sequence', (t: Test) => {
+	const obj = { x: 0 };
+	const sequence = fatina.Sequence();
 	sequence.AppendInterval(1);
 	sequence.Append(fatina.Tween(obj, ['x']).To({ x: 1 }, 1));
 	sequence.Start();
@@ -79,14 +80,14 @@ test('[Fatina.Manager] Create sequence', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Manager] Create Delay', function (t: any) {
+test('[Fatina.Manager] Create Delay', (t: Test) => {
 	let started = 0;
 	let updated = 0;
 	let killed = 0;
 	let completed = 0;
 	let elapsed = 0;
 
-	let delay = fatina.Delay(20)
+	const delay = fatina.Delay(20)
 		.OnStart(() => {})
 		.OnStart(() => started++)
 		.OnUpdate(() => {})
@@ -120,9 +121,9 @@ test('[Fatina.Manager] Create Delay', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Manager] Use SetTimeout', function (t: any) {
+test('[Fatina.Manager] Use SetTimeout', (t: Test) => {
 	let called = 0;
-	fatina.SetTimeout(function() { called++; }, 10);
+	fatina.SetTimeout(() => called++, 10);
 
 	fatina.Update(6);
 	t.equal(0, called);
@@ -133,9 +134,9 @@ test('[Fatina.Manager] Use SetTimeout', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Manager] Use SetInterval', function (t: any) {
+test('[Fatina.Manager] Use SetInterval', (t: Test) => {
 	let called = 0;
-	fatina.SetInterval(function() { called++; }, 2);
+	fatina.SetInterval(() => called++, 2);
 
 	fatina.Update(1);
 	t.equal(0, called);
@@ -149,13 +150,14 @@ test('[Fatina.Manager] Use SetInterval', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Manager] Ticker Helpers', function (t: any) {
-	let ticker = fatina.MainTicker();
+test('[Fatina.Manager] Ticker Helpers', (t: Test) => {
+	const ticker = fatina.MainTicker();
 
 	ticker.Start();
 
 	t.ok(ticker.IsRunning());
 	t.notOk(ticker.IsFinished());
+	t.notOk(ticker.IsIdle());
 	t.notOk(ticker.IsPaused());
 
 	fatina.Pause();
@@ -171,17 +173,16 @@ test('[Fatina.Manager] Ticker Helpers', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Manager] Create ticker', function (t: any) {
-	let obj = { x: 0, y: 0, z: 0 };
-	let gameTicker = fatina.Ticker('game');
-	let uiTicker = fatina.Ticker('ui');
+test('[Fatina.Manager] Create ticker', (t: Test) => {
+	const obj = { x: 0, y: 0, z: 0 };
+	const gameTicker = fatina.Ticker();
+	const uiTicker = fatina.Ticker();
 
 	fatina.Tween(obj, ['x']).SetParent(gameTicker).To({x: 5}, 5).Start();
 	fatina.Tween(obj, ['y']).SetParent(uiTicker).To({y: 5}, 5).Start();
 	fatina.Tween(obj, ['z']).To({z: 5}, 5).Start();
 
 	t.notEqual(undefined, gameTicker, 'check a ticker is properly created');
-	t.equal(gameTicker, fatina.Ticker('game'), 'check the same ticker is returned when the same name is used twice');
 
 	fatina.Update(1);
 	t.equal(1, obj.x, 'check the game ticker runs');
@@ -194,7 +195,7 @@ test('[Fatina.Manager] Create ticker', function (t: any) {
 
 	uiTicker.AddTickListener(() => {});
 	uiTicker.RemoveTickListener(() => {});
-	uiTicker.Remove(undefined);
+	uiTicker.RemoveTickListener(undefined as any);
 
 	fatina.Update(1);
 	t.equal(2, obj.x, 'check the game ticker runs');

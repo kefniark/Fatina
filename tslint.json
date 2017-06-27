@@ -1,4 +1,5 @@
 {
+	"extends": "tslint:recommended",
 	"rules": {
 		"class-name": true,
 		"interface-name": [
@@ -11,7 +12,9 @@
 			"check-format"
 		],
 		"jsdoc-format": true,
-		"no-consecutive-blank-lines": [ true ],
+		"no-consecutive-blank-lines": [
+			true
+		],
 		"comment-format": [
 			true,
 			"check-space"
@@ -47,12 +50,23 @@
 		"no-duplicate-variable": true,
 		"no-empty": false,
 		"no-eval": true,
-		"no-inferrable-types": [true],
-		"no-unused-variable": [true, "allow-new"],
+		"no-inferrable-types": [
+			true
+		],
+		"no-unused-variable": [
+			true,
+			"allow-new"
+		],
 		"no-shadowed-variable": true,
 		"no-string-literal": false,
 		"no-switch-case-fall-through": true,
 		"no-trailing-whitespace": true,
+		"trailing-comma": [
+			true, {
+				"multiline": "never",
+				"singleline": "never"
+			}
+		],
 		"no-unused-expression": true,
 		"no-var-keyword": true,
 		"object-literal-sort-keys": false,
@@ -91,6 +105,9 @@
 			"check-operator",
 			"check-separator",
 			"check-type"
-		]
+		],
+		"prefer-for-of": false,
+		"callable-types": false,
+		"array-type": [true, "array"]
 	}
 }

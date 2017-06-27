@@ -1,5 +1,5 @@
-import { BaseTween } from './baseTween';
 import { IPlayable } from '../core/interfaces/IPlayable';
+import { BaseTween } from './baseTween';
 
 /**
  * Fake tween used to append or join callback in a sequence

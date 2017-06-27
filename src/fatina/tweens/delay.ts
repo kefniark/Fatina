@@ -1,5 +1,5 @@
-import { BaseTween } from './baseTween';
 import { IPlayable } from '../core/interfaces/IPlayable';
+import { BaseTween } from './baseTween';
 
 /**
  * Fake tween used to delay other tweens in a sequence
@@ -23,7 +23,7 @@ export class Delay extends BaseTween<Delay> implements IPlayable {
 
 		while (this.remainsDt > 0) {
 			this.elapsed += this.remainsDt;
-			let progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
+			const progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
 			this.EmitEvent(this.eventUpdate, [this.remainsDt, progress]);
 
 			if (this.elapsed < this.duration) {
@@ -36,7 +36,6 @@ export class Delay extends BaseTween<Delay> implements IPlayable {
 				this.Complete();
 				return;
 			}
-
 			this.ResetAndStart(0);
 		}
 	}

@@ -1,6 +1,6 @@
-import { ITicker } from './core/interfaces/ITicker';
 import { State } from './core/enum/state';
 import { EventList } from './core/eventList';
+import { ITicker } from './core/interfaces/ITicker';
 
 /**
  * Main Fatina Ticker
@@ -19,10 +19,10 @@ export class Ticker extends EventList implements ITicker {
 	private update = 0;
 	private eventToAdd: { (dt: number): void }[] = [];
 	private eventToRemove: { (dt: number): void }[] = [];
-	public tick: {(dt: number): void} | undefined;
+	public tick: (dt: number) => void | undefined;
 	private parent: ITicker;
 
-	public SetParent(parent: ITicker, tick: {(dt: number): void}) {
+	public SetParent(parent: ITicker, tick: (dt: number) => void) {
 		this.tick = tick;
 		this.parent = parent;
 	}
@@ -58,6 +58,25 @@ export class Ticker extends EventList implements ITicker {
 	 */
 	public RemoveTickListener(cb: (dt: number) => void): void {
 		this.eventToRemove.push(cb);
+	}
+
+	/**
+	 * Internal method used to cancel a stop (restart in the same frame)
+	 *
+	 * @param {(dt: number) => void} cb
+	 *
+	 * @memberOf Ticker
+	 */
+	public CheckTickListener(cb: (dt: number) => void): boolean {
+		let found = false;
+		while (true) {
+			const index = this.eventToRemove.indexOf(cb);
+			if (index === -1) {
+				return found;
+			}
+			this.eventToRemove.splice(index, 1);
+			found = true;
+		}
 	}
 
 	/**
@@ -99,7 +118,7 @@ export class Ticker extends EventList implements ITicker {
 
 		this.UpdateListener();
 
-		let localDt = dt * this.timescale;
+		const localDt = dt * this.timescale;
 		for (let tick: any = this.first; tick; tick = tick.node_next) {
 			tick(localDt);
 		}
@@ -145,6 +164,10 @@ export class Ticker extends EventList implements ITicker {
 
 	public Reset(): void {
 		this.state = State.Idle;
+	}
+
+	public IsIdle(): boolean {
+		return this.state === State.Idle;
 	}
 
 	public IsRunning(): boolean {

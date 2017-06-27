@@ -1,18 +1,20 @@
 import * as test from 'tape';
-import { Tween } from '../src/fatina/tweens/tween';
-import { ITween } from '../src/fatina/core/interfaces/ITween';
-import { Ticker } from '../src/fatina/ticker';
+import { Test } from 'tape';
 import { State } from '../src/fatina/core/enum/state';
+import { ITween } from '../src/fatina/core/interfaces/ITween';
+import { Easing } from '../src/fatina/index';
+import { Ticker } from '../src/fatina/ticker';
+import { Tween } from '../src/fatina/tweens/tween';
 
-test('[Fatina.Tween] Get tween data', function (t: any) {
-	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
-	let properties = [ 'x', 'y' ];
-	let dest = { x: 44, y: 44 };
+test('[Fatina.Tween] Get tween data', (t: Test) => {
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+	const properties = [ 'x', 'y' ];
+	const dest = { x: 44, y: 44 };
 
-	let ticker = new Ticker();
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let tween = new Tween(obj, properties)
+	const tween = new Tween(obj, properties)
 		.To(dest, 10)
 		.SetParent(ticker);
 
@@ -35,15 +37,15 @@ test('[Fatina.Tween] Get tween data', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Create a basic tween', function (t: any) {
-	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
-	let properties = [ 'x', 'y' ];
-	let dest = { x: 44, y: 44 };
+test('[Fatina.Tween] Create a basic tween', (t: Test) => {
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+	const properties = [ 'x', 'y' ];
+	const dest = { x: 44, y: 44 };
 
-	let ticker = new Ticker();
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let tween = new Tween(obj, properties)
+	const tween = new Tween(obj, properties)
 		.To(dest, 10)
 		.SetParent(ticker);
 
@@ -67,14 +69,14 @@ test('[Fatina.Tween] Create a basic tween', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Test Tween From property', function (t: any) {
-	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
-	let properties = [ 'x', 'y' ];
-	let dest = { x: 44, y: 44 };
+test('[Fatina.Tween] Test Tween From property', (t: Test) => {
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+	const properties = [ 'x', 'y' ];
+	const dest = { x: 44, y: 44 };
 
 	let startx = 0;
 	let starty = 0;
-	let ticker = new Ticker();
+	const ticker = new Ticker();
 	ticker.Start();
 	new Tween(obj, properties)
 		.From({x: 1, y: 2})
@@ -95,15 +97,15 @@ test('[Fatina.Tween] Test Tween From property', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Test Tween Relative property', function (t: any) {
-	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
-	let properties = [ 'x', 'y' ];
-	let dest = { x: 44, y: 44 };
+test('[Fatina.Tween] Test Tween Relative property', (t: Test) => {
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+	const properties = [ 'x', 'y' ];
+	const dest = { x: 44, y: 44 };
 
 	let startx = 0;
 	let starty = 0;
 
-	let ticker = new Ticker();
+	const ticker = new Ticker();
 	ticker.Start();
 
 	new Tween(obj, properties)
@@ -125,15 +127,15 @@ test('[Fatina.Tween] Test Tween Relative property', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Test Tween with a undefined object', function (t: any) {
-	let obj: any = undefined;
-	let properties = [ 'x', 'y' ];
-	let dest = { x: 44, y: 44 };
+test('[Fatina.Tween] Test Tween with a undefined object', (t: Test) => {
+	const obj: any = undefined;
+	const properties = [ 'x', 'y' ];
+	const dest = { x: 44, y: 44 };
 
-	let ticker = new Ticker();
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let tween = new Tween(obj, properties)
+	const tween = new Tween(obj, properties)
 		.To(dest, 5)
 		.SetParent(ticker);
 
@@ -141,15 +143,15 @@ test('[Fatina.Tween] Test Tween with a undefined object', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Test Tween with a undefined property', function (t: any) {
-	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
-	let properties = [ 'tuna' ];
-	let dest = { tuna: 44 };
+test('[Fatina.Tween] Test Tween with a undefined property', (t: Test) => {
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+	const properties = [ 'tuna' ];
+	const dest = { tuna: 44 };
 
-	let ticker = new Ticker();
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let tween = new Tween(obj, properties)
+	const tween = new Tween(obj, properties)
 		.To(dest, 5)
 		.SetParent(ticker);
 
@@ -157,19 +159,19 @@ test('[Fatina.Tween] Test Tween with a undefined property', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Test mix of concurrent running and paused tween', function (t: any) {
-	let properties = [ 'x', 'y' ];
-	let dest = { x: 44, y: 44 };
-	let ticker = new Ticker();
+test('[Fatina.Tween] Test mix of concurrent running and paused tween', (t: Test) => {
+	const properties = [ 'x', 'y' ];
+	const dest = { x: 44, y: 44 };
+	const ticker = new Ticker();
 	ticker.Start();
 
 	let started = 0;
 	let updated = 0;
 	let finished = 0;
-	let paused: ITween[] = [];
+	const paused: ITween[] = [];
 
 	for (let i = 0; i < 10; i++) {
-		let obj = { name: 'alice' + i, x: Math.random() * 100 - 50, y: Math.random() * 100 - 50, alpha: 1 };
+		const obj = { name: 'alice' + i, x: Math.random() * 100 - 50, y: Math.random() * 100 - 50, alpha: 1 };
 		new Tween(obj, properties)
 			.To(dest, 10)
 			.SetParent(ticker)
@@ -178,8 +180,8 @@ test('[Fatina.Tween] Test mix of concurrent running and paused tween', function 
 			.OnComplete(() => finished++)
 			.Start();
 
-		let obj2 = { name: 'bob' + i, x: Math.random() * 100 - 50, y: Math.random() * 100 - 50, alpha: 1 };
-		let tween = new Tween(obj2, properties)
+		const obj2 = { name: 'bob' + i, x: Math.random() * 100 - 50, y: Math.random() * 100 - 50, alpha: 1 };
+		const tween = new Tween(obj2, properties)
 			.To(dest, 10)
 			.SetParent(ticker)
 			.OnStart(() => started++)
@@ -195,7 +197,7 @@ test('[Fatina.Tween] Test mix of concurrent running and paused tween', function 
 	let elapsed = 0;
 	let iterate = 0;
 	for (let i = 0; i < 20; i++) {
-		let dt = Math.random() * 0.2 + 0.8;
+		const dt = Math.random() * 0.2 + 0.8;
 		elapsed += dt;
 		if (iterate === 0 && elapsed >= 10) {
 			iterate = i + 1;
@@ -208,7 +210,7 @@ test('[Fatina.Tween] Test mix of concurrent running and paused tween', function 
 	t.equal(finished, 10, 'check all OnComplete event where emitted by running tween');
 
 	// Resume pause tween
-	for (let pause of paused) {
+	for (const pause of paused) {
 		pause.Resume();
 		pause.Resume();
 	}
@@ -219,18 +221,18 @@ test('[Fatina.Tween] Test mix of concurrent running and paused tween', function 
 	t.end();
 });
 
-test('[Fatina.Tween] Test Tween loop', function (t: any) {
-	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
-	let properties = [ 'x' ];
+test('[Fatina.Tween] Test Tween loop', (t: Test) => {
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+	const properties = [ 'x' ];
 
 	let start = 0;
 	let complete = 0;
 	let elapsed = 0;
 
-	let ticker = new Ticker();
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let tween = new Tween(obj, properties)
+	const tween = new Tween(obj, properties)
 		.From({ x: 0 })
 		.To({ x: 44 }, 5)
 		.SetParent(ticker)
@@ -252,18 +254,18 @@ test('[Fatina.Tween] Test Tween loop', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Test Tween infinite loop', function (t: any) {
-	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
-	let properties = [ 'x' ];
+test('[Fatina.Tween] Test Tween infinite loop', (t: Test) => {
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+	const properties = [ 'x' ];
 
 	let start = 0;
 	let complete = 0;
 	let elapsed = 0;
 
-	let ticker = new Ticker();
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let tween = new Tween(obj, properties)
+	const tween = new Tween(obj, properties)
 		.From({ x: 0 })
 		.To({ x: 44 }, 10)
 		.SetParent(ticker)
@@ -286,19 +288,19 @@ test('[Fatina.Tween] Test Tween infinite loop', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Test Tween timescale', function (t: any) {
-	let obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
-	let properties = [ 'x' ];
+test('[Fatina.Tween] Test Tween timescale', (t: Test) => {
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+	const properties = [ 'x' ];
 
 	let start = 0;
 	let complete = 0;
 	let elapsed = 0;
 	let update = 0;
 
-	let ticker = new Ticker();
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let tween = new Tween(obj, properties)
+	const tween = new Tween(obj, properties)
 		.From({ x: 0 })
 		.To({ x: 44 }, 5)
 		.SetParent(ticker)
@@ -310,7 +312,9 @@ test('[Fatina.Tween] Test Tween timescale', function (t: any) {
 		})
 		.OnComplete(() => complete += 1);
 
+	t.ok(tween.IsIdle());
 	tween.Start();
+	t.notOk(tween.IsIdle());
 
 	for (let i = 0; i < 25; i++) {
 		ticker.Tick(1);
@@ -324,18 +328,18 @@ test('[Fatina.Tween] Test Tween timescale', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Test Tween without parent', function (t: any) {
-	let tween = new Tween({}, []).To({}, 5);
+test('[Fatina.Tween] Test Tween without parent', (t: Test) => {
+	const tween = new Tween({}, []).To({}, 5);
 
 	t.throws(() => tween.Start(), 'Check Start explode');
 	t.end();
 });
 
-test('[Fatina.Tween] Test Tween without to', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Tween] Test Tween without to', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
 	let complete = false;
-	let tween = new Tween({}, []).SetParent(ticker).OnComplete(() => complete = true);
+	const tween = new Tween({}, []).SetParent(ticker).OnComplete(() => complete = true);
 
 	t.doesNotThrow(() => tween.Start(), 'Check Start does not explode');
 	t.notOk(complete, 'Check this tween is not finished yet');
@@ -344,22 +348,22 @@ test('[Fatina.Tween] Test Tween without to', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Test Tween Easing', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Tween] Test Tween Easing', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
-	t.doesNotThrow(() => new Tween({}, []).To({}, 5).SetParent(ticker).SetEasing(2).Start(), 'easing by type');
+	t.doesNotThrow(() => new Tween({}, []).To({}, 5).SetParent(ticker).SetEasing(Easing.OutQuad).Start(), 'easing by type');
 	t.doesNotThrow(() => new Tween({}, []).To({}, 5).SetParent(ticker).SetEasing('inOutQuad').Start(), 'easing by name');
 	t.throws(() => new Tween({}, []).To({}, 5).SetParent(ticker).SetEasing('tuna').Start(), 'easing which doesnt exist');
 	t.end();
 });
 
-test('[Fatina.Tween] Test Tween Kill', function (t: any) {
+test('[Fatina.Tween] Test Tween Kill', (t: Test) => {
 	let complete = 0;
 	let killed = 0;
 
-	let ticker = new Ticker();
+	const ticker = new Ticker();
 	ticker.Start();
-	let tween = new Tween({ x: 22 }, [ 'x' ])
+	const tween = new Tween({ x: 22 }, [ 'x' ])
 		.To({ x: 44 }, 5)
 		.SetParent(ticker)
 		.OnComplete(() => complete += 1)
@@ -382,10 +386,10 @@ test('[Fatina.Tween] Test Tween Kill', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Test Tween Kill', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Tween] Test Tween Kill', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
-	let sequence = new Tween({}, []).To({}, 2).SetParent(ticker).ToSequence().PrependInterval(1).AppendInterval(1);
+	const sequence = new Tween({}, []).To({}, 2).SetParent(ticker).ToSequence().PrependInterval(1).AppendInterval(1);
 
 	let start = 0;
 	let update = 0;
@@ -405,11 +409,11 @@ test('[Fatina.Tween] Test Tween Kill', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Test Tween with broken callback', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Tween] Test Tween with broken callback', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let obj = { x: 22 };
+	const obj = { x: 22 };
 	new Tween(obj, [ 'x' ])
 		.To({ x: 44 }, 2)
 		.SetParent(ticker)
@@ -429,12 +433,12 @@ test('[Fatina.Tween] Test Tween with broken callback', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Test Skip', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Tween] Test Skip', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
 
 	let complete = 0;
-	let tween = new Tween({}, [])
+	const tween = new Tween({}, [])
 		.To({}, 2)
 		.SetParent(ticker)
 		.OnComplete(() => complete++)
@@ -450,13 +454,13 @@ test('[Fatina.Tween] Test Skip', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Test Reverse', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Tween] Test Reverse', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let obj = {x: 0};
+	const obj = {x: 0};
 	let complete = 0;
-	let tween = new Tween(obj, ['x'])
+	const tween = new Tween(obj, ['x'])
 		.To({ x: 10}, 5)
 		.SetParent(ticker)
 		.OnComplete(() => complete++)
@@ -486,11 +490,11 @@ test('[Fatina.Tween] Test Reverse', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Test Yoyo', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Tween] Test Yoyo', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let obj = {x: 0};
+	const obj = {x: 0};
 	let complete = 0;
 	new Tween(obj, ['x'])
 		.To({ x: 10}, 5)
@@ -516,13 +520,54 @@ test('[Fatina.Tween] Test Yoyo', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Test Modify', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Tween] Test Yoyo 2', (t: Test) => {
+	const ticker = new Ticker();
+	ticker.Start();
+
+	const obj = {x: 0};
+	let complete = 0;
+	let tween = new Tween(obj, ['x'])
+		.SetRelative(true)
+		.To({ x: 10}, 5)
+		.Yoyo(1)
+		.SetParent(ticker)
+		.OnComplete(() => complete++)
+		.Start();
+
+	ticker.Tick(10);
+	t.ok(tween.IsFinished());
+	t.equal(0, obj.x, 'check the object position');
+
+	tween = new Tween(obj, ['x'])
+		.SetRelative(true)
+		.To({ x: 10}, 5)
+		.Yoyo(1)
+		.SetParent(ticker)
+		.OnComplete(() => complete++)
+		.Start();
+
+	ticker.Tick(2);
+	tween.Skip(true);
+	t.ok(tween.IsFinished());
+	t.equal(0, obj.x, 'check the object position');
+
+	(tween as any).Recycle();
+	tween.Start();
+
+	t.equal(0, obj.x, 'check the object position');
+	ticker.Tick(2.5);
+	t.equal(5, obj.x, 'check the object position');
+
+	t.end();
+});
+
+test('[Fatina.Tween] Test Modify', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
 
 	let complete = 0;
-	let obj = { x: 0, y: 0 };
-	let tween = new Tween(obj, ['x', 'y'])
+	const obj = { x: 0, y: 0 };
+	const tween = new Tween(obj, ['x', 'y'])
 		.To({ x: 1, y: 1 }, 2)
 		.SetParent(ticker)
 		.OnComplete(() => complete++)
@@ -539,23 +584,19 @@ test('[Fatina.Tween] Test Modify', function (t: any) {
 
 	tween.Modify({ x: 1 }, false);
 
-	tween.Default();
-	t.equal(0, tween.elapsed, 'check the tween elapsed after Default');
-	t.equal(0, tween.duration, 'check the tween duration after Default');
-
 	t.end();
 });
 
-test('[Fatina.Tween] Test Steps', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Tween] Test Steps', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let obj1 = { x: 0 };
-	let obj2 = { x: 0 };
-	let obj3 = { x: 0 };
-	let tween1 = new Tween(obj1, ['x']).SetParent(ticker).To({ x: 10 }, 10).SetSteps(5).Start();
-	let tween2 = new Tween(obj2, ['x']).SetParent(ticker).To({ x: 10 }, 10).SetSteps(10).Start();
-	let tween3 = new Tween(obj3, ['x']).SetParent(ticker).To({ x: 10 }, 10).SetSteps(4).Start();
+	const obj1 = { x: 0 };
+	const obj2 = { x: 0 };
+	const obj3 = { x: 0 };
+	const tween1 = new Tween(obj1, ['x']).SetParent(ticker).To({ x: 10 }, 10).SetSteps(5).Start();
+	const tween2 = new Tween(obj2, ['x']).SetParent(ticker).To({ x: 10 }, 10).SetSteps(10).Start();
+	const tween3 = new Tween(obj3, ['x']).SetParent(ticker).To({ x: 10 }, 10).SetSteps(4).Start();
 
 	ticker.Tick(1);
 	t.equal(2, obj1.x);
@@ -598,11 +639,11 @@ test('[Fatina.Tween] Test Steps', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Looping relative tween', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Tween] Looping relative tween', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let obj = { x: 0 };
+	const obj = { x: 0 };
 
 	new Tween(obj, [ 'x' ])
 		.SetParent(ticker)
@@ -630,13 +671,33 @@ test('[Fatina.Tween] Looping relative tween', function (t: any) {
 	t.end();
 });
 
-test('[Fatina.Tween] Tween destroyed object/properties', function (t: any) {
-	let ticker = new Ticker();
+test('[Fatina.Tween] Safe & Debug', (t: Test) => {
+	const ticker = new Ticker();
 	ticker.Start();
 
-	let obj = { x: 0 };
+	const obj = { x: 0 };
 
-	let tween = new Tween(obj, [ 'x' ])
+	new Tween(obj, [ 'x' ])
+		.SetParent(ticker)
+		.To({ x: 1 }, 10)
+		.SetEasing('inOutQuad')
+		.SetSafe(false)
+		.SetLog(2)
+		.OnComplete(() => {})
+		.Start();
+
+	ticker.Tick(10);
+
+	t.end();
+});
+
+test('[Fatina.Tween] Tween destroyed object/properties', (t: Test) => {
+	const ticker = new Ticker();
+	ticker.Start();
+
+	const obj = { x: 0 };
+
+	const tween = new Tween(obj, [ 'x' ])
 		.SetParent(ticker)
 		.To({ x: 5 }, 5)
 		.Start();
