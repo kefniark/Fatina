@@ -157,6 +157,7 @@ test('[Fatina.Manager] Ticker Helpers', (t: Test) => {
 
 	t.ok(ticker.IsRunning());
 	t.notOk(ticker.IsFinished());
+	t.notOk(ticker.IsIdle());
 	t.notOk(ticker.IsPaused());
 
 	fatina.Pause();

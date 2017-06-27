@@ -48,8 +48,8 @@ module.exports = {
 	plugins: [
 		new webpack.optimize.ModuleConcatenationPlugin(),
 		new webpack.optimize.UglifyJsPlugin({
-			minimize: true,
 			sourceMap: true,
+			comments: false,
 			include: /\.min\.js$/
 		}),
 		new DtsBundlePlugin()

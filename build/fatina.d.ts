@@ -20,7 +20,6 @@ export function SetTimeout(fn: () => void, duration: number): IPlayable;
 export function SetInterval(fn: () => void, duration: number): IPlayable;
 export function Ticker(): ITicker;
 export function LoadPlugin(newPlugin: IPlugin): void;
-export function GetPlugin(): IPlugin;
 
 export enum Log {
     None = 0,

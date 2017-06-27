@@ -456,7 +456,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var log_1 = __webpack_require__(2);
 var state_1 = __webpack_require__(0);
 var baseTween_1 = __webpack_require__(1);
-var callback_1 = __webpack_require__(13);
+var callback_1 = __webpack_require__(9);
 var delay_1 = __webpack_require__(4);
 var Sequence = (function (_super) {
     __extends(Sequence, _super);
@@ -654,14 +654,13 @@ exports.Sequence = Sequence;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var index_1 = __webpack_require__(7);
 var log_1 = __webpack_require__(2);
 var easingType_1 = __webpack_require__(3);
 exports.Easing = easingType_1.EasingType;
-var ticker_1 = __webpack_require__(11);
+var ticker_1 = __webpack_require__(7);
 var delay_1 = __webpack_require__(4);
 var sequence_1 = __webpack_require__(5);
-var tween_1 = __webpack_require__(14);
+var tween_1 = __webpack_require__(10);
 var tickerManager;
 var initialized = false;
 var isFirstUpdate = true;
@@ -811,10 +810,6 @@ function LoadPlugin(newPlugin) {
     Info(log_1.Log.Debug, '[Fatina.Manager] Plugin Loaded', newPlugin.name);
 }
 exports.LoadPlugin = LoadPlugin;
-function GetPlugin() {
-    return new index_1.FatinaPluginAnimator();
-}
-exports.GetPlugin = GetPlugin;
 function Info(level, message, data) {
     if (level > logLevel) {
         return;
@@ -854,274 +849,6 @@ function updateLoop(timestamp) {
 
 "use strict";
 
-Object.defineProperty(exports, "__esModule", { value: true });
-var animatorManager_1 = __webpack_require__(8);
-var tickerManager_1 = __webpack_require__(10);
-function Get() {
-    return new FatinaPluginAnimator();
-}
-exports.Get = Get;
-var FatinaPluginAnimator = (function () {
-    function FatinaPluginAnimator() {
-        this.name = 'fatina-plugin-animator';
-        this.init = false;
-    }
-    Object.defineProperty(FatinaPluginAnimator.prototype, "TickerManager", {
-        get: function () {
-            return this.fatina.plugin.TickerManager;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FatinaPluginAnimator.prototype, "AnimatorManager", {
-        get: function () {
-            return this.fatina.plugin.AnimatorManager;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    FatinaPluginAnimator.prototype.Init = function (fatina) {
-        if (this.init) {
-            throw new Error('Try to init the plugin twice : ' + name);
-        }
-        if (fatina === undefined || fatina === null || fatina.plugin === null) {
-            throw new Error('Try to init the plugin without fatina : ' + name);
-        }
-        this.fatina = fatina;
-        this.init = true;
-        fatina.plugin.AnimatorManager = new animatorManager_1.AnimatorManager(this);
-        fatina.plugin.TickerManager = new tickerManager_1.TickerManager(this);
-    };
-    return FatinaPluginAnimator;
-}());
-exports.FatinaPluginAnimator = FatinaPluginAnimator;
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var animator_1 = __webpack_require__(9);
-var AnimatorManager = (function () {
-    function AnimatorManager(plugin) {
-        this.animations = {};
-        this.tickerMap = {};
-        this.plugin = plugin;
-    }
-    Object.defineProperty(AnimatorManager.prototype, "Animations", {
-        get: function () {
-            return Object.keys(this.animations);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(AnimatorManager.prototype, "Labels", {
-        get: function () {
-            var _this = this;
-            return Object.keys(this.tickerMap).map(function (x) { return _this.tickerMap[x]; }).filter(function (piece, index, self) { return self.indexOf(piece) === index; });
-        },
-        enumerable: true,
-        configurable: true
-    });
-    AnimatorManager.prototype.Register = function (name, onCreate, label) {
-        if (this.animations[name] && this.tickerMap[name]) {
-            delete this.tickerMap[name];
-        }
-        this.animations[name] = onCreate;
-        if (label) {
-            this.tickerMap[name] = label;
-        }
-        return this;
-    };
-    AnimatorManager.prototype.Instantiate = function (name, object, params) {
-        if (!(name in this.animations)) {
-            throw new Error('this animation doesnt exist ' + name);
-        }
-        var tween = this.animations[name](object, params);
-        if (this.tickerMap[name]) {
-            tween.SetParent(this.plugin.TickerManager.Get(this.tickerMap[name]));
-        }
-        return tween;
-    };
-    AnimatorManager.prototype.AddAnimatorTo = function (obj) {
-        if (!obj.Animator) {
-            obj.Animator = new animator_1.Animator(obj, this);
-        }
-        return obj.Animator;
-    };
-    return AnimatorManager;
-}());
-exports.AnimatorManager = AnimatorManager;
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Animator = (function () {
-    function Animator(obj, animatorManager) {
-        this.animations = {};
-        this.current = {};
-        this.layers = ['default'];
-        this.animGroupMap = {};
-        this.animFinalValueMap = {};
-        this.animUnstoppableMap = {};
-        this.currentAnimName = {};
-        this.object = obj;
-        this.animatorManager = animatorManager;
-    }
-    Animator.prototype.AddAnimation = function (name, animationName, options, params) {
-        var anim = this.animatorManager.Instantiate(animationName, this.object, params);
-        return this.AddCustomAnimation(name, options || {}, anim);
-    };
-    Animator.prototype.AddCustomAnimation = function (name, options, tween) {
-        var anim = tween;
-        anim.OnKilled(function () { return anim.Recycle(); });
-        anim.OnComplete(function () { return anim.Recycle(); });
-        this.animations[name] = anim;
-        this.animFinalValueMap[name] = options ? !!options.finalValue : false;
-        this.animUnstoppableMap[name] = options ? !!options.unstoppable : false;
-        this.animGroupMap[name] = (options && options.group) ? options.group : 'default';
-        if (this.layers.indexOf(this.animGroupMap[name]) === -1) {
-            this.layers.push(this.animGroupMap[name]);
-        }
-        return this;
-    };
-    Animator.prototype.Play = function (name) {
-        if (!(name in this.animations)) {
-            throw new Error('this animation doesnt exist ' + name);
-        }
-        var layerName = this.animGroupMap[name];
-        var current = this.current[layerName];
-        if (current && current.IsRunning() && this.animUnstoppableMap[this.currentAnimName[layerName]]) {
-            console.log('This animation already run and is unstoppable', this.currentAnimName[layerName], '->', name);
-            return current;
-        }
-        if (current && (current.IsRunning() || current.IsPaused())) {
-            var currentAnimName = this.currentAnimName[layerName];
-            current.Skip(this.animFinalValueMap[currentAnimName]);
-            this.current[layerName] = undefined;
-        }
-        current = this.animations[name];
-        this.current[layerName] = current;
-        this.currentAnimName[layerName] = name;
-        current.Start();
-        return current;
-    };
-    Animator.prototype.Pause = function (layer) {
-        var layerName = !layer ? 'default' : layer;
-        var current = this.current[layerName];
-        if (current && current.IsRunning()) {
-            current.Pause();
-        }
-    };
-    Animator.prototype.PauseAll = function () {
-        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
-            var layerId = _a[_i];
-            this.Pause(layerId);
-        }
-    };
-    Animator.prototype.Resume = function (layer) {
-        var layerName = !layer ? 'default' : layer;
-        var current = this.current[layerName];
-        if (current && current.IsPaused()) {
-            current.Resume();
-        }
-    };
-    Animator.prototype.ResumeAll = function () {
-        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
-            var layerId = _a[_i];
-            this.Resume(layerId);
-        }
-    };
-    Animator.prototype.Stop = function (layer) {
-        var layerName = !layer ? 'default' : layer;
-        var current = this.current[layerName];
-        if (current && !current.IsFinished()) {
-            var currentAnimName = this.currentAnimName[layerName];
-            current.Skip(this.animFinalValueMap[currentAnimName]);
-            this.current[layerName] = undefined;
-        }
-    };
-    Animator.prototype.StopAll = function () {
-        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
-            var layerId = _a[_i];
-            this.Stop(layerId);
-        }
-    };
-    Animator.prototype.Destroy = function () {
-        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
-            var layerId = _a[_i];
-            var current = this.current[layerId];
-            if (current && !current.IsFinished()) {
-                current.Kill();
-            }
-        }
-        this.animations = {};
-        this.animGroupMap = {};
-        this.animFinalValueMap = {};
-        this.animUnstoppableMap = {};
-        this.current = {};
-        this.currentAnimName = {};
-        delete this.object.Animator;
-    };
-    return Animator;
-}());
-exports.Animator = Animator;
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var TickerManager = (function () {
-    function TickerManager(plugin) {
-        this.tickers = {};
-        this.plugin = plugin;
-    }
-    TickerManager.prototype.Get = function (name) {
-        if (this.tickers[name]) {
-            return this.tickers[name];
-        }
-        this.tickers[name] = this.plugin.fatina.Ticker();
-        return this.tickers[name];
-    };
-    TickerManager.prototype.PauseAll = function (name) {
-        if (this.tickers[name]) {
-            this.tickers[name].Pause();
-        }
-    };
-    TickerManager.prototype.ResumeAll = function (name) {
-        if (this.tickers[name]) {
-            this.tickers[name].Resume();
-        }
-    };
-    TickerManager.prototype.KillAll = function (name) {
-        if (this.tickers[name]) {
-            this.tickers[name].Kill();
-            delete this.tickers[name];
-        }
-    };
-    return TickerManager;
-}());
-exports.TickerManager = TickerManager;
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -1134,7 +861,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var state_1 = __webpack_require__(0);
-var eventList_1 = __webpack_require__(12);
+var eventList_1 = __webpack_require__(8);
 var Ticker = (function (_super) {
     __extends(Ticker, _super);
     function Ticker() {
@@ -1247,7 +974,7 @@ exports.Ticker = Ticker;
 
 
 /***/ }),
-/* 12 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1311,7 +1038,7 @@ exports.EventList = EventList;
 
 
 /***/ }),
-/* 13 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1349,7 +1076,7 @@ exports.Callback = Callback;
 
 
 /***/ }),
-/* 14 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1366,7 +1093,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var state_1 = __webpack_require__(0);
-var easing_1 = __webpack_require__(15);
+var easing_1 = __webpack_require__(11);
 var easingType_1 = __webpack_require__(3);
 var baseTween_1 = __webpack_require__(1);
 var sequence_1 = __webpack_require__(5);
@@ -1561,7 +1288,7 @@ exports.Tween = Tween;
 
 
 /***/ }),
-/* 15 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

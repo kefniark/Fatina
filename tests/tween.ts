@@ -312,7 +312,9 @@ test('[Fatina.Tween] Test Tween timescale', (t: Test) => {
 		})
 		.OnComplete(() => complete += 1);
 
+	t.ok(tween.IsIdle());
 	tween.Start();
+	t.notOk(tween.IsIdle());
 
 	for (let i = 0; i < 25; i++) {
 		ticker.Tick(1);
@@ -665,6 +667,26 @@ test('[Fatina.Tween] Looping relative tween', (t: Test) => {
 		ticker.Tick(0.2);
 	}
 	t.equal(45, obj.x, 'Check the object reached his destination');
+
+	t.end();
+});
+
+test('[Fatina.Tween] Safe & Debug', (t: Test) => {
+	const ticker = new Ticker();
+	ticker.Start();
+
+	const obj = { x: 0 };
+
+	new Tween(obj, [ 'x' ])
+		.SetParent(ticker)
+		.To({ x: 1 }, 10)
+		.SetEasing('inOutQuad')
+		.SetSafe(false)
+		.SetLog(2)
+		.OnComplete(() => {})
+		.Start();
+
+	ticker.Tick(10);
 
 	t.end();
 });

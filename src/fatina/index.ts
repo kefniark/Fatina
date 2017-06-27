@@ -1,4 +1,3 @@
-import { FatinaPluginAnimator } from '../fatina-plugin-animator/index';
 import { Log } from './core/enum/log';
 import { IPlayable } from './core/interfaces/IPlayable';
 import { IPlugin } from './core/interfaces/IPlugin';
@@ -286,10 +285,6 @@ export function LoadPlugin(newPlugin: IPlugin) {
 	newPlugin.Init(this);
 	loadedPlugins.push(newPlugin);
 	Info(Log.Debug, '[Fatina.Manager] Plugin Loaded', newPlugin.name);
-}
-
-export function GetPlugin(): IPlugin {
-	return new FatinaPluginAnimator();
 }
 
 function Info(level: Log, message: string, data?: any) {
