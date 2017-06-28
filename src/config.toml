@@ -124,6 +124,12 @@ theme = "beautifulhugo"
     weight = 8
 
 [[menu.main]]
+    name = "Animator"
+    parent = "plugins"
+    url = "plugins/animator/"
+    weight = 9
+
+[[menu.main]]
     name = "Benchmark"
     url = "basics/benchmark/"
     weight = 9

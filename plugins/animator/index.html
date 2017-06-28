@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>Animator Plugin</title>
+  <meta property="og:title" content="Animator Plugin" />
+  <meta name="twitter:title" content="Animator Plugin" />
+  <meta name="description" content="Description This plugin was designed to provide an easy way to write game animations with Fatina.
+It was design to solve few common issues related to game animations:
+ Reusability: Animations can be shared by completely different object (fadeIn, gravity, &hellip;) Easy to use: The main function is just obj.Animator.Play(&#39;animationName&#39;); Performance: Animations by default are reusable tweens, it means less instantiation at runtime and less memory usage Animation State: Each animation group is a state machine, starting a new animation will stop the previous one automatically  Github Download NPM  Demo - UnityChan Animator Fatina Sample=&nbsp;&nbsp;&nbsp;&nbsp;=FadeInFadeOutJumpPauseResumex4x1x0.">
+  <meta property="og:description" content="Description This plugin was designed to provide an easy way to write game animations with Fatina.
+It was design to solve few common issues related to game animations:
+ Reusability: Animations can be shared by completely different object (fadeIn, gravity, &hellip;) Easy to use: The main function is just obj.Animator.Play(&#39;animationName&#39;); Performance: Animations by default are reusable tweens, it means less instantiation at runtime and less memory usage Animation State: Each animation group is a state machine, starting a new animation will stop the previous one automatically  Github Download NPM  Demo - UnityChan Animator Fatina Sample=&nbsp;&nbsp;&nbsp;&nbsp;=FadeInFadeOutJumpPauseResumex4x1x0.">
+  <meta name="twitter:description" content="Description This plugin was designed to provide an easy way to write game animations with Fatina.
+It was design to solve few common issues related to game animations:
+ Reusability: Animations can be …">
+  <meta name="author" content="Kevin Destrem"/>
+  <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
+  <meta name="twitter:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@kefniark" />
+  <meta name="twitter:creator" content="@kefniark" />
+  <meta property="og:url" content="https://kefniark.github.io/Fatina/plugins/animator/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Fatina" />
+
+  <meta name="generator" content="Hugo 0.20.7" />
+  <link rel="canonical" href="https://kefniark.github.io/Fatina/plugins/animator/" />
+  <link rel="alternate" href="https://kefniark.github.io/Fatina/index.xml" type="application/rss+xml" title="Fatina">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/main.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/pygment_highlights.css" />
+  <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/highlight.min.css" />
+  <script type="text/javascript" src="https://kefniark.github.io/Fatina/fatina.min.js"></script>
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://kefniark.github.io/Fatina/">Fatina</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Getting Started" href="/Fatina/basics/download/">Getting Started</a>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">Samples</a>
+              <div class="navlinks-children">
+                
+                  <a href="/Fatina/samples/generic/">Basics</a>
+                
+                  <a href="/Fatina/samples/advanced/">Advanced</a>
+                
+                  <a href="/Fatina/samples/game/">Games</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">API</a>
+              <div class="navlinks-children">
+                
+                  <a href="/Fatina/api/basic/">Fatina</a>
+                
+                  <a href="/Fatina/api/tween/">Tween</a>
+                
+                  <a href="/Fatina/api/sequence/">Sequence</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">Plugins</a>
+              <div class="navlinks-children">
+                
+                  <a href="/Fatina/plugins/helpers/">Helpers</a>
+                
+                  <a href="/Fatina/plugins/animator/">Animator</a>
+                
+              </div>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Benchmark" href="/Fatina/basics/benchmark/">Benchmark</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About" href="/Fatina/basics/about/">About</a>
+            </li>
+          
+        
+
+        
+      </ul>
+    </div>
+
+    <div class="avatar-container">
+      <div class="avatar-img-border">
+        
+          <a title="Fatina" href="https://kefniark.github.io/Fatina/">
+            <img class="avatar-img" src="https://kefniark.github.io/Fatina/img/avatar-icon.png" alt="Fatina" />
+          </a>
+        
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+
+
+    
+  
+  
+  
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="plugins-heading">
+              <h1>Animator Plugin</h1>
+                
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        
+
+<h3 id="description">Description</h3>
+
+<p>This plugin was designed to provide an easy way to write game animations with <strong>Fatina</strong>.</p>
+
+<p>It was design to solve few common issues related to game animations:</p>
+
+<ul>
+<li><strong>Reusability</strong>: Animations can be shared by completely different object (fadeIn, gravity, &hellip;)</li>
+<li><strong>Easy to use</strong>: The main function is just <code>obj.Animator.Play('animationName');</code></li>
+<li><strong>Performance</strong>: Animations by default are reusable tweens, it means less instantiation at runtime and less memory usage</li>
+<li><strong>Animation State</strong>: Each animation group is a state machine, starting a new animation will stop the previous one automatically</li>
+</ul>
+
+<div style="text-align: center; margin-top: 30px;">
+    <a class="btn btn-primary" href="https://github.com/kefniark/Fatina-Plugin-Animator/" target="_blank">Github</a>
+    <a class="btn btn-info" href="https://github.com/kefniark/Fatina-Plugin-Animator/releases" target="_blank">Download</a>
+    <a class="btn btn-success" href="https://www.npmjs.com/package/fatina-plugin-animator" target="_blank">NPM</a>
+</div>
+
+<h3 id="demo-unitychan-animator">Demo - UnityChan Animator</h3>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fatina Sample</title>
+
+    <script src="../../fatina-plugin-animator.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.2/pixi.min.js"></script>
+</head>
+
+<body>
+    <center>
+        <div id="canvas1"></div>
+        <div>
+            <button class="btn btn-default" onclick="animUnity.Play('run_left')"><<</button>
+            <button class="btn btn-default" onclick="animUnity.Play('walk_left')"><</button>
+            <button class="btn btn-info" onclick="animUnity.Play('idle')">=</button>
+            <button class="btn btn-default" onclick="animUnity.Play('walk_right')">></button>
+            <button class="btn btn-default" onclick="animUnity.Play('run_right')">>></button>
+
+            <span>&nbsp;</span>
+            <span>&nbsp;</span>
+            <span>&nbsp;</span>
+            <span>&nbsp;</span>
+
+            <button class="btn btn-default" onclick="animYuko.Play('run_left')"><<</button>
+            <button class="btn btn-default" onclick="animYuko.Play('walk_left')"><</button>
+            <button class="btn btn-info" onclick="animYuko.Play('idle')">=</button>
+            <button class="btn btn-default" onclick="animYuko.Play('walk_right')">></button>
+            <button class="btn btn-default" onclick="animYuko.Play('run_right')">>></button>
+
+            <br><br>
+
+            <button class="btn btn-primary" onclick="animYuko.Play('fade_in')">FadeIn</button>
+            <button class="btn btn-primary" onclick="animYuko.Play('fade_out')">FadeOut</button>
+            <button class="btn btn-primary" onclick="animYuko.Play('jump')">Jump</button>
+
+            <button class="btn btn-success" onclick="Fatina.plugin.TickerManager.PauseAll('character')">Pause</button>
+            <button class="btn btn-success" onclick="Fatina.plugin.TickerManager.ResumeAll('character')">Resume</button>
+            <button class="btn btn-success" onclick="Fatina.plugin.TickerManager.Get('character').SetTimescale(4)">x4</button>
+            <button class="btn btn-success" onclick="Fatina.plugin.TickerManager.Get('character').SetTimescale(1)">x1</button>
+            <button class="btn btn-success" onclick="Fatina.plugin.TickerManager.Get('character').SetTimescale(0.25)">x0.25</button>
+        </div>
+
+        <br><br>
+        <a class="btn btn-primary" href="https://github.com/kefniark/Fatina/blob/gh-pages/src/static/animator/index.html" target="_blank">Read the code</a>
+    </center>
+
+    <script>
+        // Pixi app Initialization
+        var app = new PIXI.Application(1024 / 2, 768 / 2, { backgroundColor: 0x0c243c });
+        document.getElementById('canvas1').appendChild(app.view);
+
+        PIXI.loader.add("/Fatina/animator/unity.json").add("/Fatina/animator/yuko.json")
+            .load(function () {
+                CreateUnityCharacter();
+                CreateYukoCharacter();
+            });
+
+        var animUnity, animYuko;
+
+        // Fatina Initialization and load Animation Plugin
+        Fatina.Init();
+        Fatina.LoadPlugin(FatinaPluginAnimator.Get());
+
+        // Register a first animation type: Animation Spritesheet
+        Fatina.plugin.AnimatorManager.Register('spritesheet', (object, params) => {
+            console.log('init Spritesheet Anim', params);
+
+            // Create a tween on a proxy object and use the value to change the sprite
+            let proxy = { index: 0 };
+            const tween = Fatina.Tween(proxy, ['index'])
+                .From({ index: 0 })
+                .To({ index: params.number - 1 }, params.duration)
+                .OnStart(() => {
+                    if (!params.direction) {
+                        return;
+                    }
+
+                    // Change the orientation based on the direction param
+                    object.scale.x = Math.abs(object.scale.x) * params.direction;
+                })
+                .OnUpdate(() => object.setTexture(params.textures[proxy.index]))
+                .SetSteps(params.number - 1);
+
+            // Some animation don't need loop
+            if (!params.disableLoop) {
+                tween.SetLoop(-1);
+            }
+
+            return tween;
+        }, 'character');
+
+        // Register a second animation type: Jump (a simple relative move with yoyo=1)
+        Fatina.plugin.AnimatorManager.Register('jump', (object, params) => {
+            console.log('Instantiate Jump Anim', object.name, object.position, params);
+            return Fatina.Tween(object.position, ['y'])
+                .SetRelative(true)
+                .To({ y: - 70 }, 400)
+                .SetEasing('outSine')
+                .Yoyo(1)
+                .OnStart(() => object.Animator.Play('jump_up'))
+        }, 'character');
+
+        // Register a third animation type: Fade
+        Fatina.plugin.AnimatorManager.Register('fade', (object, params) => {
+            console.log('Instantiate Fade Anim', params);
+            return Fatina.Tween(object, ['alpha']).To({ alpha: params.value }, params.duration)
+        }, 'character');
+
+
+        // Game code, let's create a characters with animation
+        function CreateYukoCharacter() {
+
+            // Create a normal Pixi Sprite
+            let yukochan = new PIXI.Sprite(PIXI.TextureCache['Yuko_Idle_1']);
+            yukochan.name = "Yuko";
+            yukochan.anchor.set(0.5);
+            yukochan.scale.x = 1.4;
+            yukochan.scale.y = 1.4;
+            yukochan.x = app.renderer.width / 2 + 50;
+            yukochan.y = app.renderer.height / 2;
+            app.stage.addChild(yukochan);
+
+            // Let's add a animator component to that sprite and add (instantiate) reusable animations (idle, walk, jump, ...)
+            let anim = Fatina.plugin.AnimatorManager.AddAnimatorTo(yukochan)
+
+                // First Group of Animation: Sprite 
+                .AddAnimation('idle', 'spritesheet', { group: 'sprite' }, { number: 4, duration: 1000, textures: GetTextures('Yuko_Idle_') })
+                .AddAnimation('walk_right', 'spritesheet', { group: 'sprite' }, { direction: 1, number: 6, duration: 1000, textures: GetTextures('Yuko_Walk_') })
+                .AddAnimation('run_right', 'spritesheet', { group: 'sprite' }, { direction: 1, number: 8, duration: 1000, textures: GetTextures('Yuko_Run_') })
+                .AddAnimation('walk_left', 'spritesheet', { group: 'sprite' }, { direction: -1, number: 6, duration: 1000, textures: GetTextures('Yuko_Walk_') })
+                .AddAnimation('run_left', 'spritesheet', { group: 'sprite' }, { direction: -1, number: 8, duration: 1000, textures: GetTextures('Yuko_Run_') })
+                .AddAnimation('jump_fall', 'spritesheet', { group: 'sprite', unstoppable: true }, { disableLoop: true, number: 3, duration: 240, textures: GetTextures('Yuko_Jump_Fall_') })
+                .AddAnimation('jump_landing', 'spritesheet', { group: 'sprite', unstoppable: true }, { disableLoop: true, number: 1, duration: 80, textures: GetTextures('Yuko_Jump_Landing') })
+                .AddAnimation('jump_midair', 'spritesheet', { group: 'sprite', unstoppable: true }, { disableLoop: true, number: 4, duration: 320, textures: GetTextures('Yuko_Jump_MidAir_') })
+                .AddAnimation('jump_up', 'spritesheet', { group: 'sprite', unstoppable: true }, { disableLoop: true, number: 2, duration: 160, textures: GetTextures('Yuko_Jump_Up_') })
+
+                // Second Group of Animation: Alpha
+                .AddAnimation('fade_in', 'fade', { group: 'alpha', finalValue: true }, { value: 1, duration: 800 })
+                .AddAnimation('fade_out', 'fade', { group: 'alpha', finalValue: true }, { value: 0, duration: 800 })
+
+                // Third Group of Animation: Jump (defined as unstoppable)
+                .AddAnimation('jump', 'jump', { group: 'move', unstoppable: true })
+
+                // Automatic Transition (at the end of one state, autostart the next one)
+                .AddTransition('jump_up', 'jump_midair')
+                .AddTransition('jump_midair', 'jump_fall')
+                .AddTransition('jump_fall', 'jump_landing')
+                .AddTransition('jump_landing', 'idle');
+
+            // Play the default state: idle
+            anim.Play('idle');
+            animYuko = anim;
+        }
+
+        // Game code, let's create a second character with almost the same animation, just different sprites
+        function CreateUnityCharacter() {
+
+            // Create a normal Pixi Sprite
+            let tokochan = new PIXI.Sprite(PIXI.TextureCache['Unitychan_Idle_1']);
+            tokochan.name = "Toko";
+            tokochan.anchor.set(0.5);
+            tokochan.scale.x = 1.4;
+            tokochan.scale.y = 1.4;
+            tokochan.x = app.renderer.width / 2 - 50;
+            tokochan.y = app.renderer.height / 2;
+            app.stage.addChild(tokochan);
+
+            // As you can see bellow, it's exactly the same code, just the array of texture is different
+            let anim = Fatina.plugin.AnimatorManager.AddAnimatorTo(tokochan)
+                .AddAnimation('idle', 'spritesheet', { group: 'sprite' }, { number: 4, duration: 1000, textures: GetTextures('Unitychan_Idle_') })
+                .AddAnimation('walk_right', 'spritesheet', { group: 'sprite' }, { direction: 1, number: 14, duration: 2000, textures: GetTextures('Unitychan_Walk_') })
+                .AddAnimation('run_right', 'spritesheet', { group: 'sprite' }, { direction: 1, number: 18, duration: 2000, textures: GetTextures('Unitychan_Run_') })
+                .AddAnimation('walk_left', 'spritesheet', { group: 'sprite' }, { direction: -1, number: 14, duration: 2000, textures: GetTextures('Unitychan_Walk_') })
+                .AddAnimation('run_left', 'spritesheet', { group: 'sprite' }, { direction: -1, number: 18, duration: 2000, textures: GetTextures('Unitychan_Run_') });
+
+             // Play the default state: idle
+            anim.Play('idle');
+            animUnity = anim;
+        }
+
+        function GetTextureId(a, name) {
+            return parseInt(a.replace(name, ""), 10);
+        }
+
+        function GetTextures(name) {
+            return Object.keys(PIXI.TextureCache).filter(x => x.indexOf(name) !== -1).sort((a, b) => GetTextureId(a, name) - GetTextureId(b, name)).map(x => PIXI.TextureCache[x])
+        }
+    </script>
+</body>
+</html>
+
+      </article>
+
+      
+        
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="https://github.com/kefniark/fatina" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://twitter.com/kefniark" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+
+          
+        </ul>
+
+        <p class="credits copyright text-muted">
+          Kevin Destrem
+          &nbsp;&bull;&nbsp;
+          2017
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://kefniark.github.io/Fatina/">Fatina</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.20.7</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://kefniark.github.io/Fatina/js/main.js"></script>
+<script src="https://kefniark.github.io/Fatina/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> renderMathInElement(document.body); </script>
+
+
+
+
+
+  </body>
+</html>
+

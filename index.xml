@@ -17,7 +17,7 @@
       
       <guid>https://kefniark.github.io/Fatina/samples/generic/</guid>
       <description>.imgTest { position: relative; margin: 0; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html elements but you can tween almost any kind of object and data. PlayAll 
-Linear tween  function sample1() { var elem = document.getElementById(&#34;sample1&#34;); var obj = { x: 0, y: 0 }; Fatina.Tween(obj, [&#39;x&#39;]) .From({x: 0}) .To({x: 500}, 2500) .</description>
+Linear tween function sample1() {var elem = document.getElementById(&#34;sample1&#34;);var obj = { x: 0, y: 0 };Fatina.Tween(obj, [&#39;x&#39;]).From({x: 0}).To({x: 500}, 2500).</description>
     </item>
     
     <item>
@@ -55,9 +55,9 @@ Unity Chan GO!!! Parallax var app = new PIXI.Application(1024 / 2, 768 / 2, {b
       
       <guid>https://kefniark.github.io/Fatina/samples/advanced/</guid>
       <description>Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
-Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000}); document.getElementById(&#39;canvas2&#39;).appendChild(app.view); var star = new PIXI.Container(); star.x += 100; star.y += 50; app.stage.addChild(star); // Create 250 sprites for (let i = 0; i A demonic star with 250 moving sprites along a defined path
+Demonic Star Looping Sequence var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000});document.getElementById(&#39;canvas2&#39;).appendChild(app.view);var star = new PIXI.Container();star.x += 100;star.y += 50;app.stage.addChild(star);// Create 250 spritesfor (let i = 0; i A demonic star with 250 moving sprites along a defined path
 Read the code
-Golden Stars Use Modifier for curve and gravity    var app4 = new PIXI.</description>
+Golden Stars Use Modifier for curve and gravity var app4 = new PIXI.</description>
     </item>
     
     <item>
@@ -79,6 +79,17 @@ Golden Stars Use Modifier for curve and gravity    var app4 = new PIXI.</descrip
       <guid>https://kefniark.github.io/Fatina/api/tween/</guid>
       <description>Fatina Tween Sequence   A Tween that takes control of values and animates them.
  Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp;amp; timescale) duration: number duration of this tween in ms.  Controls  Start(): Tween By default new tween are not started. Don&amp;rsquo;t forget to call .Start() Pause(): void Resume(): void Skip(): void Kill(): void IsRunning(): boolean IsFinished(): boolean IsPaused(): boolean  See More// Create a tween let tween = Fatina.</description>
+    </item>
+    
+    <item>
+      <title>Animator Plugin</title>
+      <link>https://kefniark.github.io/Fatina/plugins/animator/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>https://kefniark.github.io/Fatina/plugins/animator/</guid>
+      <description>Description This plugin was designed to provide an easy way to write game animations with Fatina.
+It was design to solve few common issues related to game animations:
+ Reusability: Animations can be shared by completely different object (fadeIn, gravity, &amp;hellip;) Easy to use: The main function is just obj.Animator.Play(&#39;animationName&#39;); Performance: Animations by default are reusable tweens, it means less instantiation at runtime and less memory usage Animation State: Each animation group is a state machine, starting a new animation will stop the previous one automatically  Github Download NPM  Demo - UnityChan Animator Fatina Sample=&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;=FadeInFadeOutJumpPauseResumex4x1x0.</description>
     </item>
     
     <item>
