@@ -42,5 +42,14 @@ npm install fatina  Then include the Fatina module :
 Thanks to  Unity-chan because cute samples &amp;hellip;  Why this name ?  F* Tina: No comment &amp;hellip; Fat Tina: Because everyone know that typescript is heavy and slow Reference to Fatina from Tower of Druaga    </description>
     </item>
     
+    <item>
+      <title>Tips</title>
+      <link>https://kefniark.github.io/Fatina/basics/tips/</link>
+      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      
+      <guid>https://kefniark.github.io/Fatina/basics/tips/</guid>
+      <description>How to write tweens ?  Keep them simple: a Tween should do only one thing (avoid nesting and complexity) Split them in smaller tween to have more control (like splitting a x and y movement in two separated tweens) Group them in Sequence and prefer using .Append() and .Join() When you destroy an object like a sprite, Try to clean tweens related Avoid SetTimeout() and prefer Fatina.SetTimeout(): All the objects/events should be ticked together, normal settimeout cannot be paused &amp;hellip;  How to go farther ?</description>
+    </item>
+    
   </channel>
 </rss>

@@ -100,14 +100,17 @@
           
         
           
-            <li>
-              <a title="Benchmark" href="/Fatina/basics/benchmark/">Benchmark</a>
-            </li>
-          
-        
-          
-            <li>
-              <a title="About" href="/Fatina/basics/about/">About</a>
+            <li class="navlinks-container">
+              <a class="navlinks-parent" href="javascript:void(0)">More</a>
+              <div class="navlinks-children">
+                
+                  <a href="/Fatina/basics/tips/">Tips</a>
+                
+                  <a href="/Fatina/basics/benchmark/">Benchmark</a>
+                
+                  <a href="/Fatina/basics/about/">About</a>
+                
+              </div>
             </li>
           
         
@@ -240,6 +243,27 @@ A short and simple permissive license with conditions only requiring preservatio
  </div>
 
 
+                
+              </div>
+    
+              
+    
+            </article>
+          
+            <article class="post-preview">
+              <a href="https://kefniark.github.io/Fatina/basics/tips/">
+                <h2 class="post-title">Tips</h2>
+    
+                
+              </a>
+    
+              <p class="post-meta">
+                Posted on May 21, 2017
+              </p>
+              <div class="post-entry">
+                
+                  How to write tweens ?  Keep them simple: a Tween should do only one thing (avoid nesting and complexity) Split them in smaller tween to have more control (like splitting a x and y movement in two separated tweens) Group them in Sequence and prefer using .Append() and .Join() When you destroy an object like a sprite, Try to clean tweens related Avoid SetTimeout() and prefer Fatina.SetTimeout(): All the objects/events should be ticked together, normal settimeout cannot be paused &hellip;  How to go farther ?
+                  <a href="https://kefniark.github.io/Fatina/basics/tips/" class="post-read-more">[Read More]</a>
                 
               </div>
     

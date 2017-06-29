@@ -5,20 +5,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <title>Animator Plugin - Getting Started</title>
-  <meta property="og:title" content="Animator Plugin - Getting Started" />
-  <meta name="twitter:title" content="Animator Plugin - Getting Started" />
-  <meta name="description" content="Animator Getting Started API  The installation process is explained in the README.
-After setup, you can use this plugin:
-// Global animator manager Fatina.plugin.AnimatorManager; // Global tick manager to be able to pause / resume group of objects Fatina.plugin.TickerManager; // Add a Animator component to any object Fatina.plugin.AnimatorManager.AddAnimatorTo(object);  
-Import &amp; Initialize // require fatina let fatina = require(&#39;fatina&#39;); let fatinaAnimator = require(&#39;fatina-plugin-animator&#39;); // initialize fatina fatina.Init(); fatina.">
-  <meta property="og:description" content="Animator Getting Started API  The installation process is explained in the README.
-After setup, you can use this plugin:
-// Global animator manager Fatina.plugin.AnimatorManager; // Global tick manager to be able to pause / resume group of objects Fatina.plugin.TickerManager; // Add a Animator component to any object Fatina.plugin.AnimatorManager.AddAnimatorTo(object);  
-Import &amp; Initialize // require fatina let fatina = require(&#39;fatina&#39;); let fatinaAnimator = require(&#39;fatina-plugin-animator&#39;); // initialize fatina fatina.Init(); fatina.">
-  <meta name="twitter:description" content="Animator Getting Started API  The installation process is explained in the README.
-After setup, you can use this plugin:
-// Global animator manager Fatina.plugin.AnimatorManager; // Global tick …">
+  <title>Tips</title>
+  <meta property="og:title" content="Tips" />
+  <meta name="twitter:title" content="Tips" />
+  <meta name="description" content="How to write tweens ?  Keep them simple: a Tween should do only one thing (avoid nesting and complexity) Split them in smaller tween to have more control (like splitting a x and y movement in two separated tweens) Group them in Sequence and prefer using .Append() and .Join() When you destroy an object like a sprite, Try to clean tweens related Avoid SetTimeout() and prefer Fatina.SetTimeout(): All the objects/events should be ticked together, normal settimeout cannot be paused &hellip;  How to go farther ?">
+  <meta property="og:description" content="How to write tweens ?  Keep them simple: a Tween should do only one thing (avoid nesting and complexity) Split them in smaller tween to have more control (like splitting a x and y movement in two separated tweens) Group them in Sequence and prefer using .Append() and .Join() When you destroy an object like a sprite, Try to clean tweens related Avoid SetTimeout() and prefer Fatina.SetTimeout(): All the objects/events should be ticked together, normal settimeout cannot be paused &hellip;  How to go farther ?">
+  <meta name="twitter:description" content="How to write tweens ?  Keep them simple: a Tween should do only one thing (avoid nesting and complexity) Split them in smaller tween to have more control (like splitting a x and y movement in two …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -26,12 +18,12 @@ After setup, you can use this plugin:
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@kefniark" />
   <meta name="twitter:creator" content="@kefniark" />
-  <meta property="og:url" content="https://kefniark.github.io/Fatina/plugins/animator-usage/" />
+  <meta property="og:url" content="https://kefniark.github.io/Fatina/basics/tips/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Fatina" />
 
   <meta name="generator" content="Hugo 0.20.7" />
-  <link rel="canonical" href="https://kefniark.github.io/Fatina/plugins/animator-usage/" />
+  <link rel="canonical" href="https://kefniark.github.io/Fatina/basics/tips/" />
   <link rel="alternate" href="https://kefniark.github.io/Fatina/index.xml" type="application/rss+xml" title="Fatina">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -163,8 +155,8 @@ After setup, you can use this plugin:
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="plugins-heading">
-              <h1>Animator Plugin - Getting Started</h1>
+            <div class="basics-heading">
+              <h1>Tips</h1>
                 
                 
             </div>
@@ -182,64 +174,39 @@ After setup, you can use this plugin:
       <article role="main" class="blog-post">
         
 
-<div style="text-align: center">
-    <a class="btn btn-default" href="/Fatina/plugins/animator/">Animator</a>
-    <a class="btn btn-primary" href="/Fatina/plugins/animator-usage/">Getting Started</a>
-    <a class="btn btn-default" href="/Fatina/plugins/animator-api/">API</a>
-</div>
+<h3 id="how-to-write-tweens">How to write tweens ?</h3>
 
-<p>The installation process is explained in the <a href="https://github.com/kefniark/Fatina-Plugin-Animator">README</a>.</p>
+<ul>
+<li>Keep them simple: a <strong>Tween</strong> should do only one thing (avoid nesting and complexity)</li>
+<li>Split them in smaller tween to have more control (like splitting a <code>x</code> and <code>y</code> movement in two separated tweens)</li>
+<li>Group them in <strong>Sequence</strong> and prefer using <code>.Append()</code> and <code>.Join()</code></li>
+<li>When you destroy an object like a sprite, Try to clean tweens related</li>
+<li>Avoid <strong>SetTimeout()</strong> and prefer <strong>Fatina.SetTimeout()</strong>: All the objects/events should be ticked together, normal settimeout cannot be paused &hellip;</li>
+</ul>
 
-<p>After setup, you can use this plugin:</p>
+<h3 id="how-to-go-farther">How to go farther ?</h3>
 
-<pre><code class="language-js">// Global animator manager
-Fatina.plugin.AnimatorManager;
+<ul>
+<li>If you already have an update loop, try to tick manually <strong>Fatina</strong> to keep animation and rendering in sync</li>
+<li>Having sequence of sequence of sequence is perfectly fine ^^</li>
+<li>You can tween a proxy object or a proxy property and use the result to calculate something else (<code>dx</code>/<code>dy</code> to after calculate <code>x</code>/<code>y</code>)</li>
+<li>With <strong>Ticker</strong>, you can tween times of other tweens (bullet time, &hellip;)</li>
+<li>You can use <code>Ticker.SetTimescale()</code> to tick part of your game at different speed and manage multiple tick unit (frame, seconds, &hellip;)</li>
+</ul>
 
-// Global tick manager to be able to pause / resume group of objects
-Fatina.plugin.TickerManager;
+<h2 id="debug">Debug</h2>
 
-// Add a Animator component to any object
-Fatina.plugin.AnimatorManager.AddAnimatorTo(object);
-</code></pre>
+<p>Sometime, debugging animations and tweens can be quite complicated. <strong>Fatina</strong> provides few features to help you:</p>
 
-<p><br></p>
+<ul>
+<li>Change the <strong>Verbosity</strong> (Fatina.SetLog, Tween.SetLog, Sequence.SetLog)
 
-<h3 id="import-initialize">Import &amp; Initialize</h3>
-
-<pre><code class="language-js">// require fatina
-let fatina = require('fatina');
-let fatinaAnimator = require('fatina-plugin-animator');
-
-// initialize fatina
-fatina.Init();
-fatina.LoadPlugin(FatinaPluginAnimator.Get());
-</code></pre>
-
-<p><br></p>
-
-<h3 id="register-a-shared-animation">Register a shared animation</h3>
-
-<pre><code class="language-js">fatina.plugin.AnimatorManager.Register('move', (obj: any, params: any) =&gt; {
-    return Fatina.Tween(obj.position, ['x']).SetRelative(true).To({ x: params }, 500);
-}, 'newTicker');
-</code></pre>
-
-<p><br></p>
-
-<h3 id="play-animation">Play Animation</h3>
-
-<pre><code class="language-js">// let's create a phaser sprite
-var test = new Phaser.Sprite(this.game, 2, 80, 'hudBg');
-
-// add a component animator to that sprite and add 2 animations
-fatina.plugin.AnimatorManager.AddAnimatorTo(test)
-    .AddAnimation('moveRight', 'move', { group: 'move' }, 5)
-    .AddAnimation('moveLeft', 'move', { group: 'move' }, -5);
-
-// now you can use those animation easily
-test.Animator.Play('moveLeft');
-test.Animator.Play('moveRight');
-</code></pre>
+<ul>
+<li><code>.SetLog(0)</code>: <strong>None</strong> (default value), print nothing</li>
+<li><code>.SetLog(1)</code>: <strong>Info</strong>, log only warning</li>
+<li><code>.SetLog(2)</code>: <strong>Debug</strong>, log every event</li>
+</ul></li>
+</ul>
 
       </article>
 

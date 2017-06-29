@@ -130,11 +130,25 @@ theme = "beautifulhugo"
     weight = 9
 
 [[menu.main]]
+    name = "More"
+    identifier = "more"
+    url = "basics/tips/"
+    weight = 10
+
+[[menu.main]]
+    name = "Tips"
+    parent = "more"
+    url = "basics/tips/"
+    weight = 11
+
+[[menu.main]]
     name = "Benchmark"
+    parent = "more"
     url = "basics/benchmark/"
-    weight = 9
+    weight = 12
 
 [[menu.main]]
     name = "About"
+    parent = "more"
     url = "basics/about/"
-    weight = 10
+    weight = 13
