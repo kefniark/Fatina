@@ -338,9 +338,9 @@ exports.BaseTween = BaseTween;
 Object.defineProperty(exports, "__esModule", { value: true });
 var Log;
 (function (Log) {
-    Log["None"] = "none";
-    Log["Info"] = "info";
-    Log["Debug"] = "debug";
+    Log[Log["None"] = 0] = "None";
+    Log[Log["Info"] = 1] = "Info";
+    Log[Log["Debug"] = 2] = "Debug";
 })(Log = exports.Log || (exports.Log = {}));
 
 

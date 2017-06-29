@@ -24,9 +24,9 @@ export function Ticker(): ITicker;
 export function LoadPlugin(newPlugin: IPlugin): void;
 
 export enum Log {
-    None = "none",
-    Info = "info",
-    Debug = "debug",
+    None = 0,
+    Info = 1,
+    Debug = 2,
 }
 
 export interface IControl {
