@@ -290,7 +290,7 @@ var BaseTween = (function () {
             this.eventStart = new Array(0);
         }
         this.eventStart[this.eventStart.length] = cb;
-        this.Info(log_1.Log.Debug, 'onStart', this);
+        this.Info(log_1.Log.Debug, 'onStart');
         return this;
     };
     BaseTween.prototype.OnRestart = function (cb) {
@@ -298,7 +298,7 @@ var BaseTween = (function () {
             this.eventRestart = new Array(0);
         }
         this.eventRestart[this.eventRestart.length] = cb;
-        this.Info(log_1.Log.Debug, 'onRestart', this);
+        this.Info(log_1.Log.Debug, 'onRestart');
         return this;
     };
     BaseTween.prototype.OnUpdate = function (cb) {
@@ -313,7 +313,7 @@ var BaseTween = (function () {
             this.eventKill = new Array(0);
         }
         this.eventKill[this.eventKill.length] = cb;
-        this.Info(log_1.Log.Debug, 'onKilled', this);
+        this.Info(log_1.Log.Debug, 'onKilled');
         return this;
     };
     BaseTween.prototype.OnComplete = function (cb) {
@@ -321,7 +321,7 @@ var BaseTween = (function () {
             this.eventComplete = new Array(0);
         }
         this.eventComplete[this.eventComplete.length] = cb;
-        this.Info(log_1.Log.Debug, 'onComplete', this);
+        this.Info(log_1.Log.Debug, 'onComplete');
         return this;
     };
     return BaseTween;
@@ -526,6 +526,7 @@ var Sequence = (function (_super) {
             var first = this.currentTween[0];
             remainsDt = first.elapsed - first.duration;
             this.EmitEvent(this.eventStepEnd, [this.currentTween[0]]);
+            this.Info(log_1.Log.Debug, 'OnStepEnd', this.eventStepEnd);
             this.currentTween = undefined;
             this.sequenceIndex++;
             if (remainsDt > 0.01) {
@@ -551,6 +552,7 @@ var Sequence = (function (_super) {
                 tween.Start();
             }
             this.EmitEvent(this.eventStepStart, [this.currentTween[0]]);
+            this.Info(log_1.Log.Debug, 'OnStepStart', this.eventStepStart);
         }
     };
     Sequence.prototype.Append = function (tween) {
@@ -598,9 +600,11 @@ var Sequence = (function (_super) {
                 var tween = tweenArray[j];
                 if (tween.elapsed === 0) {
                     this.EmitEvent(this.eventStepStart, [tween]);
+                    this.Info(log_1.Log.Debug, 'OnStepStart', this.eventStepStart);
                 }
                 tween.Skip(finalValue);
                 this.EmitEvent(this.eventStepEnd, [tween]);
+                this.Info(log_1.Log.Debug, 'OnStepEnd', this.eventStepEnd);
             }
         }
         _super.prototype.Skip.call(this);
@@ -631,7 +635,6 @@ var Sequence = (function (_super) {
             this.eventStepStart = new Array(0);
         }
         this.eventStepStart[this.eventStepStart.length] = cb;
-        this.Info(log_1.Log.Debug, 'OnStepStart', this);
         return this;
     };
     Sequence.prototype.OnStepEnd = function (cb) {
@@ -639,7 +642,6 @@ var Sequence = (function (_super) {
             this.eventStepEnd = new Array(0);
         }
         this.eventStepEnd[this.eventStepEnd.length] = cb;
-        this.Info(log_1.Log.Debug, 'OnStepEnd', this);
         return this;
     };
     return Sequence;
@@ -668,6 +670,7 @@ var lastFrame;
 var lastTime = 0;
 var logLevel = log_1.Log.None;
 var safe = true;
+var eventCreated = [];
 var loadedPlugins = [];
 exports.plugin = {};
 exports.time = 0;
@@ -682,6 +685,17 @@ function MainTicker() {
     return tickerManager;
 }
 exports.MainTicker = MainTicker;
+function AddListenerCreated(cb) {
+    eventCreated.push(cb);
+}
+exports.AddListenerCreated = AddListenerCreated;
+function RemoveListenerCreated(cb) {
+    var index = eventCreated.indexOf(cb);
+    if (index !== -1) {
+        eventCreated.splice(index, 1);
+    }
+}
+exports.RemoveListenerCreated = RemoveListenerCreated;
 function Init(disableAutoTick) {
     if (initialized) {
         return false;
@@ -790,6 +804,7 @@ function AddContext(obj) {
     if (!safe) {
         obj.SetSafe(safe);
     }
+    EmitCreated(obj);
 }
 function Ticker() {
     if (!initialized) {
@@ -800,6 +815,7 @@ function Ticker() {
     tick.SetParent(tickerManager, handler);
     tickerManager.AddTickListener(handler);
     tick.Start();
+    EmitCreated(tick);
     Info(log_1.Log.Debug, '[Fatina.Manager] Ticker Instantiated', tick);
     return tick;
 }
@@ -819,6 +835,22 @@ function Info(level, message, data) {
     }
     else {
         console.log(message);
+    }
+}
+function Emit(func, tween) {
+    if (!safe) {
+        return func(tween);
+    }
+    try {
+        func(tween);
+    }
+    catch (e) {
+        console.warn(e);
+    }
+}
+function EmitCreated(tween) {
+    for (var i = 0; i < eventCreated.length; i++) {
+        Emit(eventCreated[i], tween);
     }
 }
 var requestFrame;

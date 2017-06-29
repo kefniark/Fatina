@@ -151,13 +151,13 @@ var AnimatorManager = (function () {
         enumerable: true,
         configurable: true
     });
-    AnimatorManager.prototype.Register = function (name, onCreate, label) {
+    AnimatorManager.prototype.Register = function (name, onCreate, tickerName) {
         if (this.animations[name] && this.tickerMap[name]) {
             delete this.tickerMap[name];
         }
         this.animations[name] = onCreate;
-        if (label) {
-            this.tickerMap[name] = label;
+        if (tickerName) {
+            this.tickerMap[name] = tickerName;
         }
         return this;
     };
@@ -193,12 +193,16 @@ var Animator = (function () {
     function Animator(obj, animatorManager) {
         this.animations = {};
         this.current = {};
-        this.layers = ['default'];
+        this.groups = ['default'];
+        this.currentAnimName = {};
         this.animGroupMap = {};
         this.animTransitionMap = {};
         this.animFinalValueMap = {};
         this.animUnstoppableMap = {};
-        this.currentAnimName = {};
+        this.eventStart = {};
+        this.eventOnceStart = {};
+        this.eventComplete = {};
+        this.eventOnceComplete = {};
         this.object = obj;
         this.animatorManager = animatorManager;
     }
@@ -206,22 +210,31 @@ var Animator = (function () {
         var anim = this.animatorManager.Instantiate(animationName, this.object, params);
         return this.AddCustomAnimation(name, options || {}, anim);
     };
-    Animator.prototype.AddTransition = function (name1, name2) {
-        if (!(name1 in this.animations)) {
-            throw new Error('this animation doesnt exist ' + name1);
-        }
-        if (!(name2 in this.animations)) {
-            throw new Error('this animation doesnt exist ' + name2);
-        }
-        this.animTransitionMap[name1] = name2;
-        return this;
-    };
     Animator.prototype.AddCustomAnimation = function (name, options, tween) {
         var _this = this;
         var anim = tween;
-        anim.OnKilled(function () { return anim.Recycle(); });
+        anim.OnStart(function () {
+            _this.EmitEvent(_this.eventStart[name]);
+            if (name in _this.eventOnceStart) {
+                _this.EmitEvent(_this.eventOnceStart[name]);
+                _this.eventOnceStart[name] = [];
+            }
+        });
+        anim.OnKilled(function () {
+            anim.Recycle();
+            _this.EmitEvent(_this.eventComplete[name]);
+            if (name in _this.eventOnceComplete) {
+                _this.EmitEvent(_this.eventOnceComplete[name]);
+                _this.eventOnceComplete[name] = [];
+            }
+        });
         anim.OnComplete(function () {
             anim.Recycle();
+            _this.EmitEvent(_this.eventComplete[name]);
+            if (name in _this.eventOnceComplete) {
+                _this.EmitEvent(_this.eventOnceComplete[name]);
+                _this.eventOnceComplete[name] = [];
+            }
             if (name in _this.animTransitionMap) {
                 _this.Play(_this.animTransitionMap[name]);
             }
@@ -230,12 +243,67 @@ var Animator = (function () {
         this.animFinalValueMap[name] = options ? !!options.finalValue : false;
         this.animUnstoppableMap[name] = options ? !!options.unstoppable : false;
         this.animGroupMap[name] = (options && options.group) ? options.group : 'default';
-        if (this.layers.indexOf(this.animGroupMap[name]) === -1) {
-            this.layers.push(this.animGroupMap[name]);
+        if (options && options.next) {
+            this.animTransitionMap[name] = options.next;
+        }
+        if (this.groups.indexOf(this.animGroupMap[name]) === -1) {
+            this.groups.push(this.animGroupMap[name]);
         }
         return this;
     };
-    Animator.prototype.Play = function (name) {
+    Animator.prototype.Emit = function (func, args) {
+        try {
+            func.apply(this, args);
+        }
+        catch (e) {
+            console.warn(e);
+        }
+    };
+    Animator.prototype.EmitEvent = function (listeners, args) {
+        if (!listeners) {
+            return;
+        }
+        for (var i = 0; i < listeners.length; i++) {
+            this.Emit(listeners[i], args);
+        }
+    };
+    Animator.prototype.OnStartAll = function (name, cb) {
+        if (name in this.eventStart) {
+            this.eventStart[name].push(cb);
+        }
+        else {
+            this.eventStart[name] = [cb];
+        }
+        return this;
+    };
+    Animator.prototype.OnStart = function (name, cb) {
+        if (name in this.eventOnceStart) {
+            this.eventOnceStart[name].push(cb);
+        }
+        else {
+            this.eventOnceStart[name] = [cb];
+        }
+        return this;
+    };
+    Animator.prototype.OnCompleteAll = function (name, cb) {
+        if (name in this.eventComplete) {
+            this.eventComplete[name].push(cb);
+        }
+        else {
+            this.eventComplete[name] = [cb];
+        }
+        return this;
+    };
+    Animator.prototype.OnComplete = function (name, cb) {
+        if (name in this.eventOnceComplete) {
+            this.eventOnceComplete[name].push(cb);
+        }
+        else {
+            this.eventOnceComplete[name] = [cb];
+        }
+        return this;
+    };
+    Animator.prototype.Play = function (name, onComplete) {
         if (!(name in this.animations)) {
             throw new Error('this animation doesnt exist ' + name);
         }
@@ -243,7 +311,7 @@ var Animator = (function () {
         var current = this.current[layerName];
         if (current && current.IsRunning() && this.animUnstoppableMap[this.currentAnimName[layerName]]) {
             console.log('This animation already run and is unstoppable', this.currentAnimName[layerName], '->', name);
-            return current;
+            return;
         }
         if (current && (current.IsRunning() || current.IsPaused())) {
             var currentAnimName = this.currentAnimName[layerName];
@@ -253,37 +321,40 @@ var Animator = (function () {
         current = this.animations[name];
         this.current[layerName] = current;
         this.currentAnimName[layerName] = name;
+        if (onComplete) {
+            this.OnComplete(name, onComplete);
+        }
         current.Start();
-        return current;
+        return;
     };
-    Animator.prototype.Pause = function (layer) {
-        var layerName = !layer ? 'default' : layer;
+    Animator.prototype.Pause = function (group) {
+        var layerName = !group ? 'default' : group;
         var current = this.current[layerName];
         if (current && current.IsRunning()) {
             current.Pause();
         }
     };
     Animator.prototype.PauseAll = function () {
-        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
+        for (var _i = 0, _a = this.groups; _i < _a.length; _i++) {
             var layerId = _a[_i];
             this.Pause(layerId);
         }
     };
-    Animator.prototype.Resume = function (layer) {
-        var layerName = !layer ? 'default' : layer;
+    Animator.prototype.Resume = function (group) {
+        var layerName = !group ? 'default' : group;
         var current = this.current[layerName];
         if (current && current.IsPaused()) {
             current.Resume();
         }
     };
     Animator.prototype.ResumeAll = function () {
-        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
+        for (var _i = 0, _a = this.groups; _i < _a.length; _i++) {
             var layerId = _a[_i];
             this.Resume(layerId);
         }
     };
-    Animator.prototype.Stop = function (layer) {
-        var layerName = !layer ? 'default' : layer;
+    Animator.prototype.Stop = function (group) {
+        var layerName = !group ? 'default' : group;
         var current = this.current[layerName];
         if (current && !current.IsFinished()) {
             var currentAnimName = this.currentAnimName[layerName];
@@ -292,13 +363,13 @@ var Animator = (function () {
         }
     };
     Animator.prototype.StopAll = function () {
-        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
+        for (var _i = 0, _a = this.groups; _i < _a.length; _i++) {
             var layerId = _a[_i];
             this.Stop(layerId);
         }
     };
     Animator.prototype.Destroy = function () {
-        for (var _i = 0, _a = this.layers; _i < _a.length; _i++) {
+        for (var _i = 0, _a = this.groups; _i < _a.length; _i++) {
             var layerId = _a[_i];
             var current = this.current[layerId];
             if (current && !current.IsFinished()) {

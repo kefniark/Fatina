@@ -13,7 +13,6 @@ export interface IPluginAnimator {
 }
 export class FatinaPluginAnimator implements IPlugin {
     readonly name: string;
-    fatina: any;
     readonly TickerManager: any;
     readonly AnimatorManager: any;
     Init(fatina: any): void;
@@ -23,7 +22,7 @@ export class AnimatorManager {
     readonly Animations: string[];
     readonly Labels: string[];
     constructor(plugin: FatinaPluginAnimator);
-    Register(name: string, onCreate: (object: any, params?: any) => IControl, label?: string): AnimatorManager;
+    Register(name: string, onCreate: (object: any, params?: any) => IControl, tickerName?: string): AnimatorManager;
     Instantiate(name: string, object: any, params?: any): IControl;
     AddAnimatorTo(obj: any): Animator;
 }
@@ -40,6 +39,7 @@ export interface IAnimationParams {
     group?: string;
     unstoppable?: boolean;
     finalValue?: boolean;
+    next?: string;
 }
 export class Animator {
     animations: {
@@ -48,17 +48,20 @@ export class Animator {
     current: {
         [id: string]: IControl | undefined;
     };
-    layers: string[];
+    groups: string[];
     constructor(obj: any, animatorManager: AnimatorManager);
     AddAnimation(name: string, animationName: string, options?: IAnimationParams | any, params?: any): Animator;
-    AddTransition(name1: string, name2: string): Animator;
     AddCustomAnimation(name: string, options: IAnimationParams | any, tween: IControl): Animator;
-    Play(name: string): IControl;
-    Pause(layer?: string): void;
+    OnStartAll(name: string, cb: () => void): Animator;
+    OnStart(name: string, cb: () => void): Animator;
+    OnCompleteAll(name: string, cb: () => void): Animator;
+    OnComplete(name: string, cb: () => void): Animator;
+    Play(name: string, onComplete?: () => void): void;
+    Pause(group?: string): void;
     PauseAll(): void;
-    Resume(layer?: string): void;
+    Resume(group?: string): void;
     ResumeAll(): void;
-    Stop(layer?: string): void;
+    Stop(group?: string): void;
     StopAll(): void;
     Destroy(): void;
 }
