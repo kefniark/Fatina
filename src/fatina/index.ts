@@ -1,4 +1,5 @@
 import { Log } from './core/enum/log';
+import { IControl } from './core/interfaces/IControl';
 import { IPlayable } from './core/interfaces/IPlayable';
 import { IPlugin } from './core/interfaces/IPlugin';
 import { ISequence } from './core/interfaces/ISequence';
@@ -17,6 +18,7 @@ let lastFrame: any;
 let lastTime = 0;
 let logLevel = Log.None;
 let safe = true;
+const eventCreated: {(control: IControl): void}[] = [];
 
 const loadedPlugins: IPlugin[] = [];
 
@@ -39,6 +41,29 @@ export function MainTicker(): ITicker {
 		Init();
 	}
 	return tickerManager;
+}
+
+/**
+ * Add a listener method on tween/sequence creation
+ *
+ * @export
+ * @param {(control: IControl) => void} cb
+ */
+export function AddListenerCreated(cb: (control: IControl) => void): void {
+	eventCreated.push(cb);
+}
+
+/**
+ * Remove a listener method on tween/sequence creation
+ *
+ * @export
+ * @param {(control: IControl) => void} cb
+ */
+export function RemoveListenerCreated(cb: (control: IControl) => void): void {
+	const index = eventCreated.indexOf(cb);
+	if (index !== -1) {
+		eventCreated.splice(index, 1);
+	}
 }
 
 /**
@@ -250,6 +275,8 @@ function AddContext(obj: IPlayable | ITween | ISequence): void {
 	if (!safe) {
 		obj.SetSafe(safe);
 	}
+
+	EmitCreated(obj);
 }
 
 /**
@@ -271,6 +298,7 @@ export function Ticker(): ITicker {
 	tickerManager.AddTickListener(handler);
 	tick.Start();
 
+	EmitCreated(tick);
 	Info(Log.Debug, '[Fatina.Manager] Ticker Instantiated', tick);
 	return tick;
 }
@@ -295,6 +323,24 @@ function Info(level: Log, message: string, data?: any) {
 		console.log(message, data);
 	} else {
 		console.log(message);
+	}
+}
+
+function Emit(func: any, tween: IControl) {
+	if (!safe) {
+		return func(tween);
+	}
+
+	try {
+		func(tween);
+	} catch (e) {
+		console.warn(e);
+	}
+}
+
+function EmitCreated(tween: IControl) {
+	for (let i = 0; i < eventCreated.length; i++) {
+		Emit(eventCreated[i], tween);
 	}
 }
 

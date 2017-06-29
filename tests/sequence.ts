@@ -1,5 +1,6 @@
 import * as test from 'tape';
 import { Test } from 'tape';
+import { Log } from '../src/fatina/core/enum/log';
 import { State } from '../src/fatina/core/enum/state';
 import { Ticker } from '../src/fatina/ticker';
 import { Sequence } from '../src/fatina/tweens/sequence';
@@ -422,7 +423,7 @@ test('[Fatina.Sequence] Test Reuse complexe sequence', (t: Test) => {
 				.AppendCallback(() => callback2++)
 		)
 		.AppendCallback(() => callback++)
-		.SetLog(2)
+		.SetLog(Log.Debug)
 		.OnStart(() => start++)
 		.OnComplete(() => complete++)
 		.Start();

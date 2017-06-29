@@ -173,6 +173,42 @@ test('[Fatina.Manager] Ticker Helpers', (t: Test) => {
 	t.end();
 });
 
+test('[Fatina.Manager] Ticker Helpers', (t: Test) => {
+	let created = 0;
+
+	fatina.AddListenerCreated((tween) => created++);
+	fatina.Tween({}, []).To({}, 1);
+	fatina.Sequence();
+	fatina.Delay(1);
+	fatina.Ticker();
+
+	t.equal(created, 4);
+	t.end();
+});
+
+test('[Fatina.Manager] Ticker Helpers', (t: Test) => {
+	const ticker = fatina.MainTicker();
+
+	ticker.Start();
+
+	t.ok(ticker.IsRunning());
+	t.notOk(ticker.IsFinished());
+	t.notOk(ticker.IsIdle());
+	t.notOk(ticker.IsPaused());
+
+	fatina.Pause();
+	fatina.Pause();
+
+	t.notOk(ticker.IsRunning());
+	t.notOk(ticker.IsFinished());
+	t.ok(ticker.IsPaused());
+
+	fatina.Resume();
+	fatina.Resume();
+
+	t.end();
+});
+
 test('[Fatina.Manager] Create ticker', (t: Test) => {
 	const obj = { x: 0, y: 0, z: 0 };
 	const gameTicker = fatina.Ticker();

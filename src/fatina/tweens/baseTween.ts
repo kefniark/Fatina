@@ -335,7 +335,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.eventStart = new Array(0);
 		}
 		this.eventStart[this.eventStart.length] = cb;
-		this.Info(Log.Debug, 'onStart', this);
+		this.Info(Log.Debug, 'onStart');
 		return this as any;
 	}
 
@@ -352,7 +352,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.eventRestart = new Array(0);
 		}
 		this.eventRestart[this.eventRestart.length] = cb;
-		this.Info(Log.Debug, 'onRestart', this);
+		this.Info(Log.Debug, 'onRestart');
 		return this as any;
 	}
 
@@ -385,7 +385,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.eventKill = new Array(0);
 		}
 		this.eventKill[this.eventKill.length] = cb;
-		this.Info(Log.Debug, 'onKilled', this);
+		this.Info(Log.Debug, 'onKilled');
 		return this as any;
 	}
 
@@ -402,7 +402,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.eventComplete = new Array(0);
 		}
 		this.eventComplete[this.eventComplete.length] = cb;
-		this.Info(Log.Debug, 'onComplete', this);
+		this.Info(Log.Debug, 'onComplete');
 		return this as any;
 	}
 }

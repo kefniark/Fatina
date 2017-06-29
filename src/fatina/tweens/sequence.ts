@@ -107,6 +107,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 			remainsDt = first.elapsed - first.duration;
 
 			this.EmitEvent(this.eventStepEnd, [this.currentTween[0]]);
+			this.Info(Log.Debug, 'OnStepEnd', this.eventStepEnd);
 			this.currentTween = undefined;
 			this.sequenceIndex++;
 
@@ -136,6 +137,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 			}
 
 			this.EmitEvent(this.eventStepStart, [this.currentTween[0]]);
+			this.Info(Log.Debug, 'OnStepStart', this.eventStepStart);
 		}
 	}
 
@@ -191,9 +193,11 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 				const tween = tweenArray[j];
 				if (tween.elapsed === 0) {
 					this.EmitEvent(this.eventStepStart, [tween]);
+					this.Info(Log.Debug, 'OnStepStart', this.eventStepStart);
 				}
 				tween.Skip(finalValue);
 				this.EmitEvent(this.eventStepEnd, [tween]);
+				this.Info(Log.Debug, 'OnStepEnd', this.eventStepEnd);
 			}
 		}
 		super.Skip();
@@ -229,7 +233,6 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 			this.eventStepStart = new Array(0);
 		}
 		this.eventStepStart[this.eventStepStart.length] = cb;
-		this.Info(Log.Debug, 'OnStepStart', this);
 		return this;
 	}
 
@@ -238,7 +241,6 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 			this.eventStepEnd = new Array(0);
 		}
 		this.eventStepEnd[this.eventStepEnd.length] = cb;
-		this.Info(Log.Debug, 'OnStepEnd', this);
 		return this;
 	}
 }

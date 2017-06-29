@@ -1,5 +1,6 @@
 import * as test from 'tape';
 import { Test } from 'tape';
+import { Log } from '../src/fatina/core/enum/log';
 import { State } from '../src/fatina/core/enum/state';
 import { ITween } from '../src/fatina/core/interfaces/ITween';
 import { Easing } from '../src/fatina/index';
@@ -682,7 +683,7 @@ test('[Fatina.Tween] Safe & Debug', (t: Test) => {
 		.To({ x: 1 }, 10)
 		.SetEasing('inOutQuad')
 		.SetSafe(false)
-		.SetLog(2)
+		.SetLog(Log.Debug)
 		.OnComplete(() => {})
 		.Start();
 
