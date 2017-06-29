@@ -22,11 +22,11 @@ Fatina.plugin.AddHelpers(obj);
 
 ### 1. Example (with Phaser)
 ```js
-// require tina
+// require fatina
 let fatina = require('fatina');
 let fatinaHelpers = require('fatina-plugin-helpers');
 
-// initialize tina
+// initialize fatina
 fatina.Init();
 fatina.LoadPlugin(fatinaHelpers.Get());
 

@@ -214,7 +214,7 @@
                 
                   Helpers Getting Started API  The installation process is explained in the README.
 After setup, you can use this plugin on any object:
-Fatina.plugin.AddHelpers(obj);  1. Example (with Phaser) // require tina let fatina = require('fatina'); let fatinaHelpers = require('fatina-plugin-helpers'); // initialize tina fatina.Init(); fatina.LoadPlugin(fatinaHelpers.Get()); ... // let's create a phaser sprite var test = new Phaser.Sprite(this.game, 2, 80, 'hudBg'); // use the plugin on this sprite fatina.plugin.AddHelpers(test); // use one helper function to move horizontaly the sprite to the position x = 50 in 1s.
+Fatina.plugin.AddHelpers(obj);  1. Example (with Phaser) // require fatina let fatina = require('fatina'); let fatinaHelpers = require('fatina-plugin-helpers'); // initialize fatina fatina.Init(); fatina.LoadPlugin(fatinaHelpers.Get()); ... // let's create a phaser sprite var test = new Phaser.Sprite(this.game, 2, 80, 'hudBg'); // use the plugin on this sprite fatina.plugin.AddHelpers(test); // use one helper function to move horizontaly the sprite to the position x = 50 in 1s.
                   <a href="https://kefniark.github.io/Fatina/plugins/helpers-usage/" class="post-read-more">[Read More]</a>
                 
               </div>
@@ -283,7 +283,7 @@ Animations  AddAnimation(name: string, animationName: string, options?
                   Animator Getting Started API  The installation process is explained in the README.
 After setup, you can use this plugin:
 // Global animator manager Fatina.plugin.AnimatorManager; // Global tick manager to be able to pause / resume group of objects Fatina.plugin.TickerManager; // Add a Animator component to any object Fatina.plugin.AnimatorManager.AddAnimatorTo(object);  
-Import &amp; Initialize // require tina let fatina = require('fatina'); let fatinaAnimator = require('fatina-plugin-animator'); // initialize tina fatina.Init(); fatina.
+Import &amp; Initialize // require fatina let fatina = require('fatina'); let fatinaAnimator = require('fatina-plugin-animator'); // initialize fatina fatina.Init(); fatina.
                   <a href="https://kefniark.github.io/Fatina/plugins/animator-usage/" class="post-read-more">[Read More]</a>
                 
               </div>

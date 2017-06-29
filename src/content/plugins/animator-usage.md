@@ -29,11 +29,11 @@ Fatina.plugin.AnimatorManager.AddAnimatorTo(object);
 
 ### Import & Initialize
 ```js
-// require tina
+// require fatina
 let fatina = require('fatina');
 let fatinaAnimator = require('fatina-plugin-animator');
 
-// initialize tina
+// initialize fatina
 fatina.Init();
 fatina.LoadPlugin(FatinaPluginAnimator.Get());
 ```

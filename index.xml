@@ -89,7 +89,7 @@ Golden Stars Use Modifier for curve and gravity var app4 = new PIXI.</descrip
       <guid>https://kefniark.github.io/Fatina/plugins/helpers-usage/</guid>
       <description>Helpers Getting Started API  The installation process is explained in the README.
 After setup, you can use this plugin on any object:
-Fatina.plugin.AddHelpers(obj);  1. Example (with Phaser) // require tina let fatina = require(&#39;fatina&#39;); let fatinaHelpers = require(&#39;fatina-plugin-helpers&#39;); // initialize tina fatina.Init(); fatina.LoadPlugin(fatinaHelpers.Get()); ... // let&#39;s create a phaser sprite var test = new Phaser.Sprite(this.game, 2, 80, &#39;hudBg&#39;); // use the plugin on this sprite fatina.plugin.AddHelpers(test); // use one helper function to move horizontaly the sprite to the position x = 50 in 1s.</description>
+Fatina.plugin.AddHelpers(obj);  1. Example (with Phaser) // require fatina let fatina = require(&#39;fatina&#39;); let fatinaHelpers = require(&#39;fatina-plugin-helpers&#39;); // initialize fatina fatina.Init(); fatina.LoadPlugin(fatinaHelpers.Get()); ... // let&#39;s create a phaser sprite var test = new Phaser.Sprite(this.game, 2, 80, &#39;hudBg&#39;); // use the plugin on this sprite fatina.plugin.AddHelpers(test); // use one helper function to move horizontaly the sprite to the position x = 50 in 1s.</description>
     </item>
     
     <item>
@@ -132,7 +132,7 @@ Animations  AddAnimation(name: string, animationName: string, options?</descript
       <description>Animator Getting Started API  The installation process is explained in the README.
 After setup, you can use this plugin:
 // Global animator manager Fatina.plugin.AnimatorManager; // Global tick manager to be able to pause / resume group of objects Fatina.plugin.TickerManager; // Add a Animator component to any object Fatina.plugin.AnimatorManager.AddAnimatorTo(object);  
-Import &amp;amp; Initialize // require tina let fatina = require(&#39;fatina&#39;); let fatinaAnimator = require(&#39;fatina-plugin-animator&#39;); // initialize tina fatina.Init(); fatina.</description>
+Import &amp;amp; Initialize // require fatina let fatina = require(&#39;fatina&#39;); let fatinaAnimator = require(&#39;fatina-plugin-animator&#39;); // initialize fatina fatina.Init(); fatina.</description>
     </item>
     
     <item>
