@@ -5,17 +5,20 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <title>Helpers Plugin</title>
-  <meta property="og:title" content="Helpers Plugin" />
-  <meta name="twitter:title" content="Helpers Plugin" />
-  <meta name="description" content="Description This plugin is a set of helpers to provide a better integration of Fatina with javascript games library like PixiJs or Phaser. It provides helpers to animate:
- Position: Move, Shake, PunchPosition Rotation: Rotate, PunchRotate Scale: Scale, PunchScale Alpha: Fade Color: Color, PunchColor  This make the code smaller and easier to read
-// normal fatina tween fatina.Tween(sprite.position, [&#39;x&#39;]).To({&#39;x&#39;: 50 }, 1000); // same operation with the helper sprite.">
-  <meta property="og:description" content="Description This plugin is a set of helpers to provide a better integration of Fatina with javascript games library like PixiJs or Phaser. It provides helpers to animate:
- Position: Move, Shake, PunchPosition Rotation: Rotate, PunchRotate Scale: Scale, PunchScale Alpha: Fade Color: Color, PunchColor  This make the code smaller and easier to read
-// normal fatina tween fatina.Tween(sprite.position, [&#39;x&#39;]).To({&#39;x&#39;: 50 }, 1000); // same operation with the helper sprite.">
-  <meta name="twitter:description" content="Description This plugin is a set of helpers to provide a better integration of Fatina with javascript games library like PixiJs or Phaser. It provides helpers to animate:
- Position: Move, Shake, …">
+  <title>Animator Plugin - Getting Started</title>
+  <meta property="og:title" content="Animator Plugin - Getting Started" />
+  <meta name="twitter:title" content="Animator Plugin - Getting Started" />
+  <meta name="description" content="Animator Getting Started API  The installation process is explained in the README.
+After setup, you can use this plugin:
+// Global animator manager Fatina.plugin.AnimatorManager; // Global tick manager to be able to pause / resume group of objects Fatina.plugin.TickerManager; // Add a Animator component to any object Fatina.plugin.AnimatorManager.AddAnimatorTo(object);  
+Import &amp; Initialize // require tina let fatina = require(&#39;fatina&#39;); let fatinaAnimator = require(&#39;fatina-plugin-animator&#39;); // initialize tina fatina.Init(); fatina.">
+  <meta property="og:description" content="Animator Getting Started API  The installation process is explained in the README.
+After setup, you can use this plugin:
+// Global animator manager Fatina.plugin.AnimatorManager; // Global tick manager to be able to pause / resume group of objects Fatina.plugin.TickerManager; // Add a Animator component to any object Fatina.plugin.AnimatorManager.AddAnimatorTo(object);  
+Import &amp; Initialize // require tina let fatina = require(&#39;fatina&#39;); let fatinaAnimator = require(&#39;fatina-plugin-animator&#39;); // initialize tina fatina.Init(); fatina.">
+  <meta name="twitter:description" content="Animator Getting Started API  The installation process is explained in the README.
+After setup, you can use this plugin:
+// Global animator manager Fatina.plugin.AnimatorManager; // Global tick …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -23,12 +26,12 @@
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@kefniark" />
   <meta name="twitter:creator" content="@kefniark" />
-  <meta property="og:url" content="https://kefniark.github.io/Fatina/plugins/helpers/" />
+  <meta property="og:url" content="https://kefniark.github.io/Fatina/plugins/animator-usage/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Fatina" />
 
   <meta name="generator" content="Hugo 0.20.7" />
-  <link rel="canonical" href="https://kefniark.github.io/Fatina/plugins/helpers/" />
+  <link rel="canonical" href="https://kefniark.github.io/Fatina/plugins/animator-usage/" />
   <link rel="alternate" href="https://kefniark.github.io/Fatina/index.xml" type="application/rss+xml" title="Fatina">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -158,7 +161,7 @@
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
             <div class="plugins-heading">
-              <h1>Helpers Plugin</h1>
+              <h1>Animator Plugin - Getting Started</h1>
                 
                 
             </div>
@@ -176,43 +179,64 @@
       <article role="main" class="blog-post">
         
 
-<h3 id="description">Description</h3>
-
-<p>This plugin is a set of helpers to provide a better integration of Fatina with javascript games library like <strong>PixiJs</strong> or <strong>Phaser</strong>.  It provides helpers to animate:</p>
-
-<ul>
-<li><strong>Position</strong>: Move, Shake, PunchPosition</li>
-<li><strong>Rotation</strong>: Rotate, PunchRotate</li>
-<li><strong>Scale</strong>: Scale, PunchScale</li>
-<li><strong>Alpha</strong>: Fade</li>
-<li><strong>Color</strong>: Color, PunchColor</li>
-</ul>
-
-<p>This make the code smaller and easier to read</p>
-
-<pre><code class="language-js">// normal fatina tween
-fatina.Tween(sprite.position, ['x']).To({'x': 50 }, 1000);
-
-// same operation with the helper
-sprite.MoveXTo(50, 1000);
-</code></pre>
-
-<p>This also provides conversion for angle and colors</p>
-
-<pre><code class="language-js">// degree rotation (default rotation are radiant)
-sprite.RotateDegTo(90, 200);
-
-// give a red tint to the sprite (most engine works with hex or rgba number array)
-sprite.ColorRGBTo(&quot;#FF0000&quot;, 200);
-</code></pre>
-
-<div style="text-align: center; margin-top: 30px;">
-    <a class="btn btn-primary" href="https://github.com/kefniark/Fatina-Plugin-Helpers/" target="_blank">Github</a>
-    <a class="btn btn-info" href="https://github.com/kefniark/Fatina-Plugin-Helpers/releases" target="_blank">Download</a>
-    <a class="btn btn-success" href="https://www.npmjs.com/package/fatina-plugin-helpers" target="_blank">NPM</a>
-    <a class="btn btn-default" href="/Fatina/plugins/helpers-usage/">Getting Started</a>
-    <a class="btn btn-default" href="/Fatina/plugins/helpers-api/">API</a>
+<div style="text-align: center">
+    <a class="btn btn-default" href="/Fatina/plugins/animator/">Animator</a>
+    <a class="btn btn-primary" href="/Fatina/plugins/animator-usage/">Getting Started</a>
+    <a class="btn btn-default" href="/Fatina/plugins/animator-api/">API</a>
 </div>
+
+<p>The installation process is explained in the <a href="https://github.com/kefniark/Fatina-Plugin-Animator">README</a>.</p>
+
+<p>After setup, you can use this plugin:</p>
+
+<pre><code class="language-js">// Global animator manager
+Fatina.plugin.AnimatorManager;
+
+// Global tick manager to be able to pause / resume group of objects
+Fatina.plugin.TickerManager;
+
+// Add a Animator component to any object
+Fatina.plugin.AnimatorManager.AddAnimatorTo(object);
+</code></pre>
+
+<p><br></p>
+
+<h3 id="import-initialize">Import &amp; Initialize</h3>
+
+<pre><code class="language-js">// require tina
+let fatina = require('fatina');
+let fatinaAnimator = require('fatina-plugin-animator');
+
+// initialize tina
+fatina.Init();
+fatina.LoadPlugin(FatinaPluginAnimator.Get());
+</code></pre>
+
+<p><br></p>
+
+<h3 id="register-a-shared-animation">Register a shared animation</h3>
+
+<pre><code class="language-js">fatina.plugin.AnimatorManager.Register('move', (obj: any, params: any) =&gt; {
+    return Fatina.Tween(obj.position, ['x']).SetRelative(true).To({ x: params }, 500);
+}, 'newTicker');
+</code></pre>
+
+<p><br></p>
+
+<h3 id="play-animation">Play Animation</h3>
+
+<pre><code class="language-js">// let's create a phaser sprite
+var test = new Phaser.Sprite(this.game, 2, 80, 'hudBg');
+
+// add a component animator to that sprite and add 2 animations
+fatina.plugin.AnimatorManager.AddAnimatorTo(test)
+    .AddAnimation('moveRight', 'move', { group: 'move' }, 5)
+    .AddAnimation('moveLeft', 'move', { group: 'move' }, -5);
+
+// now you can use those animation easily
+test.Animator.Play('moveLeft');
+test.Animator.Play('moveRight');
+</code></pre>
 
       </article>
 

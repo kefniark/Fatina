@@ -20,6 +20,8 @@ It was design to solve few common issues related to game animations:
     <a class="btn btn-primary" href="https://github.com/kefniark/Fatina-Plugin-Animator/" target="_blank">Github</a>
     <a class="btn btn-info" href="https://github.com/kefniark/Fatina-Plugin-Animator/releases" target="_blank">Download</a>
     <a class="btn btn-success" href="https://www.npmjs.com/package/fatina-plugin-animator" target="_blank">NPM</a>
+    <a class="btn btn-default" href="/Fatina/plugins/animator-usage/">Getting Started</a>
+    <a class="btn btn-default" href="/Fatina/plugins/animator-api/">API</a>
 </div>
 
 ### Demo - UnityChan Animator
