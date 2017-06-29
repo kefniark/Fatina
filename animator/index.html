@@ -134,23 +134,17 @@
                 .AddAnimation('run_right', 'spritesheet', { group: 'sprite' }, { direction: 1, number: 8, duration: 1000, textures: GetTextures('Yuko_Run_') })
                 .AddAnimation('walk_left', 'spritesheet', { group: 'sprite' }, { direction: -1, number: 6, duration: 1000, textures: GetTextures('Yuko_Walk_') })
                 .AddAnimation('run_left', 'spritesheet', { group: 'sprite' }, { direction: -1, number: 8, duration: 1000, textures: GetTextures('Yuko_Run_') })
-                .AddAnimation('jump_fall', 'spritesheet', { group: 'sprite', unstoppable: true }, { disableLoop: true, number: 3, duration: 240, textures: GetTextures('Yuko_Jump_Fall_') })
-                .AddAnimation('jump_landing', 'spritesheet', { group: 'sprite', unstoppable: true }, { disableLoop: true, number: 1, duration: 80, textures: GetTextures('Yuko_Jump_Landing') })
-                .AddAnimation('jump_midair', 'spritesheet', { group: 'sprite', unstoppable: true }, { disableLoop: true, number: 4, duration: 320, textures: GetTextures('Yuko_Jump_MidAir_') })
-                .AddAnimation('jump_up', 'spritesheet', { group: 'sprite', unstoppable: true }, { disableLoop: true, number: 2, duration: 160, textures: GetTextures('Yuko_Jump_Up_') })
+                .AddAnimation('jump_fall', 'spritesheet', { group: 'sprite', unstoppable: true, next: 'jump_landing' }, { disableLoop: true, number: 3, duration: 240, textures: GetTextures('Yuko_Jump_Fall_') })
+                .AddAnimation('jump_landing', 'spritesheet', { group: 'sprite', unstoppable: true, next: 'idle' }, { disableLoop: true, number: 1, duration: 80, textures: GetTextures('Yuko_Jump_Landing') })
+                .AddAnimation('jump_midair', 'spritesheet', { group: 'sprite', unstoppable: true, next: 'jump_fall' }, { disableLoop: true, number: 4, duration: 320, textures: GetTextures('Yuko_Jump_MidAir_') })
+                .AddAnimation('jump_up', 'spritesheet', { group: 'sprite', unstoppable: true, next: 'jump_midair' }, { disableLoop: true, number: 2, duration: 160, textures: GetTextures('Yuko_Jump_Up_') })
 
                 // Second Group of Animation: Alpha
                 .AddAnimation('fade_in', 'fade', { group: 'alpha', finalValue: true }, { value: 1, duration: 800 })
                 .AddAnimation('fade_out', 'fade', { group: 'alpha', finalValue: true }, { value: 0, duration: 800 })
 
                 // Third Group of Animation: Jump (defined as unstoppable)
-                .AddAnimation('jump', 'jump', { group: 'move', unstoppable: true })
-
-                // Automatic Transition (at the end of one state, autostart the next one)
-                .AddTransition('jump_up', 'jump_midair')
-                .AddTransition('jump_midair', 'jump_fall')
-                .AddTransition('jump_fall', 'jump_landing')
-                .AddTransition('jump_landing', 'idle');
+                .AddAnimation('jump', 'jump', { group: 'move', unstoppable: true });
 
             // Play the default state: idle
             anim.Play('idle');
