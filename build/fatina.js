@@ -837,20 +837,20 @@ function Info(level, message, data) {
         console.log(message);
     }
 }
-function Emit(func, tween) {
+function Emit(func, control) {
     if (!safe) {
-        return func(tween);
+        return func(control);
     }
     try {
-        func(tween);
+        func(control);
     }
     catch (e) {
         console.warn(e);
     }
 }
-function EmitCreated(tween) {
+function EmitCreated(control) {
     for (var i = 0; i < eventCreated.length; i++) {
-        Emit(eventCreated[i], tween);
+        Emit(eventCreated[i], control);
     }
 }
 var requestFrame;

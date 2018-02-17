@@ -326,21 +326,21 @@ function Info(level: Log, message: string, data?: any) {
 	}
 }
 
-function Emit(func: any, tween: IControl) {
+function Emit(func: any, control: IControl) {
 	if (!safe) {
-		return func(tween);
+		return func(control);
 	}
 
 	try {
-		func(tween);
+		func(control);
 	} catch (e) {
 		console.warn(e);
 	}
 }
 
-function EmitCreated(tween: IControl) {
+function EmitCreated(control: IControl) {
 	for (let i = 0; i < eventCreated.length; i++) {
-		Emit(eventCreated[i], tween);
+		Emit(eventCreated[i], control);
 	}
 }
 
