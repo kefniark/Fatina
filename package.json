@@ -39,7 +39,7 @@
     "clean:coverage": "rimraf \"./coverage\" && rimraf \"./.nyc_output\"",
     "reset": "rimraf \"./node_modules\"",
     "test": "run-s test:**",
-    "test:lint": "tslint --type-check --project tsconfig.json './src/**/*.ts' 'tests/**/*.ts'",
+    "test:lint": "tslint --project tsconfig.json './src/**/*.ts' 'tests/**/*.ts'",
     "test:unittest": "ts-node node_modules/tape/bin/tape ./tests/**/*.ts | tspec",
     "test:depencencies": "npm-check --production || echo \"Run 'npm run update' to interactively update dependencies for this project\"",
     "docs": "typedoc --out ./docs ./src/",
