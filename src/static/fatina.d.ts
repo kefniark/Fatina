@@ -91,7 +91,6 @@ export interface ISequence extends IControl {
 export interface ITicker extends IControl {
     AddTickListener(cb: (dt: number) => void): void;
     RemoveTickListener(cb: (dt: number) => void): void;
-    CheckTickListener(cb: (dt: number) => void): boolean;
     SetTimescale(scale: number): void;
 }
 
