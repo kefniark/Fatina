@@ -58,14 +58,8 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 		}
 
 		this.state = State.Run;
-		if (this.recycled) {
-			if (!this.parent.CheckTickListener(this.tickCb)) {
-				this.parent.AddTickListener(this.tickCb);
-			}
-			this.recycled = false;
-		} else {
-			this.parent.AddTickListener(this.tickCb);
-		}
+		this.parent.AddTickListener(this.tickCb);
+		this.recycled = false;
 
 		if (this.firstStart) {
 			this.EmitEvent(this.eventStart);

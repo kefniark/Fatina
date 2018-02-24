@@ -362,9 +362,9 @@ function updateLoop(timestamp: number) {
 	}
 
 	// cap to 500 ms
-	if (dt > 500) {
-		console.warn('[Fatina] Delta between two update was too high ' + Math.round(dt) + 'ms. , Capped to 500ms.');
-		dt = 500;
+	if (dt > 350) {
+		console.warn('[Fatina] Delta between two update was too high ' + Math.round(dt) + 'ms. , Capped to 350ms.');
+		dt = 350;
 	}
 
 	Update(dt);

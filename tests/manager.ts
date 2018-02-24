@@ -209,6 +209,25 @@ test('[Fatina.Manager] Ticker Helpers', (t: Test) => {
 	t.end();
 });
 
+test('[Fatina.Manager] Test Pooling', (t: Test) => {
+	let start = 0;
+	let complete = 0;
+	for (let i = 0; i < 1024; i++) {
+		const duration = Math.random() * 49 + 1;
+		const obj = { x: 0, y: 0, z: 0 };
+		const tween = fatina.Tween(obj, ['x']).To({ x: 1 }, duration);
+		tween.OnStart(() => start++);
+		tween.OnComplete(() => complete++);
+		tween.Start();
+		fatina.Update(1);
+	}
+	fatina.Update(50);
+
+	t.equal(start, 1024);
+	t.equal(complete, 1024);
+	t.end();
+});
+
 test('[Fatina.Manager] Create ticker', (t: Test) => {
 	const obj = { x: 0, y: 0, z: 0 };
 	const gameTicker = fatina.Ticker();
