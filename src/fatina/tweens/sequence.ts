@@ -28,7 +28,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 	public currentTween: (ITween | IPlayable)[] | undefined;
 
 	// private properties
-	private eventTick: Set<(dt: number) => void> = new Set();
+	private eventTick: {(dt: number): void}[] = [];
 	private tweens: ((ITween | IPlayable)[])[] = [];
 	private sequenceIndex = 0;
 
@@ -52,11 +52,14 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 	}
 
 	public AddTickListener(cb: (dt: number) => void): void {
-		this.eventTick.add(cb);
+		this.eventTick.unshift(cb);
 	}
 
 	public RemoveTickListener(cb: (dt: number) => void): void {
-		this.eventTick.delete(cb);
+		const index = this.eventTick.indexOf(cb);
+		if (index !== -1) {
+			this.eventTick.splice(index, 1);
+		}
 	}
 
 	private Tick(dt: number) {
@@ -76,8 +79,8 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 
 		if (this.currentTween) {
 			// Tick every listener
-			for (const tick of this.eventTick) {
-				tick(dt);
+			for (let i = this.eventTick.length - 1; i >= 0; i--) {
+				this.eventTick[i](dt);
 			}
 
 			// Dont emit update event for remains dt

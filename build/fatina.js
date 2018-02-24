@@ -1016,7 +1016,7 @@ const delay_1 = __webpack_require__(/*! ./delay */ "./src/fatina/tweens/delay.ts
 class Sequence extends baseTween_1.BaseTween {
     constructor() {
         super();
-        this.eventTick = new Set();
+        this.eventTick = [];
         this.tweens = [];
         this.sequenceIndex = 0;
         this.tickCb = this.Tick.bind(this);
@@ -1034,10 +1034,13 @@ class Sequence extends baseTween_1.BaseTween {
         }
     }
     AddTickListener(cb) {
-        this.eventTick.add(cb);
+        this.eventTick.unshift(cb);
     }
     RemoveTickListener(cb) {
-        this.eventTick.delete(cb);
+        const index = this.eventTick.indexOf(cb);
+        if (index !== -1) {
+            this.eventTick.splice(index, 1);
+        }
     }
     Tick(dt) {
         if (this.state === state_1.State.Finished || this.state === state_1.State.Killed) {
@@ -1052,8 +1055,8 @@ class Sequence extends baseTween_1.BaseTween {
             this.NextTween();
         }
         if (this.currentTween) {
-            for (const tick of this.eventTick) {
-                tick(dt);
+            for (let i = this.eventTick.length - 1; i >= 0; i--) {
+                this.eventTick[i](dt);
             }
             if (remains !== true) {
                 this.EmitEvent(this.eventUpdate, [dt, 0]);
