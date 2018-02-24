@@ -223,6 +223,8 @@ test('[Fatina.Sequence] Sequence timescale & kill', (t: Test) => {
 	t.equal(1, killed, 'check the onKilled event is emitted');
 
 	sequence.Kill();
+	(sequence as any).Tick(1);
+
 	t.equal(1, killed, 'check the onKilled event is emitted once');
 	t.end();
 });

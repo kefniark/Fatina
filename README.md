@@ -18,7 +18,7 @@ Small & Light tweening library for **Games** / **Web**
 A comprehensive and easy to use animation library for **Typescript** / **Javascript**
 
 * Easy to use (API strongly inspired by Dotween)
-* Lightweight with no dependencies ( < 25KB )
+* Lightweight with no dependencies ( < 20KB )
 * Unit tested + code coverage
 * Open source and MIT License (use it as you please)
 

@@ -62,10 +62,6 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		}
 	}
 
-	public CheckTickListener(cb: (dt: number) => void): boolean {
-		return false;
-	}
-
 	private Tick(dt: number) {
 		if (this.state === State.Finished || this.state === State.Killed) {
 			return;
