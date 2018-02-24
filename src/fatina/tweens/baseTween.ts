@@ -1,6 +1,8 @@
 import { Log } from '../core/enum/log';
 import { State } from '../core/enum/state';
 import { ITicker } from '../core/interfaces/ITicker';
+import { ISettings } from '../core/interfaces/ISettings';
+import { ITweenProperty } from '../core/interfaces/ITweenProperty';
 
 /**
  * Shared behaviors between different types of tweens and sequence
@@ -28,16 +30,12 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	public state: State = State.Idle;
 
 	// private properties
-	protected loopOriginal = 1;
-	protected loop = 1;
-	protected yoyoOriginal = 0;
-	protected yoyo = 0;
+	protected loop: ITweenProperty | undefined;
+	protected yoyo: ITweenProperty | undefined;
 	protected parent: ITicker;
 	protected tickCb: (dt: number) => void;
 	private firstStart = true;
-	private recycled = false;
-	private safe = true;
-	private logLevel = Log.None;
+	private settings?: ISettings;
 
 	/**
 	 * Method used to start a tween
@@ -59,24 +57,12 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 
 		this.state = State.Run;
 		this.parent.AddTickListener(this.tickCb);
-		this.recycled = false;
 
 		if (this.firstStart) {
 			this.EmitEvent(this.eventStart);
 			this.firstStart = false;
 		}
 		return this as any;
-	}
-
-	/**
-	 * Reset a tween to be reusable (with start)
-	 *
-	 * @memberOf BaseTween
-	 */
-	public Recycle() {
-		this.Reset(true);
-		this.firstStart = true;
-		this.recycled = true;
 	}
 
 	/**
@@ -91,7 +77,9 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 			this.RemoveParentListener();
 		}
 
-		this.loop = this.loopOriginal;
+		if (this.loop) {
+			this.loop.value = this.loop.original;
+		}
 		this.LoopInit();
 		this.EmitEvent(this.eventRestart);
 	}
@@ -194,7 +182,8 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 		}
 
 		if (finalValue) {
-			this.tickCb(this.duration - this.elapsed + (this.yoyo * this.duration));
+			const duration = this.yoyo ? (this.yoyo.value * this.duration) : 0;
+			this.tickCb(this.duration - this.elapsed + duration);
 			return;
 		}
 
@@ -230,8 +219,16 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 * @memberOf Tween
 	 */
 	public SetLoop(loop: number): T {
-		this.loopOriginal = Math.round(loop);
-		this.loop = this.loopOriginal;
+		if (!this.loop) {
+			this.loop = { original: 1, value: 1 };
+		}
+		this.loop.original = Math.round(loop);
+		this.loop.value = this.loop.original;
+		return this as any;
+	}
+
+	public SetSettings(settings: ISettings): T {
+		this.settings = settings;
 		return this as any;
 	}
 
@@ -274,18 +271,8 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 		this.elapsed = 0;
 	}
 
-	public SetSafe(safe: boolean): T {
-		this.safe = safe;
-		return this as any;
-	}
-
-	public SetLog(level: Log): T {
-		this.logLevel = level;
-		return this as any;
-	}
-
 	protected Info(level: Log, message: string, data?: any) {
-		if (level > this.logLevel) {
+		if (!this.settings || level > this.settings.logLevel) {
 			return;
 		}
 		if (data) {
@@ -296,7 +283,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	}
 
 	private Emit(func: any, args: any) {
-		if (!this.safe) {
+		if (this.settings && !this.settings.safe) {
 			return func.apply(this, args);
 		}
 		try {

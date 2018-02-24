@@ -390,8 +390,7 @@ let initialized = false;
 let isFirstUpdate = true;
 let lastFrame;
 let lastTime = 0;
-let logLevel = log_1.Log.None;
-let safe = true;
+const settings = { logLevel: log_1.Log.None, safe: true };
 const eventCreated = [];
 const loadedPlugins = [];
 exports.plugin = {};
@@ -455,11 +454,11 @@ function Resume() {
 }
 exports.Resume = Resume;
 function SetLog(level) {
-    logLevel = level;
+    settings.logLevel = level;
 }
 exports.SetLog = SetLog;
 function SetSafe(isSafe) {
-    safe = isSafe;
+    settings.safe = isSafe;
 }
 exports.SetSafe = SetSafe;
 function Destroy() {
@@ -520,11 +519,8 @@ function AddContext(obj) {
         Init();
     }
     obj.SetParent(tickerManager);
-    if (logLevel !== log_1.Log.None) {
-        obj.SetLog(logLevel);
-    }
-    if (!safe) {
-        obj.SetSafe(safe);
+    if (settings.logLevel !== log_1.Log.None || !settings.safe) {
+        obj.SetSettings(settings);
     }
     EmitCreated(obj);
 }
@@ -549,7 +545,7 @@ function LoadPlugin(newPlugin) {
 }
 exports.LoadPlugin = LoadPlugin;
 function Info(level, message, data) {
-    if (level > logLevel) {
+    if (level > settings.logLevel) {
         return;
     }
     if (data) {
@@ -560,7 +556,7 @@ function Info(level, message, data) {
     }
 }
 function Emit(func, control) {
-    if (!safe) {
+    if (!settings.safe) {
         return func(control);
     }
     try {
@@ -709,14 +705,7 @@ class BaseTween {
         this.duration = 0;
         this.timescale = 1;
         this.state = state_1.State.Idle;
-        this.loopOriginal = 1;
-        this.loop = 1;
-        this.yoyoOriginal = 0;
-        this.yoyo = 0;
         this.firstStart = true;
-        this.recycled = false;
-        this.safe = true;
-        this.logLevel = log_1.Log.None;
     }
     Start() {
         if (this.state !== state_1.State.Idle) {
@@ -730,24 +719,20 @@ class BaseTween {
         }
         this.state = state_1.State.Run;
         this.parent.AddTickListener(this.tickCb);
-        this.recycled = false;
         if (this.firstStart) {
             this.EmitEvent(this.eventStart);
             this.firstStart = false;
         }
         return this;
     }
-    Recycle() {
-        this.Reset(true);
-        this.firstStart = true;
-        this.recycled = true;
-    }
     Reset(skipParent) {
         this.state = state_1.State.Idle;
         if (!skipParent) {
             this.RemoveParentListener();
         }
-        this.loop = this.loopOriginal;
+        if (this.loop) {
+            this.loop.value = this.loop.original;
+        }
         this.LoopInit();
         this.EmitEvent(this.eventRestart);
     }
@@ -793,7 +778,8 @@ class BaseTween {
             this.EmitEvent(this.eventStart);
         }
         if (finalValue) {
-            this.tickCb(this.duration - this.elapsed + (this.yoyo * this.duration));
+            const duration = this.yoyo ? (this.yoyo.value * this.duration) : 0;
+            this.tickCb(this.duration - this.elapsed + duration);
             return;
         }
         this.elapsed = this.duration;
@@ -809,8 +795,15 @@ class BaseTween {
         this.EmitEvent(this.eventKill);
     }
     SetLoop(loop) {
-        this.loopOriginal = Math.round(loop);
-        this.loop = this.loopOriginal;
+        if (!this.loop) {
+            this.loop = { original: 1, value: 1 };
+        }
+        this.loop.original = Math.round(loop);
+        this.loop.value = this.loop.original;
+        return this;
+    }
+    SetSettings(settings) {
+        this.settings = settings;
         return this;
     }
     IsIdle() {
@@ -844,16 +837,8 @@ class BaseTween {
     LoopInit() {
         this.elapsed = 0;
     }
-    SetSafe(safe) {
-        this.safe = safe;
-        return this;
-    }
-    SetLog(level) {
-        this.logLevel = level;
-        return this;
-    }
     Info(level, message, data) {
-        if (level > this.logLevel) {
+        if (!this.settings || level > this.settings.logLevel) {
             return;
         }
         if (data) {
@@ -864,7 +849,7 @@ class BaseTween {
         }
     }
     Emit(func, args) {
-        if (!this.safe) {
+        if (this.settings && !this.settings.safe) {
             return func.apply(this, args);
         }
         try {
@@ -984,12 +969,15 @@ class Delay extends baseTween_1.BaseTween {
                 return;
             }
             this.remainsDt = this.elapsed - this.duration;
-            this.loop--;
-            if (this.loop === 0) {
-                this.Complete();
-                return;
+            if (this.loop) {
+                this.loop.value--;
+                if (this.loop.value !== 0) {
+                    this.ResetAndStart(0);
+                    continue;
+                }
             }
-            this.ResetAndStart(0);
+            this.Complete();
+            return;
         }
     }
 }
@@ -1081,13 +1069,14 @@ class Sequence extends baseTween_1.BaseTween {
             }
         }
         if (!this.currentTween && this.tweens.length === this.sequenceIndex) {
-            this.loop--;
-            if (this.loop === 0) {
-                this.Complete();
+            if (this.loop) {
+                this.loop.value--;
+                if (this.loop.value !== 0) {
+                    this.ResetAndStart(remainsDt);
+                    return;
+                }
             }
-            else {
-                this.ResetAndStart(remainsDt);
-            }
+            this.Complete();
         }
     }
     NextTween() {
@@ -1276,7 +1265,7 @@ class Tween extends baseTween_1.BaseTween {
             this.elapsed += this.remainsDt;
             const progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
             let val = this.ease(progress);
-            if ((this.yoyoOriginal - this.yoyo) % 2 === 1) {
+            if (this.yoyo && (this.yoyo.original - this.yoyo.value) % 2 === 1) {
                 val = 1 - this.ease(1 - progress);
             }
             if (this.steps !== 0) {
@@ -1293,19 +1282,22 @@ class Tween extends baseTween_1.BaseTween {
                 return;
             }
             this.remainsDt = this.elapsed - this.duration;
-            if (this.yoyo > 0) {
+            if (this.yoyo && this.yoyo.value > 0) {
                 this.Reverse();
                 this.ResetAndStart(0);
-                this.yoyo--;
+                this.yoyo.value--;
                 continue;
             }
-            this.loop--;
-            if (this.loop === 0) {
-                this.Complete();
-                return;
+            if (this.loop) {
+                this.loop.value--;
+                if (this.loop.value !== 0) {
+                    this.CheckPosition();
+                    this.ResetAndStart(0);
+                    continue;
+                }
             }
-            this.CheckPosition();
-            this.ResetAndStart(0);
+            this.Complete();
+            return;
         }
     }
     From(from) {
@@ -1337,17 +1329,19 @@ class Tween extends baseTween_1.BaseTween {
         }
     }
     Reset(skipParent) {
-        if ((this.yoyoOriginal - this.yoyo) % 2 === 1) {
-            let previous = this.currentFrom;
-            this.currentFrom = this.currentTo;
-            this.currentTo = previous;
-            previous = this.from;
-            this.from = this.to;
-            this.to = previous;
-            const elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
-            this.elapsed = Math.round(elapsed * 1000) / 1000;
+        if (this.yoyo) {
+            if ((this.yoyo.original - this.yoyo.value) % 2 === 1) {
+                let previous = this.currentFrom;
+                this.currentFrom = this.currentTo;
+                this.currentTo = previous;
+                previous = this.from;
+                this.from = this.to;
+                this.to = previous;
+                const elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
+                this.elapsed = Math.round(elapsed * 1000) / 1000;
+            }
+            this.yoyo.value = this.yoyo.original;
         }
-        this.yoyo = this.yoyoOriginal;
         super.Reset(skipParent);
     }
     Reverse() {
@@ -1365,8 +1359,11 @@ class Tween extends baseTween_1.BaseTween {
         }
     }
     Yoyo(time) {
-        this.yoyoOriginal = time;
-        this.yoyo = time;
+        if (!this.yoyo) {
+            this.yoyo = { original: 0, value: 0 };
+        }
+        this.yoyo.original = time;
+        this.yoyo.value = time;
         return this;
     }
     SetSteps(steps) {

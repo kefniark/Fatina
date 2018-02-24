@@ -2,6 +2,7 @@ import { Log } from '../enum/log';
 import { State } from '../enum/state';
 import { IControl } from './IControl';
 import { ITicker } from './ITicker';
+import { ISettings } from './ISettings';
 
 /**
  * Interface used for pseudo tween (delay / callbacks)
@@ -16,8 +17,7 @@ export interface IPlayable extends IControl {
 	SetParent(ticker: ITicker): IPlayable;
 	Start(): IPlayable;
 	SetLoop(loop: number): IPlayable;
-	SetSafe(safe: boolean): IPlayable;
-	SetLog(level: Log): IPlayable;
+	SetSettings(settings: ISettings): IPlayable;
 
 	OnStart(cb: () => void): IPlayable;
 	OnRestart(cb: () => void): IPlayable;

@@ -130,7 +130,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 			let val = this.ease(progress);
 
 			// Yoyo easing (need to be reversed)
-			if ((this.yoyoOriginal - this.yoyo) % 2 === 1) {
+			if (this.yoyo && (this.yoyo.original - this.yoyo.value) % 2 === 1) {
 				val = 1 - this.ease(1 - progress);
 			}
 
@@ -156,22 +156,25 @@ export class Tween extends BaseTween<Tween> implements ITween {
 			this.remainsDt = this.elapsed - this.duration;
 
 			// Yoyo effect ( A -> B -> A )
-			if (this.yoyo > 0) {
+			if (this.yoyo && this.yoyo.value > 0) {
 				this.Reverse();
 				this.ResetAndStart(0);
-				this.yoyo--;
+				this.yoyo.value--;
 				continue;
 			}
 
 			// Loop management
-			this.loop--;
-			if (this.loop === 0) {
-				this.Complete();
-				return;
+			if (this.loop) {
+				this.loop.value--;
+				if (this.loop.value !== 0) {
+					this.CheckPosition();
+					this.ResetAndStart(0);
+					continue;
+				}
 			}
 
-			this.CheckPosition();
-			this.ResetAndStart(0);
+			this.Complete();
+			return;
 		}
 	}
 
@@ -248,19 +251,22 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 * @memberOf Tween
 	 */
 	public Reset(skipParent?: boolean): void {
-		if ((this.yoyoOriginal - this.yoyo) % 2 === 1) {
-			let previous = this.currentFrom;
-			this.currentFrom = this.currentTo;
-			this.currentTo = previous;
+		if (this.yoyo) {
+			if ((this.yoyo.original - this.yoyo.value) % 2 === 1) {
+				let previous = this.currentFrom;
+				this.currentFrom = this.currentTo;
+				this.currentTo = previous;
 
-			previous = this.from;
-			this.from = this.to;
-			this.to = previous;
+				previous = this.from;
+				this.from = this.to;
+				this.to = previous;
 
-			const elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
-			this.elapsed = Math.round(elapsed * 1000) / 1000;
+				const elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
+				this.elapsed = Math.round(elapsed * 1000) / 1000;
+			}
+
+			this.yoyo.value = this.yoyo.original;
 		}
-		this.yoyo = this.yoyoOriginal;
 		super.Reset(skipParent);
 	}
 
@@ -296,8 +302,11 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 * @memberOf Tween
 	 */
 	public Yoyo(time: number): ITween {
-		this.yoyoOriginal = time;
-		this.yoyo = time;
+		if (!this.yoyo) {
+			this.yoyo = { original: 0, value: 0 };
+		}
+		this.yoyo.original = time;
+		this.yoyo.value = time;
 		return this;
 	}
 

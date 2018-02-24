@@ -553,12 +553,31 @@ test('[Fatina.Tween] Test Yoyo 2', (t: Test) => {
 	t.ok(tween.IsFinished());
 	t.equal(0, obj.x, 'check the object position');
 
-	(tween as any).Recycle();
-	tween.Start();
+	tween = new Tween(obj, ['x'])
+		.SetRelative(true)
+		.To({ x: 10}, 5)
+		.SetLoop(3)
+		.SetLoop(2)
+		.Yoyo(2)
+		.Yoyo(1)
+		.SetParent(ticker)
+		.OnComplete(() => complete++)
+		.Start();
+	ticker.Tick(7.5);
+	tween.Reset();
 
-	t.equal(0, obj.x, 'check the object position');
+	tween = new Tween(obj, ['x'])
+		.SetRelative(true)
+		.To({ x: 10}, 5)
+		.SetLoop(3)
+		.SetLoop(2)
+		.Yoyo(2)
+		.Yoyo(1)
+		.SetParent(ticker)
+		.OnComplete(() => complete++)
+		.Start();
 	ticker.Tick(2.5);
-	t.equal(5, obj.x, 'check the object position');
+	tween.Reset();
 
 	t.end();
 });
@@ -687,8 +706,7 @@ test('[Fatina.Tween] Safe & Debug', (t: Test) => {
 		.SetParent(ticker)
 		.To({ x: 1 }, 10)
 		.SetEasing('inOutQuad')
-		.SetSafe(false)
-		.SetLog(Log.Debug)
+		.SetSettings({logLevel: Log.Debug, safe: false})
 		.OnComplete(() => {})
 		.Start();
 
@@ -728,6 +746,8 @@ test('[Fatina.Tween] Tween destroyed object/properties', (t: Test) => {
 
 	tween.Init(undefined, []);
 	t.equal(3, obj.x, 'Check the object moved');
+
+	tween.Reset();
 
 	t.end();
 });

@@ -118,6 +118,9 @@ test('[Fatina.Manager] Create Delay', (t: Test) => {
 	delay.Skip();
 	delay.Kill();
 
+	fatina.Delay(1).SetLoop(2).Start();
+	fatina.Update(5);
+
 	t.end();
 });
 
