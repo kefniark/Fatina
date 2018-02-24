@@ -8,9 +8,9 @@
   <title>Benchmark</title>
   <meta property="og:title" content="Benchmark" />
   <meta name="twitter:title" content="Benchmark" />
-  <meta name="description" content="Tween counter: ~0kRun AllWhat is happening here:Bellow, 4 scenario are tested over different configuration / libraries:1. Normal usage : 200 tween over 100 frames x 50 times2. Medium usage : 5000 tween over 100 frames x 10 times3. Heavy usage : 20000 tween over 100 frames x 5 times (to test many concurrent tween)4. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC)Each scenario run 5 times to have more accurate estimation.">
-  <meta property="og:description" content="Tween counter: ~0kRun AllWhat is happening here:Bellow, 4 scenario are tested over different configuration / libraries:1. Normal usage : 200 tween over 100 frames x 50 times2. Medium usage : 5000 tween over 100 frames x 10 times3. Heavy usage : 20000 tween over 100 frames x 5 times (to test many concurrent tween)4. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC)Each scenario run 5 times to have more accurate estimation.">
-  <meta name="twitter:description" content="Tween counter: ~0kRun AllWhat is happening here:Bellow, 4 scenario are tested over different configuration / libraries:1. Normal usage : 200 tween over 100 frames x 50 times2. Medium usage : …">
+  <meta name="description" content="Tween counter: ~0k  Run All What is happening here: Bellow, 4 scenario are tested over different configuration / libraries:  1. Normal usage : 200 tween over 100 frames x 50 times 2. Medium usage : 5000 tween over 100 frames x 10 times 3. Heavy usage : 20000 tween over 100 frames x 5 times (to test many concurrent tween) 4. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC)  Summarize:  Scenario 1 &amp; 4: simulate normal game usage Scenario 2 &amp; 3: are stress test which should almost never happen in real life  Those 3 libraries (Fatina, Tina.">
+  <meta property="og:description" content="Tween counter: ~0k  Run All What is happening here: Bellow, 4 scenario are tested over different configuration / libraries:  1. Normal usage : 200 tween over 100 frames x 50 times 2. Medium usage : 5000 tween over 100 frames x 10 times 3. Heavy usage : 20000 tween over 100 frames x 5 times (to test many concurrent tween) 4. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC)  Summarize:  Scenario 1 &amp; 4: simulate normal game usage Scenario 2 &amp; 3: are stress test which should almost never happen in real life  Those 3 libraries (Fatina, Tina.">
+  <meta name="twitter:description" content="Tween counter: ~0k  Run All What is happening here: Bellow, 4 scenario are tested over different configuration / libraries:  1. Normal usage : 200 tween over 100 frames x 50 times 2. Medium usage : …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -190,10 +190,15 @@
             <li><b>3. Heavy usage</b> : 20000 tween over 100 frames x 5 times (to test many concurrent tween)</li>
             <li><b>4. Long duration usage</b> : 1000 tween over 500 frames x 100 times (to test long term usage and GC)</li>
         </ul>
-        Each scenario run 5 times to have more accurate estimation.<br><br>
 
-        Those 4 libraries (<b>Fatina</b>, <b>Tina.js</b>, <b>Tween.js</b> and <b>TweenJS</b>) all perform well under normal usage. This page is creating millions of tweens, this is definitely not a normal usage ...<br/>
-        results are just here to get an estimation
+        Summarize:
+        <ul>
+            <li><b>Scenario 1 &amp; 4</b>: simulate normal game usage</li>
+            <li><b>Scenario 2 &amp; 3</b>: are stress test which should almost never happen in real life</li>
+        </ul>
+
+        Those 3 libraries (<b>Fatina</b>, <b>Tina.js</b> and <b>Tween.js</b>) all perform well under normal usage. This page is creating millions of tweens, this is definitely not a normal usage ...<br/>
+        results are just here to get an estimation.
     </div>
 </div>
 
@@ -209,35 +214,30 @@
             <th width="20%">Fatina</th>
             <th width="20%">TINA.js</th>
             <th width="20%">Tween.js</th>
-            <th width="20%">TweenJS</th>
         </tr>
         <tr>
             <th>Scenario 1</th>
             <td><div class="testresult fatina1"></div></td>
             <td><div class="testresult tina1"></div></td>
             <td><div class="testresult tween1"></div></td>
-            <td><div class="testresult tweenjs1"></div></td>
         </tr>
         <tr>
             <th>Scenario 2</th>
             <td><div class="testresult fatina2"></div></td>
             <td><div class="testresult tina2"></div></td>
             <td><div class="testresult tween2"></div></td>
-            <td><div class="testresult tweenjs2"></div></td>
         </tr>
         <tr>
             <th>Scenario 3</th>
             <td><div class="testresult fatina3"></div></td>
             <td><div class="testresult tina3"></div></td>
             <td><div class="testresult tween3"></div></td>
-            <td><div class="testresult tweenjs3"></div></td>
         </tr>
         <tr>
             <th>Scenario 4</th>
             <td><div class="testresult fatina4"></div></td>
             <td><div class="testresult tina4"></div></td>
             <td><div class="testresult tween4"></div></td>
-            <td><div class="testresult tweenjs4"></div></td>
         </tr>
     </table>
 </div>
@@ -262,9 +262,6 @@ new TINA.Tween({x:0}, ['x']).to({x:100}, 10).start();
 
 // Tween.js
 new TWEEN.Tween({x:0}, ['x']).to({x:100}, 10).start();
-
-// TweenJS
-createjs.Tween.get({x:0}).to({x:100}, 10);
 </code></pre>
 
     </div>
@@ -278,40 +275,34 @@ createjs.Tween.get({x:0}).to({x:100}, 10);
             <th width="20%">Fatina</th>
             <th width="20%">TINA.js</th>
             <th width="20%">Tween.js</th>
-            <th width="20%">TweenJS</th>
         </tr>
         <tr>
             <th>Scenario 1</th>
             <td><div class="testresult fatina10"></div></td>
             <td><div class="testresult tina10"></div></td>
             <td><div class="testresult tween10"></div></td>
-            <td><div class="testresult tweenjs10"></div></td>
         </tr>
         <tr>
             <th>Scenario 2</th>
             <td><div class="testresult fatina11"></div></td>
             <td><div class="testresult tina11"></div></td>
             <td><div class="testresult tween11"></div></td>
-            <td class="crash"><div class="testresult tweenjs11">CRASH!</div></td>
         </tr>
         <tr>
             <th>Scenario 3</th>
             <td><div class="testresult fatina12"></div></td>
             <td><div class="testresult tina12"></div></td>
             <td><div class="testresult tween12"></div></td>
-            <td class="crash"><div class="testresult tweenjs12">CRASH!</div></td>
         </tr>
         <tr>
             <th>Scenario 4</th>
             <td><div class="testresult fatina13"></div></td>
             <td><div class="testresult tina13"></div></td>
             <td><div class="testresult tween13"></div></td>
-            <td class="crash"><div class="testresult tweenjs13">CRASH!</div></td>
         </tr>
     </table>
 </div>
 <small>* smaller is better</small><br>
-<small>** few tests are disabled for TweenJS (really too slow)</small>
 <div class="expand">
     <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
     	<span class="btn btn-default">
@@ -349,11 +340,6 @@ new TWEEN.Tween({x:0, y:0, z:0, a:0}, ['x', 'y', 'z', 'a'])
     .onStart(() =&gt; {})
     .onComplete(() =&gt; {})
     .start();
-
-// TweenJS (exception TweenJS doesnt have a onStart event ...)
-createjs.Tween.get({x:0, y:0, z:0, a:0}, {loop: 2})
-    .to({x:100, y:2, z:69, a:-71602}, Math.random() * 5 + 10, createjs.Ease.quadInOut)
-    .call(() =&gt; {});
 </code></pre>
 
     </div>
@@ -367,40 +353,34 @@ createjs.Tween.get({x:0, y:0, z:0, a:0}, {loop: 2})
             <th width="20%">Fatina</th>
             <th width="20%">TINA.js</th>
             <th width="20%">Tween.js</th>
-            <th width="20%">TweenJS</th>
         </tr>
         <tr>
             <th>Scenario 1</th>
             <td><div class="testresult fatina20"></div></td>
             <td><div class="testresult tina20"></div></td>
             <td><div class="testresult tween20"></div></td>
-            <td><div class="testresult tweenjs20"></div></td>
         </tr>
         <tr>
             <th>Scenario 2</th>
             <td><div class="testresult fatina21"></div></td>
             <td><div class="testresult tina21"></div></td>
             <td><div class="testresult tween21"></div></td>
-            <td><div class="testresult tweenjs21"></div></td>
         </tr>
         <tr>
             <th>Scenario 3</th>
             <td><div class="testresult fatina22"></div></td>
             <td><div class="testresult tina22"></div></td>
             <td><div class="testresult tween22"></div></td>
-            <td><div class="testresult tweenjs22"></div></td>
         </tr>
         <tr>
             <th>Scenario 4</th>
             <td><div class="testresult fatina23"></div></td>
             <td><div class="testresult tina23"></div></td>
             <td><div class="testresult tween23"></div></td>
-            <td><div class="testresult tweenjs23"></div></td>
         </tr>
     </table>
 </div>
 <small>* smaller is better</small><br>
-<small>** TweenJS is here the faster because by design, a tween == sequence</small>
 <div class="expand">
     <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
     	<span class="btn btn-default">
@@ -432,13 +412,6 @@ let tweenA = new TWEEN.Tween({x:0}, ['x']).to({x:2}, 2);
 let tweenB = new TWEEN.Tween({x:0}, ['x']).to({x:5}, 3).delay(1);
 tweenA.chain(tweenB);
 tweenA.start();
-
-// TweenJS (a tween is a sequence in tween.js)
-createjs.Tween.get({x:0}, {useTicks: false})
-    .to({x:2}, 2)
-    .wait(1)
-    .to({x:5}, 3)
-    .call(() =&gt; {});
 </code></pre>
 
     </div>
@@ -485,7 +458,7 @@ createjs.Tween.get({x:0}, {useTicks: false})
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
 
 
-<div style="visibility: hidden; height: 5px; position: absolute;">
+<div style="display: none; height: 5px; position: absolute;">
     <h2>Fatina</h2>
 
     <h3>Normal Tween</h3>
@@ -675,69 +648,6 @@ createjs.Tween.get({x:0}, {useTicks: false})
         </div>
     </div>
 
-        <hr/>
-    <h2>TweenJS</h2>
-
-    <h3>Normal Tween</h3>
-    <div class="row">
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Normal', 'tweenjs1', TestTweenJS, TestTweenJSUpdate, 200, 100, 50);">50x 200 tweens</button>
-            <div class="tweenjs1"></div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Normal', 'tweenjs2', TestTweenJS, TestTweenJSUpdate, 5000, 100, 10);">10x 5k tweens</button>
-            <div class="tweenjs2"></div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Normal', 'tweenjs3', TestTweenJS, TestTweenJSUpdate, 10000, 100, 10);">5x 20k tweens</button>
-            <div class="tweenjs3"></div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Normal', 'tweenjs4', TestTweenJS, TestTweenJSUpdate, 1000, 500, 200);">100x 1000 tweens</button>
-            <div class="tweenjs4"></div>
-        </div>
-    </div>
-
-    <h3>Complicated Tween</h3>
-    <div class="row">
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Advanced', 'tweenjs10', TestTweenJSAdvanced, TestTweenJSUpdate, 200, 100, 50);">50x 200 tweens</button>
-            <div class="tweenjs10"></div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="">10x 5k tweens</button>
-            <div class="tweenjs11">Skip</div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="">5x 20k tweens</button>
-            <div class="tweenjs12">Skip</div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="">200x 1000 tweens</button>
-            <div class="tweenjs13">Skip</div>
-        </div>
-    </div>
-
-    <h3>Sequence</h3>
-    <div class="row">
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Sequence', 'tweenjs20', TestTweenJSSequence, TestTweenUpdate, 200, 100, 50);">50x 200 tweens</button>
-            <div class="tweenjs20"></div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Sequence', 'tweenjs21', TestTweenJSSequence, TestTweenUpdate, 5000, 100, 10);">10x 5k tweens</button>
-            <div class="tweenjs21"></div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Sequence', 'tweenjs22', TestTweenJSSequence, TestTweenUpdate, 10000, 100, 10);">5x 20k tweens</button>
-            <div class="testjs22"></div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Sequence', 'tweenjs23', TestTweenJSSequence, TestTweenUpdate, 1000, 500, 200);">200x 1000 tweens</button>
-            <div class="tweenjs23"></div>
-        </div>
-    </div>
-
     <script>
         function TestFatinaUpdate() {
             Fatina.Update(1);
@@ -821,31 +731,6 @@ createjs.Tween.get({x:0}, {useTicks: false})
     </script>
 
     <script>
-        function TestTweenJSUpdate() {
-            createjs.Tween.tick(1, false);
-        }
-
-        function TestTweenJS() {
-            return createjs.Tween.get({x:0}, {useTicks:false}).to({x:100}, 10);
-        }
-
-        function TestTweenJSAdvanced() {
-            // TweenJS doesnt have a onStart event ...
-                return createjs.Tween.get({x:0, y:0, z:0, a:0}, {useTicks: false, loop: 2})
-                .to({x:100, y:2, z:69, a:-71602}, Math.random() * 5 + 10, createjs.Ease.quadInOut)
-                .call(() => {});
-        }
-
-        function TestTweenJSSequence() {
-            return createjs.Tween.get({x:0}, {useTicks: false})
-            .to({x:2}, 2)
-            .wait(1)
-            .to({x:5}, 3)
-            .call(() => {});
-        }
-    </script>
-
-    <script>
         // default fatina setup
         Fatina.Init(true);
         Fatina.SetSafe(false);
@@ -878,10 +763,9 @@ createjs.Tween.get({x:0}, {useTicks: false})
                     TestFatinaUpdate();
                     TinaUpdate();
                     TestTweenUpdate();
-                    TestTweenJSUpdate();
                 }
             }, 50);
-            setTimeout(() => RunTest(buttons), 150);
+            setTimeout(() => RunTest(buttons), 300);
         }
 
         function Test(name, spanResult, method, update, totalTween, frameNumber, iterate) {

@@ -16,7 +16,7 @@
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/basics/benchmark/</guid>
-      <description>Tween counter: ~0kRun AllWhat is happening here:Bellow, 4 scenario are tested over different configuration / libraries:1. Normal usage : 200 tween over 100 frames x 50 times2. Medium usage : 5000 tween over 100 frames x 10 times3. Heavy usage : 20000 tween over 100 frames x 5 times (to test many concurrent tween)4. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC)Each scenario run 5 times to have more accurate estimation.</description>
+      <description>Tween counter: ~0k  Run All What is happening here: Bellow, 4 scenario are tested over different configuration / libraries:  1. Normal usage : 200 tween over 100 frames x 50 times 2. Medium usage : 5000 tween over 100 frames x 10 times 3. Heavy usage : 20000 tween over 100 frames x 5 times (to test many concurrent tween) 4. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC)  Summarize:  Scenario 1 &amp;amp; 4: simulate normal game usage Scenario 2 &amp;amp; 3: are stress test which should almost never happen in real life  Those 3 libraries (Fatina, Tina.</description>
     </item>
     
     <item>
