@@ -3,6 +3,7 @@ import { IControl } from './IControl';
 import { IPlayable } from './IPlayable';
 import { ITicker } from './ITicker';
 import { ITween } from './ITween';
+import { ISettings } from './ISettings';
 
 /**
  * Interface used by Sequence
@@ -17,8 +18,7 @@ export interface ISequence extends IControl {
 	SetParent(ticker: ITicker): ISequence;
 	SetTimescale(scale: number): ISequence;
 	SetLoop(loop: number): ISequence;
-	SetSafe(safe: boolean): ISequence;
-	SetLog(level: Log): ISequence;
+	SetSettings(settings: ISettings): ISequence;
 
 	Append(tween: ITween | ISequence): ISequence;
 	AppendCallback(cb: () => void): ISequence;

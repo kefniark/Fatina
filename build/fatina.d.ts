@@ -50,8 +50,7 @@ export interface IPlayable extends IControl {
     SetParent(ticker: ITicker): IPlayable;
     Start(): IPlayable;
     SetLoop(loop: number): IPlayable;
-    SetSafe(safe: boolean): IPlayable;
-    SetLog(level: Log): IPlayable;
+    SetSettings(settings: ISettings): IPlayable;
     OnStart(cb: () => void): IPlayable;
     OnRestart(cb: () => void): IPlayable;
     OnUpdate(cb: (dt: number, progress: number) => void): IPlayable;
@@ -70,8 +69,7 @@ export interface ISequence extends IControl {
     SetParent(ticker: ITicker): ISequence;
     SetTimescale(scale: number): ISequence;
     SetLoop(loop: number): ISequence;
-    SetSafe(safe: boolean): ISequence;
-    SetLog(level: Log): ISequence;
+    SetSettings(settings: ISettings): ISequence;
     Append(tween: ITween | ISequence): ISequence;
     AppendCallback(cb: () => void): ISequence;
     AppendInterval(duration: number): ISequence;
@@ -109,8 +107,7 @@ export interface ITween extends IControl {
     SetEasing(type: EasingType | string): ITween;
     SetTimescale(scale: number): ITween;
     ToSequence(): ISequence;
-    SetSafe(safe: boolean): ITween;
-    SetLog(level: Log): ITween;
+    SetSettings(settings: ISettings): ITween;
     OnStart(cb: () => void): ITween;
     OnUpdate(cb: (dt: number, progress: number) => void): ITween;
     OnRestart(cb: () => void): ITween;
@@ -158,5 +155,10 @@ export enum State {
     Pause = 2,
     Finished = 3,
     Killed = 4,
+}
+
+export interface ISettings {
+    logLevel: Log;
+    safe: boolean;
 }
 

@@ -3,6 +3,7 @@ import { Log } from '../enum/log';
 import { IControl } from './IControl';
 import { ISequence } from './ISequence';
 import { ITicker } from './ITicker';
+import { ISettings } from './ISettings';
 
 /**
  * Interface used by tweens
@@ -27,8 +28,7 @@ export interface ITween extends IControl {
 	SetEasing(type: EasingType | string): ITween;
 	SetTimescale(scale: number): ITween;
 	ToSequence(): ISequence;
-	SetSafe(safe: boolean): ITween;
-	SetLog(level: Log): ITween;
+	SetSettings(settings: ISettings): ITween;
 
 	OnStart(cb: () => void): ITween;
 	OnUpdate(cb: (dt: number, progress: number) => void): ITween;

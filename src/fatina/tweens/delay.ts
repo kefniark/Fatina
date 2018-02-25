@@ -31,12 +31,17 @@ export class Delay extends BaseTween<Delay> implements IPlayable {
 			}
 
 			this.remainsDt = this.elapsed - this.duration;
-			this.loop--;
-			if (this.loop === 0) {
-				this.Complete();
-				return;
+
+			if (this.loop) {
+				this.loop.value--;
+				if (this.loop.value !== 0) {
+					this.ResetAndStart(0);
+					continue;
+				}
 			}
-			this.ResetAndStart(0);
+
+			this.Complete();
+			return;
 		}
 	}
 }

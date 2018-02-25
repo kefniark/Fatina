@@ -425,7 +425,7 @@ test('[Fatina.Sequence] Test Reuse complexe sequence', (t: Test) => {
 				.AppendCallback(() => callback2++)
 		)
 		.AppendCallback(() => callback++)
-		.SetLog(Log.Debug)
+		.SetSettings({logLevel: Log.Debug, safe: false})
 		.OnStart(() => start++)
 		.OnComplete(() => complete++)
 		.Start();
@@ -435,23 +435,6 @@ test('[Fatina.Sequence] Test Reuse complexe sequence', (t: Test) => {
 	t.equal(callback, 1);
 	t.equal(callback2, 1);
 
-	(sequence as any).Recycle();
-	sequence.Start();
-	ticker.Tick(16);
-
-	t.equal(callback, 2);
-	t.equal(callback2, 2);
-
-	ticker.Tick(12);
 	(sequence as any).Skip(true);
-	(sequence as any).Recycle();
-	sequence.Start();
-
-	ticker.Tick(16);
-
-	t.equal(callback, 3);
-	t.equal(callback2, 3);
-	t.equal(start, 3);
-	t.equal(complete, 3);
 	t.end();
 });

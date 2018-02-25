@@ -115,12 +115,15 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 
 		// Complete
 		if (!this.currentTween && this.tweens.length === this.sequenceIndex) {
-			this.loop--;
-			if (this.loop === 0) {
-				this.Complete();
-			} else {
-				this.ResetAndStart(remainsDt);
+			if (this.loop) {
+				this.loop.value--;
+				if (this.loop.value !== 0) {
+					this.ResetAndStart(remainsDt);
+					return;
+				}
 			}
+
+			this.Complete();
 		}
 	}
 
