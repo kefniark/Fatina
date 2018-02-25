@@ -35,9 +35,7 @@
 </style>
 
 <script src="/Fatina/benchmark/tina.min.js"></script>
-<script src="/Fatina/benchmark/tweenjs-0.6.2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
-
 
 <div style="display: none; height: 5px; position: absolute;">
     <h2>Fatina</h2>
@@ -249,11 +247,13 @@
         }
 
         function TestFatinaSequence() {
-            Fatina.Sequence()
-                .Append(Fatina.Tween({x:0}, ['x']).To({x: 2}, 2))
-                .AppendInterval(1)
-                .Append(Fatina.Tween({x:0}, ['x']).To({x: 5}, 3))
-                .Start();
+            Fatina.Sequence([
+                Fatina.Tween({x:0}, ['x']).To({x: 2}, 2),
+                Fatina.Delay(1),
+                Fatina.Tween({x:0}, ['x']).To({x: 5}, 3),
+                Fatina.Tween({x:0}, ['x']).To({x: -5}, 1),
+                Fatina.Tween({x:0}, ['x']).To({x: 0}, 2)
+            ]).Start();
         }
     </script>
 
@@ -280,6 +280,8 @@
                 .add(TINA.Tween({x:0}, ['x']).to({x:2}, 2))
                 .addDelay(1)
                 .add(TINA.Tween({x:0}, ['x']).to({x:5}, 3))
+                .add(TINA.Tween({x:0}, ['x']).to({x:-5}, 1))
+                .add(TINA.Tween({x:0}, ['x']).to({x:0}, 2))
                 .start();
         }
     </script>
@@ -306,6 +308,10 @@
         function TestTweenSequence() {
             let tweenA = new TWEEN.Tween({x:0}, ['x']).to({x:2}, 2);
             let tweenB = new TWEEN.Tween({x:0}, ['x']).to({x:5}, 3).delay(1);
+            let tweenC = new TWEEN.Tween({x:0}, ['x']).to({x:-5}, 1);
+            let tweenD = new TWEEN.Tween({x:0}, ['x']).to({x:0}, 2);
+            tweenC.chain(tweenD);
+            tweenB.chain(tweenC);
             tweenA.chain(tweenB);
             tweenA.start();
         }
@@ -314,12 +320,10 @@
     <script>
         // default fatina setup
         Fatina.Init(true);
-        Fatina.SetSafe(false);
 
         // default tina setup
         let tinaTimer = new TINA.Timer().useAsDefault();
         TINA.add(tinaTimer);
-
 
         let counter = document.getElementById('counter');
         let counterValue = 0;

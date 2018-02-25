@@ -16,7 +16,7 @@ export function SetSafe(isSafe: boolean): void;
 export function Destroy(): void;
 export function Update(timestamp: number): any;
 export function Tween(obj: any, properties: string[]): ITween;
-export function Sequence(): ISequence;
+export function Sequence(list?: tween[] | sequence[] | IPlayable[]): ISequence;
 export function Delay(duration: number): IPlayable;
 export function SetTimeout(fn: () => void, duration: number): IPlayable;
 export function SetInterval(fn: () => void, duration: number): IPlayable;
@@ -50,8 +50,7 @@ export interface IPlayable extends IControl {
     SetParent(ticker: ITicker): IPlayable;
     Start(): IPlayable;
     SetLoop(loop: number): IPlayable;
-    SetSafe(safe: boolean): IPlayable;
-    SetLog(level: Log): IPlayable;
+    SetSettings(settings: ISettings): IPlayable;
     OnStart(cb: () => void): IPlayable;
     OnRestart(cb: () => void): IPlayable;
     OnUpdate(cb: (dt: number, progress: number) => void): IPlayable;
@@ -70,8 +69,7 @@ export interface ISequence extends IControl {
     SetParent(ticker: ITicker): ISequence;
     SetTimescale(scale: number): ISequence;
     SetLoop(loop: number): ISequence;
-    SetSafe(safe: boolean): ISequence;
-    SetLog(level: Log): ISequence;
+    SetSettings(settings: ISettings): ISequence;
     Append(tween: ITween | ISequence): ISequence;
     AppendCallback(cb: () => void): ISequence;
     AppendInterval(duration: number): ISequence;
@@ -109,8 +107,7 @@ export interface ITween extends IControl {
     SetEasing(type: EasingType | string): ITween;
     SetTimescale(scale: number): ITween;
     ToSequence(): ISequence;
-    SetSafe(safe: boolean): ITween;
-    SetLog(level: Log): ITween;
+    SetSettings(settings: ISettings): ITween;
     OnStart(cb: () => void): ITween;
     OnUpdate(cb: (dt: number, progress: number) => void): ITween;
     OnRestart(cb: () => void): ITween;
@@ -152,11 +149,112 @@ export enum EasingType {
     InOutBounce = "inOutBounce",
 }
 
+export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker, IPlayable {
+    currentTween: (ITween | IPlayable)[] | undefined;
+    readonly Count: number;
+    constructor(tweens?: ITween[] | ISequence[] | IPlayable[]);
+    protected LoopInit(): void;
+    AddTickListener(cb: (dt: number) => void): void;
+    RemoveTickListener(cb: (dt: number) => void): void;
+    Append(tween: ITween | ISequence): ISequence;
+    AppendCallback(cb: () => void): ISequence;
+    AppendInterval(duration: number): ISequence;
+    Prepend(tween: ITween | ISequence): ISequence;
+    PrependCallback(cb: () => void): ISequence;
+    PrependInterval(duration: number): ISequence;
+    Skip(finalValue?: boolean): void;
+    Kill(): void;
+    Join(tween: ITween | ISequence): ISequence;
+    OnStepStart(cb: (index: ITween | IPlayable) => void): ISequence;
+    OnStepEnd(cb: (index: ITween | IPlayable) => void): ISequence;
+}
+
+export class Tween extends BaseTween<Tween> implements ITween {
+    constructor(object: any, properties: string[]);
+    Init(object: any, properties: string[]): void;
+    protected Validate(): void;
+    protected CheckPosition(): void;
+    From(from: any): ITween;
+    To(to: any, duration: number): ITween;
+    SetRelative(relative: boolean): ITween;
+    Modify(diff: any, updateTo: boolean): void;
+    Reset(skipParent?: boolean): void;
+    Reverse(): void;
+    Yoyo(time: number): ITween;
+    SetSteps(steps: number): ITween;
+    ToSequence(): ISequence;
+    SetEasing(type: EasingType | string): ITween;
+    protected LoopInit(): void;
+}
+
 export enum State {
     Idle = 0,
     Run = 1,
     Pause = 2,
     Finished = 3,
     Killed = 4,
+}
+
+export interface ISettings {
+    logLevel: Log;
+    safe: boolean;
+}
+
+export abstract class BaseTween<T extends BaseTween<any>> {
+    protected eventStart: {
+        (): void;
+    }[] | undefined;
+    protected eventRestart: {
+        (): void;
+    }[] | undefined;
+    protected eventUpdate: {
+        (dt: number, progress: number): void;
+    }[] | undefined;
+    protected eventKill: {
+        (): void;
+    }[] | undefined;
+    protected eventComplete: {
+        (): void;
+    }[] | undefined;
+    elapsed: number;
+    duration: number;
+    timescale: number;
+    state: State;
+    protected loop: ITweenProperty | undefined;
+    protected yoyo: ITweenProperty | undefined;
+    protected parent: ITicker;
+    protected tickCb: (dt: number) => void;
+    Start(): T;
+    Reset(skipParent?: boolean): void;
+    ResetAndStart(dtRemains: number): void;
+    SetParent(ticker: ITicker): T;
+    SetTimescale(scale: number): T;
+    Pause(): void;
+    Resume(): void;
+    Skip(finalValue?: boolean): void;
+    Kill(): void;
+    SetLoop(loop: number): T;
+    SetSettings(settings: ISettings): T;
+    IsIdle(): boolean;
+    IsRunning(): boolean;
+    IsFinished(): boolean;
+    IsPaused(): boolean;
+    protected Complete(): void;
+    protected RemoveParentListener(): void;
+    protected CheckPosition(): void;
+    protected Validate(): void;
+    protected LoopInit(): void;
+    protected Info(level: Log, message: string, data?: any): void;
+    protected EmitEvent(listeners: any, args?: any): void;
+    OnStart(cb: () => void): T;
+    OnRestart(cb: () => void): T;
+    OnUpdate(cb: (dt: number, progress: number) => void): T;
+    OnKilled(cb: () => void): T;
+    OnComplete(cb: () => void): T;
+}
+
+export interface ITweenProperty {
+    original: number;
+    value: number;
 }
 
