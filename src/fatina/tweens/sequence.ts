@@ -36,9 +36,17 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		return this.tweens.length;
 	}
 
-	constructor() {
+	constructor(tweens?: ITween[] | ISequence[] | IPlayable[]) {
 		super();
 		this.tickCb = this.Tick.bind(this);
+
+		if (tweens) {
+			this.tweens = new Array(tweens.length);
+			for (let i = 0; i < tweens.length; i++) {
+				tweens[i].SetParent(this);
+				this.tweens[i] = [tweens[i]];
+			}
+		}
 	}
 
 	protected LoopInit() {
@@ -60,10 +68,6 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		if (index !== -1) {
 			this.eventTick.splice(index, 1);
 		}
-	}
-
-	public CheckTickListener(cb: (dt: number) => void): boolean {
-		return false;
 	}
 
 	private Tick(dt: number) {
@@ -119,12 +123,15 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 
 		// Complete
 		if (!this.currentTween && this.tweens.length === this.sequenceIndex) {
-			this.loop--;
-			if (this.loop === 0) {
-				this.Complete();
-			} else {
-				this.ResetAndStart(remainsDt);
+			if (this.loop) {
+				this.loop.value--;
+				if (this.loop.value !== 0) {
+					this.ResetAndStart(remainsDt);
+					return;
+				}
 			}
+
+			this.Complete();
 		}
 	}
 

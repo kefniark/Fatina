@@ -5,6 +5,7 @@ import { IPlugin } from './core/interfaces/IPlugin';
 import { ISequence } from './core/interfaces/ISequence';
 import { ITicker } from './core/interfaces/ITicker';
 import { ITween } from './core/interfaces/ITween';
+import { ISettings } from './core/interfaces/ISettings';
 import { EasingType } from './easing/easingType';
 import { Ticker as ticker } from './ticker';
 import { Delay as delay } from './tweens/delay';
@@ -16,10 +17,8 @@ let initialized = false;
 let isFirstUpdate = true;
 let lastFrame: any;
 let lastTime = 0;
-let logLevel = Log.None;
-let safe = true;
+const settings = { logLevel: Log.None, safe: true } as ISettings;
 const eventCreated: {(control: IControl): void}[] = [];
-
 const loadedPlugins: IPlugin[] = [];
 
 // Area for plugins to add helpers / dynamic method
@@ -136,7 +135,7 @@ export function Resume(): void {
  * @param {Log} level
  */
 export function SetLog(level: Log) {
-	logLevel = level;
+	settings.logLevel = level;
 }
 
 /**
@@ -146,7 +145,7 @@ export function SetLog(level: Log) {
  * @param {boolean} isSafe
  */
 export function SetSafe(isSafe: boolean) {
-	safe = isSafe;
+	settings.safe = isSafe;
 }
 
 /**
@@ -201,10 +200,11 @@ export function Tween(obj: any, properties: string[]): ITween {
  * Helper to create a Sequence (use the sequence pool)
  *
  * @export
+ * @param {(tween[] | sequence[])} [list]
  * @returns {ISequence}
  */
-export function Sequence(): ISequence {
-	const s = new sequence();
+export function Sequence(list?: tween[] | sequence[] | IPlayable[]): ISequence {
+	const s = new sequence(list);
 	AddContext(s);
 	Info(Log.Debug, '[Fatina.Manager] Sequence Instantiated', s);
 	return s;
@@ -268,12 +268,8 @@ function AddContext(obj: IPlayable | ITween | ISequence): void {
 
 	obj.SetParent(tickerManager as ITicker);
 
-	if (logLevel !== Log.None) {
-		obj.SetLog(logLevel);
-	}
-
-	if (!safe) {
-		obj.SetSafe(safe);
+	if (settings.logLevel !== Log.None || !settings.safe) {
+		obj.SetSettings(settings);
 	}
 
 	EmitCreated(obj);
@@ -316,7 +312,7 @@ export function LoadPlugin(newPlugin: IPlugin) {
 }
 
 function Info(level: Log, message: string, data?: any) {
-	if (level > logLevel) {
+	if (level > settings.logLevel) {
 		return;
 	}
 	if (data) {
@@ -326,21 +322,21 @@ function Info(level: Log, message: string, data?: any) {
 	}
 }
 
-function Emit(func: any, tween: IControl) {
-	if (!safe) {
-		return func(tween);
+function Emit(func: any, control: IControl) {
+	if (!settings.safe) {
+		return func(control);
 	}
 
 	try {
-		func(tween);
+		func(control);
 	} catch (e) {
 		console.warn(e);
 	}
 }
 
-function EmitCreated(tween: IControl) {
+function EmitCreated(control: IControl) {
 	for (let i = 0; i < eventCreated.length; i++) {
-		Emit(eventCreated[i], tween);
+		Emit(eventCreated[i], control);
 	}
 }
 
@@ -362,9 +358,9 @@ function updateLoop(timestamp: number) {
 	}
 
 	// cap to 500 ms
-	if (dt > 500) {
-		console.warn('[Fatina] Delta between two update was too high ' + Math.round(dt) + 'ms. , Capped to 500ms.');
-		dt = 500;
+	if (dt > 350) {
+		console.warn('[Fatina] Delta between two update was too high ' + Math.round(dt) + 'ms. , Capped to 350ms.');
+		dt = 350;
 	}
 
 	Update(dt);

@@ -1,5 +1,4 @@
 import { State } from './core/enum/state';
-import { EventList } from './core/eventList';
 import { ITicker } from './core/interfaces/ITicker';
 
 /**
@@ -11,15 +10,14 @@ import { ITicker } from './core/interfaces/ITicker';
  * @extends {EventList}
  * @implements {ITicker}
  */
-export class Ticker extends EventList implements ITicker {
+export class Ticker implements ITicker {
 	public state = State.Idle;
 	private timescale = 1;
 	public elapsed = 0;
 	public duration = 0;
 	private update = 0;
-	private eventToAdd: { (dt: number): void }[] = [];
-	private eventToRemove: { (dt: number): void }[] = [];
 	public tick: (dt: number) => void | undefined;
+	private ticks: Set<(dt: number) => void> = new Set();
 	private parent: ITicker;
 
 	public SetParent(parent: ITicker, tick: (dt: number) => void) {
@@ -46,7 +44,7 @@ export class Ticker extends EventList implements ITicker {
 	 * @memberOf Ticker
 	 */
 	public AddTickListener(cb: (dt: number) => void): void {
-		this.eventToAdd.push(cb);
+		this.ticks.add(cb);
 	}
 
 	/**
@@ -57,50 +55,7 @@ export class Ticker extends EventList implements ITicker {
 	 * @memberOf Ticker
 	 */
 	public RemoveTickListener(cb: (dt: number) => void): void {
-		this.eventToRemove.push(cb);
-	}
-
-	/**
-	 * Internal method used to cancel a stop (restart in the same frame)
-	 *
-	 * @param {(dt: number) => void} cb
-	 *
-	 * @memberOf Ticker
-	 */
-	public CheckTickListener(cb: (dt: number) => void): boolean {
-		let found = false;
-		while (true) {
-			const index = this.eventToRemove.indexOf(cb);
-			if (index === -1) {
-				return found;
-			}
-			this.eventToRemove.splice(index, 1);
-			found = true;
-		}
-	}
-
-	/**
-	 * Method used to update the array of listener
-	 * This is mostly for performance reason, being able to batch this operation in the updateLoop
-	 *
-	 * @private
-	 *
-	 * @memberOf Ticker
-	 */
-	private UpdateListener() {
-		if (this.eventToAdd.length > 0) {
-			for (let i = 0; i < this.eventToAdd.length; i++) {
-				this.Add(this.eventToAdd[i]);
-			}
-			this.eventToAdd = [];
-		}
-
-		if (this.eventToRemove.length > 0) {
-			for (let i = 0; i < this.eventToRemove.length; i++) {
-				this.Remove(this.eventToRemove[i]);
-			}
-			this.eventToRemove = [];
-		}
+		this.ticks.delete(cb);
 	}
 
 	/**
@@ -116,16 +71,12 @@ export class Ticker extends EventList implements ITicker {
 			return;
 		}
 
-		this.UpdateListener();
-
 		const localDt = dt * this.timescale;
-		for (let tick: any = this.first; tick; tick = tick.node_next) {
+		for (const tick of this.ticks) {
 			tick(localDt);
 		}
 		this.elapsed += localDt;
 		this.update++;
-
-		this.UpdateListener();
 	}
 
 	public Start(): void {

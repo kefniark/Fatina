@@ -98,6 +98,26 @@ test('[Fatina.Sequence] Test Lagging Tick', (t: Test) => {
 	t.end();
 });
 
+test('[Fatina.Sequence] Test Constructor', (t: Test) => {
+	const ticker = new Ticker();
+	ticker.Start();
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+
+	let complete = 0;
+	const sequence = new Sequence([
+		new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 5),
+		new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 5)
+	]).SetParent(ticker).OnComplete(() => complete++);
+
+	sequence.Start();
+
+	ticker.Tick(6);
+	ticker.Tick(4);
+
+	t.equal(1, complete, 'check the remains of the first tick was propagated to the second tween');
+	t.end();
+});
+
 test('[Fatina.Sequence] Test Prepend', (t: Test) => {
 	const ticker = new Ticker();
 	ticker.Start();
@@ -223,6 +243,8 @@ test('[Fatina.Sequence] Sequence timescale & kill', (t: Test) => {
 	t.equal(1, killed, 'check the onKilled event is emitted');
 
 	sequence.Kill();
+	(sequence as any).Tick(1);
+
 	t.equal(1, killed, 'check the onKilled event is emitted once');
 	t.end();
 });
@@ -423,7 +445,7 @@ test('[Fatina.Sequence] Test Reuse complexe sequence', (t: Test) => {
 				.AppendCallback(() => callback2++)
 		)
 		.AppendCallback(() => callback++)
-		.SetLog(Log.Debug)
+		.SetSettings({logLevel: Log.Debug, safe: false})
 		.OnStart(() => start++)
 		.OnComplete(() => complete++)
 		.Start();
@@ -440,16 +462,8 @@ test('[Fatina.Sequence] Test Reuse complexe sequence', (t: Test) => {
 	t.equal(callback, 2);
 	t.equal(callback2, 2);
 
-	ticker.Tick(12);
+	ticker.Tick(10);
 	(sequence as any).Skip(true);
-	(sequence as any).Recycle();
-	sequence.Start();
 
-	ticker.Tick(16);
-
-	t.equal(callback, 3);
-	t.equal(callback2, 3);
-	t.equal(start, 3);
-	t.equal(complete, 3);
 	t.end();
 });

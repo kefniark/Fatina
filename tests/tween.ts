@@ -380,6 +380,7 @@ test('[Fatina.Tween] Test Tween Kill', (t: Test) => {
 	t.ok(tween.state === State.Killed);
 	t.notOk(tween.state === State.Finished);
 	tween.Kill();
+	(tween as any).Tick(1);
 
 	t.equal(1, killed);
 	t.equal(0, complete);
@@ -552,12 +553,31 @@ test('[Fatina.Tween] Test Yoyo 2', (t: Test) => {
 	t.ok(tween.IsFinished());
 	t.equal(0, obj.x, 'check the object position');
 
-	(tween as any).Recycle();
-	tween.Start();
+	tween = new Tween(obj, ['x'])
+		.SetRelative(true)
+		.To({ x: 10}, 5)
+		.SetLoop(3)
+		.SetLoop(2)
+		.Yoyo(2)
+		.Yoyo(1)
+		.SetParent(ticker)
+		.OnComplete(() => complete++)
+		.Start();
+	ticker.Tick(7.5);
+	tween.Reset();
 
-	t.equal(0, obj.x, 'check the object position');
+	tween = new Tween(obj, ['x'])
+		.SetRelative(true)
+		.To({ x: 10}, 5)
+		.SetLoop(3)
+		.SetLoop(2)
+		.Yoyo(2)
+		.Yoyo(1)
+		.SetParent(ticker)
+		.OnComplete(() => complete++)
+		.Start();
 	ticker.Tick(2.5);
-	t.equal(5, obj.x, 'check the object position');
+	tween.Reset();
 
 	t.end();
 });
@@ -579,8 +599,12 @@ test('[Fatina.Tween] Test Modify', (t: Test) => {
 	tween.Modify({ x: 1 }, true);
 
 	ticker.Tick(1);
+
 	t.equal(2, tween.elapsed, 'check this tween is over');
 	t.equal(2, obj.x, 'check the final position was updated');
+	t.equal(1, complete, 'check the onComplete callback is emitted');
+
+	(tween as any).Complete();
 	t.equal(1, complete, 'check the onComplete callback is emitted');
 
 	tween.Modify({ x: 1 }, false);
@@ -682,8 +706,7 @@ test('[Fatina.Tween] Safe & Debug', (t: Test) => {
 		.SetParent(ticker)
 		.To({ x: 1 }, 10)
 		.SetEasing('inOutQuad')
-		.SetSafe(false)
-		.SetLog(Log.Debug)
+		.SetSettings({logLevel: Log.Debug, safe: false})
 		.OnComplete(() => {})
 		.Start();
 
@@ -696,9 +719,13 @@ test('[Fatina.Tween] Tween destroyed object/properties', (t: Test) => {
 	const ticker = new Ticker();
 	ticker.Start();
 
-	const obj = { x: 0 };
+	const obj = { x: 0, sub: { x: 0 } };
 
 	const tween = new Tween(obj, [ 'x' ])
+		.SetParent(ticker)
+		.To({ x: 5 }, 5)
+		.Start();
+	const tween2 = new Tween(obj.sub, [ 'x' ])
 		.SetParent(ticker)
 		.To({ x: 5 }, 5)
 		.Start();
@@ -707,6 +734,8 @@ test('[Fatina.Tween] Tween destroyed object/properties', (t: Test) => {
 	t.equal(1, obj.x, 'Check the object moved');
 
 	delete obj.x;
+	delete obj.sub;
+
 	ticker.Tick(1);
 
 	t.equal(2, obj.x, 'Check the object moved');
@@ -717,6 +746,8 @@ test('[Fatina.Tween] Tween destroyed object/properties', (t: Test) => {
 
 	tween.Init(undefined, []);
 	t.equal(3, obj.x, 'Check the object moved');
+
+	tween.Reset();
 
 	t.end();
 });
