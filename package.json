@@ -61,7 +61,7 @@
     "rimraf": "^2.6.2",
     "tap-spec": "4.1.1",
     "tape": "^4.9.0",
-    "ts-loader": "^4.0.0-beta.0",
+    "ts-loader": "^4.0.0",
     "ts-node": "^5.0.0",
     "tslint": "^5.9.1",
     "typedoc": "^0.10.0",
