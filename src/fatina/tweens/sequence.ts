@@ -36,9 +36,17 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		return this.tweens.length;
 	}
 
-	constructor() {
+	constructor(tweens?: ITween[] | ISequence[] | IPlayable[]) {
 		super();
 		this.tickCb = this.Tick.bind(this);
+
+		if (tweens) {
+			this.tweens = new Array(tweens.length);
+			for (let i = 0; i < tweens.length; i++) {
+				tweens[i].SetParent(this);
+				this.tweens[i] = [tweens[i]];
+			}
+		}
 	}
 
 	protected LoopInit() {

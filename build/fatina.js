@@ -486,8 +486,8 @@ function Tween(obj, properties) {
     return t;
 }
 exports.Tween = Tween;
-function Sequence() {
-    const s = new sequence_1.Sequence();
+function Sequence(list) {
+    const s = new sequence_1.Sequence(list);
     AddContext(s);
     Info(log_1.Log.Debug, '[Fatina.Manager] Sequence Instantiated', s);
     return s;
@@ -1002,12 +1002,19 @@ const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/fatina/tweens/
 const callback_1 = __webpack_require__(/*! ./callback */ "./src/fatina/tweens/callback.ts");
 const delay_1 = __webpack_require__(/*! ./delay */ "./src/fatina/tweens/delay.ts");
 class Sequence extends baseTween_1.BaseTween {
-    constructor() {
+    constructor(tweens) {
         super();
         this.eventTick = [];
         this.tweens = [];
         this.sequenceIndex = 0;
         this.tickCb = this.Tick.bind(this);
+        if (tweens) {
+            this.tweens = new Array(tweens.length);
+            for (let i = 0; i < tweens.length; i++) {
+                tweens[i].SetParent(this);
+                this.tweens[i] = [tweens[i]];
+            }
+        }
     }
     get Count() {
         return this.tweens.length;
