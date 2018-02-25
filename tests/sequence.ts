@@ -455,6 +455,15 @@ test('[Fatina.Sequence] Test Reuse complexe sequence', (t: Test) => {
 	t.equal(callback, 1);
 	t.equal(callback2, 1);
 
+	(sequence as any).Recycle();
+	sequence.Start();
+	ticker.Tick(16);
+
+	t.equal(callback, 2);
+	t.equal(callback2, 2);
+
+	ticker.Tick(10);
 	(sequence as any).Skip(true);
+
 	t.end();
 });
