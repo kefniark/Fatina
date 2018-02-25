@@ -225,6 +225,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
     protected parent: ITicker;
     protected tickCb: (dt: number) => void;
     Start(): T;
+    Recycle(): void;
     Reset(skipParent?: boolean): void;
     ResetAndStart(dtRemains: number): void;
     SetParent(ticker: ITicker): T;
