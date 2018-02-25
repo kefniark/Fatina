@@ -98,6 +98,26 @@ test('[Fatina.Sequence] Test Lagging Tick', (t: Test) => {
 	t.end();
 });
 
+test('[Fatina.Sequence] Test Constructor', (t: Test) => {
+	const ticker = new Ticker();
+	ticker.Start();
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+
+	let complete = 0;
+	const sequence = new Sequence([
+		new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 5),
+		new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 5)
+	]).SetParent(ticker).OnComplete(() => complete++);
+
+	sequence.Start();
+
+	ticker.Tick(6);
+	ticker.Tick(4);
+
+	t.equal(1, complete, 'check the remains of the first tick was propagated to the second tween');
+	t.end();
+});
+
 test('[Fatina.Sequence] Test Prepend', (t: Test) => {
 	const ticker = new Ticker();
 	ticker.Start();
@@ -435,6 +455,15 @@ test('[Fatina.Sequence] Test Reuse complexe sequence', (t: Test) => {
 	t.equal(callback, 1);
 	t.equal(callback2, 1);
 
+	(sequence as any).Recycle();
+	sequence.Start();
+	ticker.Tick(16);
+
+	t.equal(callback, 2);
+	t.equal(callback2, 2);
+
+	ticker.Tick(10);
 	(sequence as any).Skip(true);
+
 	t.end();
 });

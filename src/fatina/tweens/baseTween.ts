@@ -66,6 +66,16 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	}
 
 	/**
+	 * Reset a tween to be reusable (with start)
+	 *
+	 * @memberOf BaseTween
+	 */
+	public Recycle() {
+		this.Reset(true);
+		this.firstStart = true;
+	}
+
+	/**
 	 * To Reset a Tween already finished (example looping sequence)
 	 *
 	 * @memberOf BaseTween

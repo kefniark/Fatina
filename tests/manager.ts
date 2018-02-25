@@ -80,6 +80,22 @@ test('[Fatina.Manager] Create sequence', (t: Test) => {
 	t.end();
 });
 
+test('[Fatina.Manager] Create sequence 2', (t: Test) => {
+	const obj = { x: 0 };
+	const sequence = fatina.Sequence([
+		fatina.Delay(1),
+		fatina.Tween(obj, ['x']).To({ x: 1 }, 1)
+	]).Start();
+
+	t.equal(0, obj.x, 'check the sequence is not starting magically');
+
+	fatina.Update(2);
+	t.equal(1, obj.x, 'check the sequence is finished');
+	t.equal(2, sequence.elapsed, 'check the sequence is still there with final values');
+
+	t.end();
+});
+
 test('[Fatina.Manager] Create Delay', (t: Test) => {
 	let started = 0;
 	let updated = 0;

@@ -200,10 +200,11 @@ export function Tween(obj: any, properties: string[]): ITween {
  * Helper to create a Sequence (use the sequence pool)
  *
  * @export
+ * @param {(tween[] | sequence[])} [list]
  * @returns {ISequence}
  */
-export function Sequence(): ISequence {
-	const s = new sequence();
+export function Sequence(list?: tween[] | sequence[] | IPlayable[]): ISequence {
+	const s = new sequence(list);
 	AddContext(s);
 	Info(Log.Debug, '[Fatina.Manager] Sequence Instantiated', s);
 	return s;
