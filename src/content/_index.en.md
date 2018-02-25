@@ -19,10 +19,10 @@ The main inspiration is the <b>C#</b> library [DOTween](http://dotween.demigiant
 ## Fatina Features
 
 * **Logical and easy to use API**: Design to boost efficiency, intuitiveness and ease of use.
-* **Lightweight**: No extra dependencies and a minified file < 25KB
+* **Stable and Reliable**: Good code coverage and lots of tests
+* **Lightweight**: No extra dependencies and a minified file under 20KB
 * **Fast and efficient**
-* **Modular**: a Plugin system to add features to **Fatina** ([Helpers](plugins/helpers/), [Animator](plugins/animator/), ...)
-* **Reliable**: Good code coverage and lot of tests
+* **Modular**: With a plugin system designed to add new features ([Helpers](plugins/helpers/), [Animator](plugins/animator/), ...)
 * **Free & Open source**
 
 <div style="text-align: center; margin-top: 30px;">

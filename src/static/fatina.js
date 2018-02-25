@@ -725,6 +725,10 @@ class BaseTween {
         }
         return this;
     }
+    Recycle() {
+        this.Reset(true);
+        this.firstStart = true;
+    }
     Reset(skipParent) {
         this.state = state_1.State.Idle;
         if (!skipParent) {

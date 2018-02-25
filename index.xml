@@ -159,13 +159,12 @@ npm install fatina  Then include the Fatina module :
     </item>
     
     <item>
-      <title>About</title>
+      <title>About Fatina</title>
       <link>https://kefniark.github.io/Fatina/basics/about/</link>
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/basics/about/</guid>
-      <description> License MIT License A short and simple permissive license with conditions only requiring preservation of copyright and license notices. Licensed works, modifications, and larger works may be distributed under different terms and without source code.
-Thanks to  Unity-chan because cute samples &amp;hellip;  Why this name ?  F* Tina: No comment &amp;hellip; Fat Tina: Because everyone know that typescript is heavy and slow Reference to Fatina from Tower of Druaga    </description>
+      <description>Special thanks to  Unity-chan for all those sprites, thanks to her I was able to make cute samples &amp;hellip; Tina.js who made me rage so much with all those nasty bugs everywhere  Why this name ?  Fat Tina: Because everyone knows typescript is fat, heavy and slow Reference to Fatina from Tower of Druaga    License MIT License A short and simple permissive licence with conditions only requiring preservation of copyright and licence notices.</description>
     </item>
     
     <item>
