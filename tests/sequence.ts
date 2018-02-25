@@ -118,7 +118,6 @@ test('[Fatina.Sequence] Test Constructor', (t: Test) => {
 	t.end();
 });
 
-
 test('[Fatina.Sequence] Test Prepend', (t: Test) => {
 	const ticker = new Ticker();
 	ticker.Start();
