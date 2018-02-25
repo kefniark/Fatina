@@ -16,10 +16,15 @@
             <li><b>3. Heavy usage</b> : 20000 tween over 100 frames x 5 times (to test many concurrent tween)</li>
             <li><b>4. Long duration usage</b> : 1000 tween over 500 frames x 100 times (to test long term usage and GC)</li>
         </ul>
-        Each scenario run 5 times to have more accurate estimation.<br><br>
 
-        Those 4 libraries (<b>Fatina</b>, <b>Tina.js</b>, <b>Tween.js</b> and <b>TweenJS</b>) all perform well under normal usage. This page is creating millions of tweens, this is definitely not a normal usage ...<br/>
-        results are just here to get an estimation
+        Summarize:
+        <ul>
+            <li><b>Scenario 1 &amp; 4</b>: simulate normal game usage</li>
+            <li><b>Scenario 2 &amp; 3</b>: are stress test which should almost never happen in real life</li>
+        </ul>
+
+        Those 3 libraries (<b>Fatina</b>, <b>Tina.js</b> and <b>Tween.js</b>) all perform well under normal usage. This page is creating millions of tweens, this is definitely not a normal usage ...<br/>
+        results are just here to get an estimation.
     </div>
 </div>
 
@@ -35,35 +40,30 @@
             <th width="20%">Fatina</th>
             <th width="20%">TINA.js</th>
             <th width="20%">Tween.js</th>
-            <th width="20%">TweenJS</th>
         </tr>
         <tr>
             <th>Scenario 1</th>
             <td><div class="testresult fatina1"></div></td>
             <td><div class="testresult tina1"></div></td>
             <td><div class="testresult tween1"></div></td>
-            <td><div class="testresult tweenjs1"></div></td>
         </tr>
         <tr>
             <th>Scenario 2</th>
             <td><div class="testresult fatina2"></div></td>
             <td><div class="testresult tina2"></div></td>
             <td><div class="testresult tween2"></div></td>
-            <td><div class="testresult tweenjs2"></div></td>
         </tr>
         <tr>
             <th>Scenario 3</th>
             <td><div class="testresult fatina3"></div></td>
             <td><div class="testresult tina3"></div></td>
             <td><div class="testresult tween3"></div></td>
-            <td><div class="testresult tweenjs3"></div></td>
         </tr>
         <tr>
             <th>Scenario 4</th>
             <td><div class="testresult fatina4"></div></td>
             <td><div class="testresult tina4"></div></td>
             <td><div class="testresult tween4"></div></td>
-            <td><div class="testresult tweenjs4"></div></td>
         </tr>
     </table>
 </div>

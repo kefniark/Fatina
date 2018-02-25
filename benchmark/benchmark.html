@@ -35,11 +35,9 @@
 </style>
 
 <script src="/Fatina/benchmark/tina.min.js"></script>
-<script src="/Fatina/benchmark/tweenjs-0.6.2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
 
-
-<div style="visibility: hidden; height: 5px; position: absolute;">
+<div style="display: none; height: 5px; position: absolute;">
     <h2>Fatina</h2>
 
     <h3>Normal Tween</h3>
@@ -229,69 +227,6 @@
         </div>
     </div>
 
-        <hr/>
-    <h2>TweenJS</h2>
-
-    <h3>Normal Tween</h3>
-    <div class="row">
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Normal', 'tweenjs1', TestTweenJS, TestTweenJSUpdate, 200, 100, 50);">50x 200 tweens</button>
-            <div class="tweenjs1"></div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Normal', 'tweenjs2', TestTweenJS, TestTweenJSUpdate, 5000, 100, 10);">10x 5k tweens</button>
-            <div class="tweenjs2"></div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Normal', 'tweenjs3', TestTweenJS, TestTweenJSUpdate, 10000, 100, 10);">5x 20k tweens</button>
-            <div class="tweenjs3"></div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Normal', 'tweenjs4', TestTweenJS, TestTweenJSUpdate, 1000, 500, 200);">100x 1000 tweens</button>
-            <div class="tweenjs4"></div>
-        </div>
-    </div>
-
-    <h3>Complicated Tween</h3>
-    <div class="row">
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Advanced', 'tweenjs10', TestTweenJSAdvanced, TestTweenJSUpdate, 200, 100, 50);">50x 200 tweens</button>
-            <div class="tweenjs10"></div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="">10x 5k tweens</button>
-            <div class="tweenjs11">Skip</div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="">5x 20k tweens</button>
-            <div class="tweenjs12">Skip</div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="">200x 1000 tweens</button>
-            <div class="tweenjs13">Skip</div>
-        </div>
-    </div>
-
-    <h3>Sequence</h3>
-    <div class="row">
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Sequence', 'tweenjs20', TestTweenJSSequence, TestTweenUpdate, 200, 100, 50);">50x 200 tweens</button>
-            <div class="tweenjs20"></div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Sequence', 'tweenjs21', TestTweenJSSequence, TestTweenUpdate, 5000, 100, 10);">10x 5k tweens</button>
-            <div class="tweenjs21"></div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Sequence', 'tweenjs22', TestTweenJSSequence, TestTweenUpdate, 10000, 100, 10);">5x 20k tweens</button>
-            <div class="testjs22"></div>
-        </div>
-        <div class="col-md-2">
-            <button class="btn test" onclick="Test('TweenJs Sequence', 'tweenjs23', TestTweenJSSequence, TestTweenUpdate, 1000, 500, 200);">200x 1000 tweens</button>
-            <div class="tweenjs23"></div>
-        </div>
-    </div>
-
     <script>
         function TestFatinaUpdate() {
             Fatina.Update(1);
@@ -312,11 +247,13 @@
         }
 
         function TestFatinaSequence() {
-            Fatina.Sequence()
-                .Append(Fatina.Tween({x:0}, ['x']).To({x: 2}, 2))
-                .AppendInterval(1)
-                .Append(Fatina.Tween({x:0}, ['x']).To({x: 5}, 3))
-                .Start();
+            Fatina.Sequence([
+                Fatina.Tween({x:0}, ['x']).To({x: 2}, 2),
+                Fatina.Delay(1),
+                Fatina.Tween({x:0}, ['x']).To({x: 5}, 3),
+                Fatina.Tween({x:0}, ['x']).To({x: -5}, 1),
+                Fatina.Tween({x:0}, ['x']).To({x: 0}, 2)
+            ]).Start();
         }
     </script>
 
@@ -343,6 +280,8 @@
                 .add(TINA.Tween({x:0}, ['x']).to({x:2}, 2))
                 .addDelay(1)
                 .add(TINA.Tween({x:0}, ['x']).to({x:5}, 3))
+                .add(TINA.Tween({x:0}, ['x']).to({x:-5}, 1))
+                .add(TINA.Tween({x:0}, ['x']).to({x:0}, 2))
                 .start();
         }
     </script>
@@ -369,45 +308,22 @@
         function TestTweenSequence() {
             let tweenA = new TWEEN.Tween({x:0}, ['x']).to({x:2}, 2);
             let tweenB = new TWEEN.Tween({x:0}, ['x']).to({x:5}, 3).delay(1);
+            let tweenC = new TWEEN.Tween({x:0}, ['x']).to({x:-5}, 1);
+            let tweenD = new TWEEN.Tween({x:0}, ['x']).to({x:0}, 2);
+            tweenC.chain(tweenD);
+            tweenB.chain(tweenC);
             tweenA.chain(tweenB);
             tweenA.start();
         }
     </script>
 
     <script>
-        function TestTweenJSUpdate() {
-            createjs.Tween.tick(1, false);
-        }
-
-        function TestTweenJS() {
-            return createjs.Tween.get({x:0}, {useTicks:false}).to({x:100}, 10);
-        }
-
-        function TestTweenJSAdvanced() {
-            // TweenJS doesnt have a onStart event ...
-                return createjs.Tween.get({x:0, y:0, z:0, a:0}, {useTicks: false, loop: 2})
-                .to({x:100, y:2, z:69, a:-71602}, Math.random() * 5 + 10, createjs.Ease.quadInOut)
-                .call(() => {});
-        }
-
-        function TestTweenJSSequence() {
-            return createjs.Tween.get({x:0}, {useTicks: false})
-            .to({x:2}, 2)
-            .wait(1)
-            .to({x:5}, 3)
-            .call(() => {});
-        }
-    </script>
-
-    <script>
         // default fatina setup
         Fatina.Init(true);
-        Fatina.SetSafe(false);
 
         // default tina setup
         let tinaTimer = new TINA.Timer().useAsDefault();
         TINA.add(tinaTimer);
-
 
         let counter = document.getElementById('counter');
         let counterValue = 0;
@@ -432,10 +348,9 @@
                     TestFatinaUpdate();
                     TinaUpdate();
                     TestTweenUpdate();
-                    TestTweenJSUpdate();
                 }
             }, 50);
-            setTimeout(() => RunTest(buttons), 150);
+            setTimeout(() => RunTest(buttons), 300);
         }
 
         function Test(name, spanResult, method, update, totalTween, frameNumber, iterate) {

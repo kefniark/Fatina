@@ -19,9 +19,6 @@ new TINA.Tween({x:0}, ['x']).to({x:100}, 10).start();
 
 // Tween.js
 new TWEEN.Tween({x:0}, ['x']).to({x:100}, 10).start();
-
-// TweenJS
-createjs.Tween.get({x:0}).to({x:100}, 10);
 ```
 {{% /expand%}}
 
@@ -55,11 +52,6 @@ new TWEEN.Tween({x:0, y:0, z:0, a:0}, ['x', 'y', 'z', 'a'])
     .onStart(() => {})
     .onComplete(() => {})
     .start();
-
-// TweenJS (exception TweenJS doesnt have a onStart event ...)
-createjs.Tween.get({x:0, y:0, z:0, a:0}, {loop: 2})
-    .to({x:100, y:2, z:69, a:-71602}, Math.random() * 5 + 10, createjs.Ease.quadInOut)
-    .call(() => {});
 ```
 {{% /expand%}}
 
@@ -87,13 +79,6 @@ let tweenA = new TWEEN.Tween({x:0}, ['x']).to({x:2}, 2);
 let tweenB = new TWEEN.Tween({x:0}, ['x']).to({x:5}, 3).delay(1);
 tweenA.chain(tweenB);
 tweenA.start();
-
-// TweenJS (a tween is a sequence in tween.js)
-createjs.Tween.get({x:0}, {useTicks: false})
-    .to({x:2}, 2)
-    .wait(1)
-    .to({x:5}, 3)
-    .call(() => {});
 ```
 {{% /expand%}}
 
