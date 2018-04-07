@@ -12,7 +12,7 @@ DtsBundlePlugin.prototype.apply = function (compiler) {
 		dts.bundle({
 			name: "Fatina",
 			baseDir: "lib",
-			main: "./lib/src/fatina/index.d.ts",
+			main: "./lib/src/index.d.ts",
 			out: "../build/fatina.d.ts",
 			exclude: (file, external) => {
 				return file.indexOf("tests") !== -1;
@@ -26,7 +26,7 @@ DtsBundlePlugin.prototype.apply = function (compiler) {
 
 module.exports = {
 	mode: "production",
-	entry: "./src/fatina/index.ts",
+	entry: "./src/index.ts",
 	output: {
 		path: path.resolve(__dirname, "build"),
 		filename: "fatina.min.js",

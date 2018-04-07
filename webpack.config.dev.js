@@ -5,7 +5,7 @@ const webpack = require("webpack");
 
 module.exports = {
 	mode: "development",
-	entry: "./src/fatina/index.ts",
+	entry: "./src/index.ts",
 	output: {
 		path: path.resolve(__dirname, "build"),
 		filename: "fatina.js",
