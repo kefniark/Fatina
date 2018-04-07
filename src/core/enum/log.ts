@@ -5,7 +5,7 @@
  * @enum {number}
  */
 export enum Log {
-	None = 0,
-	Info = 1,
-	Debug = 2
+	None,
+	Info,
+	Debug
 }

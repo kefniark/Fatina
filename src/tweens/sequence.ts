@@ -23,7 +23,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 	private readonly evtTick: Set<{(dt: number): void}> = new Set();
 	private readonly tweens: ((ITween | IPlayable)[])[] = [];
 	public cur: (ITween | IPlayable)[] | undefined;
-	private rem = 0;
+	private remainsDt = 0;
 	private index = 0;
 
 	public get count(): number {
@@ -64,9 +64,9 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		if (this.state >= 3) {
 			return;
 		}
-		this.rem = dt * this.timescale;
-		this.elapsed += this.rem;
-		this.localTick(this.rem);
+		this.remainsDt = dt * this.timescale;
+		this.elapsed += this.remainsDt;
+		this.localTick(this.remainsDt);
 	}
 
 	private localTick(dt: number, remains?: boolean) {
@@ -87,7 +87,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 			}
 		}
 
-		this.rem = dt;
+		this.remainsDt = dt;
 
 		// Current tween over
 		if (this.cur) {
@@ -97,14 +97,14 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 				}
 			}
 
-			this.rem = this.cur[0].elapsed - this.cur[0].duration;
+			this.remainsDt = this.cur[0].elapsed - this.cur[0].duration;
 
 			this.emitEvent(this.events.stepEnd, [this.cur[0]]);
 			this.cur = undefined;
 			this.index++;
 
-			if (this.rem > 0.01) {
-				this.localTick(this.rem, true);
+			if (this.remainsDt > 0.01) {
+				this.localTick(this.remainsDt, true);
 				return;
 			}
 		}
@@ -114,7 +114,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 			if (this.loop) {
 				this.loop.value--;
 				if (this.loop.value !== 0) {
-					this.resetAndStart(this.rem);
+					this.resetAndStart(this.remainsDt);
 					return;
 				}
 			}

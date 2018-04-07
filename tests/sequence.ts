@@ -157,7 +157,7 @@ test('[Fatina.Sequence] Test Join', (t: Test) => {
 		.join(new Tween(obj, [ 'x', 'y' ]).to({ x: 44, y: 44 }, 1.5))
 		.prepend(new Tween(obj, [ 'x', 'y' ]).to({ x: 0, y: 0 }, 2))
 		.join(new Tween(obj, [ 'alpha' ]).to({ alpha: 0 }, 2).onStart(() => {
-			const current = (sequence as Sequence).ct;
+			const current = (sequence as Sequence).cur;
 			if (current) {
 				t.equal(2, current.length, 'check 2 tween are running at the same time');
 			}
