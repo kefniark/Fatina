@@ -170,7 +170,7 @@
               </p>
               <div class="post-entry">
                 
-                  Fatina Tween Sequence  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .Init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  Pause() / Resume(): void SetTimescale(scale: number): void  Methods  Init(): void This method has to be called once to initialize Fatina Update(dt: number): void Tween(obj, properties): Tween Method used to create new tween Sequence(): Sequence Method used to create new sequence Delay(duration) Delay SetTimeout(fn, duration): void This is just a simple helper around Fatina.
+                  Fatina Tween Sequence  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  pause() / resume(): void setTimescale(scale: number): void  Methods  init(): void This method has to be called once to initialize Fatina update(dt: number): void tween(obj, properties): Tween Method used to create new tween sequence(): Sequence Method used to create new sequence delay(duration) Delay setTimeout(fn, duration): void This is just a simple helper around Fatina.
                   <a href="https://kefniark.github.io/Fatina/api/basic/" class="post-read-more">[Read More]</a>
                 
               </div>
@@ -192,7 +192,7 @@
               <div class="post-entry">
                 
                   Fatina Tween Sequence   A Tween that takes control of values and animates them.
- Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp; timescale) duration: number duration of this tween in ms.  Controls  Start(): Tween By default new tween are not started. Don&rsquo;t forget to call .Start() Pause(): void Resume(): void Skip(): void Kill(): void IsRunning(): boolean IsFinished(): boolean IsPaused(): boolean  See More// Create a tween let tween = Fatina.
+ Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp; timescale) duration: number duration of this tween in ms. isRunning: boolean isFinished: boolean isPaused: boolean  Controls  start(): Tween By default new tween are not started. Don&rsquo;t forget to call .start() pause(): void resume(): void skip(): void kill(): void  See More// Create a tween let tween = Fatina.
                   <a href="https://kefniark.github.io/Fatina/api/tween/" class="post-read-more">[Read More]</a>
                 
               </div>
@@ -214,7 +214,7 @@
               <div class="post-entry">
                 
                   Fatina Tween Sequence   A Sequence is special tween that, instead of taking control of a value, takes control of other tweens and animates them as a group.
- Properties  elapsed: number number of ms. elapsed for this sequence (affected by pause &amp; timescale)  Controls  Start(): Sequence By default new tween are not started. Don&rsquo;t forget to call .Start() Pause(): void Resume(): void Kill(): void IsRunning(): boolean IsFinished(): boolean IsPaused(): boolean  Callbacks  OnStart(cb: () =&gt; void): Sequence; OnStepStart(cb: (tween: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween start OnStepEnd(cb: (index: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween is completed.
+ Properties  elapsed: number number of ms. elapsed for this sequence (affected by pause &amp; timescale) isRunning: boolean isFinished: boolean isPaused: boolean  Controls  start(): Sequence By default new tween are not started. Don&rsquo;t forget to call .start() pause(): void resume(): void kill(): void  Callbacks  onStart(cb: () =&gt; void): Sequence; onStepStart(cb: (tween: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween start onStepEnd(cb: (index: ITween | IPlayable) =&gt; void): Sequence Emitted when a tween is completed.
                   <a href="https://kefniark.github.io/Fatina/api/sequence/" class="post-read-more">[Read More]</a>
                 
               </div>

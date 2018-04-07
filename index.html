@@ -196,14 +196,14 @@ The main inspiration is the <b>C#</b> library <a href="http://dotween.demigiant.
     let elem = document.getElementById('yuko1');
 
     // Switch the classname
-    Fatina.Tween({}, [])
-        .To({}, 1600)
-        .SetLoop(-1)
-        .OnUpdate((dt, progress) => {
+    Fatina.tween({}, [])
+        .to({}, 1600)
+        .setLoop(-1)
+        .onUpdate((dt, progress) => {
             let val = Math.round(progress * 13 + 1);
             elem.className = 'sprite_unitychan_walk sprite-Unitychan_Walk_' + val;
         })
-        .Start();
+        .start();
 </script>
 
 <h2 id="fatina-features">Fatina Features</h2>

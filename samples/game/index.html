@@ -9,11 +9,11 @@
   <meta property="og:title" content="Games Samples" />
   <meta name="twitter:title" content="Games Samples" />
   <meta name="description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine).  Those are just samples, not real games :P Thanks Unity-chan for her help 
-Unity Chan GO!!! Parallax var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb});document.getElementById(&#39;canvas1&#39;).appendChild(app.view);// Create background with parallaxCreateBackgrounds();// Create unity chanlet textures = LoadUnityChanTextures();var unitychan = new PIXI.Sprite(textures[0]);unitychan.anchor.set(0.5);unitychan.scale.x = 1.">
+Unity Chan GO!!! Parallax   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb}); document.getElementById(&#39;canvas1&#39;).appendChild(app.view); // Create background with parallax CreateBackgrounds(); // Create unity chan let textures = LoadUnityChanTextures(); var unitychan = new PIXI.Sprite(textures[0]); unitychan.anchor.set(0.5); unitychan.scale.x = 1.">
   <meta property="og:description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine).  Those are just samples, not real games :P Thanks Unity-chan for her help 
-Unity Chan GO!!! Parallax var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb});document.getElementById(&#39;canvas1&#39;).appendChild(app.view);// Create background with parallaxCreateBackgrounds();// Create unity chanlet textures = LoadUnityChanTextures();var unitychan = new PIXI.Sprite(textures[0]);unitychan.anchor.set(0.5);unitychan.scale.x = 1.">
+Unity Chan GO!!! Parallax   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb}); document.getElementById(&#39;canvas1&#39;).appendChild(app.view); // Create background with parallax CreateBackgrounds(); // Create unity chan let textures = LoadUnityChanTextures(); var unitychan = new PIXI.Sprite(textures[0]); unitychan.anchor.set(0.5); unitychan.scale.x = 1.">
   <meta name="twitter:description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine).  Those are just samples, not real games :P Thanks Unity-chan for her help 
-Unity Chan GO!!! Parallax var app = new …">
+Unity Chan GO!!! Parallax   var app = new …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -205,22 +205,22 @@ Unity Chan GO!!! Parallax var app = new …">
     app.stage.addChild(unitychan);
 
     // Tween to update unity chan sprite
-    Fatina.Tween({}, [])
-    .To({}, 1800)
-    .OnUpdate((dt, progress) => {
+    Fatina.tween({}, [])
+    .to({}, 1800)
+    .onUpdate((dt, progress) => {
         let index = Math.round(progress * (textures.length - 1));
         unitychan.setTexture(textures[index]);
     })
-    .SetLoop(-1)
-    .Start();
+    .setLoop(-1)
+    .start();
 
     // Tween to update unity chan position
-    Fatina.Sequence()
-        .Append(Fatina.Tween(unitychan, ['x']).SetRelative(true).To({ x : -20}, 3000).SetEasing('outQuad'))
-        .Append(Fatina.Tween(unitychan, ['x']).SetRelative(true).To({ x : 40}, 3000).SetEasing('inOutQuad'))
-        .Append(Fatina.Tween(unitychan, ['x']).SetRelative(true).To({ x : -20}, 3000).SetEasing('inQuad'))
-        .SetLoop(-1)
-        .Start();
+    Fatina.sequence()
+        .append(Fatina.tween(unitychan, ['x']).setRelative(true).to({ x : -20}, 3000).setEasing('outQuad'))
+        .append(Fatina.tween(unitychan, ['x']).setRelative(true).to({ x : 40}, 3000).setEasing('inOutQuad'))
+        .append(Fatina.tween(unitychan, ['x']).setRelative(true).to({ x : -20}, 3000).setEasing('inQuad'))
+        .setLoop(-1)
+        .start();
 
 
     function CreateBackgrounds() {
@@ -247,12 +247,12 @@ Unity Chan GO!!! Parallax var app = new …">
         AutoMove(layerFront, 6000);
 
         // Apply a vertical sin on the cloud
-        Fatina.Sequence()
-            .Append(Fatina.Tween(layerSky, ['y']).SetRelative(true).To({ y : -10}, 5000).SetEasing('outSine'))
-            .Append(Fatina.Tween(layerSky, ['y']).SetRelative(true).To({ y : 20}, 10000).SetEasing('inOutSine'))
-            .Append(Fatina.Tween(layerSky, ['y']).SetRelative(true).To({ y : -10}, 5000).SetEasing('inSine'))
-            .SetLoop(-1)
-            .Start();
+        Fatina.sequence()
+            .append(Fatina.tween(layerSky, ['y']).setRelative(true).to({ y : -10}, 5000).setEasing('outSine'))
+            .append(Fatina.tween(layerSky, ['y']).setRelative(true).to({ y : 20}, 10000).setEasing('inOutSine'))
+            .append(Fatina.tween(layerSky, ['y']).setRelative(true).to({ y : -10}, 5000).setEasing('inSine'))
+            .setLoop(-1)
+            .start();
 
         // Add to stage
         app.stage.addChild(layerSky);
@@ -273,11 +273,11 @@ Unity Chan GO!!! Parallax var app = new …">
     }
 
     function AutoMove(container, duration) {
-        Fatina.Tween(container, ['x'])
-            .From({x: 0})
-            .To({x: -app.renderer.width }, duration)
-            .SetLoop(-1)
-            .Start();
+        Fatina.tween(container, ['x'])
+            .from({x: 0})
+            .to({x: -app.renderer.width }, duration)
+            .setLoop(-1)
+            .start();
     }
 
     function LoadUnityChanTextures() {
@@ -347,14 +347,14 @@ Unity Chan GO!!! Parallax var app = new …">
         app2.stage.addChild(tokochan);
 
         // Toko Sprite
-        Fatina.Tween({}, [])
-        .To({}, 1800)
-        .OnUpdate((dt, progress) => {
+        Fatina.tween({}, [])
+        .to({}, 1800)
+        .onUpdate((dt, progress) => {
             let index = Math.round(progress * (tokoTextures.length - 1));
             tokochan.setTexture(tokoTextures[index]);
         })
-        .SetLoop(-1)
-        .Start();
+        .setLoop(-1)
+        .start();
 
         // UnityChan
         uc = new PIXI.Sprite(unitychanTextures[0]);
@@ -366,23 +366,23 @@ Unity Chan GO!!! Parallax var app = new …">
         app2.stage.addChild(uc);
 
         // UnityChan Sprite
-        Fatina.Sequence()
-            .Append(Fatina.Tween(uc, ['x']).To({ x: app2.renderer.width - 160}, 1800).SetEasing('outCubic'))
-            .AppendCallback(() => uc.scale.x = -0.8)
-            .Append(Fatina.Tween(uc, ['x']).To({ x: 160}, 3600).SetEasing('inOutCubic'))
-            .AppendCallback(() => uc.scale.x = 0.8)
-            .Append(Fatina.Tween(uc, ['x']).To({ x: app2.renderer.width / 2}, 1800).SetEasing('inCubic'))
-            .SetLoop(-1)
-            .Start();
+        Fatina.sequence()
+            .append(Fatina.tween(uc, ['x']).to({ x: app2.renderer.width - 160}, 1800).setEasing('outCubic'))
+            .appendCallback(() => uc.scale.x = -0.8)
+            .append(Fatina.tween(uc, ['x']).to({ x: 160}, 3600).setEasing('inOutCubic'))
+            .appendCallback(() => uc.scale.x = 0.8)
+            .append(Fatina.tween(uc, ['x']).to({ x: app2.renderer.width / 2}, 1800).setEasing('inCubic'))
+            .setLoop(-1)
+            .start();
 
-        Fatina.Tween({}, [])
-        .To({}, 1800)
-        .OnUpdate((dt, progress) => {
+        Fatina.tween({}, [])
+        .to({}, 1800)
+        .onUpdate((dt, progress) => {
             let index = Math.round(progress * (unitychanTextures.length - 1));
             uc.setTexture(unitychanTextures[index]);
         })
-        .SetLoop(-1)
-        .Start();
+        .setLoop(-1)
+        .start();
     }
 
     // Main sequence used to spawn waves of bullets. 2x onUpdate, one for each character
@@ -394,8 +394,8 @@ Unity Chan GO!!! Parallax var app = new …">
         let homming = 0;
         let count = 0;
         let startPatern2 = false;
-        Fatina.Tween({}, []).To({}, 5000)
-            .OnUpdate((dt, progress) => {
+        Fatina.tween({}, []).to({}, 5000)
+            .onUpdate((dt, progress) => {
                 delta += dt;
                 if (delta < 650) {
                     return;
@@ -416,7 +416,7 @@ Unity Chan GO!!! Parallax var app = new …">
                 dir = dir === 1? -1 : 1;
                 count++;
             })
-            .OnUpdate((dt, progress) => {
+            .onUpdate((dt, progress) => {
                 deltaUnity += dt;
                 if (deltaUnity < 80) {
                     return;
@@ -428,8 +428,8 @@ Unity Chan GO!!! Parallax var app = new …">
                 }
                 homming++;
             })
-            .SetLoop(-1)
-            .Start();
+            .setLoop(-1)
+            .start();
     }
 
     /*
@@ -443,11 +443,11 @@ Unity Chan GO!!! Parallax var app = new …">
         }
 
         let virtualBullet = { x: 0, y: 0, r: 0, a: 0, fadeIn: true };
-        Fatina.Sequence()
-            .Append(Fatina.Tween(virtualBullet, ['y', 'r']).To({ x: 0, y: 100, r: 45 }, 2500).SetEasing('outQuad'))
-            .Join(Fatina.Tween(virtualBullet, ['a']).To({ a: 1}, 700).SetEasing('inQuint').OnComplete(() => virtualBullet.fadeIn = false))
-            .Append(Fatina.Tween(virtualBullet, ['y', 'r']).SetRelative(true).To({ x: 0, y: 500, r: dir * 100 }, 5000).SetEasing('inOutQuad'))
-            .OnUpdate(() => {
+        Fatina.sequence()
+            .append(Fatina.tween(virtualBullet, ['y', 'r']).to({ x: 0, y: 100, r: 45 }, 2500).setEasing('outQuad'))
+            .join(Fatina.tween(virtualBullet, ['a']).to({ a: 1}, 700).setEasing('inQuint').onComplete(() => virtualBullet.fadeIn = false))
+            .append(Fatina.tween(virtualBullet, ['y', 'r']).setRelative(true).to({ x: 0, y: 500, r: dir * 100 }, 5000).setEasing('inOutQuad'))
+            .onUpdate(() => {
                 for (let i = 0; i < bullets.length; i++) {
                     let bullet = bullets[i];
 
@@ -464,13 +464,13 @@ Unity Chan GO!!! Parallax var app = new …">
                     }
                 }
             })
-            .OnComplete(() => {
+            .onComplete(() => {
                 for (let i = 0; i < bullets.length; i++) {
                     let bullet = bullets[i];
                     bullet.destroy();
                 }
             })
-            .Start();
+            .start();
     }
 
     /*
@@ -485,11 +485,11 @@ Unity Chan GO!!! Parallax var app = new …">
             }
 
             let virtualBullet = { x: 0, y: 0, r: 0, a: 0, fadeIn: true };
-            Fatina.Sequence()
-                .AppendInterval(step * 50)
-                .Append(Fatina.Tween(virtualBullet, ['y', 'r']).To({ x: 0, y: 600, r: 30 }, 3500).SetEasing('outQuad'))
-                .Join(Fatina.Tween(virtualBullet, ['a']).To({ a: 1}, 140).SetEasing('inQuint').OnComplete(() => virtualBullet.fadeIn = false))
-                .OnUpdate(() => {
+            Fatina.sequence()
+                .appendInterval(step * 50)
+                .append(Fatina.tween(virtualBullet, ['y', 'r']).to({ x: 0, y: 600, r: 30 }, 3500).setEasing('outQuad'))
+                .join(Fatina.tween(virtualBullet, ['a']).to({ a: 1}, 140).setEasing('inQuint').onComplete(() => virtualBullet.fadeIn = false))
+                .onUpdate(() => {
                     for (let i = 0; i < bullets.length; i++) {
                         let bullet = bullets[i];
 
@@ -506,13 +506,13 @@ Unity Chan GO!!! Parallax var app = new …">
                         }
                     }
                 })
-                .OnComplete(() => {
+                .onComplete(() => {
                     for (let i = 0; i < bullets.length; i++) {
                         let bullet = bullets[i];
                         bullet.destroy();
                     }
                 })
-                .Start();
+                .start();
         }
     }
 
@@ -527,17 +527,17 @@ Unity Chan GO!!! Parallax var app = new …">
 
         let unityChanOrigin = {x: uc.x, y: uc.y};
         let virtualBullet = { x: 0, y: 0, r: 0, a: 0, fadeIn: true };
-        Fatina.Sequence()
-            .Append(Fatina.Tween(virtualBullet, ['y'])
-                .To({ y: -600 }, 2500)
-                .SetEasing('outQuad')
-                .OnUpdate((dt, progress) => {
+        Fatina.sequence()
+            .append(Fatina.tween(virtualBullet, ['y'])
+                .to({ y: -600 }, 2500)
+                .setEasing('outQuad')
+                .onUpdate((dt, progress) => {
                     straightBullets[0].x = unityChanOrigin.x + progress * progress * 50;
                     straightBullets[1].x = unityChanOrigin.x + progress * progress * -50;
                 })
             )
-            .Join(Fatina.Tween(virtualBullet, ['a']).To({ a: 1}, 70).SetEasing('inQuint').OnComplete(() => virtualBullet.fadeIn = false))
-            .OnUpdate((dt, progress) => {
+            .join(Fatina.tween(virtualBullet, ['a']).to({ a: 1}, 70).setEasing('inQuint').onComplete(() => virtualBullet.fadeIn = false))
+            .onUpdate((dt, progress) => {
                 for (let i = 0; i < straightBullets.length; i++) {
                     let bullet = straightBullets[i];
                     bullet.y = unityChanOrigin.y + virtualBullet.y;
@@ -551,7 +551,7 @@ Unity Chan GO!!! Parallax var app = new …">
                     }
                 }
             })
-            .Start();
+            .start();
     }
 
     /*
@@ -568,17 +568,17 @@ Unity Chan GO!!! Parallax var app = new …">
             homming.x = unityChanOrigin.x;
             let diff = origin.x - unityChanOrigin.x;
             diff = (diff > 100) ? 100 : (diff < -100 ) ? -100 : diff + Math.random() * 20 - 10;
-            Fatina.Sequence()
-                .Append(Fatina.Tween(homming, ['x', 'y']).SetRelative(true).To({ x:diff, y: origin.y - unityChanOrigin.y }, 700 + Math.random() * 200))
-                .Join(Fatina.Tween(homming, ['alpha']).To({ alpha: 1}, 70).SetEasing('inQuint'))
-                .Append(Fatina.Tween(homming, ['y']).To({ y: -100 }, 500))
-                .OnUpdate(() => {
+            Fatina.sequence()
+                .append(Fatina.tween(homming, ['x', 'y']).setRelative(true).to({ x:diff, y: origin.y - unityChanOrigin.y }, 700 + Math.random() * 200))
+                .join(Fatina.tween(homming, ['alpha']).to({ alpha: 1}, 70).setEasing('inQuint'))
+                .append(Fatina.tween(homming, ['y']).to({ y: -100 }, 500))
+                .onUpdate(() => {
                     let distance = Math.abs(homming.x - origin.x) + Math.abs(homming.y - origin.y);
                     if (distance <= 15) {
                         homming.alpha = 0;
                     }
                 })
-                .Start();
+                .start();
         }
     }
 

@@ -16,7 +16,7 @@
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/basics/benchmark/</guid>
-      <description>Tween counter: ~0k  Run All What is happening here: Bellow, 4 scenario are tested over different configuration / libraries:  1. Normal usage : 200 tween over 100 frames x 50 times 2. Medium usage : 5000 tween over 100 frames x 10 times 3. Heavy usage : 20000 tween over 100 frames x 5 times (to test many concurrent tween) 4. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC)  Summarize:  Scenario 1 &amp;amp; 4: simulate normal game usage Scenario 2 &amp;amp; 3: are stress test which should almost never happen in real life  Those 3 libraries (Fatina, Tina.</description>
+      <description>Tween counter: ~0k  Run All What is happening here: Bellow, 5 scenario are tested over different configuration / libraries:  1. Normal usage : 200 tween over 100 frames x 50 times 2. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC) 3. Medium usage : 2k tween over 200 frames x 5 times 4. Heavy usage : 5k tween over 200 frames x 5 times 5.</description>
     </item>
     
     <item>
@@ -29,7 +29,7 @@
 &amp;lt;script src=&amp;quot;fatina.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;  
 1 bis. NPM Installation More advanced users might want to use npm
 npm install fatina  Then include the Fatina module :
-// standard node.js require var Fatina = require(&#39;fatina&#39;); // OR // standard import with typescript (typed version) import * as Fatina from &#39;fatina&#39;;  2. Done ! Now you can use Fatina properly :</description>
+// standard node.js require var Fatina = require(&#39;fatina&#39;); // OR // standard import with typescript (typed version) import Fatina from &#39;fatina&#39;;  2. Done ! Now you can use Fatina properly :</description>
     </item>
     
     <item>
@@ -47,7 +47,7 @@ npm install fatina  Then include the Fatina module :
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/basics/tips/</guid>
-      <description>How to write tweens ?  Keep them simple: a Tween should do only one thing (avoid nesting and complexity) Split them in smaller tween to have more control (like splitting a x and y movement in two separated tweens) Group them in Sequence and prefer using .Append() and .Join() When you destroy an object like a sprite, Try to clean tweens related Avoid SetTimeout() and prefer Fatina.SetTimeout(): All the objects/events should be ticked together, normal settimeout cannot be paused &amp;hellip;  How to go farther ?</description>
+      <description>How to write tweens ?  Keep them simple: a Tween should do only one thing (avoid nesting and complexity) Split them in smaller tween to have more control (like splitting a x and y movement in two separated tweens) Group them in Sequence and prefer using .append() and .join() When you destroy an object like a sprite, Try to clean tweens related Avoid SetTimeout() and prefer Fatina.setTimeout(): All the objects/events should be ticked together, normal settimeout cannot be paused &amp;hellip;  How to go farther ?</description>
     </item>
     
   </channel>

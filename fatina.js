@@ -76,21 +76,27 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/fatina/index.ts");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.ts");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/fatina/core/enum/log.ts":
-/*!*************************************!*\
-  !*** ./src/fatina/core/enum/log.ts ***!
-  \*************************************/
+/***/ "./src/core/enum/log.ts":
+/*!******************************!*\
+  !*** ./src/core/enum/log.ts ***!
+  \******************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Enum use to set the verbosity level of fatina and tweens
+ *
+ * @export
+ * @enum {number}
+ */
 var Log;
 (function (Log) {
     Log[Log["None"] = 0] = "None";
@@ -101,16 +107,22 @@ var Log;
 
 /***/ }),
 
-/***/ "./src/fatina/core/enum/state.ts":
-/*!***************************************!*\
-  !*** ./src/fatina/core/enum/state.ts ***!
-  \***************************************/
+/***/ "./src/core/enum/state.ts":
+/*!********************************!*\
+  !*** ./src/core/enum/state.ts ***!
+  \********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Possible states of a Tween / Sequence
+ *
+ * @export
+ * @enum {number}
+ */
 var State;
 (function (State) {
     State[State["Idle"] = 0] = "Idle";
@@ -123,31 +135,38 @@ var State;
 
 /***/ }),
 
-/***/ "./src/fatina/easing/easing.ts":
-/*!*************************************!*\
-  !*** ./src/fatina/easing/easing.ts ***!
-  \*************************************/
+/***/ "./src/easing/easing.ts":
+/*!******************************!*\
+  !*** ./src/easing/easing.ts ***!
+  \******************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const easingType_1 = __webpack_require__(/*! ./easingType */ "./src/fatina/easing/easingType.ts");
+/**
+ * List of easing method
+ *
+ * Mostly based on http://easings.net/
+ */
+// tslint:disable:no-parameter-reassignment
 const PI = Math.PI;
 const PI_OVER_TWO = Math.PI / 2;
 const BACK = 1.70158;
-const easingByName = {};
-easingByName[easingType_1.EasingType.Linear] = (t) => {
+const e = {};
+// Linear
+e.linear = (t) => {
     return t;
 };
-easingByName[easingType_1.EasingType.InQuad] = (t) => {
+// Quad
+e.inQuad = (t) => {
     return t * t;
 };
-easingByName[easingType_1.EasingType.OutQuad] = (t) => {
+e.outQuad = (t) => {
     return 2 * t - t * t;
 };
-easingByName[easingType_1.EasingType.InOutQuad] = (t) => {
+e.inOutQuad = (t) => {
     if (t < 0.5) {
         return 2 * t * t;
     }
@@ -155,13 +174,14 @@ easingByName[easingType_1.EasingType.InOutQuad] = (t) => {
         return 2 * (2 * t - t * t) - 1;
     }
 };
-easingByName[easingType_1.EasingType.InCubic] = (t) => {
+// Cubic
+e.inCubic = (t) => {
     return t * t * t;
 };
-easingByName[easingType_1.EasingType.OutCubic] = (t) => {
+e.outCubic = (t) => {
     return 3 * t - 3 * t * t + t * t * t;
 };
-easingByName[easingType_1.EasingType.InOutCubic] = (t) => {
+e.inOutCubic = (t) => {
     if (t < 0.5) {
         return 4 * t * t * t;
     }
@@ -169,14 +189,15 @@ easingByName[easingType_1.EasingType.InOutCubic] = (t) => {
         return 4 * (3 * t - 3 * t * t + t * t * t) - 3;
     }
 };
-easingByName[easingType_1.EasingType.InQuart] = (t) => {
+// Quart
+e.inQuart = (t) => {
     return t * t * t * t;
 };
-easingByName[easingType_1.EasingType.OutQuart] = (t) => {
+e.outQuart = (t) => {
     const t2 = t * t;
     return 4 * t - 6 * t2 + 4 * t2 * t - t2 * t2;
 };
-easingByName[easingType_1.EasingType.InOutQuart] = (t) => {
+e.inOutQuart = (t) => {
     if (t < 0.5) {
         return 8 * t * t * t * t;
     }
@@ -185,16 +206,17 @@ easingByName[easingType_1.EasingType.InOutQuart] = (t) => {
         return 8 * (4 * t - 6 * t2 + 4 * t2 * t - t2 * t2) - 7;
     }
 };
-easingByName[easingType_1.EasingType.InSine] = (t) => {
+// Sine
+e.inSine = (t) => {
     if (t === 1) {
         return 1;
     }
     return 1 - Math.cos(PI_OVER_TWO * t);
 };
-easingByName[easingType_1.EasingType.OutSine] = (t) => {
+e.outSine = (t) => {
     return Math.sin(PI_OVER_TWO * t);
 };
-easingByName[easingType_1.EasingType.InOutSine] = (t) => {
+e.inOutSine = (t) => {
     if (t < 0.5) {
         return (1 - Math.cos(PI * t)) / 2;
     }
@@ -202,13 +224,14 @@ easingByName[easingType_1.EasingType.InOutSine] = (t) => {
         return (1 + Math.sin(PI * (t - 0.5))) / 2;
     }
 };
-easingByName[easingType_1.EasingType.InCirc] = (t) => {
+// Circular
+e.inCirc = (t) => {
     return 1 - Math.sqrt(1 - Math.pow(t, 2));
 };
-easingByName[easingType_1.EasingType.OutCirc] = (t) => {
+e.outCirc = (t) => {
     return Math.sqrt(1 - Math.pow(1 - t, 2));
 };
-easingByName[easingType_1.EasingType.InOutCirc] = (t) => {
+e.inOutCirc = (t) => {
     if (t < 0.5) {
         return (1 - Math.sqrt(1 - 4 * t * t)) / 2;
     }
@@ -216,29 +239,31 @@ easingByName[easingType_1.EasingType.InOutCirc] = (t) => {
         return (1 + Math.sqrt(-3 + 8 * t - 4 * t * t)) / 2;
     }
 };
-easingByName[easingType_1.EasingType.InQuint] = (t) => {
+// Quint
+e.inQuint = (t) => {
     return t * t * t * t * t;
 };
-easingByName[easingType_1.EasingType.OutQuint] = (t) => {
+e.outQuint = (t) => {
     return --t * t * t * t * t + 1;
 };
-easingByName[easingType_1.EasingType.InOutQuint] = (t) => {
+e.InOutQuint = (t) => {
     t *= 2;
     if (t < 1) {
         return 0.5 * t * t * t * t * t;
     }
     return 0.5 * ((t -= 2) * t * t * t * t + 2);
 };
-easingByName[easingType_1.EasingType.InExponential] = (t) => {
+// Exponential
+e.inExponential = (t) => {
     if (t === 1) {
         return 1;
     }
     return t === 0 ? 0 : Math.pow(1024, t - 1);
 };
-easingByName[easingType_1.EasingType.OutExponential] = (t) => {
+e.outExponential = (t) => {
     return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
 };
-easingByName[easingType_1.EasingType.InOutExponential] = (t) => {
+e.inOutExponential = (t) => {
     if (t === 0) {
         return 0;
     }
@@ -251,19 +276,20 @@ easingByName[easingType_1.EasingType.InOutExponential] = (t) => {
     }
     return 0.5 * (-Math.pow(2, -10 * (t - 1)) + 2);
 };
-easingByName[easingType_1.EasingType.InElastic] = (t) => {
+// Elastic
+e.inElastic = (t) => {
     if (t === 0) {
         return 0;
     }
     return -Math.pow(2, 10 * (t - 1)) * Math.sin((t - 1.1) * 5 * Math.PI);
 };
-easingByName[easingType_1.EasingType.OutElastic] = (t) => {
+e.outElastic = (t) => {
     if (t === 1) {
         return 1;
     }
     return Math.pow(2, -10 * t) * Math.sin((t - 0.1) * 5 * Math.PI) + 1;
 };
-easingByName[easingType_1.EasingType.InOutElastic] = (t) => {
+e.inOutElastic = (t) => {
     if (t === 0) {
         return 0;
     }
@@ -276,15 +302,16 @@ easingByName[easingType_1.EasingType.InOutElastic] = (t) => {
     }
     return 0.5 * Math.pow(2, -10 * (t - 1)) * Math.sin((t - 1.1) * 5 * Math.PI) + 1;
 };
-easingByName[easingType_1.EasingType.InBack] = (t) => {
+// Back
+e.inBack = (t) => {
     const s = BACK;
     return t === 1 ? 1 : t * t * ((s + 1) * t - s);
 };
-easingByName[easingType_1.EasingType.OutBack] = (t) => {
+e.outBack = (t) => {
     const s = BACK;
     return t === 0 ? 0 : --t * t * ((s + 1) * t + s) + 1;
 };
-easingByName[easingType_1.EasingType.InOutBack] = (t) => {
+e.inOutBack = (t) => {
     const s = BACK * 1.525;
     t *= 2;
     if (t < 1) {
@@ -292,7 +319,8 @@ easingByName[easingType_1.EasingType.InOutBack] = (t) => {
     }
     return 0.5 * ((t -= 2) * t * ((s + 1) * t + s) + 2);
 };
-easingByName[easingType_1.EasingType.OutBounce] = (t) => {
+// Bounce
+e.outBounce = (t) => {
     if (t < (1 / 2.75)) {
         return 7.5625 * t * t;
     }
@@ -306,30 +334,36 @@ easingByName[easingType_1.EasingType.OutBounce] = (t) => {
         return 7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375;
     }
 };
-easingByName[easingType_1.EasingType.InBounce] = (t) => {
-    return 1 - easingByName[easingType_1.EasingType.OutBounce](1 - t);
+e.inBounce = (t) => {
+    return 1 - e.outBounce(1 - t);
 };
-easingByName[easingType_1.EasingType.InOutBounce] = (t) => {
+e.inOutBounce = (t) => {
     if (t < 0.5) {
-        return easingByName[easingType_1.EasingType.InBounce](t * 2) * 0.5;
+        return e.inBounce(t * 2) * 0.5;
     }
-    return easingByName[easingType_1.EasingType.OutBounce](t * 2 - 1) * 0.5 + 0.5;
+    return e.outBounce(t * 2 - 1) * 0.5 + 0.5;
 };
-exports.easeNames = easingByName;
+exports.easeNames = e;
 
 
 /***/ }),
 
-/***/ "./src/fatina/easing/easingType.ts":
-/*!*****************************************!*\
-  !*** ./src/fatina/easing/easingType.ts ***!
-  \*****************************************/
+/***/ "./src/easing/easingType.ts":
+/*!**********************************!*\
+  !*** ./src/easing/easingType.ts ***!
+  \**********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * List of all easing methods
+ *
+ * @export
+ * @enum {number}
+ */
 var EasingType;
 (function (EasingType) {
     EasingType["Linear"] = "linear";
@@ -368,481 +402,270 @@ var EasingType;
 
 /***/ }),
 
-/***/ "./src/fatina/index.ts":
-/*!*****************************!*\
-  !*** ./src/fatina/index.ts ***!
-  \*****************************/
+/***/ "./src/fatina.ts":
+/*!***********************!*\
+  !*** ./src/fatina.ts ***!
+  \***********************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const log_1 = __webpack_require__(/*! ./core/enum/log */ "./src/fatina/core/enum/log.ts");
-const easingType_1 = __webpack_require__(/*! ./easing/easingType */ "./src/fatina/easing/easingType.ts");
-exports.Easing = easingType_1.EasingType;
-const ticker_1 = __webpack_require__(/*! ./ticker */ "./src/fatina/ticker.ts");
-const delay_1 = __webpack_require__(/*! ./tweens/delay */ "./src/fatina/tweens/delay.ts");
-const sequence_1 = __webpack_require__(/*! ./tweens/sequence */ "./src/fatina/tweens/sequence.ts");
-const tween_1 = __webpack_require__(/*! ./tweens/tween */ "./src/fatina/tweens/tween.ts");
-let tickerManager;
-let initialized = false;
-let isFirstUpdate = true;
+const log_1 = __webpack_require__(/*! ./core/enum/log */ "./src/core/enum/log.ts");
+const easingType_1 = __webpack_require__(/*! ./easing/easingType */ "./src/easing/easingType.ts");
+const ticker_1 = __webpack_require__(/*! ./ticker */ "./src/ticker.ts");
+const delay_1 = __webpack_require__(/*! ./tweens/delay */ "./src/tweens/delay.ts");
+const sequence_1 = __webpack_require__(/*! ./tweens/sequence */ "./src/tweens/sequence.ts");
+const tween_1 = __webpack_require__(/*! ./tweens/tween */ "./src/tweens/tween.ts");
+/**
+ * This part manage the auto-update loop if necessary (browser only)
+ */
 let lastFrame;
-let lastTime = 0;
-const settings = { logLevel: log_1.Log.None, safe: true };
-const eventCreated = [];
-const loadedPlugins = [];
-exports.plugin = {};
-exports.time = 0;
-function Elapsed() {
-    return tickerManager.elapsed;
-}
-exports.Elapsed = Elapsed;
-function MainTicker() {
-    if (!initialized) {
-        Init();
-    }
-    return tickerManager;
-}
-exports.MainTicker = MainTicker;
-function AddListenerCreated(cb) {
-    eventCreated.push(cb);
-}
-exports.AddListenerCreated = AddListenerCreated;
-function RemoveListenerCreated(cb) {
-    const index = eventCreated.indexOf(cb);
-    if (index !== -1) {
-        eventCreated.splice(index, 1);
-    }
-}
-exports.RemoveListenerCreated = RemoveListenerCreated;
-function Init(disableAutoTick) {
-    if (initialized) {
-        return false;
-    }
-    if (!tickerManager) {
-        tickerManager = new ticker_1.Ticker();
-        tickerManager.Start();
-    }
-    if (typeof (window) !== 'undefined' && !disableAutoTick) {
-        lastFrame = requestFrame(updateLoop);
-    }
-    initialized = true;
-    return true;
-}
-exports.Init = Init;
-function SetTimescale(scale) {
-    if (!initialized) {
-        Init();
-    }
-    tickerManager.SetTimescale(scale);
-}
-exports.SetTimescale = SetTimescale;
-function Pause() {
-    if (!initialized) {
-        Init();
-    }
-    tickerManager.Pause();
-}
-exports.Pause = Pause;
-function Resume() {
-    if (!initialized) {
-        Init();
-    }
-    tickerManager.Resume();
-}
-exports.Resume = Resume;
-function SetLog(level) {
-    settings.logLevel = level;
-}
-exports.SetLog = SetLog;
-function SetSafe(isSafe) {
-    settings.safe = isSafe;
-}
-exports.SetSafe = SetSafe;
-function Destroy() {
-    if (tickerManager) {
-        tickerManager.Kill();
-    }
-    if (lastFrame) {
-        cancelFrame(lastFrame);
-    }
-    initialized = false;
-}
-exports.Destroy = Destroy;
-function Update(timestamp) {
-    if (!initialized || !tickerManager) {
-        return;
-    }
-    tickerManager.Tick(timestamp);
-    exports.time += timestamp;
-}
-exports.Update = Update;
-function Tween(obj, properties) {
-    const t = new tween_1.Tween(obj, properties);
-    AddContext(t);
-    Info(log_1.Log.Debug, '[Fatina.Manager] Tween Instantiated', t);
-    return t;
-}
-exports.Tween = Tween;
-function Sequence(list) {
-    const s = new sequence_1.Sequence(list);
-    AddContext(s);
-    Info(log_1.Log.Debug, '[Fatina.Manager] Sequence Instantiated', s);
-    return s;
-}
-exports.Sequence = Sequence;
-function Delay(duration) {
-    const d = new delay_1.Delay(duration);
-    AddContext(d);
-    Info(log_1.Log.Debug, '[Fatina.Manager] Sequence Instantiated', d);
-    return d;
-}
-exports.Delay = Delay;
-function SetTimeout(fn, duration) {
-    const timeout = new delay_1.Delay(duration).OnComplete(fn);
-    AddContext(timeout);
-    Info(log_1.Log.Debug, '[Fatina.Manager] SetTimeout Instantiated', timeout);
-    return timeout.Start();
-}
-exports.SetTimeout = SetTimeout;
-function SetInterval(fn, duration) {
-    const interval = new delay_1.Delay(duration).OnRestart(fn).SetLoop(-1);
-    AddContext(interval);
-    Info(log_1.Log.Debug, '[Fatina.Manager] SetInterval Instantiated', interval);
-    return interval.Start();
-}
-exports.SetInterval = SetInterval;
-function AddContext(obj) {
-    if (!initialized) {
-        Init();
-    }
-    obj.SetParent(tickerManager);
-    if (settings.logLevel !== log_1.Log.None || !settings.safe) {
-        obj.SetSettings(settings);
-    }
-    EmitCreated(obj);
-}
-function Ticker() {
-    if (!initialized) {
-        Init();
-    }
-    const tick = new ticker_1.Ticker();
-    const handler = tick.Tick.bind(tick);
-    tick.SetParent(tickerManager, handler);
-    tickerManager.AddTickListener(handler);
-    tick.Start();
-    EmitCreated(tick);
-    Info(log_1.Log.Debug, '[Fatina.Manager] Ticker Instantiated', tick);
-    return tick;
-}
-exports.Ticker = Ticker;
-function LoadPlugin(newPlugin) {
-    newPlugin.Init(this);
-    loadedPlugins.push(newPlugin);
-    Info(log_1.Log.Debug, '[Fatina.Manager] Plugin Loaded', newPlugin.name);
-}
-exports.LoadPlugin = LoadPlugin;
-function Info(level, message, data) {
-    if (level > settings.logLevel) {
-        return;
-    }
-    if (data) {
-        console.log(message, data);
-    }
-    else {
-        console.log(message);
-    }
-}
-function Emit(func, control) {
-    if (!settings.safe) {
-        return func(control);
-    }
-    try {
-        func(control);
-    }
-    catch (e) {
-        console.warn(e);
-    }
-}
-function EmitCreated(control) {
-    for (let i = 0; i < eventCreated.length; i++) {
-        Emit(eventCreated[i], control);
-    }
-}
 let requestFrame;
 let cancelFrame;
 if (typeof (window) !== 'undefined') {
-    requestFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    requestFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame
+        || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
     cancelFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 }
-function updateLoop(timestamp) {
-    let dt = timestamp - lastTime;
-    if (isFirstUpdate) {
-        dt = 1;
-        isFirstUpdate = false;
-    }
-    if (dt > 350) {
-        console.warn('[Fatina] Delta between two update was too high ' + Math.round(dt) + 'ms. , Capped to 350ms.');
-        dt = 350;
-    }
-    Update(dt);
-    lastTime = timestamp;
-    lastFrame = requestFrame(updateLoop);
-}
-
-
-/***/ }),
-
-/***/ "./src/fatina/ticker.ts":
-/*!******************************!*\
-  !*** ./src/fatina/ticker.ts ***!
-  \******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const state_1 = __webpack_require__(/*! ./core/enum/state */ "./src/fatina/core/enum/state.ts");
-class Ticker {
+/**
+ * Main class exposed as fatina library
+ *
+ * @export
+ * @class Fatina
+ */
+class Fatina {
     constructor() {
-        this.state = state_1.State.Idle;
-        this.timescale = 1;
-        this.elapsed = 0;
-        this.duration = 0;
-        this.update = 0;
-        this.ticks = new Set();
+        this.easing = easingType_1.EasingType;
+        // plugins
+        this.plugin = {};
+        this.loadedPlugins = [];
+        this.eventCreated = [];
+        // settings
+        this.settings = { logLevel: log_1.Log.None, safe: true };
+        // properties
+        this.time = 0;
+        this.lastTime = 0;
+        this.initialized = false;
+        this.isFirstUpdate = true;
     }
-    SetParent(parent, tick) {
-        this.tick = tick;
-        this.parent = parent;
+    get elapsed() {
+        return this.manager.elapsed;
     }
-    SetTimescale(scale) {
-        this.timescale = scale;
+    get mainTicker() {
+        if (!this.initialized) {
+            this.init();
+        }
+        return this.manager;
     }
-    AddTickListener(cb) {
-        this.ticks.add(cb);
+    /**
+     * Method used when Fatina is used for the first time.
+     * Can take few ms. (pool initialization & object creation)
+     *
+     * @export
+     * @param {boolean} [disableAutoTick]
+     * @returns {boolean}
+     */
+    init(disableAutoTick) {
+        if (this.initialized) {
+            return false;
+        }
+        if (!this.manager) {
+            this.manager = new ticker_1.Ticker();
+            this.manager.start();
+        }
+        if (typeof (window) !== 'undefined' && !disableAutoTick) {
+            lastFrame = requestFrame(this.updateLoop.bind(this));
+        }
+        this.initialized = true;
+        return true;
     }
-    RemoveTickListener(cb) {
-        this.ticks.delete(cb);
+    /**
+     * Used to change the timescale of the whole game
+     *
+     * @export
+     * @param {number} scale
+     */
+    setTimescale(scale) {
+        this.init();
+        this.manager.setTimescale(scale);
     }
-    Tick(dt) {
-        if (this.state !== state_1.State.Run) {
+    /**
+     * This method pause the update loop (update are not called anymore)
+     *
+     * @export
+     */
+    pause() {
+        this.init();
+        this.manager.pause();
+    }
+    /**
+     * This method resume the update loop (works only if the game was paused before)
+     *
+     * @export
+     */
+    resume() {
+        this.init();
+        this.manager.resume();
+    }
+    /**
+     * This method kill the main ticker, the pool of tween and stop any requestAnimationFrame
+     *
+     * @export
+     */
+    destroy() {
+        if (this.manager) {
+            this.manager.kill();
+        }
+        if (lastFrame) {
+            cancelFrame(lastFrame);
+        }
+        this.initialized = false;
+    }
+    /**
+     * Method used to tick all the child (tween or sequence)
+     * This takes cares of recycling the old tween/sequence
+     *
+     * @export
+     * @param {number} timestamp
+     * @returns {*}
+     */
+    update(timestamp) {
+        if (!this.initialized || !this.manager) {
             return;
         }
-        const localDt = dt * this.timescale;
-        for (const tick of this.ticks) {
-            tick(localDt);
+        this.manager.tick(timestamp);
+        this.time += timestamp;
+    }
+    /**
+     * Helper to create a tween (use the tween pool)
+     *
+     * @export
+     * @param {*} obj
+     * @param {string[]} properties
+     * @returns {ITween}
+     */
+    tween(obj, properties) {
+        const t = new tween_1.Tween(obj, properties);
+        this.addContext(t);
+        return t;
+    }
+    /**
+     * Helper to create a Sequence (use the sequence pool)
+     *
+     * @export
+     * @param {(tween[] | sequence[])} [list]
+     * @returns {ISequence}
+     */
+    sequence(list) {
+        const s = new sequence_1.Sequence(list);
+        this.addContext(s);
+        return s;
+    }
+    /**
+     * Helper to create a Delay
+     *
+     * @export
+     * @param {number} duration
+     * @returns {IPlayable}
+     */
+    delay(duration) {
+        const d = new delay_1.Delay(duration);
+        this.addContext(d);
+        return d;
+    }
+    /**
+     * Helper used to replace usage of normal js setTimeout() by a tween
+     * https://www.w3schools.com/jsref/met_win_settimeout.asp
+     *
+     * @export
+     * @param {() => void} fn
+     * @param {number} duration
+     * @returns {IPlayable}
+     */
+    setTimeout(fn, duration) {
+        const timeout = new delay_1.Delay(duration).onComplete(fn);
+        this.addContext(timeout);
+        return timeout.start();
+    }
+    /**
+     * Helper used to replace usage of normal js setInterval() by a tween
+     * https://www.w3schools.com/jsref/met_win_setinterval.asp
+     *
+     * @export
+     * @param {() => void} fn
+     * @param {number} duration
+     * @returns {IPlayable}
+     */
+    setInterval(fn, duration) {
+        const interval = new delay_1.Delay(duration).onRestart(fn).setLoop(-1);
+        this.addContext(interval);
+        return interval.start();
+    }
+    /**
+     * Private method to set common data to every object (the parent ticker, safe mode, verbose mode)
+     *
+     * @param {(IPlayable | ITween | ISequence)} obj
+     */
+    addContext(obj) {
+        if (!this.initialized) {
+            this.init();
         }
-        this.elapsed += localDt;
-        this.update++;
-    }
-    Start() {
-        if (this.state === state_1.State.Idle) {
-            this.state = state_1.State.Run;
+        obj.setParent(this.manager);
+        if (this.settings.logLevel !== log_1.Log.None || !this.settings.safe) {
+            obj.setSettings(this.settings);
         }
+        this.emitCreated(obj);
     }
-    Pause() {
-        if (this.state === state_1.State.Run) {
-            this.state = state_1.State.Pause;
+    /**
+     * Create or Get a ticker with a defined name
+     * This ticker is a child of the main ticker
+     *
+     * @export
+     * @param {string} name
+     * @returns {ITicker}
+     */
+    ticker() {
+        if (!this.initialized) {
+            this.init();
         }
+        const tick = new ticker_1.Ticker();
+        const handler = tick.tick.bind(tick);
+        tick.setParent(this.manager, handler);
+        this.manager.addTick(handler);
+        tick.start();
+        this.emitCreated(tick);
+        return tick;
     }
-    Resume() {
-        if (this.state === state_1.State.Pause) {
-            this.state = state_1.State.Run;
+    updateLoop(timestamp) {
+        let dt = timestamp - this.lastTime;
+        if (this.isFirstUpdate) {
+            dt = 1;
+            this.isFirstUpdate = false;
         }
-    }
-    Kill() {
-        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
-            return;
+        // cap to 500 ms
+        if (dt > 350) {
+            console.warn(`dt too high ${Math.round(dt)}ms. , Capped to 350ms.`);
+            dt = 350;
         }
-        if (this.parent && this.tick) {
-            this.parent.RemoveTickListener(this.tick);
-        }
-        this.state = state_1.State.Killed;
+        this.update(dt);
+        this.lastTime = timestamp;
+        lastFrame = requestFrame(this.updateLoop.bind(this));
     }
-    Skip() {
-        throw new Error('The main ticker cannot be skipped');
+    /**
+     * Initialize a plugin by passing fatina object to it
+     *
+     * @export
+     * @param {IPlugin} newPlugin
+     */
+    loadPlugin(newPlugin) {
+        newPlugin.init(this);
+        this.loadedPlugins.push(newPlugin);
+        this.info(log_1.Log.Debug, 'Plugin Loaded', newPlugin.name);
     }
-    Reset() {
-        this.state = state_1.State.Idle;
-    }
-    IsIdle() {
-        return this.state === state_1.State.Idle;
-    }
-    IsRunning() {
-        return this.state === state_1.State.Run;
-    }
-    IsFinished() {
-        return this.state === state_1.State.Killed || this.state === state_1.State.Finished;
-    }
-    IsPaused() {
-        return this.state === state_1.State.Pause;
-    }
-}
-exports.Ticker = Ticker;
-
-
-/***/ }),
-
-/***/ "./src/fatina/tweens/baseTween.ts":
-/*!****************************************!*\
-  !*** ./src/fatina/tweens/baseTween.ts ***!
-  \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const log_1 = __webpack_require__(/*! ../core/enum/log */ "./src/fatina/core/enum/log.ts");
-const state_1 = __webpack_require__(/*! ../core/enum/state */ "./src/fatina/core/enum/state.ts");
-class BaseTween {
-    constructor() {
-        this.elapsed = 0;
-        this.duration = 0;
-        this.timescale = 1;
-        this.state = state_1.State.Idle;
-        this.firstStart = true;
-    }
-    Start() {
-        if (this.state !== state_1.State.Idle) {
-            return this;
-        }
-        if (this.firstStart) {
-            this.Validate();
-        }
-        else {
-            this.CheckPosition();
-        }
-        this.state = state_1.State.Run;
-        this.parent.AddTickListener(this.tickCb);
-        if (this.firstStart) {
-            this.EmitEvent(this.eventStart);
-            this.firstStart = false;
-        }
-        return this;
-    }
-    Recycle() {
-        this.Reset(true);
-        this.firstStart = true;
-    }
-    Reset(skipParent) {
-        this.state = state_1.State.Idle;
-        if (!skipParent) {
-            this.RemoveParentListener();
-        }
-        if (this.loop) {
-            this.loop.value = this.loop.original;
-        }
-        this.LoopInit();
-        this.EmitEvent(this.eventRestart);
-    }
-    ResetAndStart(dtRemains) {
-        this.LoopInit();
-        this.EmitEvent(this.eventRestart);
-        this.state = state_1.State.Run;
-        if (dtRemains > 0) {
-            this.tickCb(dtRemains);
-        }
-    }
-    SetParent(ticker) {
-        this.RemoveParentListener();
-        this.parent = ticker;
-        return this;
-    }
-    SetTimescale(scale) {
-        this.timescale = scale;
-        return this;
-    }
-    Pause() {
-        if (this.state !== state_1.State.Run) {
-            this.Info(log_1.Log.Info, 'Cannot pause this tween ', this.state);
-            return;
-        }
-        this.state = state_1.State.Pause;
-        this.RemoveParentListener();
-    }
-    Resume() {
-        if (this.state !== state_1.State.Pause) {
-            this.Info(log_1.Log.Info, 'Cannot resume this tween ', this.state);
-            return;
-        }
-        this.state = state_1.State.Run;
-        this.parent.AddTickListener(this.tickCb);
-    }
-    Skip(finalValue) {
-        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
-            this.Info(log_1.Log.Info, 'Cannot skip this tween ', this.state);
-            return;
-        }
-        if (this.state === state_1.State.Idle) {
-            this.EmitEvent(this.eventStart);
-        }
-        if (finalValue) {
-            const duration = this.yoyo ? (this.yoyo.value * this.duration) : 0;
-            this.tickCb(this.duration - this.elapsed + duration);
-            return;
-        }
-        this.elapsed = this.duration;
-        this.Complete();
-    }
-    Kill() {
-        if (this.state === state_1.State.Killed) {
-            this.Info(log_1.Log.Info, 'Cannot kill this tween ', this.state);
-            return;
-        }
-        this.state = state_1.State.Killed;
-        this.RemoveParentListener();
-        this.EmitEvent(this.eventKill);
-    }
-    SetLoop(loop) {
-        if (!this.loop) {
-            this.loop = { original: 1, value: 1 };
-        }
-        this.loop.original = Math.round(loop);
-        this.loop.value = this.loop.original;
-        return this;
-    }
-    SetSettings(settings) {
-        this.settings = settings;
-        return this;
-    }
-    IsIdle() {
-        return this.state === state_1.State.Idle;
-    }
-    IsRunning() {
-        return this.state === state_1.State.Run;
-    }
-    IsFinished() {
-        return this.state === state_1.State.Killed || this.state === state_1.State.Finished;
-    }
-    IsPaused() {
-        return this.state === state_1.State.Pause;
-    }
-    Complete() {
-        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
-            this.Info(log_1.Log.Info, 'Cannot complete this tween ', this.state);
-            return;
-        }
-        this.state = state_1.State.Finished;
-        this.RemoveParentListener();
-        this.EmitEvent(this.eventComplete);
-    }
-    RemoveParentListener() {
-        if (this.parent) {
-            this.parent.RemoveTickListener(this.tickCb);
-        }
-    }
-    CheckPosition() { }
-    Validate() { }
-    LoopInit() {
-        this.elapsed = 0;
-    }
-    Info(level, message, data) {
-        if (!this.settings || level > this.settings.logLevel) {
+    info(level, message, data) {
+        if (level > this.settings.logLevel) {
             return;
         }
         if (data) {
@@ -852,7 +675,464 @@ class BaseTween {
             console.log(message);
         }
     }
-    Emit(func, args) {
+    emit(func, control) {
+        if (!this.settings.safe) {
+            return func(control);
+        }
+        try {
+            func(control);
+        }
+        catch (e) {
+            console.warn(e);
+        }
+    }
+    emitCreated(control) {
+        for (const event of this.eventCreated) {
+            this.emit(event, control);
+        }
+    }
+    /**
+     * Add a listener method on tween/sequence creation
+     *
+     * @export
+     * @param {(control: IControl) => void} cb
+     */
+    addListenerCreated(cb) {
+        this.eventCreated.push(cb);
+    }
+    /**
+     * Remove a listener method on tween/sequence creation
+     *
+     * @export
+     * @param {(control: IControl) => void} cb
+     */
+    removeListenerCreated(cb) {
+        const index = this.eventCreated.indexOf(cb);
+        if (index !== -1) {
+            this.eventCreated.splice(index, 1);
+        }
+    }
+    /**
+     * This method is used to change the log level
+     *
+     * @export
+     * @param {Log} level
+     */
+    setLog(level) {
+        this.settings.logLevel = level;
+    }
+    /**
+     * This method is used to enable / disable the callback try/catch
+     *
+     * @export
+     * @param {boolean} isSafe
+     */
+    setSafe(isSafe) {
+        this.settings.safe = isSafe;
+    }
+}
+exports.Fatina = Fatina;
+
+
+/***/ }),
+
+/***/ "./src/index.ts":
+/*!**********************!*\
+  !*** ./src/index.ts ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const fatina_1 = __webpack_require__(/*! ./fatina */ "./src/fatina.ts");
+module.exports = new fatina_1.Fatina();
+
+
+/***/ }),
+
+/***/ "./src/ticker.ts":
+/*!***********************!*\
+  !*** ./src/ticker.ts ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const state_1 = __webpack_require__(/*! ./core/enum/state */ "./src/core/enum/state.ts");
+/**
+ * Main Fatina Ticker
+ * Parent of all the normal tween and sequence
+ *
+ * @export
+ * @class Ticker
+ * @extends {EventList}
+ * @implements {ITicker}
+ */
+class Ticker {
+    constructor() {
+        this.state = state_1.State.Idle;
+        this.timescale = 1;
+        this.elapsed = 0;
+        this.duration = 0;
+        this.ticks = new Set();
+    }
+    setParent(parent, tick) {
+        this.tickCb = tick;
+        this.parent = parent;
+    }
+    /**
+     * Method used to change the timescale
+     *
+     * @param {number} scale
+     *
+     * @memberOf Ticker
+     */
+    setTimescale(scale) {
+        this.timescale = scale;
+    }
+    /**
+     * Method used by the child to be updated
+     *
+     * @param {(dt: number) => void} cb
+     *
+     * @memberOf Ticker
+     */
+    addTick(cb) {
+        this.ticks.add(cb);
+    }
+    /**
+     * Method used by the child to not receive update anymore
+     *
+     * @param {(dt: number) => void} cb
+     *
+     * @memberOf Ticker
+     */
+    removeTick(cb) {
+        this.ticks.delete(cb);
+    }
+    /**
+     * Method used to tick all the child (tick listeners)
+     *
+     * @param {number} dt
+     * @returns
+     *
+     * @memberOf Ticker
+     */
+    tick(dt) {
+        if (this.state !== state_1.State.Run) {
+            return;
+        }
+        const localDt = dt * this.timescale;
+        for (const tick of this.ticks) {
+            tick(localDt);
+        }
+        this.elapsed += localDt;
+    }
+    start() {
+        if (this.state === state_1.State.Idle) {
+            this.state = state_1.State.Run;
+        }
+    }
+    pause() {
+        if (this.state === state_1.State.Run) {
+            this.state = state_1.State.Pause;
+        }
+    }
+    resume() {
+        if (this.state === state_1.State.Pause) {
+            this.state = state_1.State.Run;
+        }
+    }
+    kill() {
+        if (this.state >= 3) {
+            return;
+        }
+        if (this.parent && this.tickCb) {
+            this.parent.removeTick(this.tickCb);
+        }
+        this.state = state_1.State.Killed;
+    }
+    skip() {
+        throw new Error('main ticker cannot be skipped');
+    }
+    reset() {
+        this.state = state_1.State.Idle;
+    }
+    get isIdle() {
+        return this.state === state_1.State.Idle;
+    }
+    get isRunning() {
+        return this.state === state_1.State.Run;
+    }
+    get isFinished() {
+        return this.state >= 3;
+    }
+    get isPaused() {
+        return this.state === state_1.State.Pause;
+    }
+}
+exports.Ticker = Ticker;
+
+
+/***/ }),
+
+/***/ "./src/tweens/baseTween.ts":
+/*!*********************************!*\
+  !*** ./src/tweens/baseTween.ts ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const log_1 = __webpack_require__(/*! ../core/enum/log */ "./src/core/enum/log.ts");
+const state_1 = __webpack_require__(/*! ../core/enum/state */ "./src/core/enum/state.ts");
+/**
+ * Shared behaviors between different types of tweens and sequence
+ * Used mostly to manage:
+ *  - events
+ *  - state
+ *  - loop and restart
+ *
+ * @export
+ * @abstract
+ * @class BaseTween
+ */
+class BaseTween {
+    constructor() {
+        // events
+        this.events = {};
+        // public properties
+        this.elapsed = 0;
+        this.duration = 0;
+        this.timescale = 1;
+        this.state = state_1.State.Idle;
+        this.first = true;
+    }
+    get isIdle() {
+        return this.state === state_1.State.Idle;
+    }
+    get isRunning() {
+        return this.state === state_1.State.Run;
+    }
+    get isFinished() {
+        return this.state >= 3;
+    }
+    get isPaused() {
+        return this.state === state_1.State.Pause;
+    }
+    /**
+     * Method used to start a tween
+     *
+     * @returns {T}
+     *
+     * @memberOf BaseTween
+     */
+    start() {
+        if (this.state !== state_1.State.Idle) {
+            return this;
+        }
+        if (this.first) {
+            this.validate();
+        }
+        else {
+            this.check();
+        }
+        this.state = state_1.State.Run;
+        this.parent.addTick(this.tickCb);
+        if (this.first) {
+            this.emitEvent(this.events.start);
+            this.first = false;
+        }
+        return this;
+    }
+    /**
+     * Reset a tween to be reusable (with start)
+     *
+     * @memberOf BaseTween
+     */
+    recycle() {
+        this.reset(true);
+        this.first = true;
+    }
+    /**
+     * To Reset a Tween already finished (example looping sequence)
+     *
+     * @memberOf BaseTween
+     */
+    reset(skipParent) {
+        this.state = state_1.State.Idle;
+        if (!skipParent) {
+            this.removeParent();
+        }
+        if (this.loop) {
+            this.loop.value = this.loop.original;
+        }
+        this.loopInit();
+        this.emitEvent(this.events.restart);
+    }
+    /**
+     * To immediately Reset a tween without stopping/restarting it
+     * This is faster than calling manually Reset() & Start() & Tick()
+     *
+     * @param {number} dtRemains
+     *
+     * @memberOf BaseTween
+     */
+    resetAndStart(dtRemains) {
+        this.loopInit();
+        this.emitEvent(this.events.restart);
+        this.state = state_1.State.Run;
+        if (dtRemains > 0) {
+            this.tickCb(dtRemains);
+        }
+    }
+    /**
+     * Method used to define the ticker of this tween
+     * When Fatina.Tween is used, the main ticker is automatically defined as parent
+     *
+     * @param {ITicker} ticker
+     * @returns {T}
+     *
+     * @memberOf BaseTween
+     */
+    setParent(ticker) {
+        this.removeParent();
+        this.parent = ticker;
+        return this;
+    }
+    /**
+     * Method used to change the timescale of the tween
+     *
+     * @param {number} scale
+     * @returns {T}
+     *
+     * @memberOf BaseTween
+     */
+    setTimescale(scale) {
+        this.timescale = scale;
+        return this;
+    }
+    /**
+     * Method used to pause a tween or a sequence (only work if the tween runs)
+     *
+     * @returns {void}
+     *
+     * @memberOf BaseTween
+     */
+    pause() {
+        if (this.state !== state_1.State.Run) {
+            this.info(log_1.Log.Info, 'Cannot pause this tween ', this.state);
+            return;
+        }
+        this.state = state_1.State.Pause;
+        this.removeParent();
+    }
+    /**
+     * Method used to resume a tween or a sequence (only work if the tween is paused)
+     *
+     * @returns {void}
+     *
+     * @memberOf BaseTween
+     */
+    resume() {
+        if (this.state !== state_1.State.Pause) {
+            this.info(log_1.Log.Info, 'Cannot resume this tween ', this.state);
+            return;
+        }
+        this.state = state_1.State.Run;
+        this.parent.addTick(this.tickCb);
+    }
+    /**
+     * Method used to Skip this tween or sequence and directly finish it
+     *
+     * @param {boolean} [finalValue]
+     * @returns {void}
+     * @memberOf BaseTween
+     */
+    skip(finalValue) {
+        if (this.state >= 3) {
+            this.info(log_1.Log.Info, 'Cannot skip this tween ', this.state);
+            return;
+        }
+        if (this.state === state_1.State.Idle) {
+            this.emitEvent(this.events.start);
+        }
+        if (finalValue) {
+            const duration = this.yo ? (this.yo.value * this.duration) : 0;
+            this.tickCb(this.duration - this.elapsed + duration);
+            return;
+        }
+        this.elapsed = this.duration;
+        this.complete();
+    }
+    /**
+     * Method used to Stop/Kill a tween or a sequence
+     *
+     * @returns {void}
+     *
+     * @memberOf BaseTween
+     */
+    kill() {
+        if (this.state === state_1.State.Killed) {
+            this.info(log_1.Log.Info, 'Cannot kill this tween ', this.state);
+            return;
+        }
+        this.state = state_1.State.Killed;
+        this.removeParent();
+        this.emitEvent(this.events.kill);
+    }
+    /**
+     * Method used to define how many time the tween has to loop
+     * Extra: if -1 the tween will loop forever
+     *
+     * @param {number} loop
+     * @returns {ITween}
+     *
+     * @memberOf Tween
+     */
+    setLoop(loop) {
+        if (!this.loop) {
+            this.loop = { original: 1, value: 1 };
+        }
+        this.loop.original = Math.round(loop);
+        this.loop.value = this.loop.original;
+        return this;
+    }
+    setSettings(settings) {
+        this.settings = settings;
+        return this;
+    }
+    complete() {
+        if (this.state >= 3) {
+            this.info(log_1.Log.Info, 'Cannot complete this tween ', this.state);
+            return;
+        }
+        this.state = state_1.State.Finished;
+        this.removeParent();
+        this.emitEvent(this.events.complete);
+    }
+    removeParent() {
+        if (this.parent) {
+            this.parent.removeTick(this.tickCb);
+        }
+    }
+    check() { }
+    validate() { }
+    loopInit() {
+        this.elapsed = 0;
+    }
+    info(level, message, data) {
+        if (!this.settings || level > this.settings.logLevel) {
+            return;
+        }
+        console.log(message, data);
+    }
+    emit(func, args) {
         if (this.settings && !this.settings.safe) {
             return func.apply(this, args);
         }
@@ -863,51 +1143,74 @@ class BaseTween {
             console.warn(e);
         }
     }
-    EmitEvent(listeners, args) {
+    emitEvent(listeners, args) {
         if (!listeners) {
             return;
         }
-        for (let i = 0; i < listeners.length; i++) {
-            this.Emit(listeners[i], args);
+        for (const listener of listeners) {
+            this.emit(listener, args);
         }
     }
-    OnStart(cb) {
-        if (!this.eventStart) {
-            this.eventStart = new Array(0);
-        }
-        this.eventStart[this.eventStart.length] = cb;
-        this.Info(log_1.Log.Debug, 'onStart');
-        return this;
+    /**
+     *  Callback called when the tween started
+     *
+     * @param {() => void} cb
+     * @returns {T}
+     *
+     * @memberOf BaseTween
+     */
+    onStart(cb) {
+        return this.onEvent('start', cb);
     }
-    OnRestart(cb) {
-        if (!this.eventRestart) {
-            this.eventRestart = new Array(0);
-        }
-        this.eventRestart[this.eventRestart.length] = cb;
-        this.Info(log_1.Log.Debug, 'onRestart');
-        return this;
+    /**
+     * Callback called when the tween restart (loop)
+     *
+     * @param {() => void} cb
+     * @returns {T}
+     *
+     * @memberOf BaseTween
+     */
+    onRestart(cb) {
+        return this.onEvent('restart', cb);
     }
-    OnUpdate(cb) {
-        if (!this.eventUpdate) {
-            this.eventUpdate = new Array(0);
-        }
-        this.eventUpdate[this.eventUpdate.length] = cb;
-        return this;
+    /**
+     * Callback called when the tween is updated
+     *
+     * @param {(dt: number, progress: number) => void} cb
+     * @returns {T}
+     *
+     * @memberOf BaseTween
+     */
+    onUpdate(cb) {
+        return this.onEvent('update', cb);
     }
-    OnKilled(cb) {
-        if (!this.eventKill) {
-            this.eventKill = new Array(0);
-        }
-        this.eventKill[this.eventKill.length] = cb;
-        this.Info(log_1.Log.Debug, 'onKilled');
-        return this;
+    /**
+     * Callback called when the tween is manually killed
+     *
+     * @param {() => void} cb
+     * @returns {T}
+     *
+     * @memberOf BaseTween
+     */
+    onKilled(cb) {
+        return this.onEvent('kill', cb);
     }
-    OnComplete(cb) {
-        if (!this.eventComplete) {
-            this.eventComplete = new Array(0);
+    /**
+     * Callback called when the tween is finished
+     *
+     * @param {() => void} cb
+     * @returns {T}
+     *
+     * @memberOf BaseTween
+     */
+    onComplete(cb) {
+        return this.onEvent('complete', cb);
+    }
+    onEvent(name, cb) {
+        if (!this.events[name]) {
+            this.events[name] = [];
         }
-        this.eventComplete[this.eventComplete.length] = cb;
-        this.Info(log_1.Log.Debug, 'onComplete');
+        this.events[name].push(cb);
         return this;
     }
 }
@@ -916,29 +1219,37 @@ exports.BaseTween = BaseTween;
 
 /***/ }),
 
-/***/ "./src/fatina/tweens/callback.ts":
-/*!***************************************!*\
-  !*** ./src/fatina/tweens/callback.ts ***!
-  \***************************************/
+/***/ "./src/tweens/callback.ts":
+/*!********************************!*\
+  !*** ./src/tweens/callback.ts ***!
+  \********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/fatina/tweens/baseTween.ts");
+const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/tweens/baseTween.ts");
+/**
+ * Fake tween used to append or join callback in a sequence
+ *
+ * @export
+ * @class Callback
+ * @extends {BaseTween}
+ * @implements {IPlayable}
+ */
 class Callback extends baseTween_1.BaseTween {
     constructor(cb) {
         super();
         this.callback = cb;
-        this.tickCb = this.Tick.bind(this);
+        this.tickCb = this.tick.bind(this);
     }
-    Tick(dt) {
+    tick(dt) {
         this.elapsed += dt;
         this.duration = 0;
         this.callback();
-        this.EmitEvent(this.eventUpdate, [dt, 1]);
-        this.Complete();
+        this.emitEvent(this.events.update, [dt, 1]);
+        this.complete();
     }
 }
 exports.Callback = Callback;
@@ -946,29 +1257,37 @@ exports.Callback = Callback;
 
 /***/ }),
 
-/***/ "./src/fatina/tweens/delay.ts":
-/*!************************************!*\
-  !*** ./src/fatina/tweens/delay.ts ***!
-  \************************************/
+/***/ "./src/tweens/delay.ts":
+/*!*****************************!*\
+  !*** ./src/tweens/delay.ts ***!
+  \*****************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/fatina/tweens/baseTween.ts");
+const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/tweens/baseTween.ts");
+/**
+ * Fake tween used to delay other tweens in a sequence
+ *
+ * @export
+ * @class Delay
+ * @extends {BaseTween}
+ * @implements {IPlayable}
+ */
 class Delay extends baseTween_1.BaseTween {
     constructor(duration) {
         super();
         this.duration = duration;
-        this.tickCb = this.Tick.bind(this);
+        this.tickCb = this.tick.bind(this);
     }
-    Tick(dt) {
+    tick(dt) {
         this.remainsDt = dt * this.timescale;
         while (this.remainsDt > 0) {
             this.elapsed += this.remainsDt;
             const progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
-            this.EmitEvent(this.eventUpdate, [this.remainsDt, progress]);
+            this.emitEvent(this.events.update, [this.remainsDt, progress]);
             if (this.elapsed < this.duration) {
                 return;
             }
@@ -976,11 +1295,11 @@ class Delay extends baseTween_1.BaseTween {
             if (this.loop) {
                 this.loop.value--;
                 if (this.loop.value !== 0) {
-                    this.ResetAndStart(0);
+                    this.resetAndStart(0);
                     continue;
                 }
             }
-            this.Complete();
+            this.complete();
             return;
         }
     }
@@ -990,205 +1309,201 @@ exports.Delay = Delay;
 
 /***/ }),
 
-/***/ "./src/fatina/tweens/sequence.ts":
-/*!***************************************!*\
-  !*** ./src/fatina/tweens/sequence.ts ***!
-  \***************************************/
+/***/ "./src/tweens/sequence.ts":
+/*!********************************!*\
+  !*** ./src/tweens/sequence.ts ***!
+  \********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const log_1 = __webpack_require__(/*! ../core/enum/log */ "./src/fatina/core/enum/log.ts");
-const state_1 = __webpack_require__(/*! ../core/enum/state */ "./src/fatina/core/enum/state.ts");
-const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/fatina/tweens/baseTween.ts");
-const callback_1 = __webpack_require__(/*! ./callback */ "./src/fatina/tweens/callback.ts");
-const delay_1 = __webpack_require__(/*! ./delay */ "./src/fatina/tweens/delay.ts");
+const log_1 = __webpack_require__(/*! ../core/enum/log */ "./src/core/enum/log.ts");
+const state_1 = __webpack_require__(/*! ../core/enum/state */ "./src/core/enum/state.ts");
+const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/tweens/baseTween.ts");
+const callback_1 = __webpack_require__(/*! ./callback */ "./src/tweens/callback.ts");
+const delay_1 = __webpack_require__(/*! ./delay */ "./src/tweens/delay.ts");
+/**
+ * Sequence: used to animate other tweens or sequence
+ * Can play them sequentially or in parallel
+ *
+ * @export
+ * @class Sequence
+ * @extends {BaseTween}
+ * @implements {ISequence}
+ * @implements {ITicker}
+ * @implements {IPlayable}
+ */
 class Sequence extends baseTween_1.BaseTween {
     constructor(tweens) {
         super();
-        this.eventTick = [];
+        this.evtTick = new Set();
         this.tweens = [];
-        this.sequenceIndex = 0;
-        this.tickCb = this.Tick.bind(this);
+        this.remainsDt = 0;
+        this.index = 0;
+        this.tickCb = this.tick.bind(this);
         if (tweens) {
             this.tweens = new Array(tweens.length);
             for (let i = 0; i < tweens.length; i++) {
-                tweens[i].SetParent(this);
+                tweens[i].setParent(this);
                 this.tweens[i] = [tweens[i]];
             }
         }
     }
-    get Count() {
+    get count() {
         return this.tweens.length;
     }
-    LoopInit() {
-        this.sequenceIndex = 0;
-        for (let i = 0; i < this.tweens.length; i++) {
-            const tweenArray = this.tweens[i];
-            for (let j = 0; j < tweenArray.length; j++) {
-                tweenArray[j].Reset();
+    loopInit() {
+        this.index = 0;
+        for (const tweenArray of this.tweens) {
+            for (const tween of tweenArray) {
+                tween.reset();
             }
         }
     }
-    AddTickListener(cb) {
-        this.eventTick.unshift(cb);
+    addTick(cb) {
+        this.evtTick.add(cb);
     }
-    RemoveTickListener(cb) {
-        const index = this.eventTick.indexOf(cb);
-        if (index !== -1) {
-            this.eventTick.splice(index, 1);
-        }
+    removeTick(cb) {
+        this.evtTick.delete(cb);
     }
-    Tick(dt) {
-        if (this.state === state_1.State.Finished || this.state === state_1.State.Killed) {
+    tick(dt) {
+        if (this.state >= 3) {
             return;
         }
-        const localDt = dt * this.timescale;
-        this.elapsed += localDt;
-        this.LocalTick(localDt);
+        this.remainsDt = dt * this.timescale;
+        this.elapsed += this.remainsDt;
+        this.localTick(this.remainsDt);
     }
-    LocalTick(dt, remains) {
-        if (!this.currentTween) {
-            this.NextTween();
+    localTick(dt, remains) {
+        // If no current tween, take the first one and start it
+        if (!this.cur) {
+            this.nextTween();
         }
-        if (this.currentTween) {
-            for (let i = this.eventTick.length - 1; i >= 0; i--) {
-                this.eventTick[i](dt);
+        if (this.cur) {
+            // Tick every listener
+            for (const tick of this.evtTick) {
+                tick(dt);
             }
+            // Dont emit update event for remains dt
             if (remains !== true) {
-                this.EmitEvent(this.eventUpdate, [dt, 0]);
+                this.emitEvent(this.events.update, [dt, 0]);
             }
         }
-        let remainsDt = dt;
-        if (this.currentTween) {
-            for (let i = 0; i < this.currentTween.length; i++) {
-                if (this.currentTween[i].state !== state_1.State.Finished) {
+        this.remainsDt = dt;
+        // Current tween over
+        if (this.cur) {
+            for (const current of this.cur) {
+                if (current.state !== state_1.State.Finished) {
                     return;
                 }
             }
-            const first = this.currentTween[0];
-            remainsDt = first.elapsed - first.duration;
-            this.EmitEvent(this.eventStepEnd, [this.currentTween[0]]);
-            this.Info(log_1.Log.Debug, 'OnStepEnd', this.eventStepEnd);
-            this.currentTween = undefined;
-            this.sequenceIndex++;
-            if (remainsDt > 0.01) {
-                this.LocalTick(remainsDt, true);
+            this.remainsDt = this.cur[0].elapsed - this.cur[0].duration;
+            this.emitEvent(this.events.stepEnd, [this.cur[0]]);
+            this.cur = undefined;
+            this.index++;
+            if (this.remainsDt > 0.01) {
+                this.localTick(this.remainsDt, true);
                 return;
             }
         }
-        if (!this.currentTween && this.tweens.length === this.sequenceIndex) {
+        // Complete
+        if (!this.cur && this.tweens.length === this.index) {
             if (this.loop) {
                 this.loop.value--;
                 if (this.loop.value !== 0) {
-                    this.ResetAndStart(remainsDt);
+                    this.resetAndStart(this.remainsDt);
                     return;
                 }
             }
-            this.Complete();
+            this.complete();
         }
     }
-    NextTween() {
-        this.currentTween = this.tweens[this.sequenceIndex];
-        if (this.currentTween) {
-            for (let i = 0; i < this.currentTween.length; i++) {
-                const tween = this.currentTween[i];
-                tween.Start();
+    nextTween() {
+        this.cur = this.tweens[this.index];
+        if (this.cur) {
+            for (const tween of this.cur) {
+                tween.start();
             }
-            this.EmitEvent(this.eventStepStart, [this.currentTween[0]]);
-            this.Info(log_1.Log.Debug, 'OnStepStart', this.eventStepStart);
+            this.emitEvent(this.events.stepStart, [this.cur[0]]);
         }
     }
-    Append(tween) {
-        tween.SetParent(this);
+    append(tween) {
+        tween.setParent(this);
         this.tweens[this.tweens.length] = [tween];
         return this;
     }
-    AppendCallback(cb) {
+    appendCallback(cb) {
         const playable = new callback_1.Callback(cb);
-        playable.SetParent(this);
+        playable.setParent(this);
         this.tweens[this.tweens.length] = [playable];
         return this;
     }
-    AppendInterval(duration) {
+    appendInterval(duration) {
         const playable = new delay_1.Delay(duration);
-        playable.SetParent(this);
+        playable.setParent(this);
         this.tweens[this.tweens.length] = [playable];
         return this;
     }
-    Prepend(tween) {
-        tween.SetParent(this);
+    prepend(tween) {
+        tween.setParent(this);
         this.tweens.unshift([tween]);
         return this;
     }
-    PrependCallback(cb) {
+    prependCallback(cb) {
         const playable = new callback_1.Callback(cb);
-        playable.SetParent(this);
+        playable.setParent(this);
         this.tweens.unshift([playable]);
         return this;
     }
-    PrependInterval(duration) {
+    prependInterval(duration) {
         const playable = new delay_1.Delay(duration);
-        playable.SetParent(this);
+        playable.setParent(this);
         this.tweens.unshift([playable]);
         return this;
     }
-    Skip(finalValue) {
-        if (this.state === state_1.State.Killed || this.state === state_1.State.Finished) {
-            this.Info(log_1.Log.Info, 'Cannot skip this tween ', this.state);
+    skip(finalValue) {
+        if (this.state >= 3) {
+            this.info(log_1.Log.Info, 'Cannot skip this tween ', this.state);
             return;
         }
-        for (let i = 0; i < this.tweens.length; i++) {
-            const tweenArray = this.tweens[i];
-            for (let j = 0; j < tweenArray.length; j++) {
-                const tween = tweenArray[j];
+        for (const tweenArray of this.tweens) {
+            for (const tween of tweenArray) {
                 if (tween.elapsed === 0) {
-                    this.EmitEvent(this.eventStepStart, [tween]);
-                    this.Info(log_1.Log.Debug, 'OnStepStart', this.eventStepStart);
+                    this.emitEvent(this.events.stepStart, [tween]);
                 }
-                tween.Skip(finalValue);
-                this.EmitEvent(this.eventStepEnd, [tween]);
-                this.Info(log_1.Log.Debug, 'OnStepEnd', this.eventStepEnd);
+                tween.skip(finalValue);
+                this.emitEvent(this.events.stepEnd, [tween]);
             }
         }
-        super.Skip();
+        super.skip();
     }
-    Kill() {
+    kill() {
         if (this.state === state_1.State.Killed) {
-            this.Info(log_1.Log.Info, 'Cannot kill this tween ', this.state);
+            this.info(log_1.Log.Info, 'Cannot kill this tween ', this.state);
             return;
         }
-        for (let i = 0; i < this.tweens.length; i++) {
-            const tweenArray = this.tweens[i];
-            for (let j = 0; j < tweenArray.length; j++) {
-                tweenArray[j].Kill();
+        for (const tweenArray of this.tweens) {
+            for (const tween of tweenArray) {
+                tween.kill();
             }
         }
-        super.Kill();
+        super.kill();
     }
-    Join(tween) {
+    join(tween) {
         if (this.tweens.length === 0) {
-            return this.Append(tween);
+            return this.append(tween);
         }
-        tween.SetParent(this);
+        tween.setParent(this);
         this.tweens[this.tweens.length - 1].push(tween);
         return this;
     }
-    OnStepStart(cb) {
-        if (!this.eventStepStart) {
-            this.eventStepStart = new Array(0);
-        }
-        this.eventStepStart[this.eventStepStart.length] = cb;
-        return this;
+    onStepStart(cb) {
+        return this.onEvent('stepStart', cb);
     }
-    OnStepEnd(cb) {
-        if (!this.eventStepEnd) {
-            this.eventStepEnd = new Array(0);
-        }
-        this.eventStepEnd[this.eventStepEnd.length] = cb;
-        return this;
+    onStepEnd(cb) {
+        return this.onEvent('stepEnd', cb);
     }
 }
 exports.Sequence = Sequence;
@@ -1196,210 +1511,328 @@ exports.Sequence = Sequence;
 
 /***/ }),
 
-/***/ "./src/fatina/tweens/tween.ts":
-/*!************************************!*\
-  !*** ./src/fatina/tweens/tween.ts ***!
-  \************************************/
+/***/ "./src/tweens/tween.ts":
+/*!*****************************!*\
+  !*** ./src/tweens/tween.ts ***!
+  \*****************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const state_1 = __webpack_require__(/*! ../core/enum/state */ "./src/fatina/core/enum/state.ts");
-const easing_1 = __webpack_require__(/*! ../easing/easing */ "./src/fatina/easing/easing.ts");
-const easingType_1 = __webpack_require__(/*! ../easing/easingType */ "./src/fatina/easing/easingType.ts");
-const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/fatina/tweens/baseTween.ts");
-const sequence_1 = __webpack_require__(/*! ./sequence */ "./src/fatina/tweens/sequence.ts");
+const state_1 = __webpack_require__(/*! ../core/enum/state */ "./src/core/enum/state.ts");
+const easing_1 = __webpack_require__(/*! ../easing/easing */ "./src/easing/easing.ts");
+const easingType_1 = __webpack_require__(/*! ../easing/easingType */ "./src/easing/easingType.ts");
+const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/tweens/baseTween.ts");
+const sequence_1 = __webpack_require__(/*! ./sequence */ "./src/tweens/sequence.ts");
+/**
+ * Tween: Used to animate values of an object
+ *
+ * @export
+ * @class Tween
+ * @extends {BaseTween}
+ * @implements {ITween}
+ */
 class Tween extends baseTween_1.BaseTween {
     constructor(object, properties) {
         super();
+        this.p = 0;
+        this.v = 0;
+        // options
         this.steps = 0;
+        this.rem = 0;
         this.relative = false;
-        this.object = object;
-        this.properties = properties;
-        this.tickCb = this.Tick.bind(this);
+        this.obj = object;
+        this.prop = properties;
+        this.tickCb = this.tick.bind(this);
     }
-    Init(object, properties) {
-        this.object = object;
-        this.properties = properties;
+    /**
+     * Used to define the object and the properties modified by this tween
+     *
+     * @param {*} object
+     * @param {string[]} properties
+     *
+     * @memberOf Tween
+     */
+    init(object, properties) {
+        this.obj = object;
+        this.prop = properties;
     }
-    Validate() {
-        if (!this.object) {
-            throw new Error('Cant Tween a undefined object');
+    /**
+     * Method used on start to check the values of this tween
+     *
+     * @protected
+     *
+     * @memberOf Tween
+     */
+    validate() {
+        // Check the object
+        if (!this.obj) {
+            throw new Error('undefined object');
         }
-        for (let i = 0; i < this.properties.length; i++) {
-            const prop = this.properties[i];
-            if (!(prop in this.object)) {
-                throw new Error('Cant Tween an unknown property' + prop);
+        // Check the properties of that object
+        for (const prop of this.prop) {
+            if (!(prop in this.obj)) {
+                throw new Error('unknown property' + prop);
             }
         }
+        // Check this tween will be updated
         if (!this.parent) {
-            throw new Error('Cant Start a tween without ticker');
+            throw new Error('no ticker');
         }
+        // Easing
         if (!this.ease) {
-            this.easeId = easingType_1.EasingType.Linear;
             this.ease = easing_1.easeNames[easingType_1.EasingType.Linear];
         }
-        this.CheckPosition();
+        this.check();
     }
-    CheckPosition() {
-        if (!this.currentFrom) {
-            this.currentFrom = {};
+    /**
+     * Method used to calculate currentFrom/currentTo based on the config
+     *
+     * @protected
+     *
+     * @memberOf Tween
+     */
+    check() {
+        if (!this.cf) {
+            this.cf = {};
         }
-        if (!this.currentTo) {
-            this.currentTo = {};
+        if (!this.ct) {
+            this.ct = {};
         }
-        for (let i = 0; i < this.properties.length; i++) {
-            const prop = this.properties[i];
-            if (!this.from) {
-                this.currentFrom[prop] = this.object[prop];
+        for (const prop of this.prop) {
+            // From
+            if (!this.f) {
+                this.cf[prop] = this.obj[prop];
             }
             else {
-                this.currentFrom[prop] = this.from[prop];
-                this.object[prop] = this.from[prop];
+                this.cf[prop] = this.f[prop];
+                this.obj[prop] = this.f[prop];
             }
+            // Relative
             if (this.relative) {
-                this.currentTo[prop] = this.object[prop] + this.to[prop];
+                this.ct[prop] = this.obj[prop] + this.t[prop];
             }
             else {
-                this.currentTo[prop] = this.to[prop];
+                this.ct[prop] = this.t[prop];
             }
         }
     }
-    Tick(dt) {
-        if (this.state === state_1.State.Finished || this.state === state_1.State.Killed) {
+    tick(dt) {
+        if (this.state >= 3) {
             return;
         }
-        this.remainsDt = dt * this.timescale;
-        while (this.remainsDt > 0) {
-            this.elapsed += this.remainsDt;
-            const progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
-            let val = this.ease(progress);
-            if (this.yoyo && (this.yoyo.original - this.yoyo.value) % 2 === 1) {
-                val = 1 - this.ease(1 - progress);
+        this.rem = dt * this.timescale;
+        while (this.rem > 0) {
+            this.elapsed += this.rem;
+            this.p = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
+            this.v = this.ease(this.p);
+            // Yoyo easing (need to be reversed)
+            if (this.yo && (this.yo.original - this.yo.value) % 2 === 1) {
+                this.v = 1 - this.ease(1 - this.p);
             }
+            // Steps behaviour
             if (this.steps !== 0) {
-                val = Math.round(val * this.steps) / this.steps;
+                this.v = Math.round(this.v * this.steps) / this.steps;
             }
-            if (this.object) {
-                for (let i = 0; i < this.properties.length; i++) {
-                    const prop = this.properties[i];
-                    this.object[prop] = this.currentFrom[prop] + (this.currentTo[prop] - this.currentFrom[prop]) * val;
+            // Update if the object still exist
+            if (this.obj) {
+                for (const prop of this.prop) {
+                    this.obj[prop] = this.cf[prop] + (this.ct[prop] - this.cf[prop]) * this.v;
                 }
             }
-            this.EmitEvent(this.eventUpdate, [this.remainsDt, progress]);
+            this.emitEvent(this.events.update, [this.rem, this.p]);
             if (this.elapsed < this.duration) {
                 return;
             }
-            this.remainsDt = this.elapsed - this.duration;
-            if (this.yoyo && this.yoyo.value > 0) {
-                this.Reverse();
-                this.ResetAndStart(0);
-                this.yoyo.value--;
+            this.rem = this.elapsed - this.duration;
+            // Yoyo effect ( A -> B -> A )
+            if (this.yo && this.yo.value > 0) {
+                this.reverse();
+                this.resetAndStart(0);
+                this.yo.value--;
                 continue;
             }
+            // Loop management
             if (this.loop) {
                 this.loop.value--;
                 if (this.loop.value !== 0) {
-                    this.CheckPosition();
-                    this.ResetAndStart(0);
+                    this.check();
+                    this.resetAndStart(0);
                     continue;
                 }
             }
-            this.Complete();
+            this.complete();
             return;
         }
     }
-    From(from) {
-        this.from = from;
+    /**
+     * Method used to set the values at the beginning of the tween
+     *
+     * @param {*} from
+     * @returns {ITween}
+     *
+     * @memberOf Tween
+     */
+    from(from) {
+        this.f = from;
         return this;
     }
-    To(to, duration) {
-        this.to = to;
+    /**
+     * Method used to set the values at the end of the tween
+     *
+     * @param {*} to
+     * @param {number} duration
+     * @returns {ITween}
+     *
+     * @memberOf Tween
+     */
+    to(to, duration) {
+        this.t = to;
         this.duration = duration;
         return this;
     }
-    SetRelative(relative) {
+    /**
+     * Method used to define if the tween as to work in relative or not
+     *
+     * @param {boolean} relative
+     * @returns {ITween}
+     *
+     * @memberOf Tween
+     */
+    setRelative(relative) {
         this.relative = relative;
         return this;
     }
-    Modify(diff, updateTo) {
-        for (let i = 0; i < this.properties.length; i++) {
-            const prop = this.properties[i];
+    /**
+     * To apply a modifier on a current tween
+     *
+     * @param {*} diff
+     * @param {boolean} updateTo
+     *
+     * @memberOf Tween
+     */
+    modify(diff, updateTo) {
+        for (const prop of this.prop) {
             if (!diff.hasOwnProperty(prop)) {
                 continue;
             }
-            this.object[prop] += diff[prop];
+            this.obj[prop] += diff[prop];
             if (updateTo) {
-                this.currentTo[prop] += diff[prop];
+                this.ct[prop] += diff[prop];
             }
             else {
-                this.currentFrom[prop] += diff[prop];
+                this.cf[prop] += diff[prop];
             }
         }
     }
-    Reset(skipParent) {
-        if (this.yoyo) {
-            if ((this.yoyo.original - this.yoyo.value) % 2 === 1) {
-                let previous = this.currentFrom;
-                this.currentFrom = this.currentTo;
-                this.currentTo = previous;
-                previous = this.from;
-                this.from = this.to;
-                this.to = previous;
+    /**
+     * Overwrite the Reset (just for yoyo)
+     *
+     * @param {boolean} [skipParent]
+     * @memberOf Tween
+     */
+    reset(skipParent) {
+        if (this.yo) {
+            if ((this.yo.original - this.yo.value) % 2 === 1) {
+                let previous = this.cf;
+                this.cf = this.ct;
+                this.ct = previous;
+                previous = this.f;
+                this.f = this.t;
+                this.t = previous;
                 const elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
                 this.elapsed = Math.round(elapsed * 1000) / 1000;
             }
-            this.yoyo.value = this.yoyo.original;
+            this.yo.value = this.yo.original;
         }
-        super.Reset(skipParent);
+        super.reset(skipParent);
     }
-    Reverse() {
-        let previous = this.currentFrom;
-        this.currentFrom = this.currentTo;
-        this.currentTo = previous;
-        previous = this.from;
-        this.from = this.to;
-        this.to = previous;
+    /**
+     * Method used to reverse the tween
+     *
+     * @memberOf Tween
+     */
+    reverse() {
+        let previous = this.cf;
+        this.cf = this.ct;
+        this.ct = previous;
+        previous = this.f;
+        this.f = this.t;
+        this.t = previous;
         const elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
         this.elapsed = Math.round(elapsed * 1000) / 1000;
         if (this.state === state_1.State.Finished) {
-            this.Reset(true);
-            this.Start();
+            this.reset(true);
+            this.start();
         }
     }
-    Yoyo(time) {
-        if (!this.yoyo) {
-            this.yoyo = { original: 0, value: 0 };
+    /**
+     * Method used to reverse the tween N times at the end
+     *
+     * @param {number} time
+     * @returns {ITween}
+     *
+     * @memberOf Tween
+     */
+    yoyo(time) {
+        if (!this.yo) {
+            this.yo = { original: 0, value: 0 };
         }
-        this.yoyo.original = time;
-        this.yoyo.value = time;
+        this.yo.original = time;
+        this.yo.value = time;
         return this;
     }
-    SetSteps(steps) {
+    /**
+     * Method used to Quantify the tween value to a certain amount of steps
+     *
+     * @param {number} steps
+     * @returns {ITween}
+     *
+     * @memberOf Tween
+     */
+    setSteps(steps) {
         this.steps = steps;
         return this;
     }
-    ToSequence() {
+    /**
+     * Method used to create a sequence with this tween as first value.
+     * Usually used with .AppendInterval(1250) or .PrependInterval(160) to add a delay
+     *
+     * @returns {ISequence}
+     *
+     * @memberOf Tween
+     */
+    toSequence() {
         if (!this.parent) {
-            throw new Error('Cant convert to a sequence, parent ticker not defined');
+            throw new Error('parent ticker not defined');
         }
-        return new sequence_1.Sequence().SetParent(this.parent).Append(this);
+        return new sequence_1.Sequence().setParent(this.parent).append(this);
     }
-    Easing(type) {
-        const name = type;
-        if (name in easing_1.easeNames) {
-            return easing_1.easeNames[name];
+    /**
+     * Method used to set the type of easing for this tween
+     *
+     * @param {(EasingType | string)} type
+     * @returns {ITween}
+     *
+     * @memberOf Tween
+     */
+    setEasing(type) {
+        if (!(type in easing_1.easeNames)) {
+            throw new Error(`unknown easing method ${type}`);
         }
-        throw new Error('Unknown ease method ' + type);
-    }
-    SetEasing(type) {
-        this.easeId = type;
-        this.ease = this.Easing(type);
+        this.ease = easing_1.easeNames[type];
         return this;
     }
-    LoopInit() {
+    /**
+     * Method used when the tween is reset (loop)
+     *
+     * @protected
+     *
+     * @memberOf Tween
+     */
+    loopInit() {
         this.elapsed = 0;
     }
 }

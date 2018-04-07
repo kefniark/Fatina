@@ -4,14 +4,14 @@
         var elem2 = document.getElementById("sample2");
 
         var obj2 = { x: 0, y: 0 };
-        Fatina.Tween(obj2, ['x'])
-            .To({x: 500}, 2500)
-            .SetEasing('inOutQuad')
-            .OnStart(() => console.log("tween2 start"))
-            .OnUpdate((dt, progress) => {
+        Fatina.tween(obj2, ['x'])
+            .to({x: 500}, 2500)
+            .setEasing('inOutQuad')
+            .onStart(() => console.log("tween2 start"))
+            .onUpdate((dt, progress) => {
                 elem2.style.left = obj2.x + "px";
             })
-            .OnComplete(() => console.log("tween2 complete"))
-            .Start();
+            .onComplete(() => console.log("tween2 complete"))
+            .start();
     }
 </script>

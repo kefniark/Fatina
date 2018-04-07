@@ -17,7 +17,7 @@
       
       <guid>https://kefniark.github.io/Fatina/samples/generic/</guid>
       <description>.imgTest { position: relative; margin: 0; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html elements but you can tween almost any kind of object and data. PlayAll 
-Linear tween  function sample1() { var elem = document.getElementById(&#34;sample1&#34;); var obj = { x: 0, y: 0 }; Fatina.Tween(obj, [&#39;x&#39;]) .From({x: 0}) .To({x: 500}, 2500) .</description>
+Linear tween  function sample1() { var elem = document.getElementById(&#34;sample1&#34;); var obj = { x: 0, y: 0 }; Fatina.tween(obj, [&#39;x&#39;]) .from({x: 0}) .to({x: 500}, 2500) .</description>
     </item>
     
     <item>
@@ -27,7 +27,7 @@ Linear tween  function sample1() { var elem = document.getElementById(&#34;sampl
       
       <guid>https://kefniark.github.io/Fatina/samples/game/</guid>
       <description>Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine).  Those are just samples, not real games :P Thanks Unity-chan for her help 
-Unity Chan GO!!! Parallax var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb});document.getElementById(&#39;canvas1&#39;).appendChild(app.view);// Create background with parallaxCreateBackgrounds();// Create unity chanlet textures = LoadUnityChanTextures();var unitychan = new PIXI.Sprite(textures[0]);unitychan.anchor.set(0.5);unitychan.scale.x = 1.</description>
+Unity Chan GO!!! Parallax   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb}); document.getElementById(&#39;canvas1&#39;).appendChild(app.view); // Create background with parallax CreateBackgrounds(); // Create unity chan let textures = LoadUnityChanTextures(); var unitychan = new PIXI.Sprite(textures[0]); unitychan.anchor.set(0.5); unitychan.scale.x = 1.</description>
     </item>
     
     <item>
@@ -36,7 +36,7 @@ Unity Chan GO!!! Parallax var app = new PIXI.Application(1024 / 2, 768 / 2, {b
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/basics/benchmark/</guid>
-      <description>Tween counter: ~0k  Run All What is happening here: Bellow, 4 scenario are tested over different configuration / libraries:  1. Normal usage : 200 tween over 100 frames x 50 times 2. Medium usage : 5000 tween over 100 frames x 10 times 3. Heavy usage : 20000 tween over 100 frames x 5 times (to test many concurrent tween) 4. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC)  Summarize:  Scenario 1 &amp;amp; 4: simulate normal game usage Scenario 2 &amp;amp; 3: are stress test which should almost never happen in real life  Those 3 libraries (Fatina, Tina.</description>
+      <description>Tween counter: ~0k  Run All What is happening here: Bellow, 5 scenario are tested over different configuration / libraries:  1. Normal usage : 200 tween over 100 frames x 50 times 2. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC) 3. Medium usage : 2k tween over 200 frames x 5 times 4. Heavy usage : 5k tween over 200 frames x 5 times 5.</description>
     </item>
     
     <item>
@@ -45,7 +45,7 @@ Unity Chan GO!!! Parallax var app = new PIXI.Application(1024 / 2, 768 / 2, {b
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/api/basic/</guid>
-      <description>Fatina Tween Sequence  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .Init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  Pause() / Resume(): void SetTimescale(scale: number): void  Methods  Init(): void This method has to be called once to initialize Fatina Update(dt: number): void Tween(obj, properties): Tween Method used to create new tween Sequence(): Sequence Method used to create new sequence Delay(duration) Delay SetTimeout(fn, duration): void This is just a simple helper around Fatina.</description>
+      <description>Fatina Tween Sequence  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  pause() / resume(): void setTimescale(scale: number): void  Methods  init(): void This method has to be called once to initialize Fatina update(dt: number): void tween(obj, properties): Tween Method used to create new tween sequence(): Sequence Method used to create new sequence delay(duration) Delay setTimeout(fn, duration): void This is just a simple helper around Fatina.</description>
     </item>
     
     <item>
@@ -99,7 +99,7 @@ Fatina.plugin.AddHelpers(obj);  1. Example (with Phaser) // require fatina let f
       
       <guid>https://kefniark.github.io/Fatina/api/tween/</guid>
       <description>Fatina Tween Sequence   A Tween that takes control of values and animates them.
- Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp;amp; timescale) duration: number duration of this tween in ms.  Controls  Start(): Tween By default new tween are not started. Don&amp;rsquo;t forget to call .Start() Pause(): void Resume(): void Skip(): void Kill(): void IsRunning(): boolean IsFinished(): boolean IsPaused(): boolean  See More// Create a tween let tween = Fatina.</description>
+ Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp;amp; timescale) duration: number duration of this tween in ms. isRunning: boolean isFinished: boolean isPaused: boolean  Controls  start(): Tween By default new tween are not started. Don&amp;rsquo;t forget to call .start() pause(): void resume(): void skip(): void kill(): void  See More// Create a tween let tween = Fatina.</description>
     </item>
     
     <item>
@@ -142,7 +142,7 @@ Import &amp;amp; Initialize // require fatina let fatina = require(&#39;fatina&#
       
       <guid>https://kefniark.github.io/Fatina/api/sequence/</guid>
       <description>Fatina Tween Sequence   A Sequence is special tween that, instead of taking control of a value, takes control of other tweens and animates them as a group.
- Properties  elapsed: number number of ms. elapsed for this sequence (affected by pause &amp;amp; timescale)  Controls  Start(): Sequence By default new tween are not started. Don&amp;rsquo;t forget to call .Start() Pause(): void Resume(): void Kill(): void IsRunning(): boolean IsFinished(): boolean IsPaused(): boolean  Callbacks  OnStart(cb: () =&amp;gt; void): Sequence; OnStepStart(cb: (tween: ITween | IPlayable) =&amp;gt; void): Sequence Emitted when a tween start OnStepEnd(cb: (index: ITween | IPlayable) =&amp;gt; void): Sequence Emitted when a tween is completed.</description>
+ Properties  elapsed: number number of ms. elapsed for this sequence (affected by pause &amp;amp; timescale) isRunning: boolean isFinished: boolean isPaused: boolean  Controls  start(): Sequence By default new tween are not started. Don&amp;rsquo;t forget to call .start() pause(): void resume(): void kill(): void  Callbacks  onStart(cb: () =&amp;gt; void): Sequence; onStepStart(cb: (tween: ITween | IPlayable) =&amp;gt; void): Sequence Emitted when a tween start onStepEnd(cb: (index: ITween | IPlayable) =&amp;gt; void): Sequence Emitted when a tween is completed.</description>
     </item>
     
     <item>
@@ -155,7 +155,7 @@ Import &amp;amp; Initialize // require fatina let fatina = require(&#39;fatina&#
 &amp;lt;script src=&amp;quot;fatina.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;  
 1 bis. NPM Installation More advanced users might want to use npm
 npm install fatina  Then include the Fatina module :
-// standard node.js require var Fatina = require(&#39;fatina&#39;); // OR // standard import with typescript (typed version) import * as Fatina from &#39;fatina&#39;;  2. Done ! Now you can use Fatina properly :</description>
+// standard node.js require var Fatina = require(&#39;fatina&#39;); // OR // standard import with typescript (typed version) import Fatina from &#39;fatina&#39;;  2. Done ! Now you can use Fatina properly :</description>
     </item>
     
     <item>
@@ -173,7 +173,7 @@ npm install fatina  Then include the Fatina module :
       <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/basics/tips/</guid>
-      <description>How to write tweens ?  Keep them simple: a Tween should do only one thing (avoid nesting and complexity) Split them in smaller tween to have more control (like splitting a x and y movement in two separated tweens) Group them in Sequence and prefer using .Append() and .Join() When you destroy an object like a sprite, Try to clean tweens related Avoid SetTimeout() and prefer Fatina.SetTimeout(): All the objects/events should be ticked together, normal settimeout cannot be paused &amp;hellip;  How to go farther ?</description>
+      <description>How to write tweens ?  Keep them simple: a Tween should do only one thing (avoid nesting and complexity) Split them in smaller tween to have more control (like splitting a x and y movement in two separated tweens) Group them in Sequence and prefer using .append() and .join() When you destroy an object like a sprite, Try to clean tweens related Avoid SetTimeout() and prefer Fatina.setTimeout(): All the objects/events should be ticked together, normal settimeout cannot be paused &amp;hellip;  How to go farther ?</description>
     </item>
     
   </channel>

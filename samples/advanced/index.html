@@ -202,14 +202,14 @@ Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2
         let currentSprite = AddSprite('/Fatina/Yuko_Blink_2.png', star, 20 + dx, 80 + dy, 1);
         let currentTimescale = Math.random() + 0.5;
 
-        var sequence = Fatina.Sequence().SetLoop(-1);
-        sequence.AppendInterval(Math.random() * 1000);
-        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 280 + dx, y: 80 + dy}, 1400).SetEasing('inOutSine').SetTimescale(currentTimescale));
-        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 50 + dx, y: 250 + dy}, 1400).SetEasing('inOutQuad').SetTimescale(currentTimescale));
-        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 150 + dx, y: 0 + dy}, 1400).SetEasing('inOutSine').SetTimescale(currentTimescale));
-        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 250 + dx, y: 250 + dy}, 1400).SetEasing('inOutQuad').SetTimescale(currentTimescale));
-        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 20 + dx, y: 80 + dy}, 1400).SetEasing('inOutQuad').SetTimescale(currentTimescale));
-        sequence.Start();
+        var sequence = Fatina.sequence().setLoop(-1);
+        sequence.appendInterval(Math.random() * 1000);
+        sequence.append(Fatina.tween(currentSprite, ['x', 'y']).to({ x: 280 + dx, y: 80 + dy}, 1400).setEasing('inOutSine').setTimescale(currentTimescale));
+        sequence.append(Fatina.tween(currentSprite, ['x', 'y']).to({ x: 50 + dx, y: 250 + dy}, 1400).setEasing('inOutQuad').setTimescale(currentTimescale));
+        sequence.append(Fatina.tween(currentSprite, ['x', 'y']).to({ x: 150 + dx, y: 0 + dy}, 1400).setEasing('inOutSine').setTimescale(currentTimescale));
+        sequence.append(Fatina.tween(currentSprite, ['x', 'y']).to({ x: 250 + dx, y: 250 + dy}, 1400).setEasing('inOutQuad').setTimescale(currentTimescale));
+        sequence.append(Fatina.tween(currentSprite, ['x', 'y']).to({ x: 20 + dx, y: 80 + dy}, 1400).setEasing('inOutQuad').setTimescale(currentTimescale));
+        sequence.start();
     }
 
     function AddSprite(path, container, x, y, scale) {
@@ -241,10 +241,10 @@ Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2
 
     let counter = 0;
     let delta = 0;
-    let move = Fatina.Tween(emitter, ['x'])
-        .From({x: app4.renderer.width / 2 - 200})
-        .To({x: app4.renderer.width / 2 + 200}, 5000)
-        .OnUpdate((dt, progress) => {
+    let move = Fatina.tween(emitter, ['x'])
+        .from({x: app4.renderer.width / 2 - 200})
+        .to({x: app4.renderer.width / 2 + 200}, 5000)
+        .onUpdate((dt, progress) => {
             delta += dt;
             if (delta < 700) {
                 return;
@@ -252,8 +252,8 @@ Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2
             delta -= 700;
             StartAnim(emitter);
         })
-        .SetLoop(-1)
-        .Start();
+        .setLoop(-1)
+        .start();
 
     function StartAnim(emit) {
         let destX = emit.x;
@@ -273,18 +273,18 @@ Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2
 
         app4.stage.addChild(prestar);
 
-        let tween = Fatina.Tween(prestar, ['x', 'y', 'rotation'])
-            .To({ x: destX, y: destY, rotation: 0}, 900)
-            .SetEasing('outQuad')
-            .OnUpdate((dt, progress) => tween.Modify({ x: 5 - progress * 5 }, false))
-            .OnComplete(function() {
+        let tween = Fatina.tween(prestar, ['x', 'y', 'rotation'])
+            .to({ x: destX, y: destY, rotation: 0}, 900)
+            .setEasing('outQuad')
+            .onUpdate((dt, progress) => tween.modify({ x: 5 - progress * 5 }, false))
+            .onComplete(function() {
                 for (let i=0; i<20; i++) {
                     CreateStar(multi, destX, destY);
                 }
 
                 setTimeout(() => prestar.destroy(), 50);
             })
-            .Start();
+            .start();
     }
 
     function CreateStar(multi, x, y) {
@@ -299,24 +299,24 @@ Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2
         star.alpha = 0;
         star.tint = 0xf4ee42;
 
-        let smoke = Fatina.Tween(star, ['x', 'y', 'rotation'])
-            .SetRelative(true)
-            .To({ x: Math.random() * 300 - 150, y: multi * (Math.random() * 200 + 200), rotation: Math.random() * 12 - 6}, 1600)
-            .OnUpdate((dt) => {
+        let smoke = Fatina.tween(star, ['x', 'y', 'rotation'])
+            .setRelative(true)
+            .to({ x: Math.random() * 300 - 150, y: multi * (Math.random() * 200 + 200), rotation: Math.random() * 12 - 6}, 1600)
+            .onUpdate((dt) => {
                 star.dy -= multi * dt / 100;
-                smoke.Modify({y: star.dy}, true)
+                smoke.modify({y: star.dy}, true)
             })
-            .OnComplete(() => star.destroy());
+            .onComplete(() => star.destroy());
 
-        let fadeIn = Fatina.Tween(star, ['alpha']).To({ alpha: Math.random() * 0.4 + 0.6 }, 250);
-        let fadeOut = Fatina.Tween(star, ['alpha']).To({ alpha: 0 }, 950).SetEasing('outSine');
+        let fadeIn = Fatina.tween(star, ['alpha']).to({ alpha: Math.random() * 0.4 + 0.6 }, 250);
+        let fadeOut = Fatina.tween(star, ['alpha']).to({ alpha: 0 }, 950).setEasing('outSine');
 
-        let sequence = Fatina.Sequence()
-            .Append(fadeIn)
-            .AppendInterval(4050)
-            .Append(fadeOut)
-            .Join(smoke)
-            .Start();
+        let sequence = Fatina.sequence()
+            .append(fadeIn)
+            .appendInterval(4050)
+            .append(fadeOut)
+            .join(smoke)
+            .start();
 
         app4.stage.addChild(star);
     }
@@ -344,23 +344,23 @@ Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2
         let ball = AddSprite('/Fatina/pixi/ball.png', app.stage, app.renderer.width - 50, 50, 1);
 
         // Fadein
-        Fatina.Tween(ball, ['alpha']).From({ alpha: 0 }).To({ alpha: 1 }, 450).SetEasing('outSine').Start();
+        Fatina.tween(ball, ['alpha']).from({ alpha: 0 }).to({ alpha: 1 }, 450).setEasing('outSine').start();
 
         // Move horizontaly
-        Fatina.Tween(ball, ['x']).To({ x: - 100}, 5000 / xSpeed).Start();
-        Fatina.Tween(ball, ['rotation']).To({ rotation: -25 }, 5000).Start();
+        Fatina.tween(ball, ['x']).to({ x: - 100}, 5000 / xSpeed).start();
+        Fatina.tween(ball, ['rotation']).to({ rotation: -25 }, 5000).start();
 
-        let sequence = Fatina.Sequence();
-        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: app.renderer.height - 50}, 800).SetEasing('inCirc'));
-        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: 100 / yRebounce }, 800).SetEasing('outCirc'));
-        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: app.renderer.height - 50}, 800).SetEasing('inCirc'));
-        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: 150 / yRebounce }, 800).SetEasing('outCirc'));
-        sequence.AppendCallback(() => Fatina.Tween(ball, ['alpha']).To({ alpha: 0 }, 250).SetEasing('inSine').Start());
-        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: app.renderer.height - 50}, 800).SetEasing('inCirc'));
-        sequence.Append(Fatina.Tween(ball, ['y']).To({ y: 200 / yRebounce }, 800).SetEasing('outCirc'));
-        sequence.AppendInterval(1500);
-        sequence.OnComplete(() => ball.destroy());
-        sequence.Start();
+        let sequence = Fatina.sequence();
+        sequence.append(Fatina.tween(ball, ['y']).to({ y: app.renderer.height - 50}, 800).setEasing('inCirc'));
+        sequence.append(Fatina.tween(ball, ['y']).to({ y: 100 / yRebounce }, 800).setEasing('outCirc'));
+        sequence.append(Fatina.tween(ball, ['y']).to({ y: app.renderer.height - 50}, 800).setEasing('inCirc'));
+        sequence.append(Fatina.tween(ball, ['y']).to({ y: 150 / yRebounce }, 800).setEasing('outCirc'));
+        sequence.appendCallback(() => Fatina.tween(ball, ['alpha']).to({ alpha: 0 }, 250).setEasing('inSine').start());
+        sequence.append(Fatina.tween(ball, ['y']).to({ y: app.renderer.height - 50}, 800).setEasing('inCirc'));
+        sequence.append(Fatina.tween(ball, ['y']).to({ y: 200 / yRebounce }, 800).setEasing('outCirc'));
+        sequence.appendInterval(1500);
+        sequence.onComplete(() => ball.destroy());
+        sequence.start();
     }
 
     function AddSprite(path, container, x, y, scale) {

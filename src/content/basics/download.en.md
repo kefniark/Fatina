@@ -32,13 +32,13 @@ var Fatina = require('fatina');
 // OR
 
 // standard import with typescript (typed version)
-import * as Fatina from 'fatina';
+import Fatina from 'fatina';
 ```
 
 ### 2. Done !
 Now you can use **Fatina** properly :
 ```javascript
-Fatina.Tween( /* etc */ ).Start();
+Fatina.tween( /* etc */ ).start();
 ```
 <br>
 <div style="text-align: center">
