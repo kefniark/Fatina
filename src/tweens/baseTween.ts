@@ -281,11 +281,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 		if (!this.settings || level > this.settings.logLevel) {
 			return;
 		}
-		if (data) {
-			console.log(message, data);
-		} else {
-			console.log(message);
-		}
+		console.log(message, data);
 	}
 
 	private emit(func: any, args: any) {
