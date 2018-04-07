@@ -161,7 +161,6 @@ export class Fatina {
 	public tween(obj: any, properties: string[]): ITween {
 		const t = new Tween(obj, properties);
 		this.addContext(t);
-		this.info(Log.Debug, 'Tween Instantiated', t);
 		return t;
 	}
 
@@ -175,7 +174,6 @@ export class Fatina {
 	public sequence(list?: Tween[] | Sequence[] | IPlayable[]): ISequence {
 		const s = new Sequence(list);
 		this.addContext(s);
-		this.info(Log.Debug, 'Sequence Instantiated', s);
 		return s;
 	}
 
@@ -189,7 +187,6 @@ export class Fatina {
 	public delay(duration: number): IPlayable {
 		const d = new Delay(duration);
 		this.addContext(d);
-		this.info(Log.Debug, 'Delay Instantiated', d);
 		return d;
 	}
 
@@ -205,7 +202,6 @@ export class Fatina {
 	public setTimeout(fn: () => void, duration: number): IPlayable {
 		const timeout = new Delay(duration).onComplete(fn);
 		this.addContext(timeout);
-		this.info(Log.Debug, 'SetTimeout Instantiated', timeout);
 		return timeout.start();
 	}
 
@@ -221,7 +217,6 @@ export class Fatina {
 	public setInterval(fn: () => void, duration: number): IPlayable {
 		const interval = new Delay(duration).onRestart(fn).setLoop(-1);
 		this.addContext(interval);
-		this.info(Log.Debug, 'SetInterval Instantiated', interval);
 		return interval.start();
 	}
 
@@ -264,7 +259,6 @@ export class Fatina {
 		tick.start();
 
 		this.emitCreated(tick);
-		this.info(Log.Debug, 'Ticker Instantiated', tick);
 		return tick;
 	}
 

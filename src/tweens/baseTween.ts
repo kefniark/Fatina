@@ -17,11 +17,7 @@ import { ITweenProperty } from '../core/interfaces/ITweenProperty';
  */
 export abstract class BaseTween<T extends BaseTween<any>> {
 	// events
-	protected evtStart: {(): void}[] | undefined;
-	protected evtRestart: {(): void}[] | undefined;
-	protected evtUpdate: {(dt: number, progress: number): void}[] | undefined;
-	protected evtKill: {(): void}[] | undefined;
-	protected evtComplete: {(): void}[] | undefined;
+	protected events: { [id: string]: any[] } = {};
 
 	// public properties
 	public elapsed = 0;
@@ -46,7 +42,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	}
 
 	public get isFinished(): boolean {
-		return this.state === State.Killed || this.state === State.Finished;
+		return this.state >= 3;
 	}
 
 	public get isPaused(): boolean {
@@ -75,7 +71,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 		this.parent.addTick(this.tickCb);
 
 		if (this.first) {
-			this.emitEvent(this.evtStart);
+			this.emitEvent(this.events.start);
 			this.first = false;
 		}
 		return this as any;
@@ -107,7 +103,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 			this.loop.value = this.loop.original;
 		}
 		this.loopInit();
-		this.emitEvent(this.evtRestart);
+		this.emitEvent(this.events.restart);
 	}
 
 	/**
@@ -120,7 +116,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 */
 	public resetAndStart(dtRemains: number) {
 		this.loopInit();
-		this.emitEvent(this.evtRestart);
+		this.emitEvent(this.events.restart);
 
 		this.state = State.Run;
 		if (dtRemains > 0) {
@@ -198,13 +194,13 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 * @memberOf BaseTween
 	 */
 	public skip(finalValue?: boolean): void {
-		if (this.state === State.Killed || this.state === State.Finished) {
+		if (this.state >= 3) {
 			this.info(Log.Info, 'Cannot skip this tween ', this.state);
 			return;
 		}
 
 		if (this.state === State.Idle) {
-			this.emitEvent(this.evtStart);
+			this.emitEvent(this.events.start);
 		}
 
 		if (finalValue) {
@@ -232,7 +228,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 
 		this.state = State.Killed;
 		this.removeParent();
-		this.emitEvent(this.evtKill);
+		this.emitEvent(this.events.kill);
 	}
 
 	/**
@@ -259,14 +255,14 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	}
 
 	protected complete(): void {
-		if (this.state === State.Killed || this.state === State.Finished) {
+		if (this.state >= 3) {
 			this.info(Log.Info, 'Cannot complete this tween ', this.state);
 			return;
 		}
 
 		this.state = State.Finished;
 		this.removeParent();
-		this.emitEvent(this.evtComplete);
+		this.emitEvent(this.events.complete);
 	}
 
 	protected removeParent() {
@@ -322,11 +318,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 * @memberOf BaseTween
 	 */
 	public onStart(cb: () => void): T {
-		if (!this.evtStart) {
-			this.evtStart = new Array(0);
-		}
-		this.evtStart[this.evtStart.length] = cb;
-		return this as any;
+		return this.onEvent('start', cb);
 	}
 
 	/**
@@ -338,11 +330,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 * @memberOf BaseTween
 	 */
 	public onRestart(cb: () => void): T {
-		if (!this.evtRestart) {
-			this.evtRestart = new Array(0);
-		}
-		this.evtRestart[this.evtRestart.length] = cb;
-		return this as any;
+		return this.onEvent('restart', cb);
 	}
 
 	/**
@@ -354,11 +342,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 * @memberOf BaseTween
 	 */
 	public onUpdate(cb: (dt: number, progress: number) => void): T {
-		if (!this.evtUpdate) {
-			this.evtUpdate = new Array(0);
-		}
-		this.evtUpdate[this.evtUpdate.length] = cb;
-		return this as any;
+		return this.onEvent('update', cb);
 	}
 
 	/**
@@ -370,11 +354,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 * @memberOf BaseTween
 	 */
 	public onKilled(cb: () => void): T {
-		if (!this.evtKill) {
-			this.evtKill = new Array(0);
-		}
-		this.evtKill[this.evtKill.length] = cb;
-		return this as any;
+		return this.onEvent('kill', cb);
 	}
 
 	/**
@@ -386,10 +366,14 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 * @memberOf BaseTween
 	 */
 	public onComplete(cb: () => void): T {
-		if (!this.evtComplete) {
-			this.evtComplete = new Array(0);
+		return this.onEvent('complete', cb);
+	}
+
+	protected onEvent(name: string, cb: any): T {
+		if (!this.events[name]) {
+			this.events[name] = [];
 		}
-		this.evtComplete[this.evtComplete.length] = cb;
+		this.events[name].push(cb);
 		return this as any;
 	}
 }

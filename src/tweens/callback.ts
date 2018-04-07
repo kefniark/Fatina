@@ -22,7 +22,7 @@ export class Callback extends BaseTween<Callback> implements IPlayable {
 		this.elapsed += dt;
 		this.duration = 0;
 		this.callback();
-		this.emitEvent(this.evtUpdate, [dt, 1]);
+		this.emitEvent(this.events.update, [dt, 1]);
 		this.complete();
 	}
 }

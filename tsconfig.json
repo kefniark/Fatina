@@ -9,7 +9,6 @@
 		"module": "commonjs",
 
 		// build settings
-		"allowJs": false,
 		"sourceMap": true,
 		"pretty": true,
 		"declaration": true,
@@ -20,9 +19,6 @@
 		"alwaysStrict": true,
 		"strictPropertyInitialization": false,
 		"noEmit": false,
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"allowSyntheticDefaultImports": true,
 		"importHelpers": false,
 		"noEmitHelpers": false,
 		"noEmitOnError": true,

@@ -18,6 +18,8 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	// properties
 	private obj: any;
 	private prop: string[];
+	private p = 0;
+	private v = 0;
 
 	// user from & to
 	private f: any;
@@ -29,7 +31,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 
 	// options
 	private steps = 0;
-	private remainsDt = 0;
+	private rem = 0;
 	private relative = false;
 	private ease: (t: number) => number;
 
@@ -121,40 +123,40 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	}
 
 	private tick(dt: number) {
-		if (this.state === State.Finished || this.state === State.Killed) {
+		if (this.state >= 3) {
 			return;
 		}
 
-		this.remainsDt = dt * this.timescale;
-		while (this.remainsDt > 0) {
-			this.elapsed += this.remainsDt;
-			const progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
-			let val = this.ease(progress);
+		this.rem = dt * this.timescale;
+		while (this.rem > 0) {
+			this.elapsed += this.rem;
+			this.p = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
+			this.v = this.ease(this.p);
 
 			// Yoyo easing (need to be reversed)
 			if (this.yo && (this.yo.original - this.yo.value) % 2 === 1) {
-				val = 1 - this.ease(1 - progress);
+				this.v = 1 - this.ease(1 - this.p);
 			}
 
 			// Steps behaviour
 			if (this.steps !== 0) {
-				val = Math.round(val * this.steps) / this.steps;
+				this.v = Math.round(this.v * this.steps) / this.steps;
 			}
 
 			// Update if the object still exist
 			if (this.obj) {
 				for (const prop of this.prop) {
-					this.obj[prop] = this.cf[prop] + (this.ct[prop] - this.cf[prop]) * val;
+					this.obj[prop] = this.cf[prop] + (this.ct[prop] - this.cf[prop]) * this.v;
 				}
 			}
 
-			this.emitEvent(this.evtUpdate, [this.remainsDt, progress]);
+			this.emitEvent(this.events.update, [this.rem, this.p]);
 
 			if (this.elapsed < this.duration) {
 				return;
 			}
 
-			this.remainsDt = this.elapsed - this.duration;
+			this.rem = this.elapsed - this.duration;
 
 			// Yoyo effect ( A -> B -> A )
 			if (this.yo && this.yo.value > 0) {
@@ -339,25 +341,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	}
 
 	/**
-	 * Private easing method (resolve the right method and set it)
-	 *
-	 * @private
-	 * @param {(EasingType | string)} type
-	 * @returns {(t: number) => number}
-	 *
-	 * @memberOf Tween
-	 */
-	private easing(type: EasingType | string): (t: number) => number {
-		const name = type as string;
-
-		if (name in easeNames) {
-			return easeNames[name];
-		}
-
-		throw new Error(`unknown easing method ${type}`);
-	}
-
-	/**
 	 * Method used to set the type of easing for this tween
 	 *
 	 * @param {(EasingType | string)} type
@@ -366,7 +349,11 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 * @memberOf Tween
 	 */
 	public setEasing(type: EasingType | string): ITween {
-		this.ease = this.easing(type);
+		if (!(type in easeNames)) {
+			throw new Error(`unknown easing method ${type}`);
+		}
+
+		this.ease = easeNames[type];
 		return this;
 	}
 

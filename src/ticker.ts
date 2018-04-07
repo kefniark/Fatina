@@ -74,6 +74,7 @@ export class Ticker implements ITicker {
 		for (const tick of this.ticks) {
 			tick(localDt);
 		}
+
 		this.elapsed += localDt;
 	}
 
@@ -96,7 +97,7 @@ export class Ticker implements ITicker {
 	}
 
 	public kill(): void {
-		if (this.state === State.Killed || this.state === State.Finished) {
+		if (this.state >= 3) {
 			return;
 		}
 
@@ -124,7 +125,7 @@ export class Ticker implements ITicker {
 	}
 
 	public get isFinished(): boolean {
-		return this.state === State.Killed || this.state === State.Finished;
+		return this.state >= 3;
 	}
 
 	public get isPaused(): boolean {

@@ -5,9 +5,9 @@
  * @enum {number}
  */
 export enum State {
-	Idle,
-	Run,
-	Pause,
-	Finished,
-	Killed
+	Idle = 0,
+	Run = 1,
+	Pause = 2,
+	Finished = 3,
+	Killed = 4
 }

@@ -20,14 +20,10 @@ import { Delay } from './delay';
  * @implements {IPlayable}
  */
 export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker, IPlayable {
-	// events
-	private evtStepStart: {(tween: ITween | IPlayable): void}[] | undefined;
-	private evtStepEnd: {(tween: ITween | IPlayable): void}[] | undefined;
 	private readonly evtTick: Set<{(dt: number): void}> = new Set();
 	private readonly tweens: ((ITween | IPlayable)[])[] = [];
-
-	// public properties
-	public ct: (ITween | IPlayable)[] | undefined;
+	public cur: (ITween | IPlayable)[] | undefined;
+	private rem = 0;
 	private index = 0;
 
 	public get count(): number {
@@ -65,59 +61,60 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 	}
 
 	private tick(dt: number) {
-		if (this.state === State.Finished || this.state === State.Killed) {
+		if (this.state >= 3) {
 			return;
 		}
-		const localDt = dt * this.timescale;
-		this.elapsed += localDt;
-		this.localTick(localDt);
+		this.rem = dt * this.timescale;
+		this.elapsed += this.rem;
+		this.localTick(this.rem);
 	}
 
 	private localTick(dt: number, remains?: boolean) {
 		// If no current tween, take the first one and start it
-		if (!this.ct) {
+		if (!this.cur) {
 			this.nextTween();
 		}
 
-		if (this.ct) {
+		if (this.cur) {
 			// Tick every listener
-			this.evtTick.forEach((tick) => tick(dt));
+			for (const tick of this.evtTick) {
+				tick(dt);
+			}
 
 			// Dont emit update event for remains dt
 			if (remains !== true) {
-				this.emitEvent(this.evtUpdate, [dt, 0]);
+				this.emitEvent(this.events.update, [dt, 0]);
 			}
 		}
 
-		let remainsDt = dt;
+		this.rem = dt;
 
 		// Current tween over
-		if (this.ct) {
-			for (const current of this.ct) {
+		if (this.cur) {
+			for (const current of this.cur) {
 				if (current.state !== State.Finished) {
 					return;
 				}
 			}
 
-			const first = this.ct[0];
-			remainsDt = first.elapsed - first.duration;
+			this.rem = this.cur[0].elapsed - this.cur[0].duration;
 
-			this.emitEvent(this.evtStepEnd, [this.ct[0]]);
-			this.ct = undefined;
+			this.emitEvent(this.events.stepEnd, [this.cur[0]]);
+			this.cur = undefined;
 			this.index++;
 
-			if (remainsDt > 0.01) {
-				this.localTick(remainsDt, true);
+			if (this.rem > 0.01) {
+				this.localTick(this.rem, true);
 				return;
 			}
 		}
 
 		// Complete
-		if (!this.ct && this.tweens.length === this.index) {
+		if (!this.cur && this.tweens.length === this.index) {
 			if (this.loop) {
 				this.loop.value--;
 				if (this.loop.value !== 0) {
-					this.resetAndStart(remainsDt);
+					this.resetAndStart(this.rem);
 					return;
 				}
 			}
@@ -127,13 +124,13 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 	}
 
 	private nextTween() {
-		this.ct = this.tweens[this.index];
-		if (this.ct) {
-			for (const tween of this.ct) {
+		this.cur = this.tweens[this.index];
+		if (this.cur) {
+			for (const tween of this.cur) {
 				tween.start();
 			}
 
-			this.emitEvent(this.evtStepStart, [this.ct[0]]);
+			this.emitEvent(this.events.stepStart, [this.cur[0]]);
 		}
 	}
 
@@ -178,7 +175,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 	}
 
 	public skip(finalValue?: boolean): void {
-		if (this.state === State.Killed || this.state === State.Finished) {
+		if (this.state >= 3) {
 			this.info(Log.Info, 'Cannot skip this tween ', this.state);
 			return;
 		}
@@ -186,10 +183,10 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		for (const tweenArray of this.tweens) {
 			for (const tween of tweenArray) {
 				if (tween.elapsed === 0) {
-					this.emitEvent(this.evtStepStart, [tween]);
+					this.emitEvent(this.events.stepStart, [tween]);
 				}
 				tween.skip(finalValue);
-				this.emitEvent(this.evtStepEnd, [tween]);
+				this.emitEvent(this.events.stepEnd, [tween]);
 			}
 		}
 		super.skip();
@@ -220,18 +217,10 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 	}
 
 	public onStepStart(cb: (index: ITween | IPlayable) => void): ISequence {
-		if (!this.evtStepStart) {
-			this.evtStepStart = new Array(0);
-		}
-		this.evtStepStart[this.evtStepStart.length] = cb;
-		return this;
+		return this.onEvent('stepStart', cb);
 	}
 
 	public onStepEnd(cb: (index: ITween | IPlayable) => void): ISequence {
-		if (!this.evtStepEnd) {
-			this.evtStepEnd = new Array(0);
-		}
-		this.evtStepEnd[this.evtStepEnd.length] = cb;
-		return this;
+		return this.onEvent('stepEnd', cb);
 	}
 }
