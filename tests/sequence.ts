@@ -1,14 +1,14 @@
 import * as test from 'tape';
 import { Test } from 'tape';
-import { Log } from '../src/fatina/core/enum/log';
-import { State } from '../src/fatina/core/enum/state';
-import { Ticker } from '../src/fatina/ticker';
-import { Sequence } from '../src/fatina/tweens/sequence';
-import { Tween } from '../src/fatina/tweens/tween';
+import { Log } from '../src/core/enum/log';
+import { State } from '../src/core/enum/state';
+import { Ticker } from '../src/ticker';
+import { Sequence } from '../src/tweens/sequence';
+import { Tween } from '../src/tweens/tween';
 
 test('[Fatina.Sequence] Create a basic Sequence', (t: Test) => {
 	const ticker = new Ticker();
-	ticker.Start();
+	ticker.start();
 	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 
 	let start = 0;
@@ -16,57 +16,55 @@ test('[Fatina.Sequence] Create a basic Sequence', (t: Test) => {
 	let stepEnd = 0;
 	let update = 0;
 	let complete = 0;
-	let duration = 0;
 	let cb = 0;
 
 	const sequence = new Sequence()
-		.SetParent(ticker)
-		.PrependInterval(1)
-		.PrependCallback(() => {})
-		.AppendInterval(1)
-		.AppendCallback(() => cb++)
-		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 2))
-		.AppendCallback(() => cb++)
-		.AppendInterval(1)
-		.AppendCallback(() => cb++)
-		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 2))
-		.AppendCallback(() => cb++)
-		.OnStart(() => {
+		.setParent(ticker)
+		.prependInterval(1)
+		.prependCallback(() => {})
+		.appendInterval(1)
+		.appendCallback(() => cb++)
+		.append(new Tween(obj, [ 'x', 'y' ]).to({ x: 44, y: 44 }, 2))
+		.appendCallback(() => cb++)
+		.appendInterval(1)
+		.appendCallback(() => cb++)
+		.append(new Tween(obj, [ 'x', 'y' ]).to({ x: 0, y: 0 }, 2))
+		.appendCallback(() => cb++)
+		.onStart(() => {
 			if (update > 0 || stepStart > 0 || complete > 0) {
 				t.fail('OnStart() - event order issue');
 			}
 			start++;
 		})
-		.OnStepStart((tween) => {
+		.onStepStart(() => {
 			if (start === 0 || complete > 0) {
 				t.fail('OnStep() - event order issue');
 			}
 			stepStart++;
 		})
-		.OnStepStart((tween) => {
+		.onStepStart(() => {
 			if (start === 0 || complete > 0) {
 				t.fail('OnStep() - event order issue');
 			}
 			stepEnd++;
 		})
-		.OnUpdate((dt) => {
+		.onUpdate(() => {
 			update++;
-			duration += dt;
 		})
-		.OnComplete(() => {
+		.onComplete(() => {
 			if (start === 0 || stepStart === 0 || stepEnd === 0 || update === 0) {
 				t.fail('OnComplete() - event order issue');
 			}
 			complete++;
 		});
 
-	sequence.Start();
+	sequence.start();
 
 	for (let i = 0; i < 10; i++) {
-		ticker.Tick(1);
+		ticker.tick(1);
 	}
 
-	t.equal(10, sequence.Count);
+	t.equal(10, sequence.count);
 	t.equal(1, start, 'check OnStart was trigger once');
 	t.equal(10, stepStart, 'check OnStepStart was trigger the right amount of time');
 	t.equal(10, stepEnd, 'check OnStepEnd was trigger the right amount of time');
@@ -79,20 +77,20 @@ test('[Fatina.Sequence] Create a basic Sequence', (t: Test) => {
 
 test('[Fatina.Sequence] Test Lagging Tick', (t: Test) => {
 	const ticker = new Ticker();
-	ticker.Start();
+	ticker.start();
 	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 
 	let complete = 0;
 	const sequence = new Sequence()
-		.SetParent(ticker)
-		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 5))
-		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 5))
-		.OnComplete(() => complete++);
+		.setParent(ticker)
+		.append(new Tween(obj, [ 'x', 'y' ]).to({ x: 44, y: 44 }, 5))
+		.append(new Tween(obj, [ 'x', 'y' ]).to({ x: 0, y: 0 }, 5))
+		.onComplete(() => complete++);
 
-	sequence.Start();
+	sequence.start();
 
-	ticker.Tick(6);
-	ticker.Tick(4);
+	ticker.tick(6);
+	ticker.tick(4);
 
 	t.equal(1, complete, 'check the remains of the first tick was propagated to the second tween');
 	t.end();
@@ -100,19 +98,19 @@ test('[Fatina.Sequence] Test Lagging Tick', (t: Test) => {
 
 test('[Fatina.Sequence] Test Constructor', (t: Test) => {
 	const ticker = new Ticker();
-	ticker.Start();
+	ticker.start();
 	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 
 	let complete = 0;
 	const sequence = new Sequence([
-		new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 5),
-		new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 5)
-	]).SetParent(ticker).OnComplete(() => complete++);
+		new Tween(obj, [ 'x', 'y' ]).to({ x: 44, y: 44 }, 5),
+		new Tween(obj, [ 'x', 'y' ]).to({ x: 0, y: 0 }, 5)
+	]).setParent(ticker).onComplete(() => complete++);
 
-	sequence.Start();
+	sequence.start();
 
-	ticker.Tick(6);
-	ticker.Tick(4);
+	ticker.tick(6);
+	ticker.tick(4);
 
 	t.equal(1, complete, 'check the remains of the first tick was propagated to the second tween');
 	t.end();
@@ -120,29 +118,29 @@ test('[Fatina.Sequence] Test Constructor', (t: Test) => {
 
 test('[Fatina.Sequence] Test Prepend', (t: Test) => {
 	const ticker = new Ticker();
-	ticker.Start();
+	ticker.start();
 	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 
 	let first = true;
 	let complete = 0;
 	const sequence = new Sequence()
-		.SetParent(ticker)
-		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 2).OnComplete(() => {
+		.setParent(ticker)
+		.append(new Tween(obj, [ 'x', 'y' ]).to({ x: 44, y: 44 }, 2).onComplete(() => {
 			if (first) {
 				t.fail('append tween should be executed second');
 			}
 		}))
-		.Prepend(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 2).OnComplete(() => {
+		.prepend(new Tween(obj, [ 'x', 'y' ]).to({ x: 0, y: 0 }, 2).onComplete(() => {
 			if (!first) {
 				t.fail('prepend tween should be executed first');
 			}
 			first = false;
 		}))
-		.OnComplete(() => complete++);
+		.onComplete(() => complete++);
 
-	sequence.Start();
+	sequence.start();
 
-	ticker.Tick(5);
+	ticker.tick(5);
 
 	t.equal(1, complete, 'check both tween are executed');
 	t.end();
@@ -150,28 +148,28 @@ test('[Fatina.Sequence] Test Prepend', (t: Test) => {
 
 test('[Fatina.Sequence] Test Join', (t: Test) => {
 	const ticker = new Ticker();
-	ticker.Start();
+	ticker.start();
 	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 	let duration = 0;
 	let complete = 0;
 	const sequence = new Sequence()
-		.SetParent(ticker)
-		.Join(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 1.5))
-		.Prepend(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 2))
-		.Join(new Tween(obj, [ 'alpha' ]).To({ alpha: 0 }, 2).OnStart(() => {
-			const current = (sequence as Sequence).currentTween;
+		.setParent(ticker)
+		.join(new Tween(obj, [ 'x', 'y' ]).to({ x: 44, y: 44 }, 1.5))
+		.prepend(new Tween(obj, [ 'x', 'y' ]).to({ x: 0, y: 0 }, 2))
+		.join(new Tween(obj, [ 'alpha' ]).to({ alpha: 0 }, 2).onStart(() => {
+			const current = (sequence as Sequence).ct;
 			if (current) {
 				t.equal(2, current.length, 'check 2 tween are running at the same time');
 			}
 		}))
-		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 2))
-		.OnUpdate((dt) => duration += dt)
-		.OnComplete(() => complete++);
+		.append(new Tween(obj, [ 'x', 'y' ]).to({ x: 44, y: 44 }, 2))
+		.onUpdate((dt) => duration += dt)
+		.onComplete(() => complete++);
 
-	sequence.Start();
+	sequence.start();
 
 	for (let i = 0; i < 50; i++) {
-		ticker.Tick(0.2);
+		ticker.tick(0.2);
 	}
 
 	t.equal(1, complete, 'check both tween are executed');
@@ -181,7 +179,7 @@ test('[Fatina.Sequence] Test Join', (t: Test) => {
 
 test('[Fatina.Sequence] Sequence loop', (t: Test) => {
 	const ticker = new Ticker();
-	ticker.Start();
+	ticker.start();
 	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 
 	let start = 0;
@@ -191,24 +189,24 @@ test('[Fatina.Sequence] Sequence loop', (t: Test) => {
 	let sequenceCb = 0;
 	let restart = 0;
 	const sequence = new Sequence()
-		.SetParent(ticker)
-		.PrependInterval(1)
-		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 44, y: 44 }, 4))
-		.Append(new Tween(obj, [ 'x', 'y' ]).To({ x: 0, y: 0 }, 4))
-		.AppendCallback(() => sequenceCb++)
-		.OnRestart(() => {})
-		.OnRestart(() => restart += 1)
-		.OnStart(() => start += 1)
-		.OnStepStart(() => step += 1)
-		.OnStepEnd(() => {})
-		.OnStepEnd(() => stepEnd += 1)
-		.OnComplete(() => complete += 1)
-		.SetLoop(3);
+		.setParent(ticker)
+		.prependInterval(1)
+		.append(new Tween(obj, [ 'x', 'y' ]).to({ x: 44, y: 44 }, 4))
+		.append(new Tween(obj, [ 'x', 'y' ]).to({ x: 0, y: 0 }, 4))
+		.appendCallback(() => sequenceCb++)
+		.onRestart(() => {})
+		.onRestart(() => restart += 1)
+		.onStart(() => start += 1)
+		.onStepStart(() => step += 1)
+		.onStepEnd(() => {})
+		.onStepEnd(() => stepEnd += 1)
+		.onComplete(() => complete += 1)
+		.setLoop(3);
 
-	sequence.Start();
+	sequence.start();
 
 	for (let i = 0; i < 100; i++) {
-		ticker.Tick(0.5);
+		ticker.tick(0.5);
 	}
 
 	t.equal(1, start, 'check onStart was emitted once');
@@ -222,28 +220,28 @@ test('[Fatina.Sequence] Sequence loop', (t: Test) => {
 
 test('[Fatina.Sequence] Sequence timescale & kill', (t: Test) => {
 	const ticker = new Ticker();
-	ticker.Start();
+	ticker.start();
 
 	let killed = 0;
-	const tween = new Tween({}, []).SetParent(ticker).To({}, 4).SetTimescale(0.5);
-	const sequence = tween.ToSequence().SetTimescale(0.5).OnKilled(() => killed++);
-	sequence.Start();
+	const tween = new Tween({}, []).setParent(ticker).to({}, 4).setTimescale(0.5);
+	const sequence = tween.toSequence().setTimescale(0.5).onKilled(() => killed++);
+	sequence.start();
 
 	for (let i = 0; i < 6; i++) {
-		ticker.Tick(1);
+		ticker.tick(1);
 	}
 
 	t.equal(3, sequence.elapsed, 'check the time of this sequence is 0.5');
 	t.equal(1.5, tween.elapsed, 'check the time of the tween is 0.25');
 
-	sequence.Kill();
+	sequence.kill();
 
 	t.ok(sequence.state === State.Killed, 'check the sequence is marked as killed');
 	t.ok(tween.state === State.Killed, 'check the tween is marked as killed');
 	t.equal(1, killed, 'check the onKilled event is emitted');
 
-	sequence.Kill();
-	(sequence as any).Tick(1);
+	sequence.kill();
+	(sequence as any).tick(1);
 
 	t.equal(1, killed, 'check the onKilled event is emitted once');
 	t.end();
@@ -251,60 +249,60 @@ test('[Fatina.Sequence] Sequence timescale & kill', (t: Test) => {
 
 test('[Fatina.Sequence] Test Sequence with broken callback', (t: Test) => {
 	const ticker = new Ticker();
-	ticker.Start();
+	ticker.start();
 
 	const obj = { x: 22 };
 	const sequence = new Sequence()
-		.SetParent(ticker)
-		.Append(new Tween(obj, ['x']).SetParent(ticker).To({ x: 44}, 1))
-		.OnStepStart((step) => {
+		.setParent(ticker)
+		.append(new Tween(obj, ['x']).setParent(ticker).to({ x: 44 }, 1))
+		.onStepStart(() => {
 			throw new Error('Test Random User Exception');
 		})
-		.OnStepEnd((step) => {
+		.onStepEnd(() => {
 			throw new Error('Test Random User Exception');
 		})
-		.Start();
+		.start();
 
-	ticker.Tick(2);
+	ticker.tick(2);
 	t.equal(44, obj.x, 'tween finished properly');
-	sequence.Skip();
+	sequence.skip();
 	t.end();
 });
 
 test('[Fatina.Sequence] Sequence of Sequence', (t: Test) => {
 	const ticker = new Ticker();
-	ticker.Start();
+	ticker.start();
 
 	const obj = { x: 0, y: 0 };
 	let complete = 0;
 
 	const sequence1 = new Sequence()
-		.SetParent(ticker)
-		.Append(new Tween(obj, [ 'x' ]).To({ x: 11 }, 1))
-		.AppendInterval(1)
-		.Append(new Tween(obj, [ 'x' ]).To({ x: 22 }, 1));
+		.setParent(ticker)
+		.append(new Tween(obj, [ 'x' ]).to({ x: 11 }, 1))
+		.appendInterval(1)
+		.append(new Tween(obj, [ 'x' ]).to({ x: 22 }, 1));
 
 	const sequence2 = new Sequence()
-		.SetParent(ticker)
-		.PrependInterval(1)
-		.Append(new Tween(obj, [ 'y' ]).To({ y: 11 }, 1))
-		.Append(new Tween(obj, [ 'y' ]).To({ y: 22 }, 1));
+		.setParent(ticker)
+		.prependInterval(1)
+		.append(new Tween(obj, [ 'y' ]).to({ y: 11 }, 1))
+		.append(new Tween(obj, [ 'y' ]).to({ y: 22 }, 1));
 
 	new Sequence()
-		.SetParent(ticker)
-		.Append(sequence1)
-		.Join(sequence2)
-		.PrependInterval(1)
-		.OnComplete(() => complete++)
-		.Start();
+		.setParent(ticker)
+		.append(sequence1)
+		.join(sequence2)
+		.prependInterval(1)
+		.onComplete(() => complete++)
+		.start();
 
-	ticker.Tick(2);
+	ticker.tick(2);
 	t.deepEqual({ x: 11, y: 0 }, obj, 'check the sequence1.tween1 is executed');
 
-	ticker.Tick(1);
+	ticker.tick(1);
 	t.deepEqual({ x: 11, y: 11 }, obj, 'check the sequence2.tween1 is executed');
 
-	ticker.Tick(1);
+	ticker.tick(1);
 	t.deepEqual({ x: 22, y: 22 }, obj, 'check the other tweens are executed in parallel');
 	t.equal(1, complete, 'check the parent sequence event onComplete is emitted');
 
@@ -313,7 +311,7 @@ test('[Fatina.Sequence] Sequence of Sequence', (t: Test) => {
 
 test('[Fatina.Sequence] Sequence Skip', (t: Test) => {
 	const ticker = new Ticker();
-	ticker.Start();
+	ticker.start();
 
 	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 
@@ -324,26 +322,26 @@ test('[Fatina.Sequence] Sequence Skip', (t: Test) => {
 	let complete = 0;
 
 	const sequence = new Sequence()
-		.SetParent(ticker)
-		.PrependInterval(1)
-		.Append(new Tween(obj, [ 'x', 'y' ])
-			.To({ x: 44, y: 44 }, 4)
-			.OnStart(() => tweenStart++)
-			.OnComplete(() => tweenComplete++)
+		.setParent(ticker)
+		.prependInterval(1)
+		.append(new Tween(obj, [ 'x', 'y' ])
+			.to({ x: 44, y: 44 }, 4)
+			.onStart(() => tweenStart++)
+			.onComplete(() => tweenComplete++)
 		)
-		.Append(new Tween(obj, [ 'x', 'y' ])
-			.To({ x: 0, y: 0 }, 4)
-			.OnStart(() => tweenStart++)
-			.OnComplete(() => tweenComplete++)
+		.append(new Tween(obj, [ 'x', 'y' ])
+			.to({ x: 0, y: 0 }, 4)
+			.onStart(() => tweenStart++)
+			.onComplete(() => tweenComplete++)
 		)
-		.OnStepStart(() => sequenceStepStart++)
-		.OnStepEnd(() => sequenceStepComplete++)
-		.OnComplete(() => complete++)
-		.Start();
+		.onStepStart(() => sequenceStepStart++)
+		.onStepEnd(() => sequenceStepComplete++)
+		.onComplete(() => complete++)
+		.start();
 
-	ticker.Tick(0.5);
+	ticker.tick(0.5);
 
-	sequence.Skip();
+	sequence.skip();
 
 	// check the sequence is finished & all the events and subtweens are skipped too
 	t.equal(2, tweenStart);
@@ -357,46 +355,46 @@ test('[Fatina.Sequence] Sequence Skip', (t: Test) => {
 
 test('[Fatina.Sequence] Sequence Looping relative tween', (t: Test) => {
 	const ticker = new Ticker();
-	ticker.Start();
+	ticker.start();
 
 	const obj = { x: 0, y: 0 };
 
 	new Sequence()
-		.SetParent(ticker)
-		.AppendInterval(1)
-		.Append(
+		.setParent(ticker)
+		.appendInterval(1)
+		.append(
 			new Tween(obj, [ 'x', 'y' ])
-				.SetRelative(true)
-				.To({ x: 1, y: 0 }, 1)
-				.SetEasing('outQuad')
+				.setRelative(true)
+				.to({ x: 1, y: 0 }, 1)
+				.setEasing('outQuad')
 		)
-		.Append(
+		.append(
 			new Tween(obj, [ 'x', 'y' ])
-				.SetRelative(true)
-				.To({ x: 0, y: 1 }, 1)
-				.SetEasing('inOutQuad')
+				.setRelative(true)
+				.to({ x: 0, y: 1 }, 1)
+				.setEasing('inOutQuad')
 		)
-		.Append(
+		.append(
 			new Tween(obj, [ 'x', 'y' ])
-				.SetRelative(true)
-				.To({ x: -1, y: -1 }, 1)
-				.SetEasing('inQuad')
+				.setRelative(true)
+				.to({ x: -1, y: -1 }, 1)
+				.setEasing('inQuad')
 		)
-		.SetLoop(-1)
-		.Start();
+		.setLoop(-1)
+		.start();
 
-	ticker.Tick(4);
+	ticker.tick(4);
 	t.deepEqual({ x: 0, y: 0 }, obj, 'Check the object is back at his original position : normal duration');
 
-	ticker.Tick(40);
+	ticker.tick(40);
 	t.deepEqual({ x: 0, y: 0 }, obj, 'Check the object is back at his original position : long update duration');
 
 	for (let i = 0; i < 4; i++) {
-		ticker.Tick(0.2);
-		ticker.Tick(0.2);
-		ticker.Tick(0.2);
-		ticker.Tick(0.2);
-		ticker.Tick(0.2);
+		ticker.tick(0.2);
+		ticker.tick(0.2);
+		ticker.tick(0.2);
+		ticker.tick(0.2);
+		ticker.tick(0.2);
 	}
 	t.deepEqual({ x: 0, y: 0 }, obj, 'Check the object is back at his original position : micro update duration');
 
@@ -405,25 +403,25 @@ test('[Fatina.Sequence] Sequence Looping relative tween', (t: Test) => {
 
 test('[Fatina.Sequence] Test Sequence with broken callback', (t: Test) => {
 	const ticker = new Ticker();
-	ticker.Start();
+	ticker.start();
 
 	const obj = { x: 22 };
 	new Sequence()
-		.SetParent(ticker)
-		.SetLoop(-1)
-		.AppendInterval(1)
-		.Append(new Tween(obj, ['x']).SetParent(ticker).To({ x: 44}, 1))
-		.Start();
+		.setParent(ticker)
+		.setLoop(-1)
+		.appendInterval(1)
+		.append(new Tween(obj, ['x']).setParent(ticker).to({ x: 44 }, 1))
+		.start();
 
-	ticker.Tick(3);
-	ticker.Tick(3);
+	ticker.tick(3);
+	ticker.tick(3);
 
 	t.end();
 });
 
 test('[Fatina.Sequence] Test Reuse complexe sequence', (t: Test) => {
 	const ticker = new Ticker();
-	ticker.Start();
+	ticker.start();
 
 	let start = 0;
 	let complete = 0;
@@ -431,39 +429,39 @@ test('[Fatina.Sequence] Test Reuse complexe sequence', (t: Test) => {
 	let callback2 = 0;
 	const obj = { x: 22 };
 	const sequence = new Tween(obj, ['x'])
-		.SetParent(ticker)
-		.SetRelative(true)
-		.SetEasing('outSine')
-		.Yoyo(1)
-		.To({ x: 44}, 5)
-		.ToSequence()
-		.AppendInterval(5)
-		.Join(
+		.setParent(ticker)
+		.setRelative(true)
+		.setEasing('outSine')
+		.yoyo(1)
+		.to({ x: 44 }, 5)
+		.toSequence()
+		.appendInterval(5)
+		.join(
 			new Sequence()
-				.SetParent(ticker)
-				.AppendInterval(5)
-				.AppendCallback(() => callback2++)
+				.setParent(ticker)
+				.appendInterval(5)
+				.appendCallback(() => callback2++)
 		)
-		.AppendCallback(() => callback++)
-		.SetSettings({logLevel: Log.Debug, safe: false})
-		.OnStart(() => start++)
-		.OnComplete(() => complete++)
-		.Start();
+		.appendCallback(() => callback++)
+		.setSettings({ logLevel: Log.Debug, safe: false })
+		.onStart(() => start++)
+		.onComplete(() => complete++)
+		.start();
 
-	ticker.Tick(16);
+	ticker.tick(16);
 
 	t.equal(callback, 1);
 	t.equal(callback2, 1);
 
-	(sequence as any).Recycle();
-	sequence.Start();
-	ticker.Tick(16);
+	(sequence as any).recycle();
+	sequence.start();
+	ticker.tick(16);
 
 	t.equal(callback, 2);
 	t.equal(callback2, 2);
 
-	ticker.Tick(10);
-	(sequence as any).Skip(true);
+	ticker.tick(10);
+	(sequence as any).skip(true);
 
 	t.end();
 });

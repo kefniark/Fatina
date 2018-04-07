@@ -1,4 +1,4 @@
 export interface IPlugin {
 	readonly name: string;
-	Init(fatina: any): void;
+	init(fatina: any): void;
 }

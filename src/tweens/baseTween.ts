@@ -1,7 +1,7 @@
 import { Log } from '../core/enum/log';
 import { State } from '../core/enum/state';
-import { ITicker } from '../core/interfaces/ITicker';
 import { ISettings } from '../core/interfaces/ISettings';
+import { ITicker } from '../core/interfaces/ITicker';
 import { ITweenProperty } from '../core/interfaces/ITweenProperty';
 
 /**
@@ -15,13 +15,13 @@ import { ITweenProperty } from '../core/interfaces/ITweenProperty';
  * @abstract
  * @class BaseTween
  */
-export abstract class BaseTween<T extends BaseTween<any>>  {
+export abstract class BaseTween<T extends BaseTween<any>> {
 	// events
-	protected eventStart: {(): void}[] | undefined;
-	protected eventRestart: {(): void}[] | undefined;
-	protected eventUpdate: {(dt: number, progress: number): void}[] | undefined;
-	protected eventKill: {(): void}[] | undefined;
-	protected eventComplete: {(): void}[] | undefined;
+	protected evtStart: {(): void}[] | undefined;
+	protected evtRestart: {(): void}[] | undefined;
+	protected evtUpdate: {(dt: number, progress: number): void}[] | undefined;
+	protected evtKill: {(): void}[] | undefined;
+	protected evtComplete: {(): void}[] | undefined;
 
 	// public properties
 	public elapsed = 0;
@@ -31,11 +31,27 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 
 	// private properties
 	protected loop: ITweenProperty | undefined;
-	protected yoyo: ITweenProperty | undefined;
+	protected yo: ITweenProperty | undefined;
 	protected parent: ITicker;
 	protected tickCb: (dt: number) => void;
-	private firstStart = true;
+	private first = true;
 	private settings?: ISettings;
+
+	public get isIdle(): boolean {
+		return this.state === State.Idle;
+	}
+
+	public get isRunning(): boolean {
+		return this.state === State.Run;
+	}
+
+	public get isFinished(): boolean {
+		return this.state === State.Killed || this.state === State.Finished;
+	}
+
+	public get isPaused(): boolean {
+		return this. state === State.Pause;
+	}
 
 	/**
 	 * Method used to start a tween
@@ -44,23 +60,23 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 *
 	 * @memberOf BaseTween
 	 */
-	public Start(): T {
+	public start(): T {
 		if (this.state !== State.Idle) {
 			return this as any;
 		}
 
-		if (this.firstStart) {
-			this.Validate();
+		if (this.first) {
+			this.validate();
 		} else {
-			this.CheckPosition();
+			this.check();
 		}
 
 		this.state = State.Run;
-		this.parent.AddTickListener(this.tickCb);
+		this.parent.addTick(this.tickCb);
 
-		if (this.firstStart) {
-			this.EmitEvent(this.eventStart);
-			this.firstStart = false;
+		if (this.first) {
+			this.emitEvent(this.evtStart);
+			this.first = false;
 		}
 		return this as any;
 	}
@@ -70,9 +86,9 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 *
 	 * @memberOf BaseTween
 	 */
-	public Recycle() {
-		this.Reset(true);
-		this.firstStart = true;
+	public recycle() {
+		this.reset(true);
+		this.first = true;
 	}
 
 	/**
@@ -80,18 +96,18 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 *
 	 * @memberOf BaseTween
 	 */
-	public Reset(skipParent?: boolean): void {
+	public reset(skipParent?: boolean): void {
 		this.state = State.Idle;
 
 		if (!skipParent) {
-			this.RemoveParentListener();
+			this.removeParent();
 		}
 
 		if (this.loop) {
 			this.loop.value = this.loop.original;
 		}
-		this.LoopInit();
-		this.EmitEvent(this.eventRestart);
+		this.loopInit();
+		this.emitEvent(this.evtRestart);
 	}
 
 	/**
@@ -102,9 +118,9 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 *
 	 * @memberOf BaseTween
 	 */
-	public ResetAndStart(dtRemains: number) {
-		this.LoopInit();
-		this.EmitEvent(this.eventRestart);
+	public resetAndStart(dtRemains: number) {
+		this.loopInit();
+		this.emitEvent(this.evtRestart);
 
 		this.state = State.Run;
 		if (dtRemains > 0) {
@@ -121,8 +137,8 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 *
 	 * @memberOf BaseTween
 	 */
-	public SetParent(ticker: ITicker): T {
-		this.RemoveParentListener();
+	public setParent(ticker: ITicker): T {
+		this.removeParent();
 		this.parent = ticker;
 		return this as any;
 	}
@@ -135,7 +151,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 *
 	 * @memberOf BaseTween
 	 */
-	public SetTimescale(scale: number): T {
+	public setTimescale(scale: number): T {
 		this.timescale = scale;
 		return this as any;
 	}
@@ -147,14 +163,14 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 *
 	 * @memberOf BaseTween
 	 */
-	public Pause(): void {
+	public pause(): void {
 		if (this.state !== State.Run) {
-			this.Info(Log.Info, 'Cannot pause this tween ', this.state);
+			this.info(Log.Info, 'Cannot pause this tween ', this.state);
 			return;
 		}
 
 		this.state = State.Pause;
-		this.RemoveParentListener();
+		this.removeParent();
 	}
 
 	/**
@@ -164,14 +180,14 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 *
 	 * @memberOf BaseTween
 	 */
-	public Resume(): void {
+	public resume(): void {
 		if (this.state !== State.Pause) {
-			this.Info(Log.Info, 'Cannot resume this tween ', this.state);
+			this.info(Log.Info, 'Cannot resume this tween ', this.state);
 			return;
 		}
 
 		this.state = State.Run;
-		this.parent.AddTickListener(this.tickCb);
+		this.parent.addTick(this.tickCb);
 	}
 
 	/**
@@ -181,24 +197,24 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 * @returns {void}
 	 * @memberOf BaseTween
 	 */
-	public Skip(finalValue?: boolean): void {
+	public skip(finalValue?: boolean): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
-			this.Info(Log.Info, 'Cannot skip this tween ', this.state);
+			this.info(Log.Info, 'Cannot skip this tween ', this.state);
 			return;
 		}
 
 		if (this.state === State.Idle) {
-			this.EmitEvent(this.eventStart);
+			this.emitEvent(this.evtStart);
 		}
 
 		if (finalValue) {
-			const duration = this.yoyo ? (this.yoyo.value * this.duration) : 0;
+			const duration = this.yo ? (this.yo.value * this.duration) : 0;
 			this.tickCb(this.duration - this.elapsed + duration);
 			return;
 		}
 
 		this.elapsed = this.duration;
-		this.Complete();
+		this.complete();
 	}
 
 	/**
@@ -208,15 +224,15 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 *
 	 * @memberOf BaseTween
 	 */
-	public Kill(): void {
+	public kill(): void {
 		if (this.state === State.Killed) {
-			this.Info(Log.Info, 'Cannot kill this tween ', this.state);
+			this.info(Log.Info, 'Cannot kill this tween ', this.state);
 			return;
 		}
 
 		this.state = State.Killed;
-		this.RemoveParentListener();
-		this.EmitEvent(this.eventKill);
+		this.removeParent();
+		this.emitEvent(this.evtKill);
 	}
 
 	/**
@@ -228,7 +244,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 *
 	 * @memberOf Tween
 	 */
-	public SetLoop(loop: number): T {
+	public setLoop(loop: number): T {
 		if (!this.loop) {
 			this.loop = { original: 1, value: 1 };
 		}
@@ -237,51 +253,35 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 		return this as any;
 	}
 
-	public SetSettings(settings: ISettings): T {
+	public setSettings(settings: ISettings): T {
 		this.settings = settings;
 		return this as any;
 	}
 
-	public IsIdle(): boolean {
-		return this.state === State.Idle;
-	}
-
-	public IsRunning(): boolean {
-		return this.state === State.Run;
-	}
-
-	public IsFinished(): boolean {
-		return this.state === State.Killed || this.state === State.Finished;
-	}
-
-	public IsPaused(): boolean {
-		return this. state === State.Pause;
-	}
-
-	protected Complete(): void {
+	protected complete(): void {
 		if (this.state === State.Killed || this.state === State.Finished) {
-			this.Info(Log.Info, 'Cannot complete this tween ', this.state);
+			this.info(Log.Info, 'Cannot complete this tween ', this.state);
 			return;
 		}
 
 		this.state = State.Finished;
-		this.RemoveParentListener();
-		this.EmitEvent(this.eventComplete);
+		this.removeParent();
+		this.emitEvent(this.evtComplete);
 	}
 
-	protected RemoveParentListener() {
+	protected removeParent() {
 		if (this.parent) {
-			this.parent.RemoveTickListener(this.tickCb);
+			this.parent.removeTick(this.tickCb);
 		}
 	}
 
-	protected CheckPosition(): void {}
-	protected Validate(): void {}
-	protected LoopInit(): void {
+	protected check(): void {}
+	protected validate(): void {}
+	protected loopInit(): void {
 		this.elapsed = 0;
 	}
 
-	protected Info(level: Log, message: string, data?: any) {
+	protected info(level: Log, message: string, data?: any) {
 		if (!this.settings || level > this.settings.logLevel) {
 			return;
 		}
@@ -292,7 +292,7 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 		}
 	}
 
-	private Emit(func: any, args: any) {
+	private emit(func: any, args: any) {
 		if (this.settings && !this.settings.safe) {
 			return func.apply(this, args);
 		}
@@ -303,13 +303,13 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 		}
 	}
 
-	protected EmitEvent(listeners: any, args?: any) {
+	protected emitEvent(listeners: any, args?: any) {
 		if (!listeners) {
 			return;
 		}
 
-		for (let i = 0; i < listeners.length; i++) {
-			this.Emit(listeners[i], args);
+		for (const listener of listeners) {
+			this.emit(listener, args);
 		}
 	}
 
@@ -321,12 +321,11 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 *
 	 * @memberOf BaseTween
 	 */
-	public OnStart(cb: () => void): T {
-		if (!this.eventStart) {
-			this.eventStart = new Array(0);
+	public onStart(cb: () => void): T {
+		if (!this.evtStart) {
+			this.evtStart = new Array(0);
 		}
-		this.eventStart[this.eventStart.length] = cb;
-		this.Info(Log.Debug, 'onStart');
+		this.evtStart[this.evtStart.length] = cb;
 		return this as any;
 	}
 
@@ -338,12 +337,11 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 *
 	 * @memberOf BaseTween
 	 */
-	public OnRestart(cb: () => void): T {
-		if (!this.eventRestart) {
-			this.eventRestart = new Array(0);
+	public onRestart(cb: () => void): T {
+		if (!this.evtRestart) {
+			this.evtRestart = new Array(0);
 		}
-		this.eventRestart[this.eventRestart.length] = cb;
-		this.Info(Log.Debug, 'onRestart');
+		this.evtRestart[this.evtRestart.length] = cb;
 		return this as any;
 	}
 
@@ -355,11 +353,11 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 *
 	 * @memberOf BaseTween
 	 */
-	public OnUpdate(cb: (dt: number, progress: number) => void): T {
-		if (!this.eventUpdate) {
-			this.eventUpdate = new Array(0);
+	public onUpdate(cb: (dt: number, progress: number) => void): T {
+		if (!this.evtUpdate) {
+			this.evtUpdate = new Array(0);
 		}
-		this.eventUpdate[this.eventUpdate.length] = cb;
+		this.evtUpdate[this.evtUpdate.length] = cb;
 		return this as any;
 	}
 
@@ -371,12 +369,11 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 *
 	 * @memberOf BaseTween
 	 */
-	public OnKilled(cb: () => void): T {
-		if (!this.eventKill) {
-			this.eventKill = new Array(0);
+	public onKilled(cb: () => void): T {
+		if (!this.evtKill) {
+			this.evtKill = new Array(0);
 		}
-		this.eventKill[this.eventKill.length] = cb;
-		this.Info(Log.Debug, 'onKilled');
+		this.evtKill[this.evtKill.length] = cb;
 		return this as any;
 	}
 
@@ -388,12 +385,11 @@ export abstract class BaseTween<T extends BaseTween<any>>  {
 	 *
 	 * @memberOf BaseTween
 	 */
-	public OnComplete(cb: () => void): T {
-		if (!this.eventComplete) {
-			this.eventComplete = new Array(0);
+	public onComplete(cb: () => void): T {
+		if (!this.evtComplete) {
+			this.evtComplete = new Array(0);
 		}
-		this.eventComplete[this.eventComplete.length] = cb;
-		this.Info(Log.Debug, 'onComplete');
+		this.evtComplete[this.evtComplete.length] = cb;
 		return this as any;
 	}
 }

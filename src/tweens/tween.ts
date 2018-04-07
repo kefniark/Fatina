@@ -15,24 +15,30 @@ import { Sequence } from './sequence';
  * @implements {ITween}
  */
 export class Tween extends BaseTween<Tween> implements ITween {
-	private object: any;
-	private properties: string[];
-	private from: any;
-	private to: any;
+	// properties
+	private obj: any;
+	private prop: string[];
+
+	// user from & to
+	private f: any;
+	private t: any;
+
+	// current value from & to (can changed based on yoyo, reset, ...)
+	private cf: any;
+	private ct: any;
+
+	// options
 	private steps = 0;
-	private currentFrom: any;
-	private currentTo: any;
-	private remainsDt: number;
+	private remainsDt = 0;
 	private relative = false;
 	private ease: (t: number) => number;
-	private easeId: EasingType | string;
 
 	constructor(object: any, properties: string[]) {
 		super();
 
-		this.object = object;
-		this.properties = properties;
-		this.tickCb = this.Tick.bind(this);
+		this.obj = object;
+		this.prop = properties;
+		this.tickCb = this.tick.bind(this);
 	}
 
 	/**
@@ -43,9 +49,9 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @memberOf Tween
 	 */
-	public Init(object: any, properties: string[]) {
-		this.object = object;
-		this.properties = properties;
+	public init(object: any, properties: string[]) {
+		this.obj = object;
+		this.prop = properties;
 	}
 
 	/**
@@ -55,32 +61,30 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @memberOf Tween
 	 */
-	protected Validate() {
+	protected validate() {
 		// Check the object
-		if (!this.object) {
-			throw new Error('Cant Tween a undefined object');
+		if (!this.obj) {
+			throw new Error('undefined object');
 		}
 
 		// Check the properties of that object
-		for (let i = 0; i < this.properties.length; i++) {
-			const prop = this.properties[i];
-			if (!(prop in this.object)) {
-				throw new Error('Cant Tween an unknown property' + prop);
+		for (const prop of this.prop) {
+			if (!(prop in this.obj)) {
+				throw new Error('unknown property' + prop);
 			}
 		}
 
 		// Check this tween will be updated
 		if (!this.parent) {
-			throw new Error('Cant Start a tween without ticker');
+			throw new Error('no ticker');
 		}
 
 		// Easing
 		if (!this.ease) {
-			this.easeId = EasingType.Linear;
 			this.ease = easeNames[EasingType.Linear];
 		}
 
-		this.CheckPosition();
+		this.check();
 	}
 
 	/**
@@ -90,35 +94,33 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @memberOf Tween
 	 */
-	protected CheckPosition() {
-		if (!this.currentFrom) {
-			this.currentFrom = {};
+	protected check() {
+		if (!this.cf) {
+			this.cf = {};
 		}
-		if (!this.currentTo) {
-			this.currentTo = {};
+		if (!this.ct) {
+			this.ct = {};
 		}
 
-		for (let i = 0; i < this.properties.length; i++) {
-			const prop = this.properties[i];
-
+		for (const prop of this.prop) {
 			// From
-			if (!this.from) {
-				this.currentFrom[prop] = this.object[prop];
+			if (!this.f) {
+				this.cf[prop] = this.obj[prop];
 			} else {
-				this.currentFrom[prop] = this.from[prop];
-				this.object[prop] = this.from[prop];
+				this.cf[prop] = this.f[prop];
+				this.obj[prop] = this.f[prop];
 			}
 
 			// Relative
 			if (this.relative) {
-				this.currentTo[prop] = this.object[prop] + this.to[prop];
+				this.ct[prop] = this.obj[prop] + this.t[prop];
 			} else {
-				this.currentTo[prop] = this.to[prop];
+				this.ct[prop] = this.t[prop];
 			}
 		}
 	}
 
-	private Tick(dt: number) {
+	private tick(dt: number) {
 		if (this.state === State.Finished || this.state === State.Killed) {
 			return;
 		}
@@ -130,7 +132,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 			let val = this.ease(progress);
 
 			// Yoyo easing (need to be reversed)
-			if (this.yoyo && (this.yoyo.original - this.yoyo.value) % 2 === 1) {
+			if (this.yo && (this.yo.original - this.yo.value) % 2 === 1) {
 				val = 1 - this.ease(1 - progress);
 			}
 
@@ -140,14 +142,13 @@ export class Tween extends BaseTween<Tween> implements ITween {
 			}
 
 			// Update if the object still exist
-			if (this.object) {
-				for (let i = 0; i < this.properties.length; i++) {
-					const prop = this.properties[i];
-					this.object[prop] = this.currentFrom[prop] + (this.currentTo[prop] - this.currentFrom[prop]) * val;
+			if (this.obj) {
+				for (const prop of this.prop) {
+					this.obj[prop] = this.cf[prop] + (this.ct[prop] - this.cf[prop]) * val;
 				}
 			}
 
-			this.EmitEvent(this.eventUpdate, [this.remainsDt, progress]);
+			this.emitEvent(this.evtUpdate, [this.remainsDt, progress]);
 
 			if (this.elapsed < this.duration) {
 				return;
@@ -156,10 +157,10 @@ export class Tween extends BaseTween<Tween> implements ITween {
 			this.remainsDt = this.elapsed - this.duration;
 
 			// Yoyo effect ( A -> B -> A )
-			if (this.yoyo && this.yoyo.value > 0) {
-				this.Reverse();
-				this.ResetAndStart(0);
-				this.yoyo.value--;
+			if (this.yo && this.yo.value > 0) {
+				this.reverse();
+				this.resetAndStart(0);
+				this.yo.value--;
 				continue;
 			}
 
@@ -167,13 +168,13 @@ export class Tween extends BaseTween<Tween> implements ITween {
 			if (this.loop) {
 				this.loop.value--;
 				if (this.loop.value !== 0) {
-					this.CheckPosition();
-					this.ResetAndStart(0);
+					this.check();
+					this.resetAndStart(0);
 					continue;
 				}
 			}
 
-			this.Complete();
+			this.complete();
 			return;
 		}
 	}
@@ -186,8 +187,8 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @memberOf Tween
 	 */
-	public From(from: any): ITween {
-		this.from = from;
+	public from(from: any): ITween {
+		this.f = from;
 		return this;
 	}
 
@@ -200,8 +201,8 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @memberOf Tween
 	 */
-	public To(to: any, duration: number): ITween {
-		this.to = to;
+	public to(to: any, duration: number): ITween {
+		this.t = to;
 		this.duration = duration;
 		return this;
 	}
@@ -214,7 +215,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @memberOf Tween
 	 */
-	public SetRelative(relative: boolean): ITween {
+	public setRelative(relative: boolean): ITween {
 		this.relative = relative;
 		return this;
 	}
@@ -227,19 +228,18 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @memberOf Tween
 	 */
-	public Modify(diff: any, updateTo: boolean): void {
-		for (let i = 0; i < this.properties.length; i++) {
-			const prop = this.properties[i];
+	public modify(diff: any, updateTo: boolean): void {
+		for (const prop of this.prop) {
 			if (!diff.hasOwnProperty(prop)) {
 				continue;
 			}
 
-			this.object[prop] += diff[prop];
+			this.obj[prop] += diff[prop];
 
 			if (updateTo) {
-				this.currentTo[prop] += diff[prop];
+				this.ct[prop] += diff[prop];
 			} else {
-				this.currentFrom[prop] += diff[prop];
+				this.cf[prop] += diff[prop];
 			}
 		}
 	}
@@ -250,24 +250,24 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 * @param {boolean} [skipParent]
 	 * @memberOf Tween
 	 */
-	public Reset(skipParent?: boolean): void {
-		if (this.yoyo) {
-			if ((this.yoyo.original - this.yoyo.value) % 2 === 1) {
-				let previous = this.currentFrom;
-				this.currentFrom = this.currentTo;
-				this.currentTo = previous;
+	public reset(skipParent?: boolean): void {
+		if (this.yo) {
+			if ((this.yo.original - this.yo.value) % 2 === 1) {
+				let previous = this.cf;
+				this.cf = this.ct;
+				this.ct = previous;
 
-				previous = this.from;
-				this.from = this.to;
-				this.to = previous;
+				previous = this.f;
+				this.f = this.t;
+				this.t = previous;
 
 				const elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
 				this.elapsed = Math.round(elapsed * 1000) / 1000;
 			}
 
-			this.yoyo.value = this.yoyo.original;
+			this.yo.value = this.yo.original;
 		}
-		super.Reset(skipParent);
+		super.reset(skipParent);
 	}
 
 	/**
@@ -275,21 +275,21 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @memberOf Tween
 	 */
-	public Reverse(): void {
-		let previous = this.currentFrom;
-		this.currentFrom = this.currentTo;
-		this.currentTo = previous;
+	public reverse(): void {
+		let previous = this.cf;
+		this.cf = this.ct;
+		this.ct = previous;
 
-		previous = this.from;
-		this.from = this.to;
-		this.to = previous;
+		previous = this.f;
+		this.f = this.t;
+		this.t = previous;
 
 		const elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
 		this.elapsed = Math.round(elapsed * 1000) / 1000;
 
 		if (this.state === State.Finished) {
-			this.Reset(true);
-			this.Start();
+			this.reset(true);
+			this.start();
 		}
 	}
 
@@ -301,12 +301,12 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @memberOf Tween
 	 */
-	public Yoyo(time: number): ITween {
-		if (!this.yoyo) {
-			this.yoyo = { original: 0, value: 0 };
+	public yoyo(time: number): ITween {
+		if (!this.yo) {
+			this.yo = { original: 0, value: 0 };
 		}
-		this.yoyo.original = time;
-		this.yoyo.value = time;
+		this.yo.original = time;
+		this.yo.value = time;
 		return this;
 	}
 
@@ -318,7 +318,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @memberOf Tween
 	 */
-	public SetSteps(steps: number): ITween {
+	public setSteps(steps: number): ITween {
 		this.steps = steps;
 		return this;
 	}
@@ -331,11 +331,11 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @memberOf Tween
 	 */
-	public ToSequence(): ISequence {
+	public toSequence(): ISequence {
 		if (!this.parent) {
-			throw new Error('Cant convert to a sequence, parent ticker not defined');
+			throw new Error('parent ticker not defined');
 		}
-		return new Sequence().SetParent(this.parent).Append(this);
+		return new Sequence().setParent(this.parent).append(this);
 	}
 
 	/**
@@ -347,14 +347,14 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @memberOf Tween
 	 */
-	private Easing(type: EasingType | string): (t: number) => number {
+	private easing(type: EasingType | string): (t: number) => number {
 		const name = type as string;
 
 		if (name in easeNames) {
 			return easeNames[name];
 		}
 
-		throw new Error('Unknown ease method ' + type);
+		throw new Error(`unknown easing method ${type}`);
 	}
 
 	/**
@@ -365,9 +365,8 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @memberOf Tween
 	 */
-	public SetEasing(type: EasingType | string): ITween {
-		this.easeId = type;
-		this.ease = this.Easing(type);
+	public setEasing(type: EasingType | string): ITween {
+		this.ease = this.easing(type);
 		return this;
 	}
 
@@ -378,7 +377,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @memberOf Tween
 	 */
-	protected LoopInit() {
+	protected loopInit() {
 		this.elapsed = 0;
 	}
 }

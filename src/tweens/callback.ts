@@ -10,19 +10,19 @@ import { BaseTween } from './baseTween';
  * @implements {IPlayable}
  */
 export class Callback extends BaseTween<Callback> implements IPlayable {
-	private callback: () => void;
+	private readonly callback: () => void;
 
 	constructor(cb: () => void) {
 		super();
 		this.callback = cb;
-		this.tickCb = this.Tick.bind(this);
+		this.tickCb = this.tick.bind(this);
 	}
 
-	private Tick(dt: number) {
+	private tick(dt: number) {
 		this.elapsed += dt;
 		this.duration = 0;
 		this.callback();
-		this.EmitEvent(this.eventUpdate, [dt, 1]);
-		this.Complete();
+		this.emitEvent(this.evtUpdate, [dt, 1]);
+		this.complete();
 	}
 }
