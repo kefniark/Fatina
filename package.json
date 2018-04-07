@@ -77,7 +77,8 @@
       "src/**/*.ts"
     ],
     "exclude": [
-      "src/index.ts"
+      "src/index.ts",
+      "src/fatina.ts"
     ],
     "extension": [
       ".ts"
