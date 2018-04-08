@@ -15,16 +15,16 @@ export class Delay extends BaseTween<Delay> implements IPlayable {
 	constructor(duration: number) {
 		super();
 		this.duration = duration;
-		this.tickCb = this.Tick.bind(this);
+		this.tickCb = this.tick.bind(this);
 	}
 
-	private Tick(dt: number) {
+	private tick(dt: number) {
 		this.remainsDt = dt * this.timescale;
 
 		while (this.remainsDt > 0) {
 			this.elapsed += this.remainsDt;
 			const progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
-			this.EmitEvent(this.eventUpdate, [this.remainsDt, progress]);
+			this.emitEvent(this.events.update, [this.remainsDt, progress]);
 
 			if (this.elapsed < this.duration) {
 				return;
@@ -35,12 +35,12 @@ export class Delay extends BaseTween<Delay> implements IPlayable {
 			if (this.loop) {
 				this.loop.value--;
 				if (this.loop.value !== 0) {
-					this.ResetAndStart(0);
+					this.resetAndStart(0);
 					continue;
 				}
 			}
 
-			this.Complete();
+			this.complete();
 			return;
 		}
 	}

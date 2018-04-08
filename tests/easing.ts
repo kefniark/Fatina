@@ -1,6 +1,6 @@
 import * as test from 'tape';
 import { Test } from 'tape';
-import { easeNames } from '../src/fatina/easing/easing';
+import { easeNames } from '../src/easing/easing';
 
 test('[Fatina.Easing]', (t: Test) => {
 	for (const name in easeNames) {
