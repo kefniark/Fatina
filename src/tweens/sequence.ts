@@ -77,9 +77,8 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 
 		if (this.cur) {
 			// Tick every listener
-			for (const tick of this.evtTick) {
-				tick(dt);
-			}
+			// tslint:disable-next-line:only-arrow-functions
+			this.evtTick.forEach(function (tick) { tick(dt); });
 
 			// Dont emit update event for remains dt
 			if (remains !== true) {

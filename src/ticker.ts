@@ -71,9 +71,8 @@ export class Ticker implements ITicker {
 		}
 
 		const localDt = dt * this.timescale;
-		for (const tick of this.ticks) {
-			tick(localDt);
-		}
+		// tslint:disable-next-line:only-arrow-functions
+		this.ticks.forEach(function (tick) { tick(localDt); });
 
 		this.elapsed += localDt;
 	}
