@@ -234,7 +234,7 @@ var test = new Phaser.Sprite(this.game, 2, 80, 'hudBg');
 // add a component animator to that sprite and add 2 animations
 fatina.plugin.animatorManager.addAnimatorTo(test)
     .addAnimation('moveRight', 'move', { group: 'move' }, 5)
-	.addAnimation('moveLeft', 'move', { group: 'move' }, -5);
+    .addAnimation('moveLeft', 'move', { group: 'move' }, -5);
 
 // now you can use those animation easily
 test.animator.play('moveLeft');
