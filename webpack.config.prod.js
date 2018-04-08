@@ -33,7 +33,7 @@ module.exports = {
 		library: "Fatina",
 		libraryTarget: "umd",
 		umdNamedDefine: true,
-		globalObject: 'typeof self !== \'undefined\' ? self : this'
+		globalObject: "typeof self !== 'undefined' ? self : this"
 	},
 	resolve: {
 		extensions: [".ts", ".tsx", ".js"]
