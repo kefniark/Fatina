@@ -227,6 +227,31 @@ test('[Fatina.Manager] Ticker Helpers', (t: Test) => {
 	t.end();
 });
 
+test('[Fatina.Manager] Create cascade tween', (t: Test) => {
+	const obj = { x: 0 };
+	const tween = fatina.tween(obj, ['x'])
+		.to({ x: 500 }, 500)
+		.onComplete(() => {
+			fatina.tween(obj, ['x'])
+			.to({ x: 0 }, 500)
+			.start();
+		});
+	tween.start();
+
+	t.equal(0, obj.x, 'check the tween is not starting magically');
+
+	fatina.update(50);
+	t.equal(50, obj.x, 'check the tween is halfway through');
+
+	fatina.update(500);
+	t.equal(500, obj.x, 'check the tween is finished');
+
+	fatina.update(500);
+	t.equal(0, obj.x, 'check the second tween is finished');
+
+	t.end();
+});
+
 test('[Fatina.Manager] Test Pooling', (t: Test) => {
 	let start = 0;
 	let complete = 0;

@@ -794,6 +794,7 @@ class Ticker {
         this.elapsed = 0;
         this.duration = 0;
         this.ticks = new Set();
+        this.newTicks = new Set();
     }
     setParent(parent, tick) {
         this.tickCb = tick;
@@ -817,7 +818,7 @@ class Ticker {
      * @memberOf Ticker
      */
     addTick(cb) {
-        this.ticks.add(cb);
+        this.newTicks.add(cb);
     }
     /**
      * Method used by the child to not receive update anymore
@@ -827,7 +828,9 @@ class Ticker {
      * @memberOf Ticker
      */
     removeTick(cb) {
-        this.ticks.delete(cb);
+        if (!this.ticks.delete(cb)) {
+            this.newTicks.delete(cb);
+        }
     }
     /**
      * Method used to tick all the child (tick listeners)
@@ -842,6 +845,10 @@ class Ticker {
             return;
         }
         const localDt = dt * this.timescale;
+        if (this.newTicks.size > 0) {
+            this.newTicks.forEach((tick) => this.ticks.add(tick));
+            this.newTicks.clear();
+        }
         // tslint:disable-next-line:only-arrow-functions
         this.ticks.forEach(function (tick) { tick(localDt); });
         this.elapsed += localDt;
