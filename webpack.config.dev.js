@@ -11,7 +11,8 @@ module.exports = {
 		filename: "fatina.js",
 		library: "Fatina",
 		libraryTarget: "umd",
-		umdNamedDefine: true
+		umdNamedDefine: true,
+		globalObject: 'typeof self !== \'undefined\' ? self : this'
 	},
 	devtool: "source-map",
 	resolve: {
