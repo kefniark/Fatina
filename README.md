@@ -45,7 +45,14 @@ import * as Fatina from 'fatina';
 
 ### Usage
 ```ts
-Fatina.Tween(obj, properties).To(destination, duration).Start();
+Fatina.tween(obj, properties)
+    .to(destination, duration)
+    .start();
+
+// example
+Fatina.tween(sprite, ['x', 'y'])
+    .to({ x: 12, y:25 }, 0.5)
+    .start();
 ```
 * [Documentation](https://kefniark.github.io/Fatina/api/basic/)
 * [Samples](https://kefniark.github.io/Fatina/samples/generic/)

@@ -10,16 +10,15 @@ export interface IControl {
 	elapsed: number;
 	duration: number;
 	state: State;
+	isIdle: boolean;
+	isRunning: boolean;
+	isFinished: boolean;
+	isPaused: boolean;
 
-	Start(): void;
-	Pause(): void;
-	Resume(): void;
-	Kill(): void;
-	Reset(): void;
-	Skip(finalValue?: boolean): void;
-
-	IsIdle(): boolean;
-	IsRunning(): boolean;
-	IsFinished(): boolean;
-	IsPaused(): boolean;
+	start(): void;
+	pause(): void;
+	resume(): void;
+	kill(): void;
+	reset(): void;
+	skip(finalValue?: boolean): void;
 }

@@ -5,13 +5,14 @@ const webpack = require("webpack");
 
 module.exports = {
 	mode: "development",
-	entry: "./src/fatina/index.ts",
+	entry: "./src/index.ts",
 	output: {
 		path: path.resolve(__dirname, "build"),
 		filename: "fatina.js",
 		library: "Fatina",
 		libraryTarget: "umd",
-		umdNamedDefine: true
+		umdNamedDefine: true,
+		globalObject: "typeof self !== 'undefined' ? self : this"
 	},
 	devtool: "source-map",
 	resolve: {

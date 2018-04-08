@@ -15,13 +15,13 @@ export class Ticker implements ITicker {
 	private timescale = 1;
 	public elapsed = 0;
 	public duration = 0;
-	private update = 0;
-	public tick: (dt: number) => void | undefined;
-	private ticks: Set<(dt: number) => void> = new Set();
+	private tickCb: (dt: number) => void | undefined;
+	private readonly ticks: Set<(dt: number) => void> = new Set();
+	private readonly newTicks: Set<(dt: number) => void> = new Set();
 	private parent: ITicker;
 
-	public SetParent(parent: ITicker, tick: (dt: number) => void) {
-		this.tick = tick;
+	public setParent(parent: ITicker, tick: (dt: number) => void) {
+		this.tickCb = tick;
 		this.parent = parent;
 	}
 
@@ -32,7 +32,7 @@ export class Ticker implements ITicker {
 	 *
 	 * @memberOf Ticker
 	 */
-	public SetTimescale(scale: number): void {
+	public setTimescale(scale: number): void {
 		this.timescale = scale;
 	}
 
@@ -43,8 +43,8 @@ export class Ticker implements ITicker {
 	 *
 	 * @memberOf Ticker
 	 */
-	public AddTickListener(cb: (dt: number) => void): void {
-		this.ticks.add(cb);
+	public addTick(cb: (dt: number) => void): void {
+		this.newTicks.add(cb);
 	}
 
 	/**
@@ -54,8 +54,10 @@ export class Ticker implements ITicker {
 	 *
 	 * @memberOf Ticker
 	 */
-	public RemoveTickListener(cb: (dt: number) => void): void {
-		this.ticks.delete(cb);
+	public removeTick(cb: (dt: number) => void): void {
+		if (!this.ticks.delete(cb)) {
+			this.newTicks.delete(cb);
+		}
 	}
 
 	/**
@@ -66,70 +68,74 @@ export class Ticker implements ITicker {
 	 *
 	 * @memberOf Ticker
 	 */
-	public Tick(dt: number) {
+	public tick(dt: number) {
 		if (this.state !== State.Run) {
 			return;
 		}
 
 		const localDt = dt * this.timescale;
-		for (const tick of this.ticks) {
-			tick(localDt);
+		if (this.newTicks.size > 0) {
+			this.newTicks.forEach((tick) => this.ticks.add(tick));
+			this.newTicks.clear();
 		}
+
+		// tslint:disable-next-line:only-arrow-functions
+		this.ticks.forEach(function (tick) { tick(localDt); });
+
 		this.elapsed += localDt;
-		this.update++;
 	}
 
-	public Start(): void {
+	public start(): void {
 		if (this.state === State.Idle) {
 			this.state = State.Run;
 		}
 	}
 
-	public Pause(): void {
+	public pause(): void {
 		if (this.state === State.Run) {
 			this.state = State.Pause;
 		}
 	}
 
-	public Resume(): void {
+	public resume(): void {
 		if (this.state === State.Pause) {
 			this.state = State.Run;
 		}
 	}
 
-	public Kill(): void {
-		if (this.state === State.Killed || this.state === State.Finished) {
+	public kill(): void {
+		if (this.state >= 3) {
 			return;
 		}
 
-		if (this.parent && this.tick) {
-			this.parent.RemoveTickListener(this.tick);
+		if (this.parent && this.tickCb) {
+			this.parent.removeTick(this.tickCb);
 		}
 
 		this.state = State.Killed;
 	}
 
-	public Skip(): void {
-		throw new Error('The main ticker cannot be skipped');
+	public skip(): void {
+		throw new Error('main ticker cannot be skipped');
 	}
 
-	public Reset(): void {
+	public reset(): void {
 		this.state = State.Idle;
 	}
 
-	public IsIdle(): boolean {
+	public get isIdle(): boolean {
 		return this.state === State.Idle;
 	}
 
-	public IsRunning(): boolean {
+	public get isRunning(): boolean {
 		return this.state === State.Run;
 	}
 
-	public IsFinished(): boolean {
-		return this.state === State.Killed || this.state === State.Finished;
+	public get isFinished(): boolean {
+		return this.state >= 3;
 	}
 
-	public IsPaused(): boolean {
+	public get isPaused(): boolean {
 		return this. state === State.Pause;
 	}
 }

@@ -1,7 +1,7 @@
 {
   "name": "fatina",
   "description": "Small & Light tweening library for web / games",
-  "version": "1.0.0",
+  "version": "2.0.1",
   "homepage": "https://kefniark.github.io/Fatina/",
   "main": "build/fatina.min.js",
   "types": "build/fatina.d.ts",
@@ -27,7 +27,9 @@
     "name": "Kevin destrem",
     "email": "kef1@free.fr"
   },
-  "dependencies": {},
+  "dependencies": {
+    "npm": "^5.8.0"
+  },
   "scripts": {
     "all": "npm run deps && npm run build && npm run dev",
     "deps": "npm install .",
@@ -42,7 +44,7 @@
     "clean:coverage": "rimraf \"./coverage\" && rimraf \"./.nyc_output\"",
     "reset": "rimraf \"./node_modules\"",
     "test": "run-s test:**",
-    "test:lint": "tslint --project tsconfig.json './src/**/*.ts' 'tests/**/*.ts'",
+    "test:lint": "tslint --project tsconfig.json \"./src/**/*.ts\" \"tests/**/*.ts\"",
     "test:unittest": "ts-node node_modules/tape/bin/tape ./tests/**/*.ts | tspec",
     "test:depencencies": "npm-check --production || echo \"Run 'npm run update' to interactively update dependencies for this project\"",
     "docs": "typedoc --out ./docs ./src/",
@@ -51,30 +53,32 @@
     "update": "npm-check --update"
   },
   "devDependencies": {
-    "@types/node": "^9.4.6",
-    "@types/tape": "^4.2.31",
+    "@types/node": "^9.6.2",
+    "@types/tape": "^4.2.32",
     "coveralls": "^3.0.0",
     "dts-bundle": "0.7.3",
-    "npm-check": "5.5.2",
+    "npm-check": "^5.6.0",
     "npm-run-all": "^4.1.2",
-    "nyc": "^11.4.1",
+    "nyc": "^11.6.0",
     "rimraf": "^2.6.2",
     "tap-spec": "4.1.1",
     "tape": "^4.9.0",
-    "ts-loader": "^4.0.0",
-    "ts-node": "^5.0.0",
+    "ts-loader": "^4.2.0",
+    "ts-node": "^5.0.1",
     "tslint": "^5.9.1",
-    "typedoc": "^0.10.0",
-    "typescript": "^2.7.2",
-    "webpack": "^4.0.0",
-    "webpack-cli": "^2.0.8"
+    "tslint-eslint-rules": "^5.1.0",
+    "typedoc": "^0.11.1",
+    "typescript": "^2.8.1",
+    "webpack": "^4.5.0",
+    "webpack-cli": "^2.0.14"
   },
   "nyc": {
     "include": [
       "src/**/*.ts"
     ],
     "exclude": [
-      "src/fatina/index.ts"
+      "src/index.ts",
+      "src/fatina.ts"
     ],
     "extension": [
       ".ts"

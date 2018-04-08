@@ -1,63 +1,64 @@
 import * as test from 'tape';
 import { Test } from 'tape';
-import * as fatina from '../src/fatina/index';
+import { Fatina } from '../src/fatina';
 
-fatina.Init(false);
+const fatina = new Fatina();
+fatina.init(false);
 
 test('[Fatina.Manager] Update manually', (t: Test) => {
 	const previousTime = fatina.time;
-	fatina.Update(1);
+	fatina.update(1);
 
 	t.equal(previousTime + 1, fatina.time, 'Check the global time was properly updated');
-	t.equal(previousTime + 1, fatina.Elapsed(), 'Check the fatina elapsed time was properly updated');
+	t.equal(previousTime + 1, fatina.elapsed, 'Check the fatina elapsed time was properly updated');
 
 	t.end();
 });
 
 test('[Fatina.Manager] Set timescale', (t: Test) => {
 	const previousTime = fatina.time;
-	const previousElapsed = fatina.Elapsed();
+	const previousElapsed = fatina.elapsed;
 
-	fatina.SetTimescale(0.5);
-	fatina.Update(1);
+	fatina.setTimescale(0.5);
+	fatina.update(1);
 
 	t.equal(previousTime + 1, fatina.time, 'Check the global time was properly updated without timescale');
-	t.equal(previousElapsed + 0.5, fatina.Elapsed(), 'Check the fatina elapsed time was properly updated with the timescale');
-	fatina.SetTimescale(1);
+	t.equal(previousElapsed + 0.5, fatina.elapsed, 'Check the fatina elapsed time was properly updated with the timescale');
+	fatina.setTimescale(1);
 
 	t.end();
 });
 
 test('[Fatina.Manager] Pause / Resume', (t: Test) => {
 	const previousTime = fatina.time;
-	const previousElapsed = fatina.Elapsed();
+	const previousElapsed = fatina.elapsed;
 
-	fatina.Pause();
-	fatina.Update(1);
+	fatina.pause();
+	fatina.update(1);
 
 	t.equal(previousTime + 1, fatina.time, 'Check the global time is still updated');
-	t.equal(previousElapsed, fatina.Elapsed(), 'Check the fatina elapsed time is paused');
+	t.equal(previousElapsed, fatina.elapsed, 'Check the fatina elapsed time is paused');
 
-	fatina.Resume();
-	fatina.Update(1);
+	fatina.resume();
+	fatina.update(1);
 
 	t.equal(previousTime + 2, fatina.time, 'Check the global time is still updated');
-	t.equal(previousElapsed + 1, fatina.Elapsed(), 'Check the fatina elapsed time is updated and was properly resumed');
+	t.equal(previousElapsed + 1, fatina.elapsed, 'Check the fatina elapsed time is updated and was properly resumed');
 
 	t.end();
 });
 
 test('[Fatina.Manager] Create tween', (t: Test) => {
 	const obj = { x: 0 };
-	const tween = fatina.Tween(obj, ['x']).To({ x: 1 }, 1);
-	tween.Start();
+	const tween = fatina.tween(obj, ['x']).to({ x: 1 }, 1);
+	tween.start();
 
 	t.equal(0, obj.x, 'check the tween is not starting magically');
 
-	fatina.Update(0.5);
+	fatina.update(0.5);
 	t.equal(0.5, obj.x, 'check the tween is halfway through');
 
-	fatina.Update(0.5);
+	fatina.update(0.5);
 	t.equal(1, obj.x, 'check the tween is finished');
 	t.equal(1, tween.elapsed, 'check the tween is still there with final values');
 
@@ -66,14 +67,14 @@ test('[Fatina.Manager] Create tween', (t: Test) => {
 
 test('[Fatina.Manager] Create sequence', (t: Test) => {
 	const obj = { x: 0 };
-	const sequence = fatina.Sequence();
-	sequence.AppendInterval(1);
-	sequence.Append(fatina.Tween(obj, ['x']).To({ x: 1 }, 1));
-	sequence.Start();
+	const sequence = fatina.sequence();
+	sequence.appendInterval(1);
+	sequence.append(fatina.tween(obj, ['x']).to({ x: 1 }, 1));
+	sequence.start();
 
 	t.equal(0, obj.x, 'check the sequence is not starting magically');
 
-	fatina.Update(2);
+	fatina.update(2);
 	t.equal(1, obj.x, 'check the sequence is finished');
 	t.equal(2, sequence.elapsed, 'check the sequence is still there with final values');
 
@@ -82,14 +83,14 @@ test('[Fatina.Manager] Create sequence', (t: Test) => {
 
 test('[Fatina.Manager] Create sequence 2', (t: Test) => {
 	const obj = { x: 0 };
-	const sequence = fatina.Sequence([
-		fatina.Delay(1),
-		fatina.Tween(obj, ['x']).To({ x: 1 }, 1)
-	]).Start();
+	const sequence = fatina.sequence([
+		fatina.delay(1),
+		fatina.tween(obj, ['x']).to({ x: 1 }, 1)
+	]).start();
 
 	t.equal(0, obj.x, 'check the sequence is not starting magically');
 
-	fatina.Update(2);
+	fatina.update(2);
 	t.equal(1, obj.x, 'check the sequence is finished');
 	t.equal(2, sequence.elapsed, 'check the sequence is still there with final values');
 
@@ -98,56 +99,54 @@ test('[Fatina.Manager] Create sequence 2', (t: Test) => {
 
 test('[Fatina.Manager] Create Delay', (t: Test) => {
 	let started = 0;
-	let updated = 0;
 	let killed = 0;
 	let completed = 0;
 	let elapsed = 0;
 
-	const delay = fatina.Delay(20)
-		.OnStart(() => {})
-		.OnStart(() => started++)
-		.OnUpdate(() => {})
-		.OnUpdate((dt: number, progress: number) => {
-			updated++;
+	const delay = fatina.delay(20)
+		.onStart(() => {})
+		.onStart(() => started++)
+		.onUpdate(() => {})
+		.onUpdate((dt: number) => {
 			elapsed += dt;
 		})
-		.OnUpdate(() => {})
-		.OnKilled(() => {})
-		.OnKilled(() => killed++)
-		.OnKilled(() => {})
-		.OnComplete(() => {})
-		.OnComplete(() => completed++)
-		.OnComplete(() => {})
-		.Start();
-	fatina.Update(10);
+		.onUpdate(() => {})
+		.onKilled(() => {})
+		.onKilled(() => killed++)
+		.onKilled(() => {})
+		.onComplete(() => {})
+		.onComplete(() => completed++)
+		.onComplete(() => {})
+		.start();
+	fatina.update(10);
 
 	t.equal(1, started);
 	t.equal(10, elapsed);
 	t.equal(0, completed);
 
-	fatina.Update(10);
+	fatina.update(10);
 
 	t.equal(1, started);
 	t.equal(20, elapsed);
 	t.equal(1, completed);
 
-	delay.Skip();
-	delay.Kill();
+	delay.skip();
+	delay.kill();
 
-	fatina.Delay(1).SetLoop(2).Start();
-	fatina.Update(5);
+	fatina.delay(1).setLoop(2).start();
+	fatina.update(5);
 
 	t.end();
 });
 
 test('[Fatina.Manager] Use SetTimeout', (t: Test) => {
 	let called = 0;
-	fatina.SetTimeout(() => called++, 10);
+	fatina.setTimeout(() => called++, 10);
 
-	fatina.Update(6);
+	fatina.update(6);
 	t.equal(0, called);
 
-	fatina.Update(6);
+	fatina.update(6);
 	t.equal(1, called);
 
 	t.end();
@@ -155,39 +154,39 @@ test('[Fatina.Manager] Use SetTimeout', (t: Test) => {
 
 test('[Fatina.Manager] Use SetInterval', (t: Test) => {
 	let called = 0;
-	fatina.SetInterval(() => called++, 2);
+	fatina.setInterval(() => called++, 2);
 
-	fatina.Update(1);
+	fatina.update(1);
 	t.equal(0, called);
 
-	fatina.Update(1);
+	fatina.update(1);
 	t.equal(1, called);
 
-	fatina.Update(6);
+	fatina.update(6);
 	t.equal(4, called);
 
 	t.end();
 });
 
 test('[Fatina.Manager] Ticker Helpers', (t: Test) => {
-	const ticker = fatina.MainTicker();
+	const ticker = fatina.mainTicker;
 
-	ticker.Start();
+	ticker.start();
 
-	t.ok(ticker.IsRunning());
-	t.notOk(ticker.IsFinished());
-	t.notOk(ticker.IsIdle());
-	t.notOk(ticker.IsPaused());
+	t.ok(ticker.isRunning);
+	t.notOk(ticker.isFinished);
+	t.notOk(ticker.isIdle);
+	t.notOk(ticker.isPaused);
 
-	fatina.Pause();
-	fatina.Pause();
+	fatina.pause();
+	fatina.pause();
 
-	t.notOk(ticker.IsRunning());
-	t.notOk(ticker.IsFinished());
-	t.ok(ticker.IsPaused());
+	t.notOk(ticker.isRunning);
+	t.notOk(ticker.isFinished);
+	t.ok(ticker.isPaused);
 
-	fatina.Resume();
-	fatina.Resume();
+	fatina.resume();
+	fatina.resume();
 
 	t.end();
 });
@@ -195,35 +194,60 @@ test('[Fatina.Manager] Ticker Helpers', (t: Test) => {
 test('[Fatina.Manager] Ticker Helpers', (t: Test) => {
 	let created = 0;
 
-	fatina.AddListenerCreated((tween) => created++);
-	fatina.Tween({}, []).To({}, 1);
-	fatina.Sequence();
-	fatina.Delay(1);
-	fatina.Ticker();
+	fatina.addListenerCreated(() => created++);
+	fatina.tween({}, []).to({}, 1);
+	fatina.sequence();
+	fatina.delay(1);
+	fatina.ticker();
 
 	t.equal(created, 4);
 	t.end();
 });
 
 test('[Fatina.Manager] Ticker Helpers', (t: Test) => {
-	const ticker = fatina.MainTicker();
+	const ticker = fatina.mainTicker;
 
-	ticker.Start();
+	ticker.start();
 
-	t.ok(ticker.IsRunning());
-	t.notOk(ticker.IsFinished());
-	t.notOk(ticker.IsIdle());
-	t.notOk(ticker.IsPaused());
+	t.ok(ticker.isRunning);
+	t.notOk(ticker.isFinished);
+	t.notOk(ticker.isIdle);
+	t.notOk(ticker.isPaused);
 
-	fatina.Pause();
-	fatina.Pause();
+	fatina.pause();
+	fatina.pause();
 
-	t.notOk(ticker.IsRunning());
-	t.notOk(ticker.IsFinished());
-	t.ok(ticker.IsPaused());
+	t.notOk(ticker.isRunning);
+	t.notOk(ticker.isFinished);
+	t.ok(ticker.isPaused);
 
-	fatina.Resume();
-	fatina.Resume();
+	fatina.resume();
+	fatina.resume();
+
+	t.end();
+});
+
+test('[Fatina.Manager] Create cascade tween', (t: Test) => {
+	const obj = { x: 0 };
+	const tween = fatina.tween(obj, ['x'])
+		.to({ x: 500 }, 500)
+		.onComplete(() => {
+			fatina.tween(obj, ['x'])
+			.to({ x: 0 }, 500)
+			.start();
+		});
+	tween.start();
+
+	t.equal(0, obj.x, 'check the tween is not starting magically');
+
+	fatina.update(50);
+	t.equal(50, obj.x, 'check the tween is halfway through');
+
+	fatina.update(500);
+	t.equal(500, obj.x, 'check the tween is finished');
+
+	fatina.update(500);
+	t.equal(0, obj.x, 'check the second tween is finished');
 
 	t.end();
 });
@@ -234,13 +258,13 @@ test('[Fatina.Manager] Test Pooling', (t: Test) => {
 	for (let i = 0; i < 1024; i++) {
 		const duration = Math.random() * 49 + 1;
 		const obj = { x: 0, y: 0, z: 0 };
-		const tween = fatina.Tween(obj, ['x']).To({ x: 1 }, duration);
-		tween.OnStart(() => start++);
-		tween.OnComplete(() => complete++);
-		tween.Start();
-		fatina.Update(1);
+		const tween = fatina.tween(obj, ['x']).to({ x: 1 }, duration);
+		tween.onStart(() => start++);
+		tween.onComplete(() => complete++);
+		tween.start();
+		fatina.update(1);
 	}
-	fatina.Update(50);
+	fatina.update(50);
 
 	t.equal(start, 1024);
 	t.equal(complete, 1024);
@@ -249,52 +273,52 @@ test('[Fatina.Manager] Test Pooling', (t: Test) => {
 
 test('[Fatina.Manager] Create ticker', (t: Test) => {
 	const obj = { x: 0, y: 0, z: 0 };
-	const gameTicker = fatina.Ticker();
-	const uiTicker = fatina.Ticker();
+	const gameTicker = fatina.ticker();
+	const uiTicker = fatina.ticker();
 
-	fatina.Tween(obj, ['x']).SetParent(gameTicker).To({x: 5}, 5).Start();
-	fatina.Tween(obj, ['y']).SetParent(uiTicker).To({y: 5}, 5).Start();
-	fatina.Tween(obj, ['z']).To({z: 5}, 5).Start();
+	fatina.tween(obj, ['x']).setParent(gameTicker).to({ x: 5 }, 5).start();
+	fatina.tween(obj, ['y']).setParent(uiTicker).to({ y: 5 }, 5).start();
+	fatina.tween(obj, ['z']).to({ z: 5 }, 5).start();
 
 	t.notEqual(undefined, gameTicker, 'check a ticker is properly created');
 
-	fatina.Update(1);
+	fatina.update(1);
 	t.equal(1, obj.x, 'check the game ticker runs');
 	t.equal(1, obj.y, 'check the ui ticker runs');
 	t.equal(1, obj.z, 'check the main ticker runs');
 
-	fatina.SetTimescale(2);
-	gameTicker.SetTimescale(0.5);
-	uiTicker.SetTimescale(0.25);
+	fatina.setTimescale(2);
+	gameTicker.setTimescale(0.5);
+	uiTicker.setTimescale(0.25);
 
-	uiTicker.AddTickListener(() => {});
-	uiTicker.RemoveTickListener(() => {});
-	uiTicker.RemoveTickListener(undefined as any);
+	uiTicker.addTick(() => {});
+	uiTicker.removeTick(() => {});
+	uiTicker.removeTick(undefined as any);
 
-	fatina.Update(1);
+	fatina.update(1);
 	t.equal(2, obj.x, 'check the game ticker runs');
 	t.equal(1.5, obj.y, 'check the ui ticker runs');
 	t.equal(3, obj.z, 'check the main ticker runs');
 
-	fatina.SetTimescale(1);
-	gameTicker.SetTimescale(1);
+	fatina.setTimescale(1);
+	gameTicker.setTimescale(1);
 
-	gameTicker.Pause();
-	uiTicker.Kill();
-	fatina.Update(1);
+	gameTicker.pause();
+	uiTicker.kill();
+	fatina.update(1);
 	t.equal(2, obj.x, 'check the game ticker is paused');
 	t.equal(1.5, obj.y, 'check the ui ticker is killed');
 
-	gameTicker.Resume();
-	fatina.Update(1);
+	gameTicker.resume();
+	fatina.update(1);
 	t.equal(3, obj.x, 'check the game ticker is resumed');
 
-	gameTicker.Kill();
-	gameTicker.Kill();
-	fatina.Update(1);
-	t.throws(() => gameTicker.Skip(), 'cannot skip ticker');
-	gameTicker.Reset();
+	gameTicker.kill();
+	gameTicker.kill();
+	fatina.update(1);
+	t.throws(() => gameTicker.skip(), 'cannot skip ticker');
+	gameTicker.reset();
 
-	fatina.Destroy();
+	fatina.destroy();
 	t.end();
 });
