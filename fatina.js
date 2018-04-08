@@ -7,7 +7,7 @@
 		exports["Fatina"] = factory();
 	else
 		root["Fatina"] = factory();
-})(window, function() {
+})(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -443,12 +443,19 @@ class Fatina {
         this.loadedPlugins = [];
         this.eventCreated = [];
         // settings
-        this.settings = { logLevel: log_1.Log.None, safe: true };
+        this.settings = {
+            logLevel: log_1.Log.None,
+            safe: true,
+            smooth: true,
+            maxFrameDt: 50,
+            maxFrameNumber: 40,
+            maxDt: 15000 // 15s of animation
+        };
         // properties
         this.time = 0;
+        this.dt = 0;
         this.lastTime = 0;
         this.initialized = false;
-        this.isFirstUpdate = true;
     }
     get elapsed() {
         return this.manager.elapsed;
@@ -639,17 +646,26 @@ class Fatina {
         return tick;
     }
     updateLoop(timestamp) {
-        let dt = timestamp - this.lastTime;
-        if (this.isFirstUpdate) {
-            dt = 1;
-            this.isFirstUpdate = false;
+        this.dt += timestamp - this.lastTime;
+        if (this.dt > this.settings.maxDt) {
+            console.warn(`dt too high ${Math.round(this.dt)}ms. , Capped to ${this.settings.maxDt}ms.`);
+            this.dt = this.settings.maxDt;
         }
-        // cap to 500 ms
-        if (dt > 350) {
-            console.warn(`dt too high ${Math.round(dt)}ms. , Capped to 350ms.`);
-            dt = 350;
+        if (!this.settings.smooth) {
+            // use directly the delta time
+            this.update(this.dt);
+            this.dt = 0;
         }
-        this.update(dt);
+        else {
+            // split high dt in multiple smaller .update()
+            let frame = 0;
+            while (this.dt > 0 && frame < this.settings.maxFrameNumber) {
+                const currentDt = Math.min(this.dt, this.settings.maxFrameDt);
+                this.update(currentDt);
+                this.dt -= currentDt;
+                frame++;
+            }
+        }
         this.lastTime = timestamp;
         lastFrame = requestFrame(this.updateLoop.bind(this));
     }
@@ -778,6 +794,7 @@ class Ticker {
         this.elapsed = 0;
         this.duration = 0;
         this.ticks = new Set();
+        this.newTicks = new Set();
     }
     setParent(parent, tick) {
         this.tickCb = tick;
@@ -801,7 +818,7 @@ class Ticker {
      * @memberOf Ticker
      */
     addTick(cb) {
-        this.ticks.add(cb);
+        this.newTicks.add(cb);
     }
     /**
      * Method used by the child to not receive update anymore
@@ -811,7 +828,9 @@ class Ticker {
      * @memberOf Ticker
      */
     removeTick(cb) {
-        this.ticks.delete(cb);
+        if (!this.ticks.delete(cb)) {
+            this.newTicks.delete(cb);
+        }
     }
     /**
      * Method used to tick all the child (tick listeners)
@@ -826,9 +845,12 @@ class Ticker {
             return;
         }
         const localDt = dt * this.timescale;
-        for (const tick of this.ticks) {
-            tick(localDt);
+        if (this.newTicks.size > 0) {
+            this.newTicks.forEach((tick) => this.ticks.add(tick));
+            this.newTicks.clear();
         }
+        // tslint:disable-next-line:only-arrow-functions
+        this.ticks.forEach(function (tick) { tick(localDt); });
         this.elapsed += localDt;
     }
     start() {
@@ -1104,7 +1126,12 @@ class BaseTween {
         return this;
     }
     setSettings(settings) {
-        this.settings = settings;
+        if (this.settings) {
+            Object.assign(this.settings, settings);
+        }
+        else {
+            this.settings = settings;
+        }
         return this;
     }
     complete() {
@@ -1383,9 +1410,8 @@ class Sequence extends baseTween_1.BaseTween {
         }
         if (this.cur) {
             // Tick every listener
-            for (const tick of this.evtTick) {
-                tick(dt);
-            }
+            // tslint:disable-next-line:only-arrow-functions
+            this.evtTick.forEach(function (tick) { tick(dt); });
             // Dont emit update event for remains dt
             if (remains !== true) {
                 this.emitEvent(this.events.update, [dt, 0]);

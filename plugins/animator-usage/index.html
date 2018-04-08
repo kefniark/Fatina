@@ -10,15 +10,15 @@
   <meta name="twitter:title" content="Animator Plugin - Getting Started" />
   <meta name="description" content="Animator Getting Started API  The installation process is explained in the README.
 After setup, you can use this plugin:
-// Global animator manager Fatina.plugin.AnimatorManager; // Global tick manager to be able to pause / resume group of objects Fatina.plugin.TickerManager; // Add a Animator component to any object Fatina.plugin.AnimatorManager.AddAnimatorTo(object);  
-Import &amp; Initialize // require fatina let fatina = require(&#39;fatina&#39;); let fatinaAnimator = require(&#39;fatina-plugin-animator&#39;); // initialize fatina fatina.Init(); fatina.">
+// Global animator manager Fatina.plugin.animatorManager; // Global tick manager to be able to pause / resume group of objects Fatina.plugin.tickerManager; // Add a Animator component to any object Fatina.plugin.animatorManager.addAnimatorTo(object);  
+Import &amp; Initialize // require fatina let fatina = require(&#39;fatina&#39;); let fatinaAnimator = require(&#39;fatina-plugin-animator&#39;); // initialize fatina fatina.init(); fatina.">
   <meta property="og:description" content="Animator Getting Started API  The installation process is explained in the README.
 After setup, you can use this plugin:
-// Global animator manager Fatina.plugin.AnimatorManager; // Global tick manager to be able to pause / resume group of objects Fatina.plugin.TickerManager; // Add a Animator component to any object Fatina.plugin.AnimatorManager.AddAnimatorTo(object);  
-Import &amp; Initialize // require fatina let fatina = require(&#39;fatina&#39;); let fatinaAnimator = require(&#39;fatina-plugin-animator&#39;); // initialize fatina fatina.Init(); fatina.">
+// Global animator manager Fatina.plugin.animatorManager; // Global tick manager to be able to pause / resume group of objects Fatina.plugin.tickerManager; // Add a Animator component to any object Fatina.plugin.animatorManager.addAnimatorTo(object);  
+Import &amp; Initialize // require fatina let fatina = require(&#39;fatina&#39;); let fatinaAnimator = require(&#39;fatina-plugin-animator&#39;); // initialize fatina fatina.init(); fatina.">
   <meta name="twitter:description" content="Animator Getting Started API  The installation process is explained in the README.
 After setup, you can use this plugin:
-// Global animator manager Fatina.plugin.AnimatorManager; // Global tick …">
+// Global animator manager Fatina.plugin.animatorManager; // Global tick …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -193,13 +193,13 @@ After setup, you can use this plugin:
 <p>After setup, you can use this plugin:</p>
 
 <pre><code class="language-js">// Global animator manager
-Fatina.plugin.AnimatorManager;
+Fatina.plugin.animatorManager;
 
 // Global tick manager to be able to pause / resume group of objects
-Fatina.plugin.TickerManager;
+Fatina.plugin.tickerManager;
 
 // Add a Animator component to any object
-Fatina.plugin.AnimatorManager.AddAnimatorTo(object);
+Fatina.plugin.animatorManager.addAnimatorTo(object);
 </code></pre>
 
 <p><br></p>
@@ -211,16 +211,16 @@ let fatina = require('fatina');
 let fatinaAnimator = require('fatina-plugin-animator');
 
 // initialize fatina
-fatina.Init();
-fatina.LoadPlugin(FatinaPluginAnimator.Get());
+fatina.init();
+fatina.loadPlugin(fatinaAnimator.get());
 </code></pre>
 
 <p><br></p>
 
 <h3 id="register-a-shared-animation">Register a shared animation</h3>
 
-<pre><code class="language-js">fatina.plugin.AnimatorManager.Register('move', (obj: any, params: any) =&gt; {
-    return Fatina.Tween(obj.position, ['x']).SetRelative(true).To({ x: params }, 500);
+<pre><code class="language-js">fatina.plugin.animatorManager.register('move', (obj: any, params: any) =&gt; {
+    return Fatina.tween(obj.position, ['x']).setRelative(true).to({ x: params }, 500);
 }, 'newTicker');
 </code></pre>
 
@@ -232,13 +232,13 @@ fatina.LoadPlugin(FatinaPluginAnimator.Get());
 var test = new Phaser.Sprite(this.game, 2, 80, 'hudBg');
 
 // add a component animator to that sprite and add 2 animations
-fatina.plugin.AnimatorManager.AddAnimatorTo(test)
-    .AddAnimation('moveRight', 'move', { group: 'move' }, 5)
-    .AddAnimation('moveLeft', 'move', { group: 'move' }, -5);
+fatina.plugin.animatorManager.addAnimatorTo(test)
+    .addAnimation('moveRight', 'move', { group: 'move' }, 5)
+	.addAnimation('moveLeft', 'move', { group: 'move' }, -5);
 
 // now you can use those animation easily
-test.Animator.Play('moveLeft');
-test.Animator.Play('moveRight');
+test.animator.play('moveLeft');
+test.animator.play('moveRight');
 </code></pre>
 
       </article>

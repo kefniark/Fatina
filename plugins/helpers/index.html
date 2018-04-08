@@ -10,10 +10,10 @@
   <meta name="twitter:title" content="Helpers Plugin" />
   <meta name="description" content="Description This plugin is a set of helpers to provide a better integration of Fatina with javascript games library like PixiJs or Phaser. It provides helpers to animate:
  Position: Move, Shake, PunchPosition Rotation: Rotate, PunchRotate Scale: Scale, PunchScale Alpha: Fade Color: Color, PunchColor  This make the code smaller and easier to read
-// normal fatina tween fatina.Tween(sprite.position, [&#39;x&#39;]).To({&#39;x&#39;: 50 }, 1000); // same operation with the helper sprite.">
+// normal fatina tween Fatina.tween(sprite.position, [&#39;x&#39;]).to({&#39;x&#39;: 50 }, 1000); // same operation with the helper sprite.">
   <meta property="og:description" content="Description This plugin is a set of helpers to provide a better integration of Fatina with javascript games library like PixiJs or Phaser. It provides helpers to animate:
  Position: Move, Shake, PunchPosition Rotation: Rotate, PunchRotate Scale: Scale, PunchScale Alpha: Fade Color: Color, PunchColor  This make the code smaller and easier to read
-// normal fatina tween fatina.Tween(sprite.position, [&#39;x&#39;]).To({&#39;x&#39;: 50 }, 1000); // same operation with the helper sprite.">
+// normal fatina tween Fatina.tween(sprite.position, [&#39;x&#39;]).to({&#39;x&#39;: 50 }, 1000); // same operation with the helper sprite.">
   <meta name="twitter:description" content="Description This plugin is a set of helpers to provide a better integration of Fatina with javascript games library like PixiJs or Phaser. It provides helpers to animate:
  Position: Move, Shake, …">
   <meta name="author" content="Kevin Destrem"/>
@@ -194,19 +194,19 @@
 <p>This make the code smaller and easier to read</p>
 
 <pre><code class="language-js">// normal fatina tween
-fatina.Tween(sprite.position, ['x']).To({'x': 50 }, 1000);
+Fatina.tween(sprite.position, ['x']).to({'x': 50 }, 1000);
 
 // same operation with the helper
-sprite.MoveXTo(50, 1000);
+sprite.moveXTo(50, 1000);
 </code></pre>
 
 <p>This also provides conversion for angle and colors</p>
 
 <pre><code class="language-js">// degree rotation (default rotation are radiant)
-sprite.RotateDegTo(90, 200);
+sprite.rotateDegTo(90, 200);
 
 // give a red tint to the sprite (most engine works with hex or rgba number array)
-sprite.ColorRGBTo(&quot;#FF0000&quot;, 200);
+sprite.colorRGBTo(&quot;#FF0000&quot;, 200);
 </code></pre>
 
 <div style="text-align: center; margin-top: 30px;">
