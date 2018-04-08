@@ -31,7 +31,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	protected parent: ITicker;
 	protected tickCb: (dt: number) => void;
 	private first = true;
-	private readonly settings?: ISettings;
+	private settings?: ISettings;
 
 	public get isIdle(): boolean {
 		return this.state === State.Idle;
@@ -250,7 +250,11 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	}
 
 	public setSettings(settings: ISettings): T {
-		Object.assign(this.settings, settings);
+		if (this.settings) {
+			Object.assign(this.settings, settings);
+		} else {
+			this.settings = settings;
+		}
 		return this as any;
 	}
 
