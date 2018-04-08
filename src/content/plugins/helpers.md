@@ -18,19 +18,19 @@ This plugin is a set of helpers to provide a better integration of Fatina with j
 This make the code smaller and easier to read
 ```js
 // normal fatina tween
-fatina.Tween(sprite.position, ['x']).To({'x': 50 }, 1000);
+Fatina.tween(sprite.position, ['x']).to({'x': 50 }, 1000);
 
 // same operation with the helper
-sprite.MoveXTo(50, 1000);
+sprite.moveXTo(50, 1000);
 ```
 
 This also provides conversion for angle and colors
 ```js
 // degree rotation (default rotation are radiant)
-sprite.RotateDegTo(90, 200);
+sprite.rotateDegTo(90, 200);
 
 // give a red tint to the sprite (most engine works with hex or rgba number array)
-sprite.ColorRGBTo("#FF0000", 200);
+sprite.colorRGBTo("#FF0000", 200);
 ```
 
 <div style="text-align: center; margin-top: 30px;">

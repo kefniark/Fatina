@@ -15,42 +15,42 @@ weight = 2
 ## Fatina
 ### Init
 <blockquote>The first time you create a tween, Fatina will initialize itself automatically, using default values.
-If instead you prefer to initialize it yourself (recommended), call the method <b>.Init()</b> once, BEFORE creating any tween (calling it afterwards will have no effect).</blockquote>
+If instead you prefer to initialize it yourself (recommended), call the method <b>.init()</b> once, BEFORE creating any tween (calling it afterwards will have no effect).</blockquote>
 
 ### Controls
-* **Pause**() / **Resume**(): `void`
-* **SetTimescale**(scale: number): `void`
+* **pause**() / **resume**(): `void`
+* **setTimescale**(scale: number): `void`
 
 ### Methods
-* **Init**(): `void` <small>This method has to be called once to initialize Fatina</small>
-* **Update**(dt: number): `void`
-* **Tween**(obj, properties): `Tween` <small>Method used to create new tween</small>
-* **Sequence**(): `Sequence` <small>Method used to create new sequence</small>
-* **Delay**(duration) `Delay`
-* **SetTimeout**(fn, duration): `void` This is just a simple helper around Fatina.Delay
-* **SetInterval**(fn, duration): `void` This is just a simple helper around Fatina.Delay
-* **Ticker**(name: string): `ITicker`
+* **init**(): `void` <small>This method has to be called once to initialize Fatina</small>
+* **update**(dt: number): `void`
+* **tween**(obj, properties): `Tween` <small>Method used to create new tween</small>
+* **sequence**(): `Sequence` <small>Method used to create new sequence</small>
+* **delay**(duration) `Delay`
+* **setTimeout**(fn, duration): `void` This is just a simple helper around Fatina.Delay
+* **setInterval**(fn, duration): `void` This is just a simple helper around Fatina.Delay
+* **ticker**(name: string): `ITicker`
 
 {{%expand "See More" %}}
 For normal usage
 ```js
 // Initialize Fatina (need to do that only once)
-Fatina.Init();
+Fatina.init();
 
 // Create a tween to move an object during 250 ms.
 var obj = { x: 0, y: 0 };
-Fatina.Tween(obj, ['x', 'y'])
-    .To({ x: 42, y: 42 }, 250)
-    .Start();
+ftina.tween(obj, ['x', 'y'])
+    .to({ x: 42, y: 42 }, 250)
+    .start();
 ```
 
 If you want to update Fatina manually
 ```js
 // Initialize Fatina (disable the auto-update)
-Fatina.Init(false);
+Fatina.init(false);
 
 // Update manually (the default dt used by fatina is in ms.)
-Fatine.Update(1);
+fatine.update(1);
 ```
 {{% /expand%}}
 
@@ -60,26 +60,28 @@ Fatine.Update(1);
 <blockquote>A <b>Ticker</b> is a container which provides a centralized tick to all his childrens.<br>
 By default, all the tweens are childs of the same default Ticker, but it's possible to change this behavior.</blockquote>
 
+### Properties
+* **isRunning**: `boolean`
+* **isPaused**: `boolean`
+
 ### Controls
-* **Pause**() / **Resume**(): `void`
-* **SetTimescale**(scale: number): `void`
-* **Kill**(): `void`
-* **IsRunning**(): `boolean`
-* **IsPaused**(): `boolean`
+* **pause**() / **resume**(): `void`
+* **setTimescale**(scale: number): `void`
+* **kill**(): `void`
 
 ### Methods
-* **AddTickListener**(listener: (dt: number) => void): `void`;
-* **RemoveTickListener**(listener: (dt: number) => void): `void`;
+* **addTick**(listener: (dt: number) => void): `void`;
+* **removeTick**(listener: (dt: number) => void): `void`;
 
 {{%expand "See More" %}}
 ```js
 // Create few tickers
-var gameTicker = Fatina.Ticker('game');
-var uiTicker = Fatina.Ticker('ui');
-uiTicker.SetTimescale(0.8);
+var gameTicker = Fatina.ticker('game');
+var uiTicker = Fatina.ticker('ui');
+uiTicker.SsetTimescale(0.8);
 
 // You just have to tell to the tween or the sequence to use those ticker and not the default one
-Fatina.Tween(obj, ['x']).SetParent(gameTicker).To({x: 5}, 5).Start();
-Fatina.Tween(obj, ['y']).SetParent(uiTicker).To({y: 5}, 5).Start();
+Fatina.tween(obj, ['x']).setParent(gameTicker).to({x: 5}, 5).start();
+Fatina.tween(obj, ['y']).setParent(uiTicker).to({y: 5}, 5).start();
 ```
 {{% /expand%}}

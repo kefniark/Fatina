@@ -19,83 +19,83 @@ weight = 3
 ### Properties
 * **elapsed**: `number` number of ms. elapsed for this tween <small>(affected by pause &amp; timescale)</small>
 * **duration**: `number` duration of this tween in ms.
+* **isRunning**: `boolean`
+* **isFinished**: `boolean`
+* **isPaused**: `boolean`
 
 ### Controls
-* **Start**(): `Tween` By default new tween are not started. Don't forget to call **.Start()**
-* **Pause**(): `void`
-* **Resume**(): `void`
-* **Skip**(): `void`
-* **Kill**(): `void`
-* **IsRunning**(): `boolean`
-* **IsFinished**(): `boolean`
-* **IsPaused**(): `boolean`
+* **start**(): `Tween` By default new tween are not started. Don't forget to call **.start()**
+* **pause**(): `void`
+* **resume**(): `void`
+* **skip**(): `void`
+* **kill**(): `void`
 
 {{%expand "See More" %}}
 ```js
 // Create a tween
-let tween = Fatina.Tween({},[]).To({}, 100).Start();
+let tween = Fatina.tween({},[]).to({}, 100).start();
 
 // Control this tween
-tween.Pause();
-tween.Resume();
-tween.Kill(); 
+tween.pause();
+tween.resume();
+tween.kill();
 ```
 {{% /expand%}}
 
 ### Callbacks
-* **OnStart**(cb: () => void): `Tween`
-* **OnUpdate**(cb: (dt: number, progress: number) => void): `Tween`
-* **OnKilled**(cb: () => void): `Tween`
-* **OnComplete**(cb: () => void): `Tween`
-* **OnRestart**(cb: () => void): `Tween`
+* **onStart**(cb: () => void): `Tween`
+* **onUpdate**(cb: (dt: number, progress: number) => void): `Tween`
+* **onKilled**(cb: () => void): `Tween`
+* **onComplete**(cb: () => void): `Tween`
+* **onRestart**(cb: () => void): `Tween`
 
 {{%expand "See More" %}}
 ```js
 var obj = { x: 0 };
 
 // Create a tween with few callbacks
-Fatina.Tween(obj, ['x'])
-    .To({ x: 42 }, 100)
-    .OnStart(() => console.log('onStart'))
-    .OnUpdate((dt, progress) => console.log('onUpdate', dt, progress)) // progress: float between 0 and 1
-    .OnComplete(() => console.log('onComplete'))
-    .Start();
+Fatina.tween(obj, ['x'])
+    .to({ x: 42 }, 100)
+    .onStart(() => console.log('onStart'))
+    .onUpdate((dt, progress) => console.log('onUpdate', dt, progress)) // progress: float between 0 and 1
+    .onComplete(() => console.log('onComplete'))
+    .start();
 ```
 {{% /expand%}}
 
 ### Methods
-* **From**(from: any): `Tween`;
-* **To**(to: any, duration: number): `Tween`;
-* **Modify**(force: any, updateTo: boolean): `void`;
-* **SetLoop**(loop: number): `Tween`;
-* **SetRelative**(relative: boolean): `Tween`;
-* **SetEasing**(type: EasingType | string): `Tween`;
-* **SetTimescale**(scale: number): `Tween`;
-* **SetSteps**(steps: number): `Tween`;
-* **Yoyo**(times: number): `Tween`;
-* **Reverse**(): `void`;
-* **ToSequence**(): `Sequence`;
+* **from**(from: any): `Tween`;
+* **to**(to: any, duration: number): `Tween`;
+* **modify**(force: any, updateTo: boolean): `void`;
+* **setLoop**(loop: number): `Tween`;
+* **setRelative**(relative: boolean): `Tween`;
+* **setEasing**(type: EasingType | string): `Tween`;
+* **setTimescale**(scale: number): `Tween`;
+* **setSteps**(steps: number): `Tween`;
+* **yoyo**(times: number): `Tween`;
+* **reverse**(): `void`;
+* **toSequence**(): `Sequence`;
 
 {{%expand "See More" %}}
 ```js
 var obj = { x: 0 };
 
 // A normal Tween
-Fatina.Tween(obj, ['x'])
-    .From({ x: -10 }) // to define the starting value
-    .To({ x: 10 }, 200) // to define the final value (absolute by default, for relative use .SetRelative(true))
-    .SetLoop(2) // play this tween twice
-    .SetTimescale(0.5) // play the tween at half the normal speed
-    .Start(); // start the tween
+Fatina.tween(obj, ['x'])
+    .from({ x: -10 }) // to define the starting value
+    .to({ x: 10 }, 200) // to define the final value (absolute by default, for relative use .SetRelative(true))
+    .setLoop(2) // play this tween twice
+    .setTimescale(0.5) // play the tween at half the normal speed
+    .start(); // start the tween
 
 // Convert to a sequence to use interval
-Fatina.Tween(obj, ['x'])
-    .From({ x: -10 })
-    .To({ x: 10 }, 200)
-    .ToSequence()
-    .PrependInterval(150)
-    .AppendInterval(150)
-    .Start();
+Fatina.tween(obj, ['x'])
+    .from({ x: -10 })
+    .to({ x: 10 }, 200)
+    .toSequence()
+    .prependInterval(150)
+    .appendInterval(150)
+    .start();
 ```
 {{% /expand%}}
 
@@ -141,10 +141,10 @@ To see what they look like : [Easings.net](http://easings.net)
 var obj = { x: 0 };
 
 // A tween with easing
-Fatina.Tween(obj, ['x'])
-    .From({ x: -10 })
-    .To({ x: 10 }, 200)
-    .SetEasing('inOutQuad')
-    .Start();
+Fatina.tween(obj, ['x'])
+    .from({ x: -10 })
+    .to({ x: 10 }, 200)
+    .setEasing('inOutQuad')
+    .start();
 ```
 {{% /expand%}}

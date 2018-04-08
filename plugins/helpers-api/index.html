@@ -9,11 +9,11 @@
   <meta property="og:title" content="Helpers Plugin - API" />
   <meta name="twitter:title" content="Helpers Plugin - API" />
   <meta name="description" content="Helpers Getting Started API  Position Following methods use .position.x and .position.y
- MoveTo(x: number, y: number, duration: number): Move to an absolute position MoveXTo(x: number, duration: number) MoveYTo(y: number, duration: number) MoveToRel(x: number, y: number, duration: number): Move to a relative position MoveXToRel(x: number, duration: number) MoveYToRel(y: number, duration: number) PunchPosition(x: number, y: number, duration: number, iteration: number): Oscillate around the current position Shake(x: number, y: number, duration: number, iteration: number): Shake around the current position  Rotation Following methods use .">
+ moveTo(x: number, y: number, duration: number): Move to an absolute position moveXTo(x: number, duration: number) moveYTo(y: number, duration: number) moveToRel(x: number, y: number, duration: number): Move to a relative position moveXToRel(x: number, duration: number) moveYToRel(y: number, duration: number) punchPosition(x: number, y: number, duration: number, iteration: number): Oscillate around the current position shake(x: number, y: number, duration: number, iteration: number): Shake around the current position  Rotation Following methods use .">
   <meta property="og:description" content="Helpers Getting Started API  Position Following methods use .position.x and .position.y
- MoveTo(x: number, y: number, duration: number): Move to an absolute position MoveXTo(x: number, duration: number) MoveYTo(y: number, duration: number) MoveToRel(x: number, y: number, duration: number): Move to a relative position MoveXToRel(x: number, duration: number) MoveYToRel(y: number, duration: number) PunchPosition(x: number, y: number, duration: number, iteration: number): Oscillate around the current position Shake(x: number, y: number, duration: number, iteration: number): Shake around the current position  Rotation Following methods use .">
+ moveTo(x: number, y: number, duration: number): Move to an absolute position moveXTo(x: number, duration: number) moveYTo(y: number, duration: number) moveToRel(x: number, y: number, duration: number): Move to a relative position moveXToRel(x: number, duration: number) moveYToRel(y: number, duration: number) punchPosition(x: number, y: number, duration: number, iteration: number): Oscillate around the current position shake(x: number, y: number, duration: number, iteration: number): Shake around the current position  Rotation Following methods use .">
   <meta name="twitter:description" content="Helpers Getting Started API  Position Following methods use .position.x and .position.y
- MoveTo(x: number, y: number, duration: number): Move to an absolute position MoveXTo(x: number, duration: …">
+ moveTo(x: number, y: number, duration: number): Move to an absolute position moveXTo(x: number, duration: …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -188,14 +188,14 @@
 <p>Following methods use <code>.position.x</code> and <code>.position.y</code></p>
 
 <ul>
-<li><strong>MoveTo</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>): Move to an absolute position</li>
-<li><strong>MoveXTo</strong>(x: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>MoveYTo</strong>(y: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>MoveToRel</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>): Move to a relative position</li>
-<li><strong>MoveXToRel</strong>(x: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>MoveYToRel</strong>(y: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>PunchPosition</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>): Oscillate around the current position</li>
-<li><strong>Shake</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>): Shake around the current position</li>
+<li><strong>moveTo</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>): Move to an absolute position</li>
+<li><strong>moveXTo</strong>(x: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>moveYTo</strong>(y: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>moveToRel</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>): Move to a relative position</li>
+<li><strong>moveXToRel</strong>(x: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>moveYToRel</strong>(y: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>punchPosition</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>): Oscillate around the current position</li>
+<li><strong>shake</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>): Shake around the current position</li>
 </ul>
 
 <h3 id="rotation">Rotation</h3>
@@ -203,11 +203,11 @@
 <p>Following methods use <code>.rotation</code></p>
 
 <ul>
-<li><strong>RotateTo</strong>(rad: <code>number</code>, duration: <code>number</code>) : Rotate to a specific angle in radiant (to PI/2)</li>
-<li><strong>RotateToRel</strong>(rad: <code>number</code>, duration: <code>number</code>) : Rotate by a relative radiant angle (+PI/2)</li>
-<li><strong>RotateDegTo</strong>(deg: <code>number</code>, duration: <code>number</code>) : Rotate to a specific angle in degrees (to 90°)</li>
-<li><strong>RotateDegToRel</strong>(deg: <code>number</code>, duration: <code>number</code>) : Rotate to a specific angle in degrees (+90°)</li>
-<li><strong>PunchRotate</strong>(rad: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>)</li>
+<li><strong>rotateTo</strong>(rad: <code>number</code>, duration: <code>number</code>) : Rotate to a specific angle in radiant (to PI/2)</li>
+<li><strong>rotateToRel</strong>(rad: <code>number</code>, duration: <code>number</code>) : Rotate by a relative radiant angle (+PI/2)</li>
+<li><strong>rotateDegTo</strong>(deg: <code>number</code>, duration: <code>number</code>) : Rotate to a specific angle in degrees (to 90°)</li>
+<li><strong>rotateDegToRel</strong>(deg: <code>number</code>, duration: <code>number</code>) : Rotate to a specific angle in degrees (+90°)</li>
+<li><strong>punchRotate</strong>(rad: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>)</li>
 </ul>
 
 <h3 id="alpha">Alpha</h3>
@@ -215,7 +215,7 @@
 <p>Following method use <code>.alpha</code></p>
 
 <ul>
-<li><strong>FadeTo</strong>(alpha, duration: <code>number</code>) : Alpha is a float between 0 and 1 (1: fadeIn, 0: fadeOut)</li>
+<li><strong>fadeTo</strong>(alpha, duration: <code>number</code>) : Alpha is a float between 0 and 1 (1: fadeIn, 0: fadeOut)</li>
 </ul>
 
 <h3 id="scale">Scale</h3>
@@ -223,13 +223,13 @@
 <p>Following methods use <code>.scale.x</code> and <code>.scale.y</code></p>
 
 <ul>
-<li><strong>ScaleTo</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>) : Scale to a specified value</li>
-<li><strong>ScaleXTo</strong>(x: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>ScaleYTo</strong>(y: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>ScaleToRel</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>ScaleXToRel</strong>(x: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>ScaleYToRel</strong>(y: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>PunchScale</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>)</li>
+<li><strong>scaleTo</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>) : Scale to a specified value</li>
+<li><strong>scaleXTo</strong>(x: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>scaleYTo</strong>(y: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>scaleToRel</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>scaleXToRel</strong>(x: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>scaleYToRel</strong>(y: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>punchScale</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>)</li>
 </ul>
 
 <h3 id="color-tint">Color / Tint</h3>
@@ -237,11 +237,11 @@
 <p>Following methods use <code>.tint</code> or <code>.hue</code> (the color API are slightly different between libs)</p>
 
 <ul>
-<li><strong>ColorTo</strong>(r: <code>number</code>, g: <code>number</code>, b: <code>number</code>, duration: <code>number</code>): R,G,B are float between 0-1</li>
-<li><strong>ColorToRel</strong>(r: <code>number</code>, g: <code>number</code>, b: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>ColorRGBTo</strong>(color: <code>string</code>, duration: <code>number</code>): color is a string representation &lsquo;#FFFFFF&rsquo;</li>
-<li><strong>ColorRGBToRel</strong>(color: <code>string</code>, duration: <code>number</code>)</li>
-<li><strong>PunchColor</strong>(r: <code>number</code>, g: <code>number</code>, b: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>)</li>
+<li><strong>colorTo</strong>(r: <code>number</code>, g: <code>number</code>, b: <code>number</code>, duration: <code>number</code>): R,G,B are float between 0-1</li>
+<li><strong>colorToRel</strong>(r: <code>number</code>, g: <code>number</code>, b: <code>number</code>, duration: <code>number</code>)</li>
+<li><strong>colorRGBTo</strong>(color: <code>string</code>, duration: <code>number</code>): color is a string representation &lsquo;#FFFFFF&rsquo;</li>
+<li><strong>colorRGBToRel</strong>(color: <code>string</code>, duration: <code>number</code>)</li>
+<li><strong>punchColor</strong>(r: <code>number</code>, g: <code>number</code>, b: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>)</li>
 </ul>
 
       </article>

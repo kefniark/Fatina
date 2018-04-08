@@ -9,18 +9,19 @@
 <div class="panel panel-default">
     <div class="panel-heading">What is happening here:</div>
     <div class="panel-body">
-        Bellow, 4 scenario are tested over different configuration / libraries:
+        Bellow, 5 scenario are tested over different configuration / libraries:
         <ul>
             <li><b>1. Normal usage</b> : 200 tween over 100 frames x 50 times</li>
-            <li><b>2. Medium usage</b> : 5000 tween over 100 frames x 10 times</li>
-            <li><b>3. Heavy usage</b> : 20000 tween over 100 frames x 5 times (to test many concurrent tween)</li>
-            <li><b>4. Long duration usage</b> : 1000 tween over 500 frames x 100 times (to test long term usage and GC)</li>
+            <li><b>2. Long duration usage</b> : 1000 tween over 500 frames x 100 times (to test long term usage and GC)</li>
+            <li><b>3. Medium usage</b> : 2k tween over 200 frames x 5 times</li>
+            <li><b>4. Heavy usage</b> : 5k tween over 200 frames x 5 times</li>
+            <li><b>5. Unrealistic</b> : 10k tween over 500 frames x 5 times (to test many concurrent tween)</li>
         </ul>
 
         Summarize:
         <ul>
-            <li><b>Scenario 1 &amp; 4</b>: simulate normal game usage</li>
-            <li><b>Scenario 2 &amp; 3</b>: are stress test which should almost never happen in real life</li>
+            <li><b>Scenario 1 &amp; 2</b>: simulate normal game usage</li>
+            <li><b>Scenario 3 &amp; 4 &amp; 5</b>: are stress test which should almost never happen in real life</li>
         </ul>
 
         Those 3 libraries (<b>Fatina</b>, <b>Tina.js</b> and <b>Tween.js</b>) all perform well under normal usage. This page is creating millions of tweens, this is definitely not a normal usage ...<br/>
@@ -64,6 +65,12 @@
             <td><div class="testresult fatina4"></div></td>
             <td><div class="testresult tina4"></div></td>
             <td><div class="testresult tween4"></div></td>
+        </tr>
+        <tr>
+            <th>Scenario 5</th>
+            <td><div class="testresult fatina5"></div></td>
+            <td><div class="testresult tina5"></div></td>
+            <td><div class="testresult tween5"></div></td>
         </tr>
     </table>
 </div>

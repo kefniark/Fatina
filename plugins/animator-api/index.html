@@ -8,11 +8,11 @@
   <title>Animator Plugin - API</title>
   <meta property="og:title" content="Animator Plugin - API" />
   <meta name="twitter:title" content="Animator Plugin - API" />
-  <meta name="description" content="Animator Getting Started API  AnimatorManager  Animations: string[] names of registered animations Labels: string[] Register(name: string, onCreate: (object: any, params?: any) =&gt; IControl, label?: string): AnimatorManager; AddAnimatorTo(obj: any): Animator;  TickerManager  Get(name: string): ITicker; PauseAll(name: string): void; ResumeAll(name: string): void; KillAll(name: string): void;  Animator Animator component added to object you want to animate. This keep track of your animations and manage their states for you.
-Animations  AddAnimation(name: string, animationName: string, options?">
-  <meta property="og:description" content="Animator Getting Started API  AnimatorManager  Animations: string[] names of registered animations Labels: string[] Register(name: string, onCreate: (object: any, params?: any) =&gt; IControl, label?: string): AnimatorManager; AddAnimatorTo(obj: any): Animator;  TickerManager  Get(name: string): ITicker; PauseAll(name: string): void; ResumeAll(name: string): void; KillAll(name: string): void;  Animator Animator component added to object you want to animate. This keep track of your animations and manage their states for you.
-Animations  AddAnimation(name: string, animationName: string, options?">
-  <meta name="twitter:description" content="Animator Getting Started API  AnimatorManager  Animations: string[] names of registered animations Labels: string[] Register(name: string, onCreate: (object: any, params?: any) =&gt; IControl, label?: …">
+  <meta name="description" content="Animator Getting Started API  AnimatorManager  animations: string[] names of registered animations labels: string[] register(name: string, onCreate: (object: any, params?: any) =&gt; IControl, label?: string): AnimatorManager; addAnimatorTo(obj: any): Animator;  TickerManager  get(name: string): ITicker; pauseAll(name: string): void; resumeAll(name: string): void; killAll(name: string): void;  Animator Animator component added to object you want to animate. This keep track of your animations and manage their states for you.
+Animations  addAnimation(name: string, animationName: string, options?">
+  <meta property="og:description" content="Animator Getting Started API  AnimatorManager  animations: string[] names of registered animations labels: string[] register(name: string, onCreate: (object: any, params?: any) =&gt; IControl, label?: string): AnimatorManager; addAnimatorTo(obj: any): Animator;  TickerManager  get(name: string): ITicker; pauseAll(name: string): void; resumeAll(name: string): void; killAll(name: string): void;  Animator Animator component added to object you want to animate. This keep track of your animations and manage their states for you.
+Animations  addAnimation(name: string, animationName: string, options?">
+  <meta name="twitter:description" content="Animator Getting Started API  AnimatorManager  animations: string[] names of registered animations labels: string[] register(name: string, onCreate: (object: any, params?: any) =&gt; IControl, label?: …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -185,19 +185,19 @@ Animations  AddAnimation(name: string, animationName: string, options?">
 <h3 id="animatormanager">AnimatorManager</h3>
 
 <ul>
-<li><strong>Animations</strong>: <code>string[]</code> names of registered animations</li>
-<li><strong>Labels</strong>: <code>string[]</code></li>
-<li><strong>Register</strong>(name: <code>string</code>, onCreate: (object: <code>any</code>, params?: <code>any</code>) =&gt; IControl, label?: <code>string</code>): AnimatorManager;</li>
-<li><strong>AddAnimatorTo</strong>(obj: <code>any</code>): Animator;</li>
+<li><strong>animations</strong>: <code>string[]</code> names of registered animations</li>
+<li><strong>labels</strong>: <code>string[]</code></li>
+<li><strong>register</strong>(name: <code>string</code>, onCreate: (object: <code>any</code>, params?: <code>any</code>) =&gt; IControl, label?: <code>string</code>): AnimatorManager;</li>
+<li><strong>addAnimatorTo</strong>(obj: <code>any</code>): Animator;</li>
 </ul>
 
 <h3 id="tickermanager">TickerManager</h3>
 
 <ul>
-<li><strong>Get</strong>(name: <code>string</code>): ITicker;</li>
-<li><strong>PauseAll</strong>(name: <code>string</code>): void;</li>
-<li><strong>ResumeAll</strong>(name: <code>string</code>): void;</li>
-<li><strong>KillAll</strong>(name: <code>string</code>): void;</li>
+<li><strong>get</strong>(name: <code>string</code>): ITicker;</li>
+<li><strong>pauseAll</strong>(name: <code>string</code>): void;</li>
+<li><strong>resumeAll</strong>(name: <code>string</code>): void;</li>
+<li><strong>killAll</strong>(name: <code>string</code>): void;</li>
 </ul>
 
 <h3 id="animator">Animator</h3>
@@ -207,30 +207,30 @@ Animations  AddAnimation(name: string, animationName: string, options?">
 <h4 id="animations">Animations</h4>
 
 <ul>
-<li><strong>AddAnimation</strong>(name: <code>string</code>, animationName: <code>string</code>, options?: <code>IAnimationParams</code>, params?: <code>any</code>): <code>Animator</code>;</li>
-<li><strong>AddCustomAnimation</strong>(name: <code>string</code>, options: <code>IAnimationParams</code>, tween: <code>IControl</code>): <code>Animator</code>;</li>
+<li><strong>addAnimation</strong>(name: <code>string</code>, animationName: <code>string</code>, options?: <code>IAnimationParams</code>, params?: <code>any</code>): <code>Animator</code>;</li>
+<li><strong>addCustomAnimation</strong>(name: <code>string</code>, options: <code>IAnimationParams</code>, tween: <code>IControl</code>): <code>Animator</code>;</li>
 </ul>
 
 <h4 id="controls">Controls</h4>
 
 <ul>
-<li><strong>Play</strong>(name: <code>string</code>, onComplete?: () =&gt; void)</li>
-<li><strong>Pause</strong>(layer?: <code>string</code>): void;</li>
-<li><strong>PauseAll</strong>(): void;</li>
-<li><strong>Resume</strong>(layer?: <code>string</code>): void;</li>
-<li><strong>ResumeAll</strong>(): void;</li>
-<li><strong>Stop</strong>(layer?: <code>string</code>): void;</li>
-<li><strong>StopAll</strong>(): void;</li>
-<li><strong>Destroy</strong>(): void;</li>
+<li><strong>play</strong>(name: <code>string</code>, onComplete?: () =&gt; void)</li>
+<li><strong>pause</strong>(layer?: <code>string</code>): void;</li>
+<li><strong>pauseAll</strong>(): void;</li>
+<li><strong>resume</strong>(layer?: <code>string</code>): void;</li>
+<li><strong>resumeAll</strong>(): void;</li>
+<li><strong>stop</strong>(layer?: <code>string</code>): void;</li>
+<li><strong>stopAll</strong>(): void;</li>
+<li><strong>destroy</strong>(): void;</li>
 </ul>
 
 <h4 id="events">Events</h4>
 
 <ul>
-<li><strong>OnStart</strong>(name: <code>string</code>, cb: () =&gt; void)</li>
-<li><strong>OnStartAll</strong>(name: <code>string</code>, cb: () =&gt; void)</li>
-<li><strong>OnComplete</strong>(name: <code>string</code>, cb: () =&gt; void)</li>
-<li><strong>OnCompleteAll</strong>(name: <code>string</code>, cb: () =&gt; void)</li>
+<li><strong>onStart</strong>(name: <code>string</code>, cb: () =&gt; void)</li>
+<li><strong>onStartAll</strong>(name: <code>string</code>, cb: () =&gt; void)</li>
+<li><strong>onComplete</strong>(name: <code>string</code>, cb: () =&gt; void)</li>
+<li><strong>onCompleteAll</strong>(name: <code>string</code>, cb: () =&gt; void)</li>
 </ul>
 
 <h4 id="animationparams">AnimationParams</h4>
@@ -238,10 +238,10 @@ Animations  AddAnimation(name: string, animationName: string, options?">
 <p>When you add an animation, you have an option params</p>
 
 <pre><code class="language-js">{
-    group: string; // Animation Group (default value: 'default')
-    unstoppable?: boolean; // To create unstoppable animation (default: false)
-    finalValue?: boolean; // To force the animation to always finish with final values, even if skipped
-    next?: string // To force a transition to another animation on complete
+	group: string; // Animation Group (default value: 'default')
+	unstoppable?: boolean; // To create unstoppable animation (default: false)
+	finalValue?: boolean; // To force the animation to always finish with final values, even if skipped
+	next?: string // To force a transition to another animation on complete
 }
 </code></pre>
 

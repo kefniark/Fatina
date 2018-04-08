@@ -170,7 +170,7 @@
               </p>
               <div class="post-entry">
                 
-                  Tween counter: ~0k  Run All What is happening here: Bellow, 4 scenario are tested over different configuration / libraries:  1. Normal usage : 200 tween over 100 frames x 50 times 2. Medium usage : 5000 tween over 100 frames x 10 times 3. Heavy usage : 20000 tween over 100 frames x 5 times (to test many concurrent tween) 4. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC)  Summarize:  Scenario 1 &amp; 4: simulate normal game usage Scenario 2 &amp; 3: are stress test which should almost never happen in real life  Those 3 libraries (Fatina, Tina.
+                  Tween counter: ~0kRun AllWhat is happening here:Bellow, 5 scenario are tested over different configuration / libraries:1. Normal usage : 200 tween over 100 frames x 50 times2. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC)3. Medium usage : 2k tween over 200 frames x 5 times4. Heavy usage : 5k tween over 200 frames x 5 times5.
                   <a href="https://kefniark.github.io/Fatina/basics/benchmark/" class="post-read-more">[Read More]</a>
                 
               </div>
@@ -195,7 +195,7 @@
 &lt;script src=&quot;fatina.min.js&quot;&gt;&lt;/script&gt;  
 1 bis. NPM Installation More advanced users might want to use npm
 npm install fatina  Then include the Fatina module :
-// standard node.js require var Fatina = require('fatina'); // OR // standard import with typescript (typed version) import * as Fatina from 'fatina';  2. Done ! Now you can use Fatina properly :
+// standard node.js require var Fatina = require('fatina'); // OR // standard import with typescript (typed version) import Fatina from 'fatina';  2. Done ! Now you can use Fatina properly :
                   <a href="https://kefniark.github.io/Fatina/basics/download/" class="post-read-more">[Read More]</a>
                 
               </div>
@@ -237,7 +237,7 @@ npm install fatina  Then include the Fatina module :
               </p>
               <div class="post-entry">
                 
-                  How to write tweens ?  Keep them simple: a Tween should do only one thing (avoid nesting and complexity) Split them in smaller tween to have more control (like splitting a x and y movement in two separated tweens) Group them in Sequence and prefer using .Append() and .Join() When you destroy an object like a sprite, Try to clean tweens related Avoid SetTimeout() and prefer Fatina.SetTimeout(): All the objects/events should be ticked together, normal settimeout cannot be paused &hellip;  How to go farther ?
+                  How to write tweens ?  Keep them simple: a Tween should do only one thing (avoid nesting and complexity) Split them in smaller tween to have more control (like splitting a x and y movement in two separated tweens) Group them in Sequence and prefer using .append() and .join() When you destroy an object like a sprite, Try to clean tweens related Avoid SetTimeout() and prefer Fatina.setTimeout(): All the objects/events should be ticked together, normal settimeout cannot be paused &hellip;  How to go farther ?
                   <a href="https://kefniark.github.io/Fatina/basics/tips/" class="post-read-more">[Read More]</a>
                 
               </div>

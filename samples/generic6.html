@@ -5,31 +5,31 @@
         var obj6 = { x: 0, y: 0, rotate:0 };
 
         // Create moving tween (loop twice)
-        Fatina.Tween(obj6, ['x'])
-            .From({ x: 0 })
-            .To({x: 500}, 1250)
-            .SetLoop(2)
-            .SetEasing('inOutQuad')
-            .OnStart(() => console.log("tween6 start"))
-            .OnUpdate((dt, progress) => {
+        Fatina.tween(obj6, ['x'])
+            .from({ x: 0 })
+            .to({x: 500}, 1250)
+            .setLoop(2)
+            .setEasing('inOutQuad')
+            .onStart(() => console.log("tween6 start"))
+            .onUpdate((dt, progress) => {
                 elem6.style.left = obj6.x + "px";
             })
-            .OnComplete(() => console.log("tween6 move complete"))
-            .Start();
+            .onComplete(() => console.log("tween6 move complete"))
+            .start();
 
         // Create a sequence of infinite rotation
-        Fatina.Sequence()
-            .Join(
-                Fatina.Tween(obj6, ['rotate'])
-                    .From({rotate:0})
-                    .To({rotate: 360}, 550)
+        Fatina.sequence()
+            .join(
+                Fatina.tween(obj6, ['rotate'])
+                    .from({rotate:0})
+                    .to({rotate: 360}, 550)
             )
-            .OnUpdate(() => {
+            .onUpdate(() => {
                 elem6.style.transform = "rotate(" + obj6.rotate + "deg)"
             })
-            .SetLoop(-1)
-            .OnStart(() => console.log("tween6 rotation start"))
-            .OnComplete(() => console.log("tween6 rotation complete"))
-            .Start();
+            .setLoop(-1)
+            .onStart(() => console.log("tween6 rotation start"))
+            .onComplete(() => console.log("tween6 rotation complete"))
+            .start();
     }
 </script>

@@ -15,14 +15,14 @@
         let currentSprite = AddSprite('/Fatina/Yuko_Blink_2.png', star, 20 + dx, 80 + dy, 1);
         let currentTimescale = Math.random() + 0.5;
 
-        var sequence = Fatina.Sequence().SetLoop(-1);
-        sequence.AppendInterval(Math.random() * 1000);
-        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 280 + dx, y: 80 + dy}, 1400).SetEasing('inOutSine').SetTimescale(currentTimescale));
-        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 50 + dx, y: 250 + dy}, 1400).SetEasing('inOutQuad').SetTimescale(currentTimescale));
-        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 150 + dx, y: 0 + dy}, 1400).SetEasing('inOutSine').SetTimescale(currentTimescale));
-        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 250 + dx, y: 250 + dy}, 1400).SetEasing('inOutQuad').SetTimescale(currentTimescale));
-        sequence.Append(Fatina.Tween(currentSprite, ['x', 'y']).To({ x: 20 + dx, y: 80 + dy}, 1400).SetEasing('inOutQuad').SetTimescale(currentTimescale));
-        sequence.Start();
+        var sequence = Fatina.sequence().setLoop(-1);
+        sequence.appendInterval(Math.random() * 1000);
+        sequence.append(Fatina.tween(currentSprite, ['x', 'y']).to({ x: 280 + dx, y: 80 + dy}, 1400).setEasing('inOutSine').setTimescale(currentTimescale));
+        sequence.append(Fatina.tween(currentSprite, ['x', 'y']).to({ x: 50 + dx, y: 250 + dy}, 1400).setEasing('inOutQuad').setTimescale(currentTimescale));
+        sequence.append(Fatina.tween(currentSprite, ['x', 'y']).to({ x: 150 + dx, y: 0 + dy}, 1400).setEasing('inOutSine').setTimescale(currentTimescale));
+        sequence.append(Fatina.tween(currentSprite, ['x', 'y']).to({ x: 250 + dx, y: 250 + dy}, 1400).setEasing('inOutQuad').setTimescale(currentTimescale));
+        sequence.append(Fatina.tween(currentSprite, ['x', 'y']).to({ x: 20 + dx, y: 80 + dy}, 1400).setEasing('inOutQuad').setTimescale(currentTimescale));
+        sequence.start();
     }
 
     function AddSprite(path, container, x, y, scale) {

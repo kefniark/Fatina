@@ -18,22 +18,22 @@
     app.stage.addChild(unitychan);
 
     // Tween to update unity chan sprite
-    Fatina.Tween({}, [])
-    .To({}, 1800)
-    .OnUpdate((dt, progress) => {
+    Fatina.tween({}, [])
+    .to({}, 1800)
+    .onUpdate((dt, progress) => {
         let index = Math.round(progress * (textures.length - 1));
         unitychan.setTexture(textures[index]);
     })
-    .SetLoop(-1)
-    .Start();
+    .setLoop(-1)
+    .start();
 
     // Tween to update unity chan position
-    Fatina.Sequence()
-        .Append(Fatina.Tween(unitychan, ['x']).SetRelative(true).To({ x : -20}, 3000).SetEasing('outQuad'))
-        .Append(Fatina.Tween(unitychan, ['x']).SetRelative(true).To({ x : 40}, 3000).SetEasing('inOutQuad'))
-        .Append(Fatina.Tween(unitychan, ['x']).SetRelative(true).To({ x : -20}, 3000).SetEasing('inQuad'))
-        .SetLoop(-1)
-        .Start();
+    Fatina.sequence()
+        .append(Fatina.tween(unitychan, ['x']).setRelative(true).to({ x : -20}, 3000).setEasing('outQuad'))
+        .append(Fatina.tween(unitychan, ['x']).setRelative(true).to({ x : 40}, 3000).setEasing('inOutQuad'))
+        .append(Fatina.tween(unitychan, ['x']).setRelative(true).to({ x : -20}, 3000).setEasing('inQuad'))
+        .setLoop(-1)
+        .start();
 
 
     function CreateBackgrounds() {
@@ -60,12 +60,12 @@
         AutoMove(layerFront, 6000);
 
         // Apply a vertical sin on the cloud
-        Fatina.Sequence()
-            .Append(Fatina.Tween(layerSky, ['y']).SetRelative(true).To({ y : -10}, 5000).SetEasing('outSine'))
-            .Append(Fatina.Tween(layerSky, ['y']).SetRelative(true).To({ y : 20}, 10000).SetEasing('inOutSine'))
-            .Append(Fatina.Tween(layerSky, ['y']).SetRelative(true).To({ y : -10}, 5000).SetEasing('inSine'))
-            .SetLoop(-1)
-            .Start();
+        Fatina.sequence()
+            .append(Fatina.tween(layerSky, ['y']).setRelative(true).to({ y : -10}, 5000).setEasing('outSine'))
+            .append(Fatina.tween(layerSky, ['y']).setRelative(true).to({ y : 20}, 10000).setEasing('inOutSine'))
+            .append(Fatina.tween(layerSky, ['y']).setRelative(true).to({ y : -10}, 5000).setEasing('inSine'))
+            .setLoop(-1)
+            .start();
 
         // Add to stage
         app.stage.addChild(layerSky);
@@ -86,11 +86,11 @@
     }
 
     function AutoMove(container, duration) {
-        Fatina.Tween(container, ['x'])
-            .From({x: 0})
-            .To({x: -app.renderer.width }, duration)
-            .SetLoop(-1)
-            .Start();
+        Fatina.tween(container, ['x'])
+            .from({x: 0})
+            .to({x: -app.renderer.width }, duration)
+            .setLoop(-1)
+            .start();
     }
 
     function LoadUnityChanTextures() {

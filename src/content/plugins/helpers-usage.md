@@ -15,9 +15,9 @@ weight = 3
 
 The installation process is explained in the [README](https://github.com/kefniark/Fatina-Plugin-Helpers).
 
-After setup, you can use this plugin on any object: 
+After setup, you can use this plugin on any object:
 ```js
-Fatina.plugin.AddHelpers(obj);
+Fatina.plugin.addHelpers(obj);
 ```
 
 ### 1. Example (with Phaser)
@@ -27,8 +27,8 @@ let fatina = require('fatina');
 let fatinaHelpers = require('fatina-plugin-helpers');
 
 // initialize fatina
-fatina.Init();
-fatina.LoadPlugin(fatinaHelpers.Get());
+fatina.init();
+fatina.loadPlugin(fatinaHelpers.get());
 
 ...
 
@@ -36,10 +36,10 @@ fatina.LoadPlugin(fatinaHelpers.Get());
 var test = new Phaser.Sprite(this.game, 2, 80, 'hudBg');
 
 // use the plugin on this sprite
-fatina.plugin.AddHelpers(test);
+fatina.plugin.addHelpers(test);
 
 // use one helper function to move horizontaly the sprite to the position x = 50 in 1s.
-test.MoveXTo(50, 1000);
+test.moveXTo(50, 1000);
 ```
 
 ### 2. Advanced
@@ -48,22 +48,22 @@ So you can interact and modify them
 
 ```js
 // Create a tween
-var tween = test.MoveXTo(50, 1000);
+var tween = test.moveXTo(50, 1000);
 
 // you can easily get callback
-tween.OnComplete(() => console.log('this animation finished'));
+tween.onComplete(() => console.log('this animation finished'));
 
 // or controls
-tween.Pause();
+tween.pause();
 
 // and by turning off the autostart parameter, you can even change the tween configuration
-test.MoveXTo(50, 1000, false)
-    .From({x: 0})
-    .Yoyo(1)
-    .OnComplete(() => console.log('the tween finished'))
-    .ToSequence() // convert to a sequence
-    .PrependInterval(1000)
-    .Append(test.MoveYTo(50, 1000, false))
-    .OnComplete(() => console.log('the sequence finished'))
-    .Start();
+test.moveXTo(50, 1000, false)
+    .from({x: 0})
+    .yoyo(1)
+    .onComplete(() => console.log('the tween finished'))
+    .toSequence() // convert to a sequence
+    .prependInterval(1000)
+    .append(test.moveYTo(50, 1000, false))
+    .onComplete(() => console.log('the sequence finished'))
+    .start();
 ```

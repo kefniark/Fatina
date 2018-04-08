@@ -10,13 +10,13 @@
   <meta name="twitter:title" content="Helpers Plugin - Getting Started" />
   <meta name="description" content="Helpers Getting Started API  The installation process is explained in the README.
 After setup, you can use this plugin on any object:
-Fatina.plugin.AddHelpers(obj);  1. Example (with Phaser) // require fatina let fatina = require(&#39;fatina&#39;); let fatinaHelpers = require(&#39;fatina-plugin-helpers&#39;); // initialize fatina fatina.Init(); fatina.LoadPlugin(fatinaHelpers.Get()); ... // let&#39;s create a phaser sprite var test = new Phaser.Sprite(this.game, 2, 80, &#39;hudBg&#39;); // use the plugin on this sprite fatina.plugin.AddHelpers(test); // use one helper function to move horizontaly the sprite to the position x = 50 in 1s.">
+Fatina.plugin.addHelpers(obj);  1. Example (with Phaser) // require fatina let fatina = require(&#39;fatina&#39;); let fatinaHelpers = require(&#39;fatina-plugin-helpers&#39;); // initialize fatina fatina.init(); fatina.loadPlugin(fatinaHelpers.get()); ... // let&#39;s create a phaser sprite var test = new Phaser.Sprite(this.game, 2, 80, &#39;hudBg&#39;); // use the plugin on this sprite fatina.plugin.addHelpers(test); // use one helper function to move horizontaly the sprite to the position x = 50 in 1s.">
   <meta property="og:description" content="Helpers Getting Started API  The installation process is explained in the README.
 After setup, you can use this plugin on any object:
-Fatina.plugin.AddHelpers(obj);  1. Example (with Phaser) // require fatina let fatina = require(&#39;fatina&#39;); let fatinaHelpers = require(&#39;fatina-plugin-helpers&#39;); // initialize fatina fatina.Init(); fatina.LoadPlugin(fatinaHelpers.Get()); ... // let&#39;s create a phaser sprite var test = new Phaser.Sprite(this.game, 2, 80, &#39;hudBg&#39;); // use the plugin on this sprite fatina.plugin.AddHelpers(test); // use one helper function to move horizontaly the sprite to the position x = 50 in 1s.">
+Fatina.plugin.addHelpers(obj);  1. Example (with Phaser) // require fatina let fatina = require(&#39;fatina&#39;); let fatinaHelpers = require(&#39;fatina-plugin-helpers&#39;); // initialize fatina fatina.init(); fatina.loadPlugin(fatinaHelpers.get()); ... // let&#39;s create a phaser sprite var test = new Phaser.Sprite(this.game, 2, 80, &#39;hudBg&#39;); // use the plugin on this sprite fatina.plugin.addHelpers(test); // use one helper function to move horizontaly the sprite to the position x = 50 in 1s.">
   <meta name="twitter:description" content="Helpers Getting Started API  The installation process is explained in the README.
 After setup, you can use this plugin on any object:
-Fatina.plugin.AddHelpers(obj);  1. Example (with Phaser) // …">
+Fatina.plugin.addHelpers(obj);  1. Example (with Phaser) // …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -190,7 +190,7 @@ Fatina.plugin.AddHelpers(obj);  1. Example (with Phaser) // …">
 
 <p>After setup, you can use this plugin on any object:</p>
 
-<pre><code class="language-js">Fatina.plugin.AddHelpers(obj);
+<pre><code class="language-js">Fatina.plugin.addHelpers(obj);
 </code></pre>
 
 <h3 id="1-example-with-phaser">1. Example (with Phaser)</h3>
@@ -200,8 +200,8 @@ let fatina = require('fatina');
 let fatinaHelpers = require('fatina-plugin-helpers');
 
 // initialize fatina
-fatina.Init();
-fatina.LoadPlugin(fatinaHelpers.Get());
+fatina.init();
+fatina.loadPlugin(fatinaHelpers.get());
 
 ...
 
@@ -209,10 +209,10 @@ fatina.LoadPlugin(fatinaHelpers.Get());
 var test = new Phaser.Sprite(this.game, 2, 80, 'hudBg');
 
 // use the plugin on this sprite
-fatina.plugin.AddHelpers(test);
+fatina.plugin.addHelpers(test);
 
 // use one helper function to move horizontaly the sprite to the position x = 50 in 1s.
-test.MoveXTo(50, 1000);
+test.moveXTo(50, 1000);
 </code></pre>
 
 <h3 id="2-advanced">2. Advanced</h3>
@@ -221,24 +221,24 @@ test.MoveXTo(50, 1000);
 So you can interact and modify them</p>
 
 <pre><code class="language-js">// Create a tween
-var tween = test.MoveXTo(50, 1000);
+var tween = test.moveXTo(50, 1000);
 
 // you can easily get callback
-tween.OnComplete(() =&gt; console.log('this animation finished'));
+tween.onComplete(() =&gt; console.log('this animation finished'));
 
 // or controls
-tween.Pause();
+tween.pause();
 
 // and by turning off the autostart parameter, you can even change the tween configuration
-test.MoveXTo(50, 1000, false)
-    .From({x: 0})
-    .Yoyo(1)
-    .OnComplete(() =&gt; console.log('the tween finished'))
-    .ToSequence() // convert to a sequence
-    .PrependInterval(1000)
-    .Append(test.MoveYTo(50, 1000, false))
-    .OnComplete(() =&gt; console.log('the sequence finished'))
-    .Start();
+test.moveXTo(50, 1000, false)
+    .from({x: 0})
+    .yoyo(1)
+    .onComplete(() =&gt; console.log('the tween finished'))
+    .toSequence() // convert to a sequence
+    .prependInterval(1000)
+    .append(test.moveYTo(50, 1000, false))
+    .onComplete(() =&gt; console.log('the sequence finished'))
+    .start();
 </code></pre>
 
       </article>

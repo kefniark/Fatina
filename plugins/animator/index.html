@@ -10,10 +10,10 @@
   <meta name="twitter:title" content="Animator Plugin" />
   <meta name="description" content="Description This plugin was designed to provide an easy way to write game animations with Fatina.
 It was design to solve few common issues related to game animations:
- Reusability: Animations can be shared by completely different object (fadeIn, gravity, &hellip;) Easy to use: The main function is just obj.Animator.Play(&#39;animationName&#39;); Performance: Animations by default are reusable tweens, it means less instantiation at runtime and less memory usage Animation State: Each animation group is a state machine, starting a new animation will stop the previous one automatically  Github Download NPM Getting Started API  Demo - UnityChan Animator Fatina Sample=&nbsp;&nbsp;&nbsp;&nbsp;=FadeInFadeOutJumpPauseResumex4x1x0.">
+ Reusability: Animations can be shared by completely different object (fadeIn, gravity, &hellip;) Easy to use: The main function is just obj.Animator.Play(&#39;animationName&#39;); Performance: Animations by default are reusable tweens, it means less instantiation at runtime and less memory usage Animation State: Each animation group is a state machine, starting a new animation will stop the previous one automatically  Github Download NPM Getting Started API  Demo - UnityChan Animator   Fatina Sample          =   &nbsp; &nbsp; &nbsp; &nbsp;   =   FadeIn FadeOut Jump Pause Resume x4 x1 x0.">
   <meta property="og:description" content="Description This plugin was designed to provide an easy way to write game animations with Fatina.
 It was design to solve few common issues related to game animations:
- Reusability: Animations can be shared by completely different object (fadeIn, gravity, &hellip;) Easy to use: The main function is just obj.Animator.Play(&#39;animationName&#39;); Performance: Animations by default are reusable tweens, it means less instantiation at runtime and less memory usage Animation State: Each animation group is a state machine, starting a new animation will stop the previous one automatically  Github Download NPM Getting Started API  Demo - UnityChan Animator Fatina Sample=&nbsp;&nbsp;&nbsp;&nbsp;=FadeInFadeOutJumpPauseResumex4x1x0.">
+ Reusability: Animations can be shared by completely different object (fadeIn, gravity, &hellip;) Easy to use: The main function is just obj.Animator.Play(&#39;animationName&#39;); Performance: Animations by default are reusable tweens, it means less instantiation at runtime and less memory usage Animation State: Each animation group is a state machine, starting a new animation will stop the previous one automatically  Github Download NPM Getting Started API  Demo - UnityChan Animator   Fatina Sample          =   &nbsp; &nbsp; &nbsp; &nbsp;   =   FadeIn FadeOut Jump Pause Resume x4 x1 x0.">
   <meta name="twitter:description" content="Description This plugin was designed to provide an easy way to write game animations with Fatina.
 It was design to solve few common issues related to game animations:
  Reusability: Animations can be …">
@@ -220,34 +220,34 @@ It was design to solve few common issues related to game animations:
     <center>
         <div id="canvas1"></div>
         <div>
-            <button class="btn btn-default" onclick="animUnity.Play('run_left')"><<</button>
-            <button class="btn btn-default" onclick="animUnity.Play('walk_left')"><</button>
-            <button class="btn btn-info" onclick="animUnity.Play('idle')">=</button>
-            <button class="btn btn-default" onclick="animUnity.Play('walk_right')">></button>
-            <button class="btn btn-default" onclick="animUnity.Play('run_right')">>></button>
+            <button class="btn btn-default" onclick="animUnity.play('run_left')"><<</button>
+            <button class="btn btn-default" onclick="animUnity.play('walk_left')"><</button>
+            <button class="btn btn-info" onclick="animUnity.play('idle')">=</button>
+            <button class="btn btn-default" onclick="animUnity.play('walk_right')">></button>
+            <button class="btn btn-default" onclick="animUnity.play('run_right')">>></button>
 
             <span>&nbsp;</span>
             <span>&nbsp;</span>
             <span>&nbsp;</span>
             <span>&nbsp;</span>
 
-            <button class="btn btn-default" onclick="animYuko.Play('run_left')"><<</button>
-            <button class="btn btn-default" onclick="animYuko.Play('walk_left')"><</button>
-            <button class="btn btn-info" onclick="animYuko.Play('idle')">=</button>
-            <button class="btn btn-default" onclick="animYuko.Play('walk_right')">></button>
-            <button class="btn btn-default" onclick="animYuko.Play('run_right')">>></button>
+            <button class="btn btn-default" onclick="animYuko.play('run_left')"><<</button>
+            <button class="btn btn-default" onclick="animYuko.play('walk_left')"><</button>
+            <button class="btn btn-info" onclick="animYuko.play('idle')">=</button>
+            <button class="btn btn-default" onclick="animYuko.play('walk_right')">></button>
+            <button class="btn btn-default" onclick="animYuko.play('run_right')">>></button>
 
             <br><br>
 
-            <button class="btn btn-primary" onclick="animYuko.Play('fade_in')">FadeIn</button>
-            <button class="btn btn-primary" onclick="animYuko.Play('fade_out')">FadeOut</button>
-            <button class="btn btn-primary" onclick="animYuko.Play('jump')">Jump</button>
+            <button class="btn btn-primary" onclick="animYuko.play('fade_in')">FadeIn</button>
+            <button class="btn btn-primary" onclick="animYuko.play('fade_out')">FadeOut</button>
+            <button class="btn btn-primary" onclick="animYuko.play('jump')">Jump</button>
 
-            <button class="btn btn-success" onclick="Fatina.plugin.TickerManager.PauseAll('character')">Pause</button>
-            <button class="btn btn-success" onclick="Fatina.plugin.TickerManager.ResumeAll('character')">Resume</button>
-            <button class="btn btn-success" onclick="Fatina.plugin.TickerManager.Get('character').SetTimescale(4)">x4</button>
-            <button class="btn btn-success" onclick="Fatina.plugin.TickerManager.Get('character').SetTimescale(1)">x1</button>
-            <button class="btn btn-success" onclick="Fatina.plugin.TickerManager.Get('character').SetTimescale(0.25)">x0.25</button>
+            <button class="btn btn-success" onclick="Fatina.plugin.tickerManager.pauseAll('character')">Pause</button>
+            <button class="btn btn-success" onclick="Fatina.plugin.tickerManager.resumeAll('character')">Resume</button>
+            <button class="btn btn-success" onclick="Fatina.plugin.tickerManager.get('character').setTimescale(4)">x4</button>
+            <button class="btn btn-success" onclick="Fatina.plugin.tickerManager.get('character').setTimescale(1)">x1</button>
+            <button class="btn btn-success" onclick="Fatina.plugin.tickerManager.get('character').setTimescale(0.25)">x0.25</button>
         </div>
 
         <br><br>
@@ -268,19 +268,19 @@ It was design to solve few common issues related to game animations:
         var animUnity, animYuko;
 
         // Fatina Initialization and load Animation Plugin
-        Fatina.Init();
-        Fatina.LoadPlugin(FatinaPluginAnimator.Get());
+        Fatina.init();
+        Fatina.loadPlugin(FatinaPluginAnimator.get());
 
         // Register a first animation type: Animation Spritesheet
-        Fatina.plugin.AnimatorManager.Register('spritesheet', (object, params) => {
+        Fatina.plugin.animatorManager.register('spritesheet', (object, params) => {
             console.log('init Spritesheet Anim', params);
 
             // Create a tween on a proxy object and use the value to change the sprite
             let proxy = { index: 0 };
-            const tween = Fatina.Tween(proxy, ['index'])
-                .From({ index: 0 })
-                .To({ index: params.number - 1 }, params.duration)
-                .OnStart(() => {
+            const tween = Fatina.tween(proxy, ['index'])
+                .from({ index: 0 })
+                .to({ index: params.number - 1 }, params.duration)
+                .onStart(() => {
                     if (!params.direction) {
                         return;
                     }
@@ -288,32 +288,32 @@ It was design to solve few common issues related to game animations:
                     // Change the orientation based on the direction param
                     object.scale.x = Math.abs(object.scale.x) * params.direction;
                 })
-                .OnUpdate(() => object.setTexture(params.textures[proxy.index]))
-                .SetSteps(params.number - 1);
+                .onUpdate(() => object.setTexture(params.textures[proxy.index]))
+                .setSteps(params.number - 1);
 
             // Some animation don't need loop
             if (!params.disableLoop) {
-                tween.SetLoop(-1);
+                tween.setLoop(-1);
             }
 
             return tween;
         }, 'character');
 
         // Register a second animation type: Jump (a simple relative move with yoyo=1)
-        Fatina.plugin.AnimatorManager.Register('jump', (object, params) => {
+        Fatina.plugin.animatorManager.register('jump', (object, params) => {
             console.log('Instantiate Jump Anim', object.name, object.position, params);
-            return Fatina.Tween(object.position, ['y'])
-                .SetRelative(true)
-                .To({ y: - 70 }, 400)
-                .SetEasing('outSine')
-                .Yoyo(1)
-                .OnStart(() => object.Animator.Play('jump_up'))
+            return Fatina.tween(object.position, ['y'])
+                .setRelative(true)
+                .to({ y: - 70 }, 400)
+                .setEasing('outSine')
+                .yoyo(1)
+                .onStart(() => object.animator.play('jump_up'))
         }, 'character');
 
         // Register a third animation type: Fade
-        Fatina.plugin.AnimatorManager.Register('fade', (object, params) => {
+        Fatina.plugin.animatorManager.register('fade', (object, params) => {
             console.log('Instantiate Fade Anim', params);
-            return Fatina.Tween(object, ['alpha']).To({ alpha: params.value }, params.duration)
+            return Fatina.tween(object, ['alpha']).to({ alpha: params.value }, params.duration)
         }, 'character');
 
 
@@ -331,28 +331,28 @@ It was design to solve few common issues related to game animations:
             app.stage.addChild(yukochan);
 
             // Let's add a animator component to that sprite and add (instantiate) reusable animations (idle, walk, jump, ...)
-            let anim = Fatina.plugin.AnimatorManager.AddAnimatorTo(yukochan)
+            let anim = Fatina.plugin.animatorManager.addAnimatorTo(yukochan)
 
-                // First Group of Animation: Sprite 
-                .AddAnimation('idle', 'spritesheet', { group: 'sprite' }, { number: 4, duration: 1000, textures: GetTextures('Yuko_Idle_') })
-                .AddAnimation('walk_right', 'spritesheet', { group: 'sprite' }, { direction: 1, number: 6, duration: 1000, textures: GetTextures('Yuko_Walk_') })
-                .AddAnimation('run_right', 'spritesheet', { group: 'sprite' }, { direction: 1, number: 8, duration: 1000, textures: GetTextures('Yuko_Run_') })
-                .AddAnimation('walk_left', 'spritesheet', { group: 'sprite' }, { direction: -1, number: 6, duration: 1000, textures: GetTextures('Yuko_Walk_') })
-                .AddAnimation('run_left', 'spritesheet', { group: 'sprite' }, { direction: -1, number: 8, duration: 1000, textures: GetTextures('Yuko_Run_') })
-                .AddAnimation('jump_fall', 'spritesheet', { group: 'sprite', unstoppable: true, next: 'jump_landing' }, { disableLoop: true, number: 3, duration: 240, textures: GetTextures('Yuko_Jump_Fall_') })
-                .AddAnimation('jump_landing', 'spritesheet', { group: 'sprite', unstoppable: true, next: 'idle' }, { disableLoop: true, number: 1, duration: 80, textures: GetTextures('Yuko_Jump_Landing') })
-                .AddAnimation('jump_midair', 'spritesheet', { group: 'sprite', unstoppable: true, next: 'jump_fall' }, { disableLoop: true, number: 4, duration: 320, textures: GetTextures('Yuko_Jump_MidAir_') })
-                .AddAnimation('jump_up', 'spritesheet', { group: 'sprite', unstoppable: true, next: 'jump_midair' }, { disableLoop: true, number: 2, duration: 160, textures: GetTextures('Yuko_Jump_Up_') })
+                // First Group of Animation: Sprite
+                .addAnimation('idle', 'spritesheet', { group: 'sprite' }, { number: 4, duration: 1000, textures: GetTextures('Yuko_Idle_') })
+                .addAnimation('walk_right', 'spritesheet', { group: 'sprite' }, { direction: 1, number: 6, duration: 1000, textures: GetTextures('Yuko_Walk_') })
+                .addAnimation('run_right', 'spritesheet', { group: 'sprite' }, { direction: 1, number: 8, duration: 1000, textures: GetTextures('Yuko_Run_') })
+                .addAnimation('walk_left', 'spritesheet', { group: 'sprite' }, { direction: -1, number: 6, duration: 1000, textures: GetTextures('Yuko_Walk_') })
+                .addAnimation('run_left', 'spritesheet', { group: 'sprite' }, { direction: -1, number: 8, duration: 1000, textures: GetTextures('Yuko_Run_') })
+                .addAnimation('jump_fall', 'spritesheet', { group: 'sprite', unstoppable: true, next: 'jump_landing' }, { disableLoop: true, number: 3, duration: 240, textures: GetTextures('Yuko_Jump_Fall_') })
+                .addAnimation('jump_landing', 'spritesheet', { group: 'sprite', unstoppable: true, next: 'idle' }, { disableLoop: true, number: 1, duration: 80, textures: GetTextures('Yuko_Jump_Landing') })
+                .addAnimation('jump_midair', 'spritesheet', { group: 'sprite', unstoppable: true, next: 'jump_fall' }, { disableLoop: true, number: 4, duration: 320, textures: GetTextures('Yuko_Jump_MidAir_') })
+                .addAnimation('jump_up', 'spritesheet', { group: 'sprite', unstoppable: true, next: 'jump_midair' }, { disableLoop: true, number: 2, duration: 160, textures: GetTextures('Yuko_Jump_Up_') })
 
                 // Second Group of Animation: Alpha
-                .AddAnimation('fade_in', 'fade', { group: 'alpha', finalValue: true }, { value: 1, duration: 800 })
-                .AddAnimation('fade_out', 'fade', { group: 'alpha', finalValue: true }, { value: 0, duration: 800 })
+                .addAnimation('fade_in', 'fade', { group: 'alpha', finalValue: true }, { value: 1, duration: 800 })
+                .addAnimation('fade_out', 'fade', { group: 'alpha', finalValue: true }, { value: 0, duration: 800 })
 
                 // Third Group of Animation: Jump (defined as unstoppable)
-                .AddAnimation('jump', 'jump', { group: 'move', unstoppable: true });
+                .addAnimation('jump', 'jump', { group: 'move', unstoppable: true });
 
             // Play the default state: idle
-            anim.Play('idle');
+            anim.play('idle');
             animYuko = anim;
         }
 
@@ -370,15 +370,15 @@ It was design to solve few common issues related to game animations:
             app.stage.addChild(tokochan);
 
             // As you can see bellow, it's exactly the same code, just the array of texture is different
-            let anim = Fatina.plugin.AnimatorManager.AddAnimatorTo(tokochan)
-                .AddAnimation('idle', 'spritesheet', { group: 'sprite' }, { number: 4, duration: 1000, textures: GetTextures('Unitychan_Idle_') })
-                .AddAnimation('walk_right', 'spritesheet', { group: 'sprite' }, { direction: 1, number: 14, duration: 2000, textures: GetTextures('Unitychan_Walk_') })
-                .AddAnimation('run_right', 'spritesheet', { group: 'sprite' }, { direction: 1, number: 18, duration: 2000, textures: GetTextures('Unitychan_Run_') })
-                .AddAnimation('walk_left', 'spritesheet', { group: 'sprite' }, { direction: -1, number: 14, duration: 2000, textures: GetTextures('Unitychan_Walk_') })
-                .AddAnimation('run_left', 'spritesheet', { group: 'sprite' }, { direction: -1, number: 18, duration: 2000, textures: GetTextures('Unitychan_Run_') });
+            let anim = Fatina.plugin.animatorManager.addAnimatorTo(tokochan)
+                .addAnimation('idle', 'spritesheet', { group: 'sprite' }, { number: 4, duration: 1000, textures: GetTextures('Unitychan_Idle_') })
+                .addAnimation('walk_right', 'spritesheet', { group: 'sprite' }, { direction: 1, number: 14, duration: 2000, textures: GetTextures('Unitychan_Walk_') })
+                .addAnimation('run_right', 'spritesheet', { group: 'sprite' }, { direction: 1, number: 18, duration: 2000, textures: GetTextures('Unitychan_Run_') })
+                .addAnimation('walk_left', 'spritesheet', { group: 'sprite' }, { direction: -1, number: 14, duration: 2000, textures: GetTextures('Unitychan_Walk_') })
+                .addAnimation('run_left', 'spritesheet', { group: 'sprite' }, { direction: -1, number: 18, duration: 2000, textures: GetTextures('Unitychan_Run_') });
 
              // Play the default state: idle
-            anim.Play('idle');
+            anim.play('idle');
             animUnity = anim;
         }
 

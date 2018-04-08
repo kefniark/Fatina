@@ -4,15 +4,15 @@
         var elem7 = document.getElementById("sample7");
 
         var obj7 = { x: 0, y: 0 };
-        Fatina.Tween(obj7, ['x'])
-            .To({x: 500}, 2500)
-            .SetEasing('inOutSine')
-            .SetSteps(15)
-            .OnStart(() => console.log("tween7 start"))
-            .OnUpdate((dt, progress) => {
+        Fatina.tween(obj7, ['x'])
+            .to({x: 500}, 2500)
+            .setEasing('inOutSine')
+            .setSteps(15)
+            .onStart(() => console.log("tween7 start"))
+            .onUpdate((dt, progress) => {
                 elem7.style.left = obj7.x + "px";
             })
-            .OnComplete(() => console.log("tween7 complete"))
-            .Start();
+            .onComplete(() => console.log("tween7 complete"))
+            .start();
     }
 </script>
