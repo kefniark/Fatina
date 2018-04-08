@@ -443,12 +443,19 @@ class Fatina {
         this.loadedPlugins = [];
         this.eventCreated = [];
         // settings
-        this.settings = { logLevel: log_1.Log.None, safe: true };
+        this.settings = {
+            logLevel: log_1.Log.None,
+            safe: true,
+            smooth: true,
+            maxFrameDt: 50,
+            maxFrameNumber: 40,
+            maxDt: 15000 // 15s of animation
+        };
         // properties
         this.time = 0;
+        this.dt = 0;
         this.lastTime = 0;
         this.initialized = false;
-        this.isFirstUpdate = true;
     }
     get elapsed() {
         return this.manager.elapsed;
@@ -639,17 +646,26 @@ class Fatina {
         return tick;
     }
     updateLoop(timestamp) {
-        let dt = timestamp - this.lastTime;
-        if (this.isFirstUpdate) {
-            dt = 1;
-            this.isFirstUpdate = false;
+        this.dt += timestamp - this.lastTime;
+        if (this.dt > this.settings.maxDt) {
+            console.warn(`dt too high ${Math.round(this.dt)}ms. , Capped to ${this.settings.maxDt}ms.`);
+            this.dt = this.settings.maxDt;
         }
-        // cap to 500 ms
-        if (dt > 350) {
-            console.warn(`dt too high ${Math.round(dt)}ms. , Capped to 350ms.`);
-            dt = 350;
+        if (!this.settings.smooth) {
+            // use directly the delta time
+            this.update(this.dt);
+            this.dt = 0;
         }
-        this.update(dt);
+        else {
+            // split high dt in multiple smaller .update()
+            let frame = 0;
+            while (this.dt > 0 && frame < this.settings.maxFrameNumber) {
+                const currentDt = Math.min(this.dt, this.settings.maxFrameDt);
+                this.update(currentDt);
+                this.dt -= currentDt;
+                frame++;
+            }
+        }
         this.lastTime = timestamp;
         lastFrame = requestFrame(this.updateLoop.bind(this));
     }
@@ -1103,7 +1119,7 @@ class BaseTween {
         return this;
     }
     setSettings(settings) {
-        this.settings = settings;
+        Object.assign(this.settings, settings);
         return this;
     }
     complete() {

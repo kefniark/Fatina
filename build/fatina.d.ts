@@ -572,6 +572,10 @@ export enum State {
 export interface ISettings {
     logLevel: Log;
     safe: boolean;
+    smooth: boolean;
+    maxFrameDt: number;
+    maxFrameNumber: number;
+    maxDt: number;
 }
 
 /**

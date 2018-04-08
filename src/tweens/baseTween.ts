@@ -250,7 +250,11 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	}
 
 	public setSettings(settings: ISettings): T {
-		this.settings = settings;
+		if (this.settings) {
+			Object.assign(this.settings, settings);
+		} else {
+			this.settings = settings;
+		}
 		return this as any;
 	}
 

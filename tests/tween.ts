@@ -704,7 +704,7 @@ test('[Fatina.Tween] Safe & Debug', (t: Test) => {
 		.setParent(ticker)
 		.to({ x: 1 }, 10)
 		.setEasing('inOutQuad')
-		.setSettings({ logLevel: Log.Debug, safe: false })
+		.setSettings({ logLevel: Log.Debug, safe: false } as any)
 		.onComplete(() => {})
 		.start();
 

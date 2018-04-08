@@ -443,7 +443,8 @@ test('[Fatina.Sequence] Test Reuse complexe sequence', (t: Test) => {
 				.appendCallback(() => callback2++)
 		)
 		.appendCallback(() => callback++)
-		.setSettings({ logLevel: Log.Debug, safe: false })
+		.setSettings({ logLevel: Log.Debug, safe: true } as any)
+		.setSettings({ safe: false } as any)
 		.onStart(() => start++)
 		.onComplete(() => complete++)
 		.start();

@@ -40,13 +40,20 @@ export class Fatina {
 	private readonly eventCreated: {(control: IControl): void}[] = [];
 
 	// settings
-	private readonly settings = { logLevel: Log.None, safe: true } as ISettings;
+	private readonly settings = {
+		logLevel: Log.None,
+		safe: true,
+		smooth: true,
+		maxFrameDt: 50, // 3 frames
+		maxFrameNumber: 40, // 40 x 3 frames ~2s.
+		maxDt: 15000 // 15s of animation
+	} as ISettings;
 
 	// properties
 	public time = 0;
+	private dt = 0;
 	private lastTime = 0;
 	private initialized = false;
-	private isFirstUpdate = true;
 	public manager: Ticker;
 
 	public get elapsed(): number {
@@ -263,19 +270,27 @@ export class Fatina {
 	}
 
 	private updateLoop(timestamp: number) {
-		let dt = timestamp - this.lastTime;
-		if (this.isFirstUpdate) {
-			dt = 1;
-			this.isFirstUpdate = false;
+		this.dt += timestamp - this.lastTime;
+		if (this.dt > this.settings.maxDt) {
+			console.warn(`dt too high ${Math.round(this.dt)}ms. , Capped to ${this.settings.maxDt}ms.`);
+			this.dt = this.settings.maxDt;
 		}
 
-		// cap to 500 ms
-		if (dt > 350) {
-			console.warn(`dt too high ${Math.round(dt)}ms. , Capped to 350ms.`);
-			dt = 350;
+		if (!this.settings.smooth) {
+			// use directly the delta time
+			this.update(this.dt);
+			this.dt = 0;
+		} else {
+			// split high dt in multiple smaller .update()
+			let frame = 0;
+			while (this.dt > 0 && frame < this.settings.maxFrameNumber) {
+				const currentDt = Math.min(this.dt, this.settings.maxFrameDt);
+				this.update(currentDt);
+				this.dt -= currentDt;
+				frame++;
+			}
 		}
 
-		this.update(dt);
 		this.lastTime = timestamp;
 		lastFrame = requestFrame(this.updateLoop.bind(this));
 	}
