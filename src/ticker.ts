@@ -17,6 +17,7 @@ export class Ticker implements ITicker {
 	public duration = 0;
 	private tickCb: (dt: number) => void | undefined;
 	private readonly ticks: Set<(dt: number) => void> = new Set();
+	private readonly newTicks: Set<(dt: number) => void> = new Set();
 	private parent: ITicker;
 
 	public setParent(parent: ITicker, tick: (dt: number) => void) {
@@ -43,7 +44,7 @@ export class Ticker implements ITicker {
 	 * @memberOf Ticker
 	 */
 	public addTick(cb: (dt: number) => void): void {
-		this.ticks.add(cb);
+		this.newTicks.add(cb);
 	}
 
 	/**
@@ -54,7 +55,9 @@ export class Ticker implements ITicker {
 	 * @memberOf Ticker
 	 */
 	public removeTick(cb: (dt: number) => void): void {
-		this.ticks.delete(cb);
+		if (!this.ticks.delete(cb)) {
+			this.newTicks.delete(cb);
+		}
 	}
 
 	/**
@@ -71,6 +74,11 @@ export class Ticker implements ITicker {
 		}
 
 		const localDt = dt * this.timescale;
+		if (this.newTicks.size > 0) {
+			this.newTicks.forEach((tick) => this.ticks.add(tick));
+			this.newTicks.clear();
+		}
+
 		// tslint:disable-next-line:only-arrow-functions
 		this.ticks.forEach(function (tick) { tick(localDt); });
 
