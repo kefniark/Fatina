@@ -14,16 +14,16 @@ weight = 4
 
 The installation process is explained in the [README](https://github.com/kefniark/Fatina-Plugin-Animator).
 
-After setup, you can use this plugin: 
+After setup, you can use this plugin:
 ```js
 // Global animator manager
-Fatina.plugin.AnimatorManager;
+Fatina.plugin.animatorManager;
 
 // Global tick manager to be able to pause / resume group of objects
-Fatina.plugin.TickerManager;
+Fatina.plugin.tickerManager;
 
 // Add a Animator component to any object
-Fatina.plugin.AnimatorManager.AddAnimatorTo(object);
+Fatina.plugin.animatorManager.addAnimatorTo(object);
 ```
 <br>
 
@@ -34,15 +34,15 @@ let fatina = require('fatina');
 let fatinaAnimator = require('fatina-plugin-animator');
 
 // initialize fatina
-fatina.Init();
-fatina.LoadPlugin(FatinaPluginAnimator.Get());
+fatina.init();
+fatina.loadPlugin(fatinaAnimator.get());
 ```
 <br>
 
 ### Register a shared animation
 ```js
-fatina.plugin.AnimatorManager.Register('move', (obj: any, params: any) => {
-    return Fatina.Tween(obj.position, ['x']).SetRelative(true).To({ x: params }, 500);
+fatina.plugin.animatorManager.register('move', (obj: any, params: any) => {
+    return Fatina.tween(obj.position, ['x']).setRelative(true).to({ x: params }, 500);
 }, 'newTicker');
 ```
 <br>
@@ -53,11 +53,11 @@ fatina.plugin.AnimatorManager.Register('move', (obj: any, params: any) => {
 var test = new Phaser.Sprite(this.game, 2, 80, 'hudBg');
 
 // add a component animator to that sprite and add 2 animations
-fatina.plugin.AnimatorManager.AddAnimatorTo(test)
-    .AddAnimation('moveRight', 'move', { group: 'move' }, 5)
-	.AddAnimation('moveLeft', 'move', { group: 'move' }, -5);
+fatina.plugin.animatorManager.addAnimatorTo(test)
+    .addAnimation('moveRight', 'move', { group: 'move' }, 5)
+	.addAnimation('moveLeft', 'move', { group: 'move' }, -5);
 
 // now you can use those animation easily
-test.Animator.Play('moveLeft');
-test.Animator.Play('moveRight');
+test.animator.play('moveLeft');
+test.animator.play('moveRight');
 ```

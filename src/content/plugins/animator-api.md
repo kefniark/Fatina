@@ -13,40 +13,39 @@ weight = 4
 </div>
 
 ### AnimatorManager
-* **Animations**: `string[]` names of registered animations
-* **Labels**: `string[]`
-* **Register**(name: `string`, onCreate: (object: `any`, params?: `any`) => IControl, label?: `string`): AnimatorManager;
-* **AddAnimatorTo**(obj: `any`): Animator;
+* **animations**: `string[]` names of registered animations
+* **labels**: `string[]`
+* **register**(name: `string`, onCreate: (object: `any`, params?: `any`) => IControl, label?: `string`): AnimatorManager;
+* **addAnimatorTo**(obj: `any`): Animator;
 
 ### TickerManager
-* **Get**(name: `string`): ITicker;
-* **PauseAll**(name: `string`): void;
-* **ResumeAll**(name: `string`): void;
-* **KillAll**(name: `string`): void;
+* **get**(name: `string`): ITicker;
+* **pauseAll**(name: `string`): void;
+* **resumeAll**(name: `string`): void;
+* **killAll**(name: `string`): void;
 
 ### Animator
 Animator component added to object you want to animate. This keep track of your animations and manage their states for you.
 
 #### Animations
-* **AddAnimation**(name: `string`, animationName: `string`, options?: `IAnimationParams`, params?: `any`): `Animator`;
-* **AddCustomAnimation**(name: `string`, options: `IAnimationParams`, tween: `IControl`): `Animator`;
+* **addAnimation**(name: `string`, animationName: `string`, options?: `IAnimationParams`, params?: `any`): `Animator`;
+* **addCustomAnimation**(name: `string`, options: `IAnimationParams`, tween: `IControl`): `Animator`;
 
 #### Controls
-* **Play**(name: `string`, onComplete?: () => void)
-* **Pause**(layer?: `string`): void;
-* **PauseAll**(): void;
-* **Resume**(layer?: `string`): void;
-* **ResumeAll**(): void;
-* **Stop**(layer?: `string`): void;
-* **StopAll**(): void;
-* **Destroy**(): void;
+* **play**(name: `string`, onComplete?: () => void)
+* **pause**(layer?: `string`): void;
+* **pauseAll**(): void;
+* **resume**(layer?: `string`): void;
+* **resumeAll**(): void;
+* **stop**(layer?: `string`): void;
+* **stopAll**(): void;
+* **destroy**(): void;
 
 #### Events
-* **OnStart**(name: `string`, cb: () => void)
-* **OnStartAll**(name: `string`, cb: () => void)
-* **OnComplete**(name: `string`, cb: () => void)
-* **OnCompleteAll**(name: `string`, cb: () => void)
-
+* **onStart**(name: `string`, cb: () => void)
+* **onStartAll**(name: `string`, cb: () => void)
+* **onComplete**(name: `string`, cb: () => void)
+* **onCompleteAll**(name: `string`, cb: () => void)
 
 #### AnimationParams
 When you add an animation, you have an option params

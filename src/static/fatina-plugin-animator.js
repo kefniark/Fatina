@@ -7,7 +7,7 @@
 		exports["FatinaPluginAnimator"] = factory();
 	else
 		root["FatinaPluginAnimator"] = factory();
-})(this, function() {
+})(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -54,6 +54,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		}
 /******/ 	};
 /******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
 /******/ 	__webpack_require__.n = function(module) {
 /******/ 		var getter = module && module.__esModule ?
@@ -69,128 +74,33 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.ts");
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ "./src/animator/animator.ts":
+/*!**********************************!*\
+  !*** ./src/animator/animator.ts ***!
+  \**********************************/
+/*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var animatorManager_1 = __webpack_require__(1);
-var tickerManager_1 = __webpack_require__(3);
-function Get() {
-    return new FatinaPluginAnimator();
-}
-exports.Get = Get;
-var FatinaPluginAnimator = (function () {
-    function FatinaPluginAnimator() {
-        this.name = 'fatina-plugin-animator';
-        this.init = false;
-    }
-    Object.defineProperty(FatinaPluginAnimator.prototype, "TickerManager", {
-        get: function () {
-            return this.fatina.plugin.TickerManager;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FatinaPluginAnimator.prototype, "AnimatorManager", {
-        get: function () {
-            return this.fatina.plugin.AnimatorManager;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    FatinaPluginAnimator.prototype.Init = function (fatina) {
-        if (this.init) {
-            throw new Error('Try to init the plugin twice : ' + name);
-        }
-        if (fatina === undefined || fatina === null || fatina.plugin === null) {
-            throw new Error('Try to init the plugin without fatina : ' + name);
-        }
-        this.fatina = fatina;
-        this.init = true;
-        fatina.plugin.AnimatorManager = new animatorManager_1.AnimatorManager(this);
-        fatina.plugin.TickerManager = new tickerManager_1.TickerManager(this);
-    };
-    return FatinaPluginAnimator;
-}());
-exports.FatinaPluginAnimator = FatinaPluginAnimator;
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var animator_1 = __webpack_require__(2);
-var AnimatorManager = (function () {
-    function AnimatorManager(plugin) {
-        this.animations = {};
-        this.tickerMap = {};
-        this.plugin = plugin;
-    }
-    Object.defineProperty(AnimatorManager.prototype, "Animations", {
-        get: function () {
-            return Object.keys(this.animations);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(AnimatorManager.prototype, "Labels", {
-        get: function () {
-            var _this = this;
-            return Object.keys(this.tickerMap).map(function (x) { return _this.tickerMap[x]; }).filter(function (piece, index, self) { return self.indexOf(piece) === index; });
-        },
-        enumerable: true,
-        configurable: true
-    });
-    AnimatorManager.prototype.Register = function (name, onCreate, tickerName) {
-        if (this.animations[name] && this.tickerMap[name]) {
-            delete this.tickerMap[name];
-        }
-        this.animations[name] = onCreate;
-        if (tickerName) {
-            this.tickerMap[name] = tickerName;
-        }
-        return this;
-    };
-    AnimatorManager.prototype.Instantiate = function (name, object, params) {
-        if (!(name in this.animations)) {
-            throw new Error('this animation doesnt exist ' + name);
-        }
-        var tween = this.animations[name](object, params);
-        if (this.tickerMap[name]) {
-            tween.SetParent(this.plugin.TickerManager.Get(this.tickerMap[name]));
-        }
-        return tween;
-    };
-    AnimatorManager.prototype.AddAnimatorTo = function (obj) {
-        if (!obj.Animator) {
-            obj.Animator = new animator_1.Animator(obj, this);
-        }
-        return obj.Animator;
-    };
-    return AnimatorManager;
-}());
-exports.AnimatorManager = AnimatorManager;
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Animator = (function () {
-    function Animator(obj, animatorManager) {
+/**
+ * Animator component applied on a object.
+ * This store a list of animations and manage them for that object
+ *
+ * @export
+ * @class Animator
+ */
+class Animator {
+    constructor(obj, animatorManager) {
+        // public properties
         this.animations = {};
         this.current = {};
         this.groups = ['default'];
@@ -199,6 +109,7 @@ var Animator = (function () {
         this.animTransitionMap = {};
         this.animFinalValueMap = {};
         this.animUnstoppableMap = {};
+        // events
         this.eventStart = {};
         this.eventOnceStart = {};
         this.eventComplete = {};
@@ -206,37 +117,55 @@ var Animator = (function () {
         this.object = obj;
         this.animatorManager = animatorManager;
     }
-    Animator.prototype.AddAnimation = function (name, animationName, options, params) {
-        var anim = this.animatorManager.Instantiate(animationName, this.object, params);
-        return this.AddCustomAnimation(name, options || {}, anim);
-    };
-    Animator.prototype.AddCustomAnimation = function (name, options, tween) {
-        var _this = this;
-        var anim = tween;
-        anim.OnStart(function () {
-            _this.EmitEvent(_this.eventStart[name]);
-            if (name in _this.eventOnceStart) {
-                _this.EmitEvent(_this.eventOnceStart[name]);
-                _this.eventOnceStart[name] = [];
+    /**
+     * Add a new Animation to this object
+     *
+     * @param {string} name
+     * @param {string} animationName
+     * @param {(IAnimationParams | any)} [options]
+     * @param {*} [params]
+     * @returns {Animator}
+     * @memberOf Animator
+     */
+    addAnimation(name, animationName, options, params) {
+        const anim = this.animatorManager.instantiate(animationName, this.object, params);
+        return this.addCustomAnimation(name, options || {}, anim);
+    }
+    /**
+     * Add a new Tween to this object
+     *
+     * @param {string} name
+     * @param {(IAnimationParams | any)} options
+     * @param {IControl} tween
+     * @returns {Animator}
+     * @memberOf Animator
+     */
+    addCustomAnimation(name, options, tween) {
+        const anim = tween;
+        anim.onStart(() => {
+            this.emitEvent(this.eventStart[name]);
+            if (name in this.eventOnceStart) {
+                this.emitEvent(this.eventOnceStart[name]);
+                this.eventOnceStart[name] = [];
             }
         });
-        anim.OnKilled(function () {
-            anim.Recycle();
-            _this.EmitEvent(_this.eventComplete[name]);
-            if (name in _this.eventOnceComplete) {
-                _this.EmitEvent(_this.eventOnceComplete[name]);
-                _this.eventOnceComplete[name] = [];
+        anim.onKilled(() => {
+            anim.recycle();
+            this.emitEvent(this.eventComplete[name]);
+            if (name in this.eventOnceComplete) {
+                this.emitEvent(this.eventOnceComplete[name]);
+                this.eventOnceComplete[name] = [];
             }
         });
-        anim.OnComplete(function () {
-            anim.Recycle();
-            _this.EmitEvent(_this.eventComplete[name]);
-            if (name in _this.eventOnceComplete) {
-                _this.EmitEvent(_this.eventOnceComplete[name]);
-                _this.eventOnceComplete[name] = [];
+        anim.onComplete(() => {
+            anim.recycle();
+            this.emitEvent(this.eventComplete[name]);
+            if (name in this.eventOnceComplete) {
+                this.emitEvent(this.eventOnceComplete[name]);
+                this.eventOnceComplete[name] = [];
             }
-            if (name in _this.animTransitionMap) {
-                _this.Play(_this.animTransitionMap[name]);
+            if (name in this.animTransitionMap) {
+                this.play(this.animTransitionMap[name]);
             }
         });
         this.animations[name] = anim;
@@ -250,24 +179,24 @@ var Animator = (function () {
             this.groups.push(this.animGroupMap[name]);
         }
         return this;
-    };
-    Animator.prototype.Emit = function (func, args) {
+    }
+    emit(func, args) {
         try {
             func.apply(this, args);
         }
         catch (e) {
             console.warn(e);
         }
-    };
-    Animator.prototype.EmitEvent = function (listeners, args) {
+    }
+    emitEvent(listeners, args) {
         if (!listeners) {
             return;
         }
-        for (var i = 0; i < listeners.length; i++) {
-            this.Emit(listeners[i], args);
+        for (let i = 0; i < listeners.length; i++) {
+            this.emit(listeners[i], args);
         }
-    };
-    Animator.prototype.OnStartAll = function (name, cb) {
+    }
+    onStartAll(name, cb) {
         if (name in this.eventStart) {
             this.eventStart[name].push(cb);
         }
@@ -275,8 +204,8 @@ var Animator = (function () {
             this.eventStart[name] = [cb];
         }
         return this;
-    };
-    Animator.prototype.OnStart = function (name, cb) {
+    }
+    onStart(name, cb) {
         if (name in this.eventOnceStart) {
             this.eventOnceStart[name].push(cb);
         }
@@ -284,8 +213,8 @@ var Animator = (function () {
             this.eventOnceStart[name] = [cb];
         }
         return this;
-    };
-    Animator.prototype.OnCompleteAll = function (name, cb) {
+    }
+    onCompleteAll(name, cb) {
         if (name in this.eventComplete) {
             this.eventComplete[name].push(cb);
         }
@@ -293,8 +222,8 @@ var Animator = (function () {
             this.eventComplete[name] = [cb];
         }
         return this;
-    };
-    Animator.prototype.OnComplete = function (name, cb) {
+    }
+    onComplete(name, cb) {
         if (name in this.eventOnceComplete) {
             this.eventOnceComplete[name].push(cb);
         }
@@ -302,78 +231,91 @@ var Animator = (function () {
             this.eventOnceComplete[name] = [cb];
         }
         return this;
-    };
-    Animator.prototype.Play = function (name, onComplete) {
+    }
+    /**
+     * Method used to play an animation
+     *
+     * @param {string} name
+     * @param {() => void} [onComplete]
+     * @returns {void}
+     *
+     * @memberOf Animator
+     */
+    play(name, onComplete) {
         if (!(name in this.animations)) {
             throw new Error('this animation doesnt exist ' + name);
         }
-        var layerName = this.animGroupMap[name];
-        var current = this.current[layerName];
-        if (current && current.IsRunning() && this.animUnstoppableMap[this.currentAnimName[layerName]]) {
+        const layerName = this.animGroupMap[name];
+        let current = this.current[layerName];
+        // Block any unstoppable running anim
+        if (current && current.isRunning && this.animUnstoppableMap[this.currentAnimName[layerName]]) {
             console.log('This animation already run and is unstoppable', this.currentAnimName[layerName], '->', name);
             return;
         }
-        if (current && (current.IsRunning() || current.IsPaused())) {
-            var currentAnimName = this.currentAnimName[layerName];
-            current.Skip(this.animFinalValueMap[currentAnimName]);
+        // Stop any previous animation on this layer
+        if (current && (current.isRunning || current.isPaused)) {
+            const currentAnimName = this.currentAnimName[layerName];
+            current.skip(this.animFinalValueMap[currentAnimName]);
             this.current[layerName] = undefined;
         }
+        // Start the right animation
         current = this.animations[name];
         this.current[layerName] = current;
         this.currentAnimName[layerName] = name;
         if (onComplete) {
-            this.OnComplete(name, onComplete);
+            this.onComplete(name, onComplete);
         }
-        current.Start();
+        current.start();
         return;
-    };
-    Animator.prototype.Pause = function (group) {
-        var layerName = !group ? 'default' : group;
-        var current = this.current[layerName];
-        if (current && current.IsRunning()) {
-            current.Pause();
+    }
+    pause(group) {
+        const layerName = !group ? 'default' : group;
+        const current = this.current[layerName];
+        if (current && current.isRunning) {
+            current.pause();
         }
-    };
-    Animator.prototype.PauseAll = function () {
-        for (var _i = 0, _a = this.groups; _i < _a.length; _i++) {
-            var layerId = _a[_i];
-            this.Pause(layerId);
+    }
+    pauseAll() {
+        for (const layerId of this.groups) {
+            this.pause(layerId);
         }
-    };
-    Animator.prototype.Resume = function (group) {
-        var layerName = !group ? 'default' : group;
-        var current = this.current[layerName];
-        if (current && current.IsPaused()) {
-            current.Resume();
+    }
+    resume(group) {
+        const layerName = !group ? 'default' : group;
+        const current = this.current[layerName];
+        if (current && current.isPaused) {
+            current.resume();
         }
-    };
-    Animator.prototype.ResumeAll = function () {
-        for (var _i = 0, _a = this.groups; _i < _a.length; _i++) {
-            var layerId = _a[_i];
-            this.Resume(layerId);
+    }
+    resumeAll() {
+        for (const layerId of this.groups) {
+            this.resume(layerId);
         }
-    };
-    Animator.prototype.Stop = function (group) {
-        var layerName = !group ? 'default' : group;
-        var current = this.current[layerName];
-        if (current && !current.IsFinished()) {
-            var currentAnimName = this.currentAnimName[layerName];
-            current.Skip(this.animFinalValueMap[currentAnimName]);
+    }
+    stop(group) {
+        const layerName = !group ? 'default' : group;
+        const current = this.current[layerName];
+        if (current && !current.isFinished) {
+            const currentAnimName = this.currentAnimName[layerName];
+            current.skip(this.animFinalValueMap[currentAnimName]);
             this.current[layerName] = undefined;
         }
-    };
-    Animator.prototype.StopAll = function () {
-        for (var _i = 0, _a = this.groups; _i < _a.length; _i++) {
-            var layerId = _a[_i];
-            this.Stop(layerId);
+    }
+    stopAll() {
+        for (const layerId of this.groups) {
+            this.stop(layerId);
         }
-    };
-    Animator.prototype.Destroy = function () {
-        for (var _i = 0, _a = this.groups; _i < _a.length; _i++) {
-            var layerId = _a[_i];
-            var current = this.current[layerId];
-            if (current && !current.IsFinished()) {
-                current.Kill();
+    }
+    /**
+     * Used to destroy this animation and stop all the tweens
+     *
+     * @memberOf Animator
+     */
+    destroy() {
+        for (const layerId of this.groups) {
+            const current = this.current[layerId];
+            if (current && !current.isFinished) {
+                current.kill();
             }
         }
         this.animations = {};
@@ -382,54 +324,188 @@ var Animator = (function () {
         this.animUnstoppableMap = {};
         this.current = {};
         this.currentAnimName = {};
-        delete this.object.Animator;
-    };
-    return Animator;
-}());
+        delete this.object.animator;
+    }
+}
 exports.Animator = Animator;
 
 
 /***/ }),
-/* 3 */
+
+/***/ "./src/index.ts":
+/*!**********************!*\
+  !*** ./src/index.ts ***!
+  \**********************/
+/*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var TickerManager = (function () {
-    function TickerManager(plugin) {
+const animatorManager_1 = __webpack_require__(/*! ./manager/animatorManager */ "./src/manager/animatorManager.ts");
+const tickerManager_1 = __webpack_require__(/*! ./manager/tickerManager */ "./src/manager/tickerManager.ts");
+function get() {
+    return new FatinaPluginAnimator();
+}
+exports.get = get;
+class FatinaPluginAnimator {
+    constructor() {
+        this.name = 'fatina-plugin-animator';
+        this.initialized = false;
+    }
+    get tickerManager() {
+        return this.fatina.plugin.tickerManager;
+    }
+    get animatorManager() {
+        return this.fatina.plugin.animatorManager;
+    }
+    init(fatina) {
+        if (this.initialized) {
+            throw new Error('Try to init the plugin twice : ' + name);
+        }
+        if (fatina === undefined || fatina === null || fatina.plugin === null) {
+            throw new Error('Try to init the plugin without fatina : ' + name);
+        }
+        this.fatina = fatina;
+        this.initialized = true;
+        fatina.plugin.animatorManager = new animatorManager_1.AnimatorManager(this);
+        fatina.plugin.tickerManager = new tickerManager_1.TickerManager(this);
+    }
+}
+exports.FatinaPluginAnimator = FatinaPluginAnimator;
+
+
+/***/ }),
+
+/***/ "./src/manager/animatorManager.ts":
+/*!****************************************!*\
+  !*** ./src/manager/animatorManager.ts ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const animator_1 = __webpack_require__(/*! ../animator/animator */ "./src/animator/animator.ts");
+/**
+ * This manager is there to store shared animations and instantiate them
+ *
+ * @export
+ * @class AnimatorManager
+ */
+class AnimatorManager {
+    constructor(plugin) {
+        this.anims = {};
+        this.tickerMap = {};
+        this.plugin = plugin;
+    }
+    get animations() {
+        return Object.keys(this.anims);
+    }
+    get labels() {
+        return Object.keys(this.tickerMap).map((x) => this.tickerMap[x]).filter((piece, index, self) => self.indexOf(piece) === index);
+    }
+    /**
+     * Method used to register a new animation
+     *
+     * @param {string} name
+     * @param {(object: any, params?: any) => IControl} onCreate
+     * @param {string} [tickerName]
+     * @returns {AnimatorManager}
+     *
+     * @memberOf AnimatorManager
+     */
+    register(name, onCreate, tickerName) {
+        if (this.anims[name] && this.tickerMap[name]) {
+            delete this.tickerMap[name];
+        }
+        this.anims[name] = onCreate;
+        if (tickerName) {
+            this.tickerMap[name] = tickerName;
+        }
+        return this;
+    }
+    instantiate(name, object, params) {
+        if (!(name in this.anims)) {
+            throw new Error('this animation doesnt exist ' + name);
+        }
+        const tween = this.anims[name](object, params);
+        if (this.tickerMap[name]) {
+            tween.setParent(this.plugin.tickerManager.get(this.tickerMap[name]));
+        }
+        return tween;
+    }
+    /**
+     * Method used to add a component animator to any object
+     *
+     * @param {*} obj
+     * @returns {Animator}
+     *
+     * @memberOf AnimatorManager
+     */
+    addAnimatorTo(obj) {
+        if (!obj.animator) {
+            obj.animator = new animator_1.Animator(obj, this);
+        }
+        return obj.animator;
+    }
+}
+exports.AnimatorManager = AnimatorManager;
+
+
+/***/ }),
+
+/***/ "./src/manager/tickerManager.ts":
+/*!**************************************!*\
+  !*** ./src/manager/tickerManager.ts ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * This manager is just there to keep reference to ticker by name
+ *
+ * @export
+ * @class TickerManager
+ */
+class TickerManager {
+    constructor(plugin) {
         this.tickers = {};
         this.plugin = plugin;
     }
-    TickerManager.prototype.Get = function (name) {
+    get(name) {
         if (this.tickers[name]) {
             return this.tickers[name];
         }
-        this.tickers[name] = this.plugin.fatina.Ticker();
+        this.tickers[name] = this.plugin.fatina.ticker();
         return this.tickers[name];
-    };
-    TickerManager.prototype.PauseAll = function (name) {
+    }
+    pauseAll(name) {
         if (this.tickers[name]) {
-            this.tickers[name].Pause();
+            this.tickers[name].pause();
         }
-    };
-    TickerManager.prototype.ResumeAll = function (name) {
+    }
+    resumeAll(name) {
         if (this.tickers[name]) {
-            this.tickers[name].Resume();
+            this.tickers[name].resume();
         }
-    };
-    TickerManager.prototype.KillAll = function (name) {
+    }
+    killAll(name) {
         if (this.tickers[name]) {
-            this.tickers[name].Kill();
+            this.tickers[name].kill();
             delete this.tickers[name];
         }
-    };
-    return TickerManager;
-}());
+    }
+}
 exports.TickerManager = TickerManager;
 
 
 /***/ })
-/******/ ]);
+
+/******/ });
 });
 //# sourceMappingURL=fatina-plugin-animator.js.map
