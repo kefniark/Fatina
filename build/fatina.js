@@ -7,7 +7,7 @@
 		exports["Fatina"] = factory();
 	else
 		root["Fatina"] = factory();
-})(window, function() {
+})(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -1119,7 +1119,12 @@ class BaseTween {
         return this;
     }
     setSettings(settings) {
-        Object.assign(this.settings, settings);
+        if (this.settings) {
+            Object.assign(this.settings, settings);
+        }
+        else {
+            this.settings = settings;
+        }
         return this;
     }
     complete() {
