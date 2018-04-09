@@ -10,7 +10,7 @@ import { BaseTween } from './baseTween';
  * @implements {IPlayable}
  */
 export class Delay extends BaseTween<Delay> implements IPlayable {
-	private remains: number;
+	private remains = 0;
 
 	constructor(duration: number) {
 		super();

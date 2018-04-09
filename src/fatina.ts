@@ -159,11 +159,10 @@ export class Fatina {
 	 *
 	 * @export
 	 * @param {*} obj
-	 * @param {string[]} properties
 	 * @returns {ITween}
 	 */
-	public tween(obj: any, properties: string[]): ITween {
-		const t = new Tween(obj, properties);
+	public tween(obj: any): ITween {
+		const t = new Tween(obj);
 		this.addContext(t);
 		return t;
 	}

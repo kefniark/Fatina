@@ -45,7 +45,7 @@ import * as Fatina from 'fatina';
 
 ### Usage
 ```ts
-Fatina.tween(obj, properties)
+Fatina.tween(obj)
     .to(destination, duration)
     .start();
 

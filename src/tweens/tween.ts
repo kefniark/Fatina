@@ -17,7 +17,7 @@ import { Sequence } from './sequence';
 export class Tween extends BaseTween<Tween> implements ITween {
 	// properties
 	private obj: any;
-	private prop: string[];
+	private readonly prop: string[] = [];
 
 	// user from & to
 	private f: any;
@@ -37,11 +37,10 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	private v = 0;
 	private remains = 0;
 
-	constructor(object: any, properties: string[]) {
+	constructor(object: any) {
 		super();
 
 		this.obj = object;
-		this.prop = properties;
 		this.tickCb = this.tick.bind(this);
 	}
 
@@ -49,13 +48,11 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 * Used to define the object and the properties modified by this tween
 	 *
 	 * @param {*} object
-	 * @param {string[]} properties
 	 *
 	 * @memberOf Tween
 	 */
-	public init(object: any, properties: string[]) {
+	public init(object: any) {
 		this.obj = object;
-		this.prop = properties;
 	}
 
 	/**
@@ -193,6 +190,11 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 */
 	public from(from: any): ITween {
 		this.f = from;
+		for (const index in this.f) {
+			if (this.f.hasOwnProperty(index)) {
+				this.prop.push(index);
+			}
+		}
 		return this;
 	}
 
@@ -208,6 +210,11 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	public to(to: any, duration: number): ITween {
 		this.t = to;
 		this.duration = duration;
+		for (const index in this.t) {
+			if (this.t.hasOwnProperty(index)) {
+				this.prop.push(index);
+			}
+		}
 		return this;
 	}
 
@@ -235,7 +242,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	public modify(diff: any, updateTo: boolean): void {
 		for (const prop of this.prop) {
 			if (!diff.hasOwnProperty(prop)) {
-				continue;
+				return;
 			}
 
 			this.obj[prop] += diff[prop];

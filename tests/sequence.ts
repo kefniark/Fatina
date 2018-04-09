@@ -24,11 +24,11 @@ test('[Fatina.Sequence] Create a basic Sequence', (t: Test) => {
 		.prependCallback(() => {})
 		.appendInterval(1)
 		.appendCallback(() => cb++)
-		.append(new Tween(obj, [ 'x', 'y' ]).to({ x: 44, y: 44 }, 2))
+		.append(new Tween(obj).to({ x: 44, y: 44 }, 2))
 		.appendCallback(() => cb++)
 		.appendInterval(1)
 		.appendCallback(() => cb++)
-		.append(new Tween(obj, [ 'x', 'y' ]).to({ x: 0, y: 0 }, 2))
+		.append(new Tween(obj).to({ x: 0, y: 0 }, 2))
 		.appendCallback(() => cb++)
 		.onStart(() => {
 			if (update > 0 || stepStart > 0 || complete > 0) {
@@ -83,8 +83,8 @@ test('[Fatina.Sequence] Test Lagging Tick', (t: Test) => {
 	let complete = 0;
 	const sequence = new Sequence()
 		.setParent(ticker)
-		.append(new Tween(obj, [ 'x', 'y' ]).to({ x: 44, y: 44 }, 5))
-		.append(new Tween(obj, [ 'x', 'y' ]).to({ x: 0, y: 0 }, 5))
+		.append(new Tween(obj).to({ x: 44, y: 44 }, 5))
+		.append(new Tween(obj).to({ x: 0, y: 0 }, 5))
 		.onComplete(() => complete++);
 
 	sequence.start();
@@ -103,8 +103,8 @@ test('[Fatina.Sequence] Test Constructor', (t: Test) => {
 
 	let complete = 0;
 	const sequence = new Sequence([
-		new Tween(obj, [ 'x', 'y' ]).to({ x: 44, y: 44 }, 5),
-		new Tween(obj, [ 'x', 'y' ]).to({ x: 0, y: 0 }, 5)
+		new Tween(obj).to({ x: 44, y: 44 }, 5),
+		new Tween(obj).to({ x: 0, y: 0 }, 5)
 	]).setParent(ticker).onComplete(() => complete++);
 
 	sequence.start();
@@ -125,12 +125,12 @@ test('[Fatina.Sequence] Test Prepend', (t: Test) => {
 	let complete = 0;
 	const sequence = new Sequence()
 		.setParent(ticker)
-		.append(new Tween(obj, [ 'x', 'y' ]).to({ x: 44, y: 44 }, 2).onComplete(() => {
+		.append(new Tween(obj).to({ x: 44, y: 44 }, 2).onComplete(() => {
 			if (first) {
 				t.fail('append tween should be executed second');
 			}
 		}))
-		.prepend(new Tween(obj, [ 'x', 'y' ]).to({ x: 0, y: 0 }, 2).onComplete(() => {
+		.prepend(new Tween(obj).to({ x: 0, y: 0 }, 2).onComplete(() => {
 			if (!first) {
 				t.fail('prepend tween should be executed first');
 			}
@@ -154,15 +154,15 @@ test('[Fatina.Sequence] Test Join', (t: Test) => {
 	let complete = 0;
 	const sequence = new Sequence()
 		.setParent(ticker)
-		.join(new Tween(obj, [ 'x', 'y' ]).to({ x: 44, y: 44 }, 1.5))
-		.prepend(new Tween(obj, [ 'x', 'y' ]).to({ x: 0, y: 0 }, 2))
-		.join(new Tween(obj, [ 'alpha' ]).to({ alpha: 0 }, 2).onStart(() => {
+		.join(new Tween(obj).to({ x: 44, y: 44 }, 1.5))
+		.prepend(new Tween(obj).to({ x: 0, y: 0 }, 2))
+		.join(new Tween(obj).to({ alpha: 0 }, 2).onStart(() => {
 			const current = (sequence as Sequence).cur;
 			if (current) {
 				t.equal(2, current.length, 'check 2 tween are running at the same time');
 			}
 		}))
-		.append(new Tween(obj, [ 'x', 'y' ]).to({ x: 44, y: 44 }, 2))
+		.append(new Tween(obj).to({ x: 44, y: 44 }, 2))
 		.onUpdate((dt) => duration += dt)
 		.onComplete(() => complete++);
 
@@ -191,8 +191,8 @@ test('[Fatina.Sequence] Sequence loop', (t: Test) => {
 	const sequence = new Sequence()
 		.setParent(ticker)
 		.prependInterval(1)
-		.append(new Tween(obj, [ 'x', 'y' ]).to({ x: 44, y: 44 }, 4))
-		.append(new Tween(obj, [ 'x', 'y' ]).to({ x: 0, y: 0 }, 4))
+		.append(new Tween(obj).to({ x: 44, y: 44 }, 4))
+		.append(new Tween(obj).to({ x: 0, y: 0 }, 4))
 		.appendCallback(() => sequenceCb++)
 		.onRestart(() => {})
 		.onRestart(() => restart += 1)
@@ -223,7 +223,7 @@ test('[Fatina.Sequence] Sequence timescale & kill', (t: Test) => {
 	ticker.start();
 
 	let killed = 0;
-	const tween = new Tween({}, []).setParent(ticker).to({}, 4).setTimescale(0.5);
+	const tween = new Tween({}).setParent(ticker).to({}, 4).setTimescale(0.5);
 	const sequence = tween.toSequence().setTimescale(0.5).onKilled(() => killed++);
 	sequence.start();
 
@@ -254,7 +254,7 @@ test('[Fatina.Sequence] Test Sequence with broken callback', (t: Test) => {
 	const obj = { x: 22 };
 	const sequence = new Sequence()
 		.setParent(ticker)
-		.append(new Tween(obj, ['x']).setParent(ticker).to({ x: 44 }, 1))
+		.append(new Tween(obj).setParent(ticker).to({ x: 44 }, 1))
 		.onStepStart(() => {
 			throw new Error('Test Random User Exception');
 		})
@@ -278,15 +278,15 @@ test('[Fatina.Sequence] Sequence of Sequence', (t: Test) => {
 
 	const sequence1 = new Sequence()
 		.setParent(ticker)
-		.append(new Tween(obj, [ 'x' ]).to({ x: 11 }, 1))
+		.append(new Tween(obj).to({ x: 11 }, 1))
 		.appendInterval(1)
-		.append(new Tween(obj, [ 'x' ]).to({ x: 22 }, 1));
+		.append(new Tween(obj).to({ x: 22 }, 1));
 
 	const sequence2 = new Sequence()
 		.setParent(ticker)
 		.prependInterval(1)
-		.append(new Tween(obj, [ 'y' ]).to({ y: 11 }, 1))
-		.append(new Tween(obj, [ 'y' ]).to({ y: 22 }, 1));
+		.append(new Tween(obj).to({ y: 11 }, 1))
+		.append(new Tween(obj).to({ y: 22 }, 1));
 
 	new Sequence()
 		.setParent(ticker)
@@ -324,12 +324,12 @@ test('[Fatina.Sequence] Sequence Skip', (t: Test) => {
 	const sequence = new Sequence()
 		.setParent(ticker)
 		.prependInterval(1)
-		.append(new Tween(obj, [ 'x', 'y' ])
+		.append(new Tween(obj)
 			.to({ x: 44, y: 44 }, 4)
 			.onStart(() => tweenStart++)
 			.onComplete(() => tweenComplete++)
 		)
-		.append(new Tween(obj, [ 'x', 'y' ])
+		.append(new Tween(obj)
 			.to({ x: 0, y: 0 }, 4)
 			.onStart(() => tweenStart++)
 			.onComplete(() => tweenComplete++)
@@ -363,19 +363,19 @@ test('[Fatina.Sequence] Sequence Looping relative tween', (t: Test) => {
 		.setParent(ticker)
 		.appendInterval(1)
 		.append(
-			new Tween(obj, [ 'x', 'y' ])
+			new Tween(obj)
 				.setRelative(true)
 				.to({ x: 1, y: 0 }, 1)
 				.setEasing('outQuad')
 		)
 		.append(
-			new Tween(obj, [ 'x', 'y' ])
+			new Tween(obj)
 				.setRelative(true)
 				.to({ x: 0, y: 1 }, 1)
 				.setEasing('inOutQuad')
 		)
 		.append(
-			new Tween(obj, [ 'x', 'y' ])
+			new Tween(obj)
 				.setRelative(true)
 				.to({ x: -1, y: -1 }, 1)
 				.setEasing('inQuad')
@@ -410,7 +410,7 @@ test('[Fatina.Sequence] Test Sequence with broken callback', (t: Test) => {
 		.setParent(ticker)
 		.setLoop(-1)
 		.appendInterval(1)
-		.append(new Tween(obj, ['x']).setParent(ticker).to({ x: 44 }, 1))
+		.append(new Tween(obj).setParent(ticker).to({ x: 44 }, 1))
 		.start();
 
 	ticker.tick(3);
@@ -428,7 +428,7 @@ test('[Fatina.Sequence] Test Reuse complexe sequence', (t: Test) => {
 	let callback = 0;
 	let callback2 = 0;
 	const obj = { x: 22 };
-	const sequence = new Tween(obj, ['x'])
+	const sequence = new Tween(obj)
 		.setParent(ticker)
 		.setRelative(true)
 		.setEasing('outSine')

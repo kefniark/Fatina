@@ -25,7 +25,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 	private index = 0;
 
 	// cache
-	private cur: (ITween | IPlayable)[] | undefined;
+	public cur: (ITween | IPlayable)[] | undefined;
 	private remains = 0;
 
 	public get count(): number {
