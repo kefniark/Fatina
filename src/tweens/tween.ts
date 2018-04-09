@@ -242,7 +242,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	public modify(diff: any, updateTo: boolean): void {
 		for (const prop of this.prop) {
 			if (!diff.hasOwnProperty(prop)) {
-				return;
+				continue;
 			}
 
 			this.obj[prop] += diff[prop];

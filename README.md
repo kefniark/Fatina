@@ -50,7 +50,7 @@ Fatina.tween(obj)
     .start();
 
 // example
-Fatina.tween(sprite, ['x', 'y'])
+Fatina.tween(sprite)
     .to({ x: 12, y:25 }, 0.5)
     .start();
 ```

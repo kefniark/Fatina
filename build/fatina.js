@@ -81,6 +81,60 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/core/enum/log.ts":
+/*!******************************!*\
+  !*** ./src/core/enum/log.ts ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Enum use to set the verbosity level of fatina and tweens
+ *
+ * @export
+ * @enum {number}
+ */
+var Log;
+(function (Log) {
+    Log[Log["None"] = 0] = "None";
+    Log[Log["Info"] = 1] = "Info";
+    Log[Log["Debug"] = 2] = "Debug";
+})(Log = exports.Log || (exports.Log = {}));
+
+
+/***/ }),
+
+/***/ "./src/core/enum/state.ts":
+/*!********************************!*\
+  !*** ./src/core/enum/state.ts ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Possible states of a Tween / Sequence
+ *
+ * @export
+ * @enum {number}
+ */
+var State;
+(function (State) {
+    State[State["Idle"] = 0] = "Idle";
+    State[State["Run"] = 1] = "Run";
+    State[State["Pause"] = 2] = "Pause";
+    State[State["Finished"] = 3] = "Finished";
+    State[State["Killed"] = 4] = "Killed";
+})(State = exports.State || (exports.State = {}));
+
+
+/***/ }),
+
 /***/ "./src/easing/easing.ts":
 /*!******************************!*\
   !*** ./src/easing/easing.ts ***!
@@ -294,6 +348,60 @@ exports.easeNames = e;
 
 /***/ }),
 
+/***/ "./src/easing/easingType.ts":
+/*!**********************************!*\
+  !*** ./src/easing/easingType.ts ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * List of all easing methods
+ *
+ * @export
+ * @enum {number}
+ */
+var EasingType;
+(function (EasingType) {
+    EasingType["Linear"] = "linear";
+    EasingType["InQuad"] = "inQuad";
+    EasingType["OutQuad"] = "outQuad";
+    EasingType["InOutQuad"] = "inOutQuad";
+    EasingType["InCubic"] = "inCubic";
+    EasingType["OutCubic"] = "outCubic";
+    EasingType["InOutCubic"] = "inOutCubic";
+    EasingType["InQuart"] = "inQuart";
+    EasingType["OutQuart"] = "outQuart";
+    EasingType["InOutQuart"] = "inOutQuart";
+    EasingType["InSine"] = "inSine";
+    EasingType["OutSine"] = "outSine";
+    EasingType["InOutSine"] = "inOutSine";
+    EasingType["InCirc"] = "inCirc";
+    EasingType["OutCirc"] = "outCirc";
+    EasingType["InOutCirc"] = "inOutCirc";
+    EasingType["InQuint"] = "inQuint";
+    EasingType["OutQuint"] = "outQuint";
+    EasingType["InOutQuint"] = "inOutQuint";
+    EasingType["InExponential"] = "inExponential";
+    EasingType["OutExponential"] = "outExponential";
+    EasingType["InOutExponential"] = "inOutExponential";
+    EasingType["InElastic"] = "inElastic";
+    EasingType["OutElastic"] = "outElastic";
+    EasingType["InOutElastic"] = "inOutElastic";
+    EasingType["InBack"] = "inBack";
+    EasingType["OutBack"] = "outBack";
+    EasingType["InOutBack"] = "inOutBack";
+    EasingType["InBounce"] = "inBounce";
+    EasingType["OutBounce"] = "outBounce";
+    EasingType["InOutBounce"] = "inOutBounce";
+})(EasingType = exports.EasingType || (exports.EasingType = {}));
+
+
+/***/ }),
+
 /***/ "./src/fatina.ts":
 /*!***********************!*\
   !*** ./src/fatina.ts ***!
@@ -304,6 +412,8 @@ exports.easeNames = e;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const log_1 = __webpack_require__(/*! ./core/enum/log */ "./src/core/enum/log.ts");
+const easingType_1 = __webpack_require__(/*! ./easing/easingType */ "./src/easing/easingType.ts");
 const ticker_1 = __webpack_require__(/*! ./ticker */ "./src/ticker.ts");
 const delay_1 = __webpack_require__(/*! ./tweens/delay */ "./src/tweens/delay.ts");
 const sequence_1 = __webpack_require__(/*! ./tweens/sequence */ "./src/tweens/sequence.ts");
@@ -327,13 +437,14 @@ if (typeof (window) !== 'undefined') {
  */
 class Fatina {
     constructor() {
+        this.easing = easingType_1.EasingType;
         // plugins
         this.plugin = {};
         this.loadedPlugins = [];
         this.eventCreated = [];
         // settings
         this.settings = {
-            logLevel: 0 /* None */,
+            logLevel: log_1.Log.None,
             safe: true,
             smooth: true,
             maxFrameDt: 50,
@@ -439,10 +550,11 @@ class Fatina {
      *
      * @export
      * @param {*} obj
+     * @param {string[]} properties
      * @returns {ITween}
      */
-    tween(obj) {
-        const t = new tween_1.Tween(obj);
+    tween(obj, properties) {
+        const t = new tween_1.Tween(obj, properties);
         this.addContext(t);
         return t;
     }
@@ -508,7 +620,7 @@ class Fatina {
             this.init();
         }
         obj.setParent(this.manager);
-        if (this.settings.logLevel !== 0 /* None */ || !this.settings.safe) {
+        if (this.settings.logLevel !== log_1.Log.None || !this.settings.safe) {
             obj.setSettings(this.settings);
         }
         this.emitCreated(obj);
@@ -566,7 +678,7 @@ class Fatina {
     loadPlugin(newPlugin) {
         newPlugin.init(this);
         this.loadedPlugins.push(newPlugin);
-        this.info(2 /* Debug */, 'Plugin Loaded', newPlugin.name);
+        this.info(log_1.Log.Debug, 'Plugin Loaded', newPlugin.name);
     }
     info(level, message, data) {
         if (level > this.settings.logLevel) {
@@ -665,6 +777,7 @@ module.exports = new fatina_1.Fatina();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const state_1 = __webpack_require__(/*! ./core/enum/state */ "./src/core/enum/state.ts");
 /**
  * Main Fatina Ticker
  * Parent of all the normal tween and sequence
@@ -676,13 +789,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 class Ticker {
     constructor() {
-        this.state = 0 /* Idle */;
+        this.state = state_1.State.Idle;
         this.timescale = 1;
         this.elapsed = 0;
         this.duration = 0;
         this.ticks = new Set();
         this.newTicks = new Set();
-        this.dt = 0;
     }
     setParent(parent, tick) {
         this.tickCb = tick;
@@ -729,30 +841,31 @@ class Ticker {
      * @memberOf Ticker
      */
     tick(dt) {
-        if (this.state !== 1 /* Run */) {
+        if (this.state !== state_1.State.Run) {
             return;
         }
-        this.dt = dt * this.timescale;
+        const localDt = dt * this.timescale;
         if (this.newTicks.size > 0) {
             this.newTicks.forEach((tick) => this.ticks.add(tick));
             this.newTicks.clear();
         }
-        this.ticks.forEach((tick) => tick(this.dt));
-        this.elapsed += this.dt;
+        // tslint:disable-next-line:only-arrow-functions
+        this.ticks.forEach(function (tick) { tick(localDt); });
+        this.elapsed += localDt;
     }
     start() {
-        if (this.state === 0 /* Idle */) {
-            this.state = 1 /* Run */;
+        if (this.state === state_1.State.Idle) {
+            this.state = state_1.State.Run;
         }
     }
     pause() {
-        if (this.state === 1 /* Run */) {
-            this.state = 2 /* Pause */;
+        if (this.state === state_1.State.Run) {
+            this.state = state_1.State.Pause;
         }
     }
     resume() {
-        if (this.state === 2 /* Pause */) {
-            this.state = 1 /* Run */;
+        if (this.state === state_1.State.Pause) {
+            this.state = state_1.State.Run;
         }
     }
     kill() {
@@ -762,23 +875,25 @@ class Ticker {
         if (this.parent && this.tickCb) {
             this.parent.removeTick(this.tickCb);
         }
-        this.state = 4 /* Killed */;
+        this.state = state_1.State.Killed;
     }
-    skip() { }
+    skip() {
+        throw new Error('main ticker cannot be skipped');
+    }
     reset() {
-        this.state = 0 /* Idle */;
+        this.state = state_1.State.Idle;
     }
     get isIdle() {
-        return this.state === 0 /* Idle */;
+        return this.state === state_1.State.Idle;
     }
     get isRunning() {
-        return this.state === 1 /* Run */;
+        return this.state === state_1.State.Run;
     }
     get isFinished() {
         return this.state >= 3;
     }
     get isPaused() {
-        return this.state === 2 /* Pause */;
+        return this.state === state_1.State.Pause;
     }
 }
 exports.Ticker = Ticker;
@@ -796,6 +911,8 @@ exports.Ticker = Ticker;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const log_1 = __webpack_require__(/*! ../core/enum/log */ "./src/core/enum/log.ts");
+const state_1 = __webpack_require__(/*! ../core/enum/state */ "./src/core/enum/state.ts");
 /**
  * Shared behaviors between different types of tweens and sequence
  * Used mostly to manage:
@@ -815,20 +932,20 @@ class BaseTween {
         this.elapsed = 0;
         this.duration = 0;
         this.timescale = 1;
-        this.state = 0 /* Idle */;
+        this.state = state_1.State.Idle;
         this.first = true;
     }
     get isIdle() {
-        return this.state === 0 /* Idle */;
+        return this.state === state_1.State.Idle;
     }
     get isRunning() {
-        return this.state === 1 /* Run */;
+        return this.state === state_1.State.Run;
     }
     get isFinished() {
         return this.state >= 3;
     }
     get isPaused() {
-        return this.state === 2 /* Pause */;
+        return this.state === state_1.State.Pause;
     }
     /**
      * Method used to start a tween
@@ -838,7 +955,7 @@ class BaseTween {
      * @memberOf BaseTween
      */
     start() {
-        if (this.state !== 0 /* Idle */) {
+        if (this.state !== state_1.State.Idle) {
             return this;
         }
         if (this.first) {
@@ -847,7 +964,7 @@ class BaseTween {
         else {
             this.check();
         }
-        this.state = 1 /* Run */;
+        this.state = state_1.State.Run;
         this.parent.addTick(this.tickCb);
         if (this.first) {
             this.emitEvent(this.events.start);
@@ -870,7 +987,7 @@ class BaseTween {
      * @memberOf BaseTween
      */
     reset(skipParent) {
-        this.state = 0 /* Idle */;
+        this.state = state_1.State.Idle;
         if (!skipParent) {
             this.removeParent();
         }
@@ -891,7 +1008,7 @@ class BaseTween {
     resetAndStart(dtRemains) {
         this.loopInit();
         this.emitEvent(this.events.restart);
-        this.state = 1 /* Run */;
+        this.state = state_1.State.Run;
         if (dtRemains > 0) {
             this.tickCb(dtRemains);
         }
@@ -930,11 +1047,11 @@ class BaseTween {
      * @memberOf BaseTween
      */
     pause() {
-        if (this.state !== 1 /* Run */) {
-            this.info(1 /* Info */, 'Cannot pause this tween ', this.state);
+        if (this.state !== state_1.State.Run) {
+            this.info(log_1.Log.Info, 'Cannot pause this tween ', this.state);
             return;
         }
-        this.state = 2 /* Pause */;
+        this.state = state_1.State.Pause;
         this.removeParent();
     }
     /**
@@ -945,11 +1062,11 @@ class BaseTween {
      * @memberOf BaseTween
      */
     resume() {
-        if (this.state !== 2 /* Pause */) {
-            this.info(1 /* Info */, 'Cannot resume this tween ', this.state);
+        if (this.state !== state_1.State.Pause) {
+            this.info(log_1.Log.Info, 'Cannot resume this tween ', this.state);
             return;
         }
-        this.state = 1 /* Run */;
+        this.state = state_1.State.Run;
         this.parent.addTick(this.tickCb);
     }
     /**
@@ -961,10 +1078,10 @@ class BaseTween {
      */
     skip(finalValue) {
         if (this.state >= 3) {
-            this.info(1 /* Info */, 'Cannot skip this tween ', this.state);
+            this.info(log_1.Log.Info, 'Cannot skip this tween ', this.state);
             return;
         }
-        if (this.state === 0 /* Idle */) {
+        if (this.state === state_1.State.Idle) {
             this.emitEvent(this.events.start);
         }
         if (finalValue) {
@@ -983,11 +1100,11 @@ class BaseTween {
      * @memberOf BaseTween
      */
     kill() {
-        if (this.state === 4 /* Killed */) {
-            this.info(1 /* Info */, 'Cannot kill this tween ', this.state);
+        if (this.state === state_1.State.Killed) {
+            this.info(log_1.Log.Info, 'Cannot kill this tween ', this.state);
             return;
         }
-        this.state = 4 /* Killed */;
+        this.state = state_1.State.Killed;
         this.removeParent();
         this.emitEvent(this.events.kill);
     }
@@ -1019,10 +1136,10 @@ class BaseTween {
     }
     complete() {
         if (this.state >= 3) {
-            this.info(1 /* Info */, 'Cannot complete this tween ', this.state);
+            this.info(log_1.Log.Info, 'Cannot complete this tween ', this.state);
             return;
         }
-        this.state = 3 /* Finished */;
+        this.state = state_1.State.Finished;
         this.removeParent();
         this.emitEvent(this.events.complete);
     }
@@ -1189,20 +1306,19 @@ const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/tweens/baseTwe
 class Delay extends baseTween_1.BaseTween {
     constructor(duration) {
         super();
-        this.remains = 0;
         this.duration = duration;
         this.tickCb = this.tick.bind(this);
     }
     tick(dt) {
-        this.remains = dt * this.timescale;
-        while (this.remains > 0) {
-            this.elapsed += this.remains;
+        this.remainsDt = dt * this.timescale;
+        while (this.remainsDt > 0) {
+            this.elapsed += this.remainsDt;
             const progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
-            this.emitEvent(this.events.update, [this.remains, progress]);
+            this.emitEvent(this.events.update, [this.remainsDt, progress]);
             if (this.elapsed < this.duration) {
                 return;
             }
-            this.remains = this.elapsed - this.duration;
+            this.remainsDt = this.elapsed - this.duration;
             if (this.loop) {
                 this.loop.value--;
                 if (this.loop.value !== 0) {
@@ -1230,6 +1346,8 @@ exports.Delay = Delay;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const log_1 = __webpack_require__(/*! ../core/enum/log */ "./src/core/enum/log.ts");
+const state_1 = __webpack_require__(/*! ../core/enum/state */ "./src/core/enum/state.ts");
 const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/tweens/baseTween.ts");
 const callback_1 = __webpack_require__(/*! ./callback */ "./src/tweens/callback.ts");
 const delay_1 = __webpack_require__(/*! ./delay */ "./src/tweens/delay.ts");
@@ -1249,8 +1367,8 @@ class Sequence extends baseTween_1.BaseTween {
         super();
         this.evtTick = new Set();
         this.tweens = [];
+        this.remainsDt = 0;
         this.index = 0;
-        this.remains = 0;
         this.tickCb = this.tick.bind(this);
         if (tweens) {
             this.tweens = new Array(tweens.length);
@@ -1281,9 +1399,9 @@ class Sequence extends baseTween_1.BaseTween {
         if (this.state >= 3) {
             return;
         }
-        this.remains = dt * this.timescale;
-        this.elapsed += this.remains;
-        this.localTick(this.remains);
+        this.remainsDt = dt * this.timescale;
+        this.elapsed += this.remainsDt;
+        this.localTick(this.remainsDt);
     }
     localTick(dt, remains) {
         // If no current tween, take the first one and start it
@@ -1292,26 +1410,27 @@ class Sequence extends baseTween_1.BaseTween {
         }
         if (this.cur) {
             // Tick every listener
+            // tslint:disable-next-line:only-arrow-functions
             this.evtTick.forEach(function (tick) { tick(dt); });
             // Dont emit update event for remains dt
             if (remains !== true) {
                 this.emitEvent(this.events.update, [dt, 0]);
             }
         }
-        this.remains = dt;
+        this.remainsDt = dt;
         // Current tween over
         if (this.cur) {
             for (const current of this.cur) {
-                if (current.state !== 3 /* Finished */) {
+                if (current.state !== state_1.State.Finished) {
                     return;
                 }
             }
-            this.remains = this.cur[0].elapsed - this.cur[0].duration;
+            this.remainsDt = this.cur[0].elapsed - this.cur[0].duration;
             this.emitEvent(this.events.stepEnd, [this.cur[0]]);
             this.cur = undefined;
             this.index++;
-            if (this.remains > 0.01) {
-                this.localTick(this.remains, true);
+            if (this.remainsDt > 0.01) {
+                this.localTick(this.remainsDt, true);
                 return;
             }
         }
@@ -1320,7 +1439,7 @@ class Sequence extends baseTween_1.BaseTween {
             if (this.loop) {
                 this.loop.value--;
                 if (this.loop.value !== 0) {
-                    this.resetAndStart(this.remains);
+                    this.resetAndStart(this.remainsDt);
                     return;
                 }
             }
@@ -1372,7 +1491,7 @@ class Sequence extends baseTween_1.BaseTween {
     }
     skip(finalValue) {
         if (this.state >= 3) {
-            this.info(1 /* Info */, 'Cannot skip this tween ', this.state);
+            this.info(log_1.Log.Info, 'Cannot skip this tween ', this.state);
             return;
         }
         for (const tweenArray of this.tweens) {
@@ -1387,8 +1506,8 @@ class Sequence extends baseTween_1.BaseTween {
         super.skip();
     }
     kill() {
-        if (this.state === 4 /* Killed */) {
-            this.info(1 /* Info */, 'Cannot kill this tween ', this.state);
+        if (this.state === state_1.State.Killed) {
+            this.info(log_1.Log.Info, 'Cannot kill this tween ', this.state);
             return;
         }
         for (const tweenArray of this.tweens) {
@@ -1428,7 +1547,9 @@ exports.Sequence = Sequence;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const state_1 = __webpack_require__(/*! ../core/enum/state */ "./src/core/enum/state.ts");
 const easing_1 = __webpack_require__(/*! ../easing/easing */ "./src/easing/easing.ts");
+const easingType_1 = __webpack_require__(/*! ../easing/easingType */ "./src/easing/easingType.ts");
 const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/tweens/baseTween.ts");
 const sequence_1 = __webpack_require__(/*! ./sequence */ "./src/tweens/sequence.ts");
 /**
@@ -1440,28 +1561,29 @@ const sequence_1 = __webpack_require__(/*! ./sequence */ "./src/tweens/sequence.
  * @implements {ITween}
  */
 class Tween extends baseTween_1.BaseTween {
-    constructor(object) {
+    constructor(object, properties) {
         super();
-        this.prop = [];
-        // options
-        this.steps = 0;
-        this.relative = false;
-        // cache
         this.p = 0;
         this.v = 0;
-        this.remains = 0;
+        // options
+        this.steps = 0;
+        this.rem = 0;
+        this.relative = false;
         this.obj = object;
+        this.prop = properties;
         this.tickCb = this.tick.bind(this);
     }
     /**
      * Used to define the object and the properties modified by this tween
      *
      * @param {*} object
+     * @param {string[]} properties
      *
      * @memberOf Tween
      */
-    init(object) {
+    init(object, properties) {
         this.obj = object;
+        this.prop = properties;
     }
     /**
      * Method used on start to check the values of this tween
@@ -1487,7 +1609,7 @@ class Tween extends baseTween_1.BaseTween {
         }
         // Easing
         if (!this.ease) {
-            this.ease = easing_1.easeNames["linear" /* Linear */];
+            this.ease = easing_1.easeNames[easingType_1.EasingType.Linear];
         }
         this.check();
     }
@@ -1527,9 +1649,9 @@ class Tween extends baseTween_1.BaseTween {
         if (this.state >= 3) {
             return;
         }
-        this.remains = dt * this.timescale;
-        while (this.remains > 0) {
-            this.elapsed += this.remains;
+        this.rem = dt * this.timescale;
+        while (this.rem > 0) {
+            this.elapsed += this.rem;
             this.p = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
             this.v = this.ease(this.p);
             // Yoyo easing (need to be reversed)
@@ -1546,11 +1668,11 @@ class Tween extends baseTween_1.BaseTween {
                     this.obj[prop] = this.cf[prop] + (this.ct[prop] - this.cf[prop]) * this.v;
                 }
             }
-            this.emitEvent(this.events.update, [this.remains, this.p]);
+            this.emitEvent(this.events.update, [this.rem, this.p]);
             if (this.elapsed < this.duration) {
                 return;
             }
-            this.remains = this.elapsed - this.duration;
+            this.rem = this.elapsed - this.duration;
             // Yoyo effect ( A -> B -> A )
             if (this.yo && this.yo.value > 0) {
                 this.reverse();
@@ -1581,11 +1703,6 @@ class Tween extends baseTween_1.BaseTween {
      */
     from(from) {
         this.f = from;
-        for (const index in this.f) {
-            if (this.f.hasOwnProperty(index)) {
-                this.prop.push(index);
-            }
-        }
         return this;
     }
     /**
@@ -1600,11 +1717,6 @@ class Tween extends baseTween_1.BaseTween {
     to(to, duration) {
         this.t = to;
         this.duration = duration;
-        for (const index in this.t) {
-            if (this.t.hasOwnProperty(index)) {
-                this.prop.push(index);
-            }
-        }
         return this;
     }
     /**
@@ -1630,7 +1742,7 @@ class Tween extends baseTween_1.BaseTween {
     modify(diff, updateTo) {
         for (const prop of this.prop) {
             if (!diff.hasOwnProperty(prop)) {
-                return;
+                continue;
             }
             this.obj[prop] += diff[prop];
             if (updateTo) {
@@ -1677,7 +1789,7 @@ class Tween extends baseTween_1.BaseTween {
         this.t = previous;
         const elapsed = (1 - (this.elapsed / this.duration)) * this.duration;
         this.elapsed = Math.round(elapsed * 1000) / 1000;
-        if (this.state === 3 /* Finished */) {
+        if (this.state === state_1.State.Finished) {
             this.reset(true);
             this.start();
         }
