@@ -53,6 +53,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 */
 	public init(object: any) {
 		this.obj = object;
+		this.prop.length = 0;
 	}
 
 	/**
@@ -143,10 +144,8 @@ export class Tween extends BaseTween<Tween> implements ITween {
 			}
 
 			// Update if the object still exist
-			if (this.obj) {
-				for (const prop of this.prop) {
-					this.obj[prop] = this.cf[prop] + (this.ct[prop] - this.cf[prop]) * this.v;
-				}
+			for (const prop of this.prop) {
+				this.obj[prop] = this.cf[prop] + (this.ct[prop] - this.cf[prop]) * this.v;
 			}
 
 			this.emitEvent(this.events.update, [this.remains, this.p]);
@@ -190,11 +189,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 */
 	public from(from: any): ITween {
 		this.f = from;
-		for (const index in this.f) {
-			if (this.f.hasOwnProperty(index)) {
-				this.prop.push(index);
-			}
-		}
+		this.updateProp();
 		return this;
 	}
 
@@ -210,12 +205,27 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	public to(to: any, duration: number): ITween {
 		this.t = to;
 		this.duration = duration;
+		this.updateProp();
+		return this;
+	}
+
+	/**
+	 * Compute the properties
+	 *
+	 * @private
+	 */
+	private updateProp() {
+		if (!this.obj) {
+			return;
+		}
+
 		for (const index in this.t) {
-			if (this.t.hasOwnProperty(index)) {
+			if (this.t.hasOwnProperty(index) && this.obj.hasOwnProperty(index)) {
 				this.prop.push(index);
 			}
 		}
-		return this;
+
+		this.prop.filter((el, i, a) => i === a.indexOf(el));
 	}
 
 	/**

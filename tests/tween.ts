@@ -68,6 +68,47 @@ test('[Fatina.Tween] Create a basic tween', (t: Test) => {
 	t.end();
 });
 
+test('[Fatina.Tween] Create a basic tween with strange dest', (t: Test) => {
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+
+	// tslint:disable-next-line:no-construct
+	const src = new String('Src') as any;
+	src.x = 22;
+	src.y = -42;
+
+	// tslint:disable-next-line:no-construct
+	const dest = new String('Dest') as any;
+	dest.x = 44;
+	dest.y = 44;
+
+	const ticker = new Ticker();
+	ticker.start();
+
+	const tween = new Tween(obj)
+		.from(src)
+		.to(dest, 10)
+		.setParent(ticker);
+
+	// Test a first update before start
+	ticker.tick(1);
+	t.equal(obj.x, 22, 'check the object is not ticked if not started');
+
+	// Start & tick
+	tween.start();
+	ticker.tick(1);
+	t.notEqual(obj.x, 22, 'check the object moved');
+
+	// Tick to the end
+	ticker.tick(9);
+	t.equal(obj.x, 44, 'check the object reach the end');
+
+	ticker.tick(1);
+	t.equal(obj.name, 'nano', 'check the other properties are not modified');
+	t.equal(obj.alpha, 1, 'check the other properties are not modified');
+
+	t.end();
+});
+
 test('[Fatina.Tween] Test Tween From property', (t: Test) => {
 	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 	const dest = { x: 44, y: 44 };
@@ -125,21 +166,6 @@ test('[Fatina.Tween] Test Tween Relative property', (t: Test) => {
 test('[Fatina.Tween] Test Tween with a undefined object', (t: Test) => {
 	const obj: any = undefined;
 	const dest = { x: 44, y: 44 };
-
-	const ticker = new Ticker();
-	ticker.start();
-
-	const tween = new Tween(obj)
-		.to(dest, 5)
-		.setParent(ticker);
-
-	t.throws(() => tween.start(), 'Check Start explode');
-	t.end();
-});
-
-test('[Fatina.Tween] Test Tween with a undefined property', (t: Test) => {
-	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
-	const dest = { tuna: 44 };
 
 	const ticker = new Ticker();
 	ticker.start();
