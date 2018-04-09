@@ -10,7 +10,7 @@ import { BaseTween } from './baseTween';
  * @implements {IPlayable}
  */
 export class Delay extends BaseTween<Delay> implements IPlayable {
-	private remainsDt: number;
+	private remains: number;
 
 	constructor(duration: number) {
 		super();
@@ -19,18 +19,18 @@ export class Delay extends BaseTween<Delay> implements IPlayable {
 	}
 
 	private tick(dt: number) {
-		this.remainsDt = dt * this.timescale;
+		this.remains = dt * this.timescale;
 
-		while (this.remainsDt > 0) {
-			this.elapsed += this.remainsDt;
+		while (this.remains > 0) {
+			this.elapsed += this.remains;
 			const progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
-			this.emitEvent(this.events.update, [this.remainsDt, progress]);
+			this.emitEvent(this.events.update, [this.remains, progress]);
 
 			if (this.elapsed < this.duration) {
 				return;
 			}
 
-			this.remainsDt = this.elapsed - this.duration;
+			this.remains = this.elapsed - this.duration;
 
 			if (this.loop) {
 				this.loop.value--;

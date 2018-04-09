@@ -221,4 +221,4 @@ e.inOutBounce = (t: number): number => {
 	return e.outBounce(t * 2 - 1) * 0.5 + 0.5;
 };
 
-export let easeNames = e;
+export const easeNames = e;

@@ -5,7 +5,7 @@
  * @export
  * @enum {number}
  */
-export enum EasingType {
+export const enum EasingType {
 	Linear = 'linear',
 	InQuad = 'inQuad',
 	OutQuad = 'outQuad',

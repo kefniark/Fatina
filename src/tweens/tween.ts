@@ -18,8 +18,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	// properties
 	private obj: any;
 	private prop: string[];
-	private p = 0;
-	private v = 0;
 
 	// user from & to
 	private f: any;
@@ -31,9 +29,13 @@ export class Tween extends BaseTween<Tween> implements ITween {
 
 	// options
 	private steps = 0;
-	private rem = 0;
 	private relative = false;
 	private ease: (t: number) => number;
+
+	// cache
+	private p = 0;
+	private v = 0;
+	private remains = 0;
 
 	constructor(object: any, properties: string[]) {
 		super();
@@ -127,9 +129,9 @@ export class Tween extends BaseTween<Tween> implements ITween {
 			return;
 		}
 
-		this.rem = dt * this.timescale;
-		while (this.rem > 0) {
-			this.elapsed += this.rem;
+		this.remains = dt * this.timescale;
+		while (this.remains > 0) {
+			this.elapsed += this.remains;
 			this.p = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
 			this.v = this.ease(this.p);
 
@@ -150,13 +152,13 @@ export class Tween extends BaseTween<Tween> implements ITween {
 				}
 			}
 
-			this.emitEvent(this.events.update, [this.rem, this.p]);
+			this.emitEvent(this.events.update, [this.remains, this.p]);
 
 			if (this.elapsed < this.duration) {
 				return;
 			}
 
-			this.rem = this.elapsed - this.duration;
+			this.remains = this.elapsed - this.duration;
 
 			// Yoyo effect ( A -> B -> A )
 			if (this.yo && this.yo.value > 0) {

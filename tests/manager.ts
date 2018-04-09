@@ -316,7 +316,6 @@ test('[Fatina.Manager] Create ticker', (t: Test) => {
 	gameTicker.kill();
 	gameTicker.kill();
 	fatina.update(1);
-	t.throws(() => gameTicker.skip(), 'cannot skip ticker');
 	gameTicker.reset();
 
 	fatina.destroy();

@@ -22,9 +22,11 @@ import { Delay } from './delay';
 export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker, IPlayable {
 	private readonly evtTick: Set<{(dt: number): void}> = new Set();
 	private readonly tweens: ((ITween | IPlayable)[])[] = [];
-	public cur: (ITween | IPlayable)[] | undefined;
-	private remainsDt = 0;
 	private index = 0;
+
+	// cache
+	private cur: (ITween | IPlayable)[] | undefined;
+	private remains = 0;
 
 	public get count(): number {
 		return this.tweens.length;
@@ -64,9 +66,9 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		if (this.state >= 3) {
 			return;
 		}
-		this.remainsDt = dt * this.timescale;
-		this.elapsed += this.remainsDt;
-		this.localTick(this.remainsDt);
+		this.remains = dt * this.timescale;
+		this.elapsed += this.remains;
+		this.localTick(this.remains);
 	}
 
 	private localTick(dt: number, remains?: boolean) {
@@ -77,7 +79,6 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 
 		if (this.cur) {
 			// Tick every listener
-			// tslint:disable-next-line:only-arrow-functions
 			this.evtTick.forEach(function (tick) { tick(dt); });
 
 			// Dont emit update event for remains dt
@@ -86,7 +87,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 			}
 		}
 
-		this.remainsDt = dt;
+		this.remains = dt;
 
 		// Current tween over
 		if (this.cur) {
@@ -96,14 +97,14 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 				}
 			}
 
-			this.remainsDt = this.cur[0].elapsed - this.cur[0].duration;
+			this.remains = this.cur[0].elapsed - this.cur[0].duration;
 
 			this.emitEvent(this.events.stepEnd, [this.cur[0]]);
 			this.cur = undefined;
 			this.index++;
 
-			if (this.remainsDt > 0.01) {
-				this.localTick(this.remainsDt, true);
+			if (this.remains > 0.01) {
+				this.localTick(this.remains, true);
 				return;
 			}
 		}
@@ -113,7 +114,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 			if (this.loop) {
 				this.loop.value--;
 				if (this.loop.value !== 0) {
-					this.resetAndStart(this.remainsDt);
+					this.resetAndStart(this.remains);
 					return;
 				}
 			}

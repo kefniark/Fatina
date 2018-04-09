@@ -7,7 +7,6 @@ import { ISequence } from './core/interfaces/ISequence';
 import { ISettings } from './core/interfaces/ISettings';
 import { ITicker } from './core/interfaces/ITicker';
 import { ITween } from './core/interfaces/ITween';
-import { EasingType } from './easing/easingType';
 import { Ticker } from './ticker';
 import { Delay } from './tweens/delay';
 import { Sequence } from './tweens/sequence';
@@ -32,8 +31,6 @@ if (typeof(window) !== 'undefined') {
  * @class Fatina
  */
 export class Fatina {
-	public easing = EasingType;
-
 	// plugins
 	public plugin: any = {};
 	private readonly loadedPlugins: IPlugin[] = [];
