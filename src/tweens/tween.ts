@@ -17,7 +17,7 @@ import { Sequence } from './sequence';
 export class Tween extends BaseTween<Tween> implements ITween {
 	// properties
 	private obj: any;
-	private prop: string[];
+	private readonly prop: string[] = [];
 
 	// user from & to
 	private f: any;
@@ -37,11 +37,10 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	private v = 0;
 	private remains = 0;
 
-	constructor(object: any, properties: string[]) {
+	constructor(object: any) {
 		super();
 
 		this.obj = object;
-		this.prop = properties;
 		this.tickCb = this.tick.bind(this);
 	}
 
@@ -49,13 +48,12 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 * Used to define the object and the properties modified by this tween
 	 *
 	 * @param {*} object
-	 * @param {string[]} properties
 	 *
 	 * @memberOf Tween
 	 */
-	public init(object: any, properties: string[]) {
+	public init(object: any) {
 		this.obj = object;
-		this.prop = properties;
+		this.prop.length = 0;
 	}
 
 	/**
@@ -69,13 +67,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 		// Check the object
 		if (!this.obj) {
 			throw new Error('undefined object');
-		}
-
-		// Check the properties of that object
-		for (const prop of this.prop) {
-			if (!(prop in this.obj)) {
-				throw new Error('unknown property' + prop);
-			}
 		}
 
 		// Check this tween will be updated
@@ -146,10 +137,8 @@ export class Tween extends BaseTween<Tween> implements ITween {
 			}
 
 			// Update if the object still exist
-			if (this.obj) {
-				for (const prop of this.prop) {
-					this.obj[prop] = this.cf[prop] + (this.ct[prop] - this.cf[prop]) * this.v;
-				}
+			for (const prop of this.prop) {
+				this.obj[prop] = this.cf[prop] + (this.ct[prop] - this.cf[prop]) * this.v;
 			}
 
 			this.emitEvent(this.events.update, [this.remains, this.p]);
@@ -193,6 +182,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 */
 	public from(from: any): ITween {
 		this.f = from;
+		this.updateProp();
 		return this;
 	}
 
@@ -208,7 +198,27 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	public to(to: any, duration: number): ITween {
 		this.t = to;
 		this.duration = duration;
+		this.updateProp();
 		return this;
+	}
+
+	/**
+	 * Compute the properties
+	 *
+	 * @private
+	 */
+	private updateProp() {
+		if (!this.obj) {
+			return;
+		}
+
+		for (const index in this.t) {
+			if (this.t.hasOwnProperty(index) && this.obj.hasOwnProperty(index)) {
+				this.prop.push(index);
+			}
+		}
+
+		this.prop.filter((el, i, a) => i === a.indexOf(el));
 	}
 
 	/**
