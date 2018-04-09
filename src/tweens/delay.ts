@@ -18,6 +18,10 @@ export class Delay extends BaseTween<Delay> implements IPlayable {
 		this.tickCb = this.tick.bind(this);
 	}
 
+	public init(duration: number) {
+		this.duration = duration;
+	}
+
 	private tick(dt: number) {
 		this.remains = dt * this.timescale;
 

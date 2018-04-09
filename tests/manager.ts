@@ -6,23 +6,23 @@ const fatina = new Fatina();
 fatina.init(false);
 
 test('[Fatina.Manager] Update manually', (t: Test) => {
-	const previousTime = fatina.time;
+	const previousTime = fatina.stats.time;
 	fatina.update(1);
 
-	t.equal(previousTime + 1, fatina.time, 'Check the global time was properly updated');
+	t.equal(previousTime + 1, fatina.stats.time, 'Check the global time was properly updated');
 	t.equal(previousTime + 1, fatina.elapsed, 'Check the fatina elapsed time was properly updated');
 
 	t.end();
 });
 
 test('[Fatina.Manager] Set timescale', (t: Test) => {
-	const previousTime = fatina.time;
+	const previousTime = fatina.stats.time;
 	const previousElapsed = fatina.elapsed;
 
 	fatina.setTimescale(0.5);
 	fatina.update(1);
 
-	t.equal(previousTime + 1, fatina.time, 'Check the global time was properly updated without timescale');
+	t.equal(previousTime + 1, fatina.stats.time, 'Check the global time was properly updated without timescale');
 	t.equal(previousElapsed + 0.5, fatina.elapsed, 'Check the fatina elapsed time was properly updated with the timescale');
 	fatina.setTimescale(1);
 
@@ -30,19 +30,19 @@ test('[Fatina.Manager] Set timescale', (t: Test) => {
 });
 
 test('[Fatina.Manager] Pause / Resume', (t: Test) => {
-	const previousTime = fatina.time;
+	const previousTime = fatina.stats.time;
 	const previousElapsed = fatina.elapsed;
 
 	fatina.pause();
 	fatina.update(1);
 
-	t.equal(previousTime + 1, fatina.time, 'Check the global time is still updated');
+	t.equal(previousTime + 1, fatina.stats.time, 'Check the global time is still updated');
 	t.equal(previousElapsed, fatina.elapsed, 'Check the fatina elapsed time is paused');
 
 	fatina.resume();
 	fatina.update(1);
 
-	t.equal(previousTime + 2, fatina.time, 'Check the global time is still updated');
+	t.equal(previousTime + 2, fatina.stats.time, 'Check the global time is still updated');
 	t.equal(previousElapsed + 1, fatina.elapsed, 'Check the fatina elapsed time is updated and was properly resumed');
 
 	t.end();
@@ -255,7 +255,7 @@ test('[Fatina.Manager] Create cascade tween', (t: Test) => {
 test('[Fatina.Manager] Test Pooling', (t: Test) => {
 	let start = 0;
 	let complete = 0;
-	for (let i = 0; i < 1024; i++) {
+	for (let i = 0; i < 2048; i++) {
 		const duration = Math.random() * 49 + 1;
 		const obj = { x: 0, y: 0, z: 0 };
 		const tween = fatina.tween(obj).to({ x: 1 }, duration);
@@ -266,8 +266,9 @@ test('[Fatina.Manager] Test Pooling', (t: Test) => {
 	}
 	fatina.update(50);
 
-	t.equal(start, 1024);
-	t.equal(complete, 1024);
+	console.log(start, complete, fatina.stats);
+	t.equal(start, 2048);
+	t.equal(complete, 2048);
 	t.end();
 });
 

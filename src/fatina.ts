@@ -7,6 +7,7 @@ import { ISequence } from './core/interfaces/ISequence';
 import { ISettings } from './core/interfaces/ISettings';
 import { ITicker } from './core/interfaces/ITicker';
 import { ITween } from './core/interfaces/ITween';
+import { Pool } from './pool';
 import { Ticker } from './ticker';
 import { Delay } from './tweens/delay';
 import { Sequence } from './tweens/sequence';
@@ -37,7 +38,7 @@ export class Fatina {
 	private readonly eventCreated: {(control: IControl): void}[] = [];
 
 	// settings
-	private readonly settings = {
+	public readonly settings = {
 		logLevel: Log.None,
 		safe: true,
 		smooth: true,
@@ -46,12 +47,21 @@ export class Fatina {
 		maxDt: 15000 // 15s of animation
 	} as ISettings;
 
+	// stats
+	public stats = {
+		tweens: 0,
+		delay: 0,
+		time: 0,
+		frame: 0
+	};
+
 	// properties
-	public time = 0;
 	private dt = 0;
 	private lastTime = 0;
 	private initialized = false;
-	public manager: Ticker;
+	private manager: Ticker;
+	private readonly poolTween: Pool<Tween>;
+	private readonly poolDelay: Pool<Delay>;
 
 	public get elapsed(): number {
 		return this.manager.elapsed;
@@ -62,6 +72,17 @@ export class Fatina {
 			this.init();
 		}
 		return this.manager;
+	}
+
+	constructor() {
+		this.poolTween = new Pool(1024, () => {
+			this.stats.tweens += 1;
+			return new Tween(undefined);
+		});
+		this.poolDelay = new Pool(128, () => {
+			this.stats.delay += 1;
+			return new Delay(0);
+		});
 	}
 
 	/**
@@ -150,8 +171,10 @@ export class Fatina {
 		if (!this.initialized || !this.manager) {
 			return;
 		}
+		this.poolTween.update();
 		this.manager.tick(timestamp);
-		this.time += timestamp;
+		this.stats.time += timestamp;
+		this.stats.frame += 1;
 	}
 
 	/**
@@ -162,8 +185,10 @@ export class Fatina {
 	 * @returns {ITween}
 	 */
 	public tween(obj: any): ITween {
-		const t = new Tween(obj);
+		const t = this.poolTween.get();
+		t.init(obj);
 		this.addContext(t);
+		t.onFinally(() => this.poolTween.add(t));
 		return t;
 	}
 
@@ -188,8 +213,10 @@ export class Fatina {
 	 * @returns {IPlayable}
 	 */
 	public delay(duration: number): IPlayable {
-		const d = new Delay(duration);
+		const d = this.poolDelay.get();
+		d.init(duration);
 		this.addContext(d);
+		// d.onFinally(() => this.poolDelay.add(d));
 		return d;
 	}
 

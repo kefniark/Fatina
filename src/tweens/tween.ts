@@ -24,8 +24,8 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	private t: any;
 
 	// current value from & to (can changed based on yoyo, reset, ...)
-	private cf: any;
-	private ct: any;
+	private cf: any = {};
+	private ct: any = {};
 
 	// options
 	private steps = 0;
@@ -91,10 +91,14 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 */
 	protected check() {
 		if (!this.cf) {
-			this.cf = {};
+			for (const prop of Object.keys(this.cf)) {
+				delete this.cf[prop];
+			}
 		}
 		if (!this.ct) {
-			this.ct = {};
+			for (const prop of Object.keys(this.ct)) {
+				delete this.ct[prop];
+			}
 		}
 
 		for (const prop of this.prop) {

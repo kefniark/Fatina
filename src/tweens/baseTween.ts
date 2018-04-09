@@ -84,6 +84,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 */
 	public recycle() {
 		this.reset(true);
+		this.events = {};
 		this.first = true;
 	}
 
@@ -267,6 +268,9 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 		this.state = State.Finished;
 		this.removeParent();
 		this.emitEvent(this.events.complete);
+		if (this.state >= 3) {
+			this.emitEvent(this.events.finally);
+		}
 	}
 
 	protected removeParent() {
@@ -369,11 +373,16 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 		return this.onEvent('complete', cb);
 	}
 
+	public onFinally(cb: () => void): T {
+		return this.onEvent('finally', cb);
+	}
+
 	protected onEvent(name: string, cb: any): T {
 		if (!this.events[name]) {
-			this.events[name] = [];
+			this.events[name] = [cb];
+		} else {
+			this.events[name].push(cb);
 		}
-		this.events[name].push(cb);
 		return this as any;
 	}
 }
