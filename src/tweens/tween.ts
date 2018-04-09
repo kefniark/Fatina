@@ -69,13 +69,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 			throw new Error('undefined object');
 		}
 
-		// Check the properties of that object
-		for (const prop of this.prop) {
-			if (!(prop in this.obj)) {
-				throw new Error('unknown property' + prop);
-			}
-		}
-
 		// Check this tween will be updated
 		if (!this.parent) {
 			throw new Error('no ticker');

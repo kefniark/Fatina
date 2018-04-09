@@ -178,6 +178,21 @@ test('[Fatina.Tween] Test Tween with a undefined object', (t: Test) => {
 	t.end();
 });
 
+test('[Fatina.Tween] Test Tween with a undefined property', (t: Test) => {
+	const obj: any = { x: 1, y: 4 };
+	const dest = { x: 44, y: 44, z: 2 };
+
+	const ticker = new Ticker();
+	ticker.start();
+
+	const tween = new Tween(obj)
+		.to(dest, 5)
+		.setParent(ticker);
+
+	t.doesNotThrow(() => tween.start(), 'Check Start not explode');
+	t.end();
+});
+
 test('[Fatina.Tween] Test mix of concurrent running and paused tween', (t: Test) => {
 	const dest = { x: 44, y: 44 };
 	const ticker = new Ticker();
