@@ -4,7 +4,7 @@
  * @export
  * @enum {number}
  */
-export enum Log {
+export const enum Log {
 	None,
 	Info,
 	Debug

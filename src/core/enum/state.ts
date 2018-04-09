@@ -4,7 +4,7 @@
  * @export
  * @enum {number}
  */
-export enum State {
+export const enum State {
 	Idle,
 	Run,
 	Pause,
