@@ -82,7 +82,7 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 			this.evtTick.forEach(function (tick) { tick(dt); });
 
 			// Dont emit update event for remains dt
-			if (remains !== true) {
+			if (remains !== true && this.events.update) {
 				this.emitEvent(this.events.update, [dt, 0]);
 			}
 		}
@@ -99,7 +99,10 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 
 			this.remains = this.cur[0].elapsed - this.cur[0].duration;
 
-			this.emitEvent(this.events.stepEnd, [this.cur[0]]);
+			if (this.events.stepEnd) {
+				this.emitEvent(this.events.stepEnd, this.cur[0]);
+			}
+
 			this.cur = undefined;
 			this.index++;
 
@@ -125,12 +128,16 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 
 	private nextTween() {
 		this.cur = this.tweens[this.index];
-		if (this.cur) {
-			for (const tween of this.cur) {
-				tween.start();
-			}
+		if (!this.cur) {
+			return;
+		}
 
-			this.emitEvent(this.events.stepStart, [this.cur[0]]);
+		for (const tween of this.cur) {
+			tween.start();
+		}
+
+		if (this.events.stepStart) {
+			this.emitEvent(this.events.stepStart, this.cur[0]);
 		}
 	}
 
@@ -182,11 +189,15 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 
 		for (const tweenArray of this.tweens) {
 			for (const tween of tweenArray) {
-				if (tween.elapsed === 0) {
-					this.emitEvent(this.events.stepStart, [tween]);
+				if (tween.elapsed === 0 && this.events.stepStart) {
+					this.emitEvent(this.events.stepStart, tween);
 				}
+
 				tween.skip(finalValue);
-				this.emitEvent(this.events.stepEnd, [tween]);
+
+				if (this.events.stepEnd) {
+					this.emitEvent(this.events.stepEnd, tween);
+				}
 			}
 		}
 		super.skip();
