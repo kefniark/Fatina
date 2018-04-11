@@ -189,15 +189,12 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 
 		for (const tweenArray of this.tweens) {
 			for (const tween of tweenArray) {
-				if (tween.elapsed === 0 && this.events.stepStart) {
+				if (tween.elapsed === 0) {
 					this.emitEvent(this.events.stepStart, tween);
 				}
 
 				tween.skip(finalValue);
-
-				if (this.events.stepEnd) {
-					this.emitEvent(this.events.stepEnd, tween);
-				}
+				this.emitEvent(this.events.stepEnd, tween);
 			}
 		}
 		super.skip();
