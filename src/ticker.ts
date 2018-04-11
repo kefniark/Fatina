@@ -77,11 +77,15 @@ export class Ticker implements ITicker {
 
 		this.dt = dt * this.timescale;
 		if (this.newTicks.size > 0) {
-			this.newTicks.forEach((tick) => this.ticks.add(tick));
+			for (const tick of this.newTicks) {
+				this.ticks.add(tick);
+			}
 			this.newTicks.clear();
 		}
 
-		this.ticks.forEach((tick) => tick(this.dt));
+		for (const tick of this.ticks) {
+			tick(this.dt);
+		}
 		this.elapsed += this.dt;
 	}
 

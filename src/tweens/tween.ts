@@ -145,7 +145,9 @@ export class Tween extends BaseTween<Tween> implements ITween {
 				this.obj[prop] = this.cf[prop] + (this.ct[prop] - this.cf[prop]) * this.v;
 			}
 
-			this.emitEvent(this.events.update, [this.remains, this.p]);
+			if (this.events.update) {
+				this.emitEvent(this.events.update, [this.remains, this.p]);
+			}
 
 			if (this.elapsed < this.duration) {
 				return;

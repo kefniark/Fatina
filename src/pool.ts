@@ -28,12 +28,14 @@ export class Pool<T extends BaseTween<any>> {
 	}
 
 	public update() {
-		if (this.tmp.size > 0) {
-			for (const t of this.tmp) {
-				t.recycle();
-				this.data.add(t);
-			}
-			this.tmp.clear();
+		if (this.tmp.size === 0) {
+			return;
 		}
+
+		for (const t of this.tmp) {
+			t.recycle();
+			this.data.add(t);
+		}
+		this.tmp.clear();
 	}
 }

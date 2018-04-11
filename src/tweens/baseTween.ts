@@ -17,7 +17,7 @@ import { ITweenProperty } from '../core/interfaces/ITweenProperty';
  */
 export abstract class BaseTween<T extends BaseTween<any>> {
 	// events
-	protected events: { [id: string]: any[] } = {};
+	protected readonly events: { [id: string]: any } = {};
 
 	// public properties
 	public elapsed = 0;
@@ -84,7 +84,9 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 */
 	public recycle() {
 		this.reset(true);
-		this.events = {};
+		for (const id of Object.keys(this.events)) {
+			delete this.events[id];
+		}
 		this.first = true;
 	}
 
@@ -316,8 +318,12 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 			return;
 		}
 
-		for (const listener of listeners) {
-			this.emit(listener, args);
+		if (listeners instanceof Array) {
+			for (const listener of listeners) {
+				this.emit(listener, args);
+			}
+		} else {
+			this.emit(listeners, args);
 		}
 	}
 
@@ -387,9 +393,11 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 
 	protected onEvent(name: string, cb: any): T {
 		if (!this.events[name]) {
-			this.events[name] = [cb];
-		} else {
+			this.events[name] = cb;
+		} else if (this.events[name] instanceof Array) {
 			this.events[name].push(cb);
+		} else {
+			this.events[name] = [this.events[name], cb];
 		}
 		return this as any;
 	}

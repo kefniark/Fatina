@@ -21,11 +21,11 @@ import { Delay } from './delay';
  */
 export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker, IPlayable {
 	private readonly evtTick: Set<{(dt: number): void}> = new Set();
-	private tweens: ((ITween | IPlayable)[])[] = [];
+	private readonly tweens: ((ITween | IPlayable) | (ITween | IPlayable)[])[] = [];
 	private index = 0;
 
 	// cache
-	private cur: (ITween | IPlayable)[] | undefined;
+	private cur: (ITween | IPlayable) | (ITween | IPlayable)[] | undefined;
 	private remains = 0;
 
 	public get count(): number {
@@ -35,15 +35,22 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 	constructor(tweens?: ITween[] | ISequence[] | IPlayable[]) {
 		super();
 		this.tickCb = this.tick.bind(this);
-		this.init(tweens);
+		if (tweens) {
+			for (const tween of tweens) {
+				this.append(tween as any);
+			}
+		}
 	}
 
 	public init(tweens?: ITween[] | ISequence[] | IPlayable[]) {
+		this.evtTick.clear();
+		this.tweens.length = 0;
+		this.index = 0;
+		this.remains = 0;
+
 		if (tweens) {
-			this.tweens = new Array(tweens.length);
-			for (let i = 0; i < tweens.length; i++) {
-				tweens[i].setParent(this);
-				this.tweens[i] = [tweens[i]];
+			for (const tween of tweens) {
+				this.append(tween as any);
 			}
 		}
 	}
@@ -51,8 +58,12 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 	protected loopInit() {
 		this.index = 0;
 		for (const tweenArray of this.tweens) {
-			for (const tween of tweenArray) {
-				tween.reset();
+			if (tweenArray instanceof Array) {
+				for (const tween of tweenArray) {
+					tween.reset();
+				}
+			} else {
+				tweenArray.reset();
 			}
 		}
 	}
@@ -82,10 +93,12 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 
 		if (this.cur) {
 			// Tick every listener
-			this.evtTick.forEach(function (tick) { tick(dt); });
+			for (const tick of this.evtTick) {
+				tick(dt);
+			}
 
 			// Dont emit update event for remains dt
-			if (remains !== true) {
+			if (remains !== true && this.events.update) {
 				this.emitEvent(this.events.update, [dt, 0]);
 			}
 		}
@@ -94,15 +107,23 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 
 		// Current tween over
 		if (this.cur) {
-			for (const current of this.cur) {
-				if (current.state !== State.Finished) {
+			if (this.cur instanceof Array) {
+				for (const current of this.cur) {
+					if (current.state !== State.Finished) {
+						return;
+					}
+				}
+				this.remains = this.cur[0].elapsed - this.cur[0].duration;
+				this.emitEvent(this.events.stepEnd, this.cur[0]);
+			} else {
+				if (this.cur.state !== State.Finished) {
 					return;
 				}
+
+				this.remains = this.cur.elapsed - this.cur.duration;
+				this.emitEvent(this.events.stepEnd, this.cur);
 			}
 
-			this.remains = this.cur[0].elapsed - this.cur[0].duration;
-
-			this.emitEvent(this.events.stepEnd, [this.cur[0]]);
 			this.cur = undefined;
 			this.index++;
 
@@ -130,62 +151,74 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		if (!this.events.finally) {
 			return;
 		}
+
 		for (const line of this.tweens) {
-			for (const tween of line) {
-				(tween as any).final();
+			if (line instanceof Array) {
+				for (const tween of line) {
+					(tween as any).final();
+				}
+			} else {
+				(line as any).final();
 			}
 		}
+
 		super.final();
 	}
 
 	private nextTween() {
 		this.cur = this.tweens[this.index];
-		if (this.cur) {
+		if (!this.cur) {
+			return;
+		}
+
+		if (this.cur instanceof Array) {
 			for (const tween of this.cur) {
 				tween.start();
 			}
-
-			this.emitEvent(this.events.stepStart, [this.cur[0]]);
+			this.emitEvent(this.events.stepStart, this.cur[0]);
+		} else {
+			this.cur.start();
+			this.emitEvent(this.events.stepStart, this.cur);
 		}
 	}
 
 	public append(tween: ITween | ISequence): ISequence {
 		tween.setParent(this);
-		this.tweens[this.tweens.length] = [tween];
+		this.tweens[this.tweens.length] = tween;
 		return this;
 	}
 
 	public appendCallback(cb: () => void): ISequence {
 		const playable = new Callback(cb);
 		playable.setParent(this);
-		this.tweens[this.tweens.length] = [playable];
+		this.tweens[this.tweens.length] = playable;
 		return this;
 	}
 
 	public appendInterval(duration: number): ISequence {
 		const playable = new Delay(duration);
 		playable.setParent(this);
-		this.tweens[this.tweens.length] = [playable];
+		this.tweens[this.tweens.length] = playable;
 		return this;
 	}
 
 	public prepend(tween: ITween | ISequence): ISequence {
 		tween.setParent(this);
-		this.tweens.unshift([tween]);
+		this.tweens.unshift(tween);
 		return this;
 	}
 
 	public prependCallback(cb: () => void): ISequence {
 		const playable = new Callback(cb);
 		playable.setParent(this);
-		this.tweens.unshift([playable]);
+		this.tweens.unshift(playable);
 		return this;
 	}
 
 	public prependInterval(duration: number): ISequence {
 		const playable = new Delay(duration);
 		playable.setParent(this);
-		this.tweens.unshift([playable]);
+		this.tweens.unshift(playable);
 		return this;
 	}
 
@@ -196,14 +229,23 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		}
 
 		for (const tweenArray of this.tweens) {
-			for (const tween of tweenArray) {
-				if (tween.elapsed === 0) {
-					this.emitEvent(this.events.stepStart, [tween]);
+			if (tweenArray instanceof Array) {
+				for (const tween of tweenArray) {
+					if (tween.elapsed === 0) {
+						this.emitEvent(this.events.stepStart, tween);
+					}
+					tween.skip(finalValue);
+					this.emitEvent(this.events.stepEnd, tween);
 				}
-				tween.skip(finalValue);
-				this.emitEvent(this.events.stepEnd, [tween]);
+			} else {
+				if (tweenArray.elapsed === 0) {
+					this.emitEvent(this.events.stepStart, tweenArray);
+				}
+				tweenArray.skip(finalValue);
+				this.emitEvent(this.events.stepEnd, tweenArray);
 			}
 		}
+
 		super.skip();
 	}
 
@@ -214,8 +256,12 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		}
 
 		for (const tweenArray of this.tweens) {
-			for (const tween of tweenArray) {
-				tween.kill();
+			if (tweenArray instanceof Array) {
+				for (const tween of tweenArray) {
+					tween.kill();
+				}
+			} else {
+				tweenArray.kill();
 			}
 		}
 
@@ -226,8 +272,17 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		if (this.tweens.length === 0) {
 			return this.append(tween);
 		}
+
 		tween.setParent(this);
-		this.tweens[this.tweens.length - 1].push(tween);
+
+		if (!this.tweens[this.tweens.length - 1]) {
+			this.tweens[this.tweens.length - 1] = tween;
+		} else if (this.tweens[this.tweens.length - 1] instanceof Array) {
+			(this.tweens[this.tweens.length - 1] as any).push(tween);
+		} else {
+			this.tweens[this.tweens.length - 1] = [this.tweens[this.tweens.length - 1], tween] as any;
+		}
+
 		return this;
 	}
 

@@ -28,7 +28,9 @@ export class Delay extends BaseTween<Delay> implements IPlayable {
 		while (this.remains > 0) {
 			this.elapsed += this.remains;
 			const progress = Math.max(Math.min(this.elapsed / this.duration, 1), 0);
-			this.emitEvent(this.events.update, [this.remains, progress]);
+			if (this.events.update) {
+				this.emitEvent(this.events.update, [this.remains, progress]);
+			}
 
 			if (this.elapsed < this.duration) {
 				return;

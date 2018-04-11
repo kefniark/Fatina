@@ -42,7 +42,7 @@ export class Fatina {
 		logLevel: Log.None,
 		safe: true,
 		smooth: true,
-		pooling: true,
+		pooling: false,
 		maxFrameDt: 50, // 3 frames
 		maxFrameNumber: 40, // 40 x 3 frames ~2s.
 		maxDt: 15000 // 15s of animation
@@ -81,21 +81,6 @@ export class Fatina {
 		this.createPool();
 	}
 
-	public createPool() {
-		this.poolTween = new Pool(this.settings.pooling ? 1024 : 0, () => {
-			this.stats.tween += 1;
-			return new Tween(undefined);
-		});
-		this.poolDelay = new Pool(this.settings.pooling ? 128 : 0, () => {
-			this.stats.delay += 1;
-			return new Delay(0);
-		});
-		this.poolSequence = new Pool(this.settings.pooling ? 128 : 0, () => {
-			this.stats.sequence += 1;
-			return new Sequence();
-		});
-	}
-
 	/**
 	 * Method used when Fatina is used for the first time.
 	 * Can take few ms. (pool initialization & object creation)
@@ -120,6 +105,21 @@ export class Fatina {
 
 		this.initialized = true;
 		return true;
+	}
+
+	public createPool() {
+		this.poolTween = new Pool(this.settings.pooling ? 1024 : 0, () => {
+			this.stats.tween += 1;
+			return new Tween(undefined);
+		});
+		this.poolDelay = new Pool(this.settings.pooling ? 128 : 0, () => {
+			this.stats.delay += 1;
+			return new Delay(0);
+		});
+		this.poolSequence = new Pool(this.settings.pooling ? 128 : 0, () => {
+			this.stats.sequence += 1;
+			return new Sequence();
+		});
 	}
 
 	/**
@@ -183,6 +183,8 @@ export class Fatina {
 			return;
 		}
 		this.poolTween.update();
+		this.poolDelay.update();
+		this.poolSequence.update();
 		this.manager.tick(timestamp);
 		this.stats.time += timestamp;
 		this.stats.frame += 1;
@@ -213,7 +215,7 @@ export class Fatina {
 	 * @returns {ISequence}
 	 */
 	public sequence(list?: Tween[] | Sequence[] | IPlayable[]): ISequence {
-		const s = new Sequence(list);
+		const s = this.poolSequence.get();
 		s.init(list);
 		this.addContext(s);
 		if (this.settings.pooling) {
