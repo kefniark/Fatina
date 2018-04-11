@@ -466,3 +466,87 @@ test('[Fatina.Sequence] Test Reuse complexe sequence', (t: Test) => {
 
 	t.end();
 });
+
+test('[Fatina.Tween] Test Sequence Finally', (t: Test) => {
+	let complete = 0;
+	let final = 0;
+	let finalLoop = 0;
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+
+	const ticker = new Ticker();
+	ticker.start();
+
+	new Sequence()
+		.append(new Tween(obj).setRelative(true).to({ y : -10 }, 5).setEasing('outSine').onComplete(() => complete += 1).onFinally(() => final += 1))
+		.append(new Tween(obj).setRelative(true).to({ y : 20 }, 10).setEasing('inOutSine').onComplete(() => complete += 1).onFinally(() => final += 1))
+		.append(new Tween(obj).setRelative(true).to({ y : -10 }, 5).setEasing('inSine').onComplete(() => complete += 1).onFinally(() => final += 1))
+		.setParent(ticker)
+		.onFinally(() => finalLoop += 1)
+		.start();
+
+	for (let i = 1; i < 100; i++) {
+		ticker.tick(i);
+	}
+
+	t.equal(3, complete, 'Check the Tween emit complete');
+	t.equal(3, final, 'Check the Tween emit final');
+	t.equal(1, finalLoop, 'Check the sequence emit final');
+
+	t.end();
+});
+
+test('[Fatina.Tween] Test Sequence Loop Finally', (t: Test) => {
+	let complete = 0;
+	let final = 0;
+	let finalLoop = 0;
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+
+	const ticker = new Ticker();
+	ticker.start();
+
+	new Sequence()
+		.append(new Tween(obj).setRelative(true).to({ y : -10 }, 5).setEasing('outSine').onComplete(() => complete += 1).onFinally(() => final += 1))
+		.append(new Tween(obj).setRelative(true).to({ y : 20 }, 10).setEasing('inOutSine').onComplete(() => complete += 1).onFinally(() => final += 1))
+		.append(new Tween(obj).setRelative(true).to({ y : -10 }, 5).setEasing('inSine').onComplete(() => complete += 1).onFinally(() => final += 1))
+		.setLoop(4)
+		.setParent(ticker)
+		.onFinally(() => finalLoop += 1)
+		.start();
+
+	for (let i = 1; i < 100; i++) {
+		ticker.tick(i);
+	}
+
+	t.equal(12, complete, 'Check the Tween emit complete');
+	t.equal(3, final, 'Check the Tween emit final');
+	t.equal(1, finalLoop, 'Check the sequence emit final');
+
+	t.end();
+});
+
+test('[Fatina.Tween] Test Sequence Infinite Loop Finally', (t: Test) => {
+	let final = 0;
+	let finalLoop = 0;
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+
+	const ticker = new Ticker();
+	ticker.start();
+
+	new Sequence()
+		.append(new Tween(obj).setRelative(true).to({ y : -10 }, 5).setEasing('outSine').onFinally(() => final += 1))
+		.append(new Tween(obj).setRelative(true).to({ y : 20 }, 10).setEasing('inOutSine').onFinally(() => final += 1))
+		.append(new Tween(obj).setRelative(true).to({ y : -10 }, 5).setEasing('inSine').onFinally(() => final += 1))
+		.setLoop(-1)
+		.setParent(ticker)
+		.onFinally(() => finalLoop += 1)
+		.start();
+
+	for (let i = 1; i < 100; i++) {
+		ticker.tick(i);
+	}
+
+	t.equal(0, final, 'Check the Tween didnt final');
+	t.equal(0, finalLoop, 'Check the sequence didnt final');
+
+	t.end();
+});

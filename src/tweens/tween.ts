@@ -217,7 +217,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 		}
 
 		for (const index in this.t) {
-			if (this.t.hasOwnProperty(index) && this.obj.hasOwnProperty(index)) {
+			if (this.t.hasOwnProperty(index)) {
 				this.prop.push(index);
 			}
 		}

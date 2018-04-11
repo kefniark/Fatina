@@ -15,6 +15,9 @@ export interface ISettings {
 	// smooth dt over frames
 	smooth: boolean;
 
+	// enable pooling
+	pooling: boolean;
+
 	// maximum dt for one frames
 	maxFrameDt: number;
 

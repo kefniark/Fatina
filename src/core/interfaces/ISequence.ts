@@ -35,4 +35,5 @@ export interface ISequence extends IControl {
 	onUpdate(cb: (dt: number, progress: number) => void): ISequence;
 	onKilled(cb: () => void): ISequence;
 	onComplete(cb: () => void): ISequence;
+	onFinally(cb: () => void): ISequence;
 }

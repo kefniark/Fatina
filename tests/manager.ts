@@ -272,6 +272,33 @@ test('[Fatina.Manager] Test Pooling', (t: Test) => {
 	t.end();
 });
 
+test('[Fatina.Manager] Create sequence Complex', (t: Test) => {
+	const obj = {
+		position: { x: 0, y: 0 },
+		scale: { x: 0, y: 0 },
+		rotate: 0
+	};
+
+	fatina.sequence()
+		.append(fatina.tween(obj.position).to({ x: -100 }, 2).setEasing('outCubic'))
+		.appendCallback(() => obj.scale.x = -0.8)
+		.append(fatina.tween(obj.position).to({ x: 100 }, 4).setEasing('inOutCubic'))
+		.appendCallback(() => obj.scale.x = 0.8)
+		.append(fatina.tween(obj.position).to({ x: -100 }, 2).setEasing('inCubic'))
+		.setLoop(-1)
+		.start();
+
+	fatina.update(12);
+	t.equal(0, obj.position.x);
+	t.equal(-0.8, obj.scale.x);
+
+	fatina.update(36);
+	t.equal(-100, obj.position.x);
+	t.equal(0.8, obj.scale.x);
+
+	t.end();
+});
+
 test('[Fatina.Manager] Create ticker', (t: Test) => {
 	const obj = { x: 0, y: 0, z: 0 };
 	const gameTicker = fatina.ticker();

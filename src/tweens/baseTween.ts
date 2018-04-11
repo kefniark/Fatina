@@ -268,9 +268,17 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 		this.state = State.Finished;
 		this.removeParent();
 		this.emitEvent(this.events.complete);
-		if (this.state >= 3) {
-			this.emitEvent(this.events.finally);
+
+		if (this.parent && (this.parent as any).cur) {
+			return;
 		}
+		if (this.state >= 3) {
+			this.final();
+		}
+	}
+
+	protected final(): void {
+		this.emitEvent(this.events.finally);
 	}
 
 	protected removeParent() {

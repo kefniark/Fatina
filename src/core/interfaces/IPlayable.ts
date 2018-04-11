@@ -23,4 +23,5 @@ export interface IPlayable extends IControl {
 	onUpdate(cb: (dt: number, progress: number) => void): IPlayable;
 	onKilled(cb: () => void): IPlayable;
 	onComplete(cb: () => void): IPlayable;
+	onFinally(cb: () => void): IPlayable;
 }

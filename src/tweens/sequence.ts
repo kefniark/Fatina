@@ -21,7 +21,7 @@ import { Delay } from './delay';
  */
 export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker, IPlayable {
 	private readonly evtTick: Set<{(dt: number): void}> = new Set();
-	private readonly tweens: ((ITween | IPlayable)[])[] = [];
+	private tweens: ((ITween | IPlayable)[])[] = [];
 	private index = 0;
 
 	// cache
@@ -35,7 +35,10 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 	constructor(tweens?: ITween[] | ISequence[] | IPlayable[]) {
 		super();
 		this.tickCb = this.tick.bind(this);
+		this.init(tweens);
+	}
 
+	public init(tweens?: ITween[] | ISequence[] | IPlayable[]) {
 		if (tweens) {
 			this.tweens = new Array(tweens.length);
 			for (let i = 0; i < tweens.length; i++) {
@@ -121,6 +124,18 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 
 			this.complete();
 		}
+	}
+
+	protected final(): void {
+		if (!this.events.finally) {
+			return;
+		}
+		for (const line of this.tweens) {
+			for (const tween of line) {
+				(tween as any).final();
+			}
+		}
+		super.final();
 	}
 
 	private nextTween() {

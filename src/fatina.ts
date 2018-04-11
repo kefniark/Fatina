@@ -42,6 +42,7 @@ export class Fatina {
 		logLevel: Log.None,
 		safe: true,
 		smooth: true,
+		pooling: true,
 		maxFrameDt: 50, // 3 frames
 		maxFrameNumber: 40, // 40 x 3 frames ~2s.
 		maxDt: 15000 // 15s of animation
@@ -49,8 +50,9 @@ export class Fatina {
 
 	// stats
 	public stats = {
-		tweens: 0,
+		tween: 0,
 		delay: 0,
+		sequence: 0,
 		time: 0,
 		frame: 0
 	};
@@ -60,8 +62,9 @@ export class Fatina {
 	private lastTime = 0;
 	private initialized = false;
 	private manager: Ticker;
-	private readonly poolTween: Pool<Tween>;
-	private readonly poolDelay: Pool<Delay>;
+	private poolTween: Pool<Tween>;
+	private poolSequence: Pool<Sequence>;
+	private poolDelay: Pool<Delay>;
 
 	public get elapsed(): number {
 		return this.manager.elapsed;
@@ -75,13 +78,21 @@ export class Fatina {
 	}
 
 	constructor() {
-		this.poolTween = new Pool(1024, () => {
-			this.stats.tweens += 1;
+		this.createPool();
+	}
+
+	public createPool() {
+		this.poolTween = new Pool(this.settings.pooling ? 1024 : 0, () => {
+			this.stats.tween += 1;
 			return new Tween(undefined);
 		});
-		this.poolDelay = new Pool(128, () => {
+		this.poolDelay = new Pool(this.settings.pooling ? 128 : 0, () => {
 			this.stats.delay += 1;
 			return new Delay(0);
+		});
+		this.poolSequence = new Pool(this.settings.pooling ? 128 : 0, () => {
+			this.stats.sequence += 1;
+			return new Sequence();
 		});
 	}
 
@@ -188,7 +199,9 @@ export class Fatina {
 		const t = this.poolTween.get();
 		t.init(obj);
 		this.addContext(t);
-		t.onFinally(() => this.poolTween.add(t));
+		if (this.settings.pooling) {
+			t.onFinally(() => this.poolTween.add(t));
+		}
 		return t;
 	}
 
@@ -201,7 +214,11 @@ export class Fatina {
 	 */
 	public sequence(list?: Tween[] | Sequence[] | IPlayable[]): ISequence {
 		const s = new Sequence(list);
+		s.init(list);
 		this.addContext(s);
+		if (this.settings.pooling) {
+			s.onFinally(() => this.poolSequence.add(s));
+		}
 		return s;
 	}
 
@@ -216,7 +233,9 @@ export class Fatina {
 		const d = this.poolDelay.get();
 		d.init(duration);
 		this.addContext(d);
-		// d.onFinally(() => this.poolDelay.add(d));
+		if (this.settings.pooling) {
+			d.onFinally(() => this.poolDelay.add(d));
+		}
 		return d;
 	}
 
@@ -230,8 +249,13 @@ export class Fatina {
 	 * @returns {IPlayable}
 	 */
 	public setTimeout(fn: () => void, duration: number): IPlayable {
-		const timeout = new Delay(duration).onComplete(fn);
+		const timeout = this.poolDelay.get();
+		timeout.init(duration);
+		timeout.onComplete(fn);
 		this.addContext(timeout);
+		if (this.settings.pooling) {
+			timeout.onFinally(() => this.poolDelay.add(timeout));
+		}
 		return timeout.start();
 	}
 

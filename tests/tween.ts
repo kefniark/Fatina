@@ -7,6 +7,8 @@ import { EasingType as Easing } from '../src/easing/easingType';
 import { Ticker } from '../src/ticker';
 import { Tween } from '../src/tweens/tween';
 
+// tslint:disable:max-file-line-count
+
 test('[Fatina.Tween] Get tween data', (t: Test) => {
 	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
 	const dest = { x: 44, y: 44 };
@@ -777,6 +779,103 @@ test('[Fatina.Tween] Tween destroyed object/properties', (t: Test) => {
 	t.equal(3, obj.x, 'Check the object moved');
 
 	tween.reset();
+
+	t.end();
+});
+
+test('[Fatina.Tween] Tween Move', (t: Test) => {
+	const obj = {
+		get x() {
+			return this._x;
+		},
+		set x(val) {
+			this._x = val;
+		},
+		_x: 10,
+		sub: { x: 0 }
+	};
+	const ticker = new Ticker();
+	ticker.start();
+
+	new Tween(obj)
+		.from({ x: 0 })
+		.to({ x: 100 }, 10)
+		.setLoop(-1)
+		.setParent(ticker)
+		.start();
+
+	ticker.tick(4);
+	t.equal(40, obj.x);
+	ticker.tick(4);
+	t.equal(80, obj.x);
+	ticker.tick(4);
+	t.equal(20, obj.x);
+
+	t.end();
+});
+
+test('[Fatina.Tween] Empty Tween Move', (t: Test) => {
+	let update = 0;
+	const ticker = new Ticker();
+	ticker.start();
+
+	new Tween({})
+		.to({}, 2)
+		.setParent(ticker)
+		.onUpdate(() => update += 1)
+		.setLoop(-1)
+		.start();
+
+	ticker.tick(5);
+	ticker.tick(5);
+
+	t.equal(6, update);
+
+	t.end();
+});
+
+test('[Fatina.Tween] Test Finally', (t: Test) => {
+	let complete = 0;
+	let final = 0;
+	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
+
+	const ticker = new Ticker();
+	ticker.start();
+
+	const tweenInLoop = new Tween(obj)
+		.from({ x: 0 })
+		.to({ x: 44 }, 5)
+		.setParent(ticker)
+		.setLoop(3)
+		.onComplete(() => complete += 1)
+		.onFinally(() => final += 1);
+
+	const tweenLoop = new Tween(obj)
+		.from({ x: 0 })
+		.to({ x: 44 }, 5)
+		.setParent(ticker)
+		.setLoop(-1)
+		.onComplete(() => complete += 1)
+		.onFinally(() => final += 1);
+
+	const tweenYoyo = new Tween(obj)
+		.from({ x: 0 })
+		.to({ x: 44 }, 5)
+		.setParent(ticker)
+		.yoyo(3)
+		.onComplete(() => complete += 1)
+		.onFinally(() => final += 1);
+
+	tweenInLoop.start();
+	tweenLoop.start();
+	tweenYoyo.start();
+
+	for (let i = 1; i < 100; i++) {
+		ticker.tick(i);
+	}
+
+	t.equal(2, complete, 'Check the object complete twice');
+	t.equal(2, final, 'Check the object final twice');
 
 	t.end();
 });

@@ -34,4 +34,5 @@ export interface ITween extends IControl {
 	onRestart(cb: () => void): ITween;
 	onKilled(cb: () => void): ITween;
 	onComplete(cb: () => void): ITween;
+	onFinally(cb: () => void): ITween;
 }
