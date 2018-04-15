@@ -1,7 +1,7 @@
 {
   "name": "fatina",
   "description": "Small & Light tweening library for web / games",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "homepage": "https://kefniark.github.io/Fatina/",
   "main": "build/fatina.min.js",
   "types": "build/fatina.d.ts",
@@ -30,6 +30,7 @@
   "dependencies": {
     "npm": "^5.8.0"
   },
+  "side-effects": false,
   "scripts": {
     "all": "npm run deps && npm run build && npm run dev",
     "deps": "npm install .",
@@ -53,7 +54,7 @@
     "update": "npm-check --update"
   },
   "devDependencies": {
-    "@types/node": "^9.6.2",
+    "@types/node": "^9.6.5",
     "@types/tape": "^4.2.32",
     "coveralls": "^3.0.0",
     "dts-bundle": "0.7.3",

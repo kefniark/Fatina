@@ -50,7 +50,7 @@ test('[Fatina.Manager] Pause / Resume', (t: Test) => {
 
 test('[Fatina.Manager] Create tween', (t: Test) => {
 	const obj = { x: 0 };
-	const tween = fatina.tween(obj, ['x']).to({ x: 1 }, 1);
+	const tween = fatina.tween(obj).to({ x: 1 }, 1);
 	tween.start();
 
 	t.equal(0, obj.x, 'check the tween is not starting magically');
@@ -69,7 +69,7 @@ test('[Fatina.Manager] Create sequence', (t: Test) => {
 	const obj = { x: 0 };
 	const sequence = fatina.sequence();
 	sequence.appendInterval(1);
-	sequence.append(fatina.tween(obj, ['x']).to({ x: 1 }, 1));
+	sequence.append(fatina.tween(obj).to({ x: 1 }, 1));
 	sequence.start();
 
 	t.equal(0, obj.x, 'check the sequence is not starting magically');
@@ -85,7 +85,7 @@ test('[Fatina.Manager] Create sequence 2', (t: Test) => {
 	const obj = { x: 0 };
 	const sequence = fatina.sequence([
 		fatina.delay(1),
-		fatina.tween(obj, ['x']).to({ x: 1 }, 1)
+		fatina.tween(obj).to({ x: 1 }, 1)
 	]).start();
 
 	t.equal(0, obj.x, 'check the sequence is not starting magically');
@@ -195,7 +195,7 @@ test('[Fatina.Manager] Ticker Helpers', (t: Test) => {
 	let created = 0;
 
 	fatina.addListenerCreated(() => created++);
-	fatina.tween({}, []).to({}, 1);
+	fatina.tween({}).to({}, 1);
 	fatina.sequence();
 	fatina.delay(1);
 	fatina.ticker();
@@ -229,10 +229,10 @@ test('[Fatina.Manager] Ticker Helpers', (t: Test) => {
 
 test('[Fatina.Manager] Create cascade tween', (t: Test) => {
 	const obj = { x: 0 };
-	const tween = fatina.tween(obj, ['x'])
+	const tween = fatina.tween(obj)
 		.to({ x: 500 }, 500)
 		.onComplete(() => {
-			fatina.tween(obj, ['x'])
+			fatina.tween(obj)
 			.to({ x: 0 }, 500)
 			.start();
 		});
@@ -258,7 +258,7 @@ test('[Fatina.Manager] Test Pooling', (t: Test) => {
 	for (let i = 0; i < 1024; i++) {
 		const duration = Math.random() * 49 + 1;
 		const obj = { x: 0, y: 0, z: 0 };
-		const tween = fatina.tween(obj, ['x']).to({ x: 1 }, duration);
+		const tween = fatina.tween(obj).to({ x: 1 }, duration);
 		tween.onStart(() => start++);
 		tween.onComplete(() => complete++);
 		tween.start();
@@ -276,9 +276,9 @@ test('[Fatina.Manager] Create ticker', (t: Test) => {
 	const gameTicker = fatina.ticker();
 	const uiTicker = fatina.ticker();
 
-	fatina.tween(obj, ['x']).setParent(gameTicker).to({ x: 5 }, 5).start();
-	fatina.tween(obj, ['y']).setParent(uiTicker).to({ y: 5 }, 5).start();
-	fatina.tween(obj, ['z']).to({ z: 5 }, 5).start();
+	fatina.tween(obj).setParent(gameTicker).to({ x: 5 }, 5).start();
+	fatina.tween(obj).setParent(uiTicker).to({ y: 5 }, 5).start();
+	fatina.tween(obj).to({ z: 5 }, 5).start();
 
 	t.notEqual(undefined, gameTicker, 'check a ticker is properly created');
 
@@ -316,7 +316,6 @@ test('[Fatina.Manager] Create ticker', (t: Test) => {
 	gameTicker.kill();
 	gameTicker.kill();
 	fatina.update(1);
-	t.throws(() => gameTicker.skip(), 'cannot skip ticker');
 	gameTicker.reset();
 
 	fatina.destroy();

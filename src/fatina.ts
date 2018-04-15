@@ -7,7 +7,6 @@ import { ISequence } from './core/interfaces/ISequence';
 import { ISettings } from './core/interfaces/ISettings';
 import { ITicker } from './core/interfaces/ITicker';
 import { ITween } from './core/interfaces/ITween';
-import { EasingType } from './easing/easingType';
 import { Ticker } from './ticker';
 import { Delay } from './tweens/delay';
 import { Sequence } from './tweens/sequence';
@@ -32,8 +31,6 @@ if (typeof(window) !== 'undefined') {
  * @class Fatina
  */
 export class Fatina {
-	public easing = EasingType;
-
 	// plugins
 	public plugin: any = {};
 	private readonly loadedPlugins: IPlugin[] = [];
@@ -162,11 +159,10 @@ export class Fatina {
 	 *
 	 * @export
 	 * @param {*} obj
-	 * @param {string[]} properties
 	 * @returns {ITween}
 	 */
-	public tween(obj: any, properties: string[]): ITween {
-		const t = new Tween(obj, properties);
+	public tween(obj: any): ITween {
+		const t = new Tween(obj);
 		this.addContext(t);
 		return t;
 	}
@@ -175,7 +171,7 @@ export class Fatina {
 	 * Helper to create a Sequence (use the sequence pool)
 	 *
 	 * @export
-	 * @param {(tween[] | sequence[])} [list]
+	 * @param {(Tween[] | Sequence[])} [list]
 	 * @returns {ISequence}
 	 */
 	public sequence(list?: Tween[] | Sequence[] | IPlayable[]): ISequence {

@@ -15,10 +15,12 @@ export class Ticker implements ITicker {
 	private timescale = 1;
 	public elapsed = 0;
 	public duration = 0;
+
 	private tickCb: (dt: number) => void | undefined;
 	private readonly ticks: Set<(dt: number) => void> = new Set();
 	private readonly newTicks: Set<(dt: number) => void> = new Set();
 	private parent: ITicker;
+	private dt: number = 0;
 
 	public setParent(parent: ITicker, tick: (dt: number) => void) {
 		this.tickCb = tick;
@@ -73,16 +75,14 @@ export class Ticker implements ITicker {
 			return;
 		}
 
-		const localDt = dt * this.timescale;
+		this.dt = dt * this.timescale;
 		if (this.newTicks.size > 0) {
 			this.newTicks.forEach((tick) => this.ticks.add(tick));
 			this.newTicks.clear();
 		}
 
-		// tslint:disable-next-line:only-arrow-functions
-		this.ticks.forEach(function (tick) { tick(localDt); });
-
-		this.elapsed += localDt;
+		this.ticks.forEach((tick) => tick(this.dt));
+		this.elapsed += this.dt;
 	}
 
 	public start(): void {
@@ -115,9 +115,7 @@ export class Ticker implements ITicker {
 		this.state = State.Killed;
 	}
 
-	public skip(): void {
-		throw new Error('main ticker cannot be skipped');
-	}
+	public skip(): void {}
 
 	public reset(): void {
 		this.state = State.Idle;

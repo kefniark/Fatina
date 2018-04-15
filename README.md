@@ -45,12 +45,12 @@ import * as Fatina from 'fatina';
 
 ### Usage
 ```ts
-Fatina.tween(obj, properties)
+Fatina.tween(obj)
     .to(destination, duration)
     .start();
 
 // example
-Fatina.tween(sprite, ['x', 'y'])
+Fatina.tween(sprite)
     .to({ x: 12, y:25 }, 0.5)
     .start();
 ```

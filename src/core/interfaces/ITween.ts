@@ -12,7 +12,7 @@ import { ITicker } from './ITicker';
  * @extends {IControl}
  */
 export interface ITween extends IControl {
-	init(object: any, properties: string[]): void;
+	init(object: any): void;
 	start(): ITween;
 	from(from: any): ITween;
 	to(to: any, duration: number): ITween;
