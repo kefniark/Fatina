@@ -1,4 +1,3 @@
-export const easing: typeof EasingType;
 export const plugin: any;
 export const time: number;
 export const manager: Ticker;
@@ -14,6 +13,7 @@ export const mainTicker: ITicker;
 * @returns {boolean}
 */
 export function init(disableAutoTick?: boolean): boolean;
+
 /**
 * Used to change the timescale of the whole game
 *
@@ -21,24 +21,28 @@ export function init(disableAutoTick?: boolean): boolean;
 * @param {number} scale
 */
 export function setTimescale(scale: number): void;
+
 /**
 * This method pause the update loop (update are not called anymore)
 *
 * @export
 */
 export function pause(): void;
+
 /**
 * This method resume the update loop (works only if the game was paused before)
 *
 * @export
 */
 export function resume(): void;
+
 /**
 * This method kill the main ticker, the pool of tween and stop any requestAnimationFrame
 *
 * @export
 */
 export function destroy(): void;
+
 /**
 * Method used to tick all the child (tween or sequence)
 * This takes cares of recycling the old tween/sequence
@@ -48,23 +52,25 @@ export function destroy(): void;
 * @returns {*}
 */
 export function update(timestamp: number): any;
+
 /**
 * Helper to create a tween (use the tween pool)
 *
 * @export
 * @param {*} obj
-* @param {string[]} properties
 * @returns {ITween}
 */
-export function tween(obj: any, properties: string[]): ITween;
+export function tween(obj: any): ITween;
+
 /**
 * Helper to create a Sequence (use the sequence pool)
 *
 * @export
-* @param {(tween[] | sequence[])} [list]
+* @param {(Tween[] | Sequence[])} [list]
 * @returns {ISequence}
 */
 export function sequence(list?: Tween[] | Sequence[] | IPlayable[]): ISequence;
+
 /**
 * Helper to create a Delay
 *
@@ -73,6 +79,7 @@ export function sequence(list?: Tween[] | Sequence[] | IPlayable[]): ISequence;
 * @returns {IPlayable}
 */
 export function delay(duration: number): IPlayable;
+
 /**
 * Helper used to replace usage of normal js setTimeout() by a tween
 * https://www.w3schools.com/jsref/met_win_settimeout.asp
@@ -83,6 +90,7 @@ export function delay(duration: number): IPlayable;
 * @returns {IPlayable}
 */
 export function setTimeout(fn: () => void, duration: number): IPlayable;
+
 /**
 * Helper used to replace usage of normal js setInterval() by a tween
 * https://www.w3schools.com/jsref/met_win_setinterval.asp
@@ -93,6 +101,7 @@ export function setTimeout(fn: () => void, duration: number): IPlayable;
 * @returns {IPlayable}
 */
 export function setInterval(fn: () => void, duration: number): IPlayable;
+
 /**
 * Create or Get a ticker with a defined name
 * This ticker is a child of the main ticker
@@ -102,6 +111,7 @@ export function setInterval(fn: () => void, duration: number): IPlayable;
 * @returns {ITicker}
 */
 export function ticker(): ITicker;
+
 /**
 * Initialize a plugin by passing fatina object to it
 *
@@ -109,6 +119,7 @@ export function ticker(): ITicker;
 * @param {IPlugin} newPlugin
 */
 export function loadPlugin(newPlugin: IPlugin): void;
+
 /**
 * Add a listener method on tween/sequence creation
 *
@@ -116,6 +127,7 @@ export function loadPlugin(newPlugin: IPlugin): void;
 * @param {(control: IControl) => void} cb
 */
 export function addListenerCreated(cb: (control: IControl) => void): void;
+
 /**
 * Remove a listener method on tween/sequence creation
 *
@@ -123,6 +135,7 @@ export function addListenerCreated(cb: (control: IControl) => void): void;
 * @param {(control: IControl) => void} cb
 */
 export function removeListenerCreated(cb: (control: IControl) => void): void;
+
 /**
 * This method is used to change the log level
 *
@@ -130,6 +143,7 @@ export function removeListenerCreated(cb: (control: IControl) => void): void;
 * @param {Log} level
 */
 export function setLog(level: Log): void;
+
 /**
 * This method is used to enable / disable the callback try/catch
 *
@@ -144,7 +158,7 @@ export function setSafe(isSafe: boolean): void;
   * @export
   * @enum {number}
   */
-export enum Log {
+export const enum Log {
     None = 0,
     Info = 1,
     Debug = 2,
@@ -254,7 +268,7 @@ export interface ITicker extends IControl {
   * @extends {IControl}
   */
 export interface ITween extends IControl {
-    init(object: any, properties: string[]): void;
+    init(object: any): void;
     start(): ITween;
     from(from: any): ITween;
     to(to: any, duration: number): ITween;
@@ -274,46 +288,6 @@ export interface ITween extends IControl {
     onRestart(cb: () => void): ITween;
     onKilled(cb: () => void): ITween;
     onComplete(cb: () => void): ITween;
-}
-
-/**
-  * List of all easing methods
-  *
-  * @export
-  * @enum {number}
-  */
-export enum EasingType {
-    Linear = "linear",
-    InQuad = "inQuad",
-    OutQuad = "outQuad",
-    InOutQuad = "inOutQuad",
-    InCubic = "inCubic",
-    OutCubic = "outCubic",
-    InOutCubic = "inOutCubic",
-    InQuart = "inQuart",
-    OutQuart = "outQuart",
-    InOutQuart = "inOutQuart",
-    InSine = "inSine",
-    OutSine = "outSine",
-    InOutSine = "inOutSine",
-    InCirc = "inCirc",
-    OutCirc = "outCirc",
-    InOutCirc = "inOutCirc",
-    InQuint = "inQuint",
-    OutQuint = "outQuint",
-    InOutQuint = "inOutQuint",
-    InExponential = "inExponential",
-    OutExponential = "outExponential",
-    InOutExponential = "inOutExponential",
-    InElastic = "inElastic",
-    OutElastic = "outElastic",
-    InOutElastic = "inOutElastic",
-    InBack = "inBack",
-    OutBack = "outBack",
-    InOutBack = "inOutBack",
-    InBounce = "inBounce",
-    OutBounce = "outBounce",
-    InOutBounce = "inOutBounce",
 }
 
 /**
@@ -387,7 +361,6 @@ export class Ticker implements ITicker {
   * @implements {IPlayable}
   */
 export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker, IPlayable {
-    cur: (ITween | IPlayable)[] | undefined;
     readonly count: number;
     constructor(tweens?: ITween[] | ISequence[] | IPlayable[]);
     protected loopInit(): void;
@@ -415,16 +388,15 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
     * @implements {ITween}
     */
 export class Tween extends BaseTween<Tween> implements ITween {
-        constructor(object: any, properties: string[]);
+        constructor(object: any);
         /**
             * Used to define the object and the properties modified by this tween
             *
             * @param {*} object
-            * @param {string[]} properties
             *
             * @memberOf Tween
             */
-        init(object: any, properties: string[]): void;
+        init(object: any): void;
         /**
             * Method used on start to check the values of this tween
             *
@@ -543,7 +515,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
   * @export
   * @enum {number}
   */
-export enum State {
+export const enum State {
     Idle = 0,
     Run = 1,
     Pause = 2,
@@ -567,6 +539,46 @@ export interface ISettings {
 }
 
 /**
+  * List of all easing methods
+  *
+  * @export
+  * @enum {number}
+  */
+export const enum EasingType {
+    Linear = "linear",
+    InQuad = "inQuad",
+    OutQuad = "outQuad",
+    InOutQuad = "inOutQuad",
+    InCubic = "inCubic",
+    OutCubic = "outCubic",
+    InOutCubic = "inOutCubic",
+    InQuart = "inQuart",
+    OutQuart = "outQuart",
+    InOutQuart = "inOutQuart",
+    InSine = "inSine",
+    OutSine = "outSine",
+    InOutSine = "inOutSine",
+    InCirc = "inCirc",
+    OutCirc = "outCirc",
+    InOutCirc = "inOutCirc",
+    InQuint = "inQuint",
+    OutQuint = "outQuint",
+    InOutQuint = "inOutQuint",
+    InExponential = "inExponential",
+    OutExponential = "outExponential",
+    InOutExponential = "inOutExponential",
+    InElastic = "inElastic",
+    OutElastic = "outElastic",
+    InOutElastic = "inOutElastic",
+    InBack = "inBack",
+    OutBack = "outBack",
+    InOutBack = "inOutBack",
+    InBounce = "inBounce",
+    OutBounce = "outBounce",
+    InOutBounce = "inOutBounce",
+}
+
+/**
     * Shared behaviors between different types of tweens and sequence
     * Used mostly to manage:
     *  - events
@@ -579,7 +591,7 @@ export interface ISettings {
     */
 export abstract class BaseTween<T extends BaseTween<any>> {
         protected events: {
-                [id: string]: any[];
+                [id: string]: any;
         };
         elapsed: number;
         duration: number;

@@ -171,7 +171,7 @@ export class Fatina {
 	 * Helper to create a Sequence (use the sequence pool)
 	 *
 	 * @export
-	 * @param {(tween[] | sequence[])} [list]
+	 * @param {(Tween[] | Sequence[])} [list]
 	 * @returns {ISequence}
 	 */
 	public sequence(list?: Tween[] | Sequence[] | IPlayable[]): ISequence {
