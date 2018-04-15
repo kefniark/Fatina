@@ -9,15 +9,15 @@
   <meta property="og:title" content="Advanced Samples" />
   <meta name="twitter:title" content="Advanced Samples" />
   <meta name="description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
-Demonic Star Looping Sequence var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000});document.getElementById(&#39;canvas2&#39;).appendChild(app.view);var star = new PIXI.Container();star.x &#43;= 100;star.y &#43;= 50;app.stage.addChild(star);// Create 250 spritesfor (let i = 0; i A demonic star with 250 moving sprites along a defined path
+Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000}); document.getElementById(&#39;canvas2&#39;).appendChild(app.view); var star = new PIXI.Container(); star.x &#43;= 100; star.y &#43;= 50; app.stage.addChild(star); // Create 250 sprites for (let i = 0; i A demonic star with 250 moving sprites along a defined path
 Read the code
 Golden Stars Use Modifier for curve and gravity    var app4 = new PIXI.">
   <meta property="og:description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
-Demonic Star Looping Sequence var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000});document.getElementById(&#39;canvas2&#39;).appendChild(app.view);var star = new PIXI.Container();star.x &#43;= 100;star.y &#43;= 50;app.stage.addChild(star);// Create 250 spritesfor (let i = 0; i A demonic star with 250 moving sprites along a defined path
+Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000}); document.getElementById(&#39;canvas2&#39;).appendChild(app.view); var star = new PIXI.Container(); star.x &#43;= 100; star.y &#43;= 50; app.stage.addChild(star); // Create 250 sprites for (let i = 0; i A demonic star with 250 moving sprites along a defined path
 Read the code
 Golden Stars Use Modifier for curve and gravity    var app4 = new PIXI.">
   <meta name="twitter:description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
-Demonic Star Looping Sequence var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000}); …">
+Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000}); …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -204,11 +204,11 @@ Demonic Star Looping Sequence var app = new PIXI.Application(1024 / 2, 768 / 2
 
         var sequence = Fatina.sequence().setLoop(-1);
         sequence.appendInterval(Math.random() * 1000);
-        sequence.append(Fatina.tween(currentSprite, ['x', 'y']).to({ x: 280 + dx, y: 80 + dy}, 1400).setEasing('inOutSine').setTimescale(currentTimescale));
-        sequence.append(Fatina.tween(currentSprite, ['x', 'y']).to({ x: 50 + dx, y: 250 + dy}, 1400).setEasing('inOutQuad').setTimescale(currentTimescale));
-        sequence.append(Fatina.tween(currentSprite, ['x', 'y']).to({ x: 150 + dx, y: 0 + dy}, 1400).setEasing('inOutSine').setTimescale(currentTimescale));
-        sequence.append(Fatina.tween(currentSprite, ['x', 'y']).to({ x: 250 + dx, y: 250 + dy}, 1400).setEasing('inOutQuad').setTimescale(currentTimescale));
-        sequence.append(Fatina.tween(currentSprite, ['x', 'y']).to({ x: 20 + dx, y: 80 + dy}, 1400).setEasing('inOutQuad').setTimescale(currentTimescale));
+        sequence.append(Fatina.tween(currentSprite).to({ x: 280 + dx, y: 80 + dy}, 1400).setEasing('inOutSine').setTimescale(currentTimescale));
+        sequence.append(Fatina.tween(currentSprite).to({ x: 50 + dx, y: 250 + dy}, 1400).setEasing('inOutQuad').setTimescale(currentTimescale));
+        sequence.append(Fatina.tween(currentSprite).to({ x: 150 + dx, y: 0 + dy}, 1400).setEasing('inOutSine').setTimescale(currentTimescale));
+        sequence.append(Fatina.tween(currentSprite).to({ x: 250 + dx, y: 250 + dy}, 1400).setEasing('inOutQuad').setTimescale(currentTimescale));
+        sequence.append(Fatina.tween(currentSprite).to({ x: 20 + dx, y: 80 + dy}, 1400).setEasing('inOutQuad').setTimescale(currentTimescale));
         sequence.start();
     }
 

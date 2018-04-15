@@ -53,8 +53,8 @@ weight = 4
 // Wait 200ms and play 2 tween in parallel
 Fatina.sequence()
     .appendInterval(200)
-    .append(Fatina.tween(star, ['alpha']).to({ alpha: 0 }, 950).setEasing('outSine'))
-    .join(Fatina.tween(star, ['x', 'y', 'rotation']).setRelative(true).to({ x: 0, y: 0, rotation: 12}, 1600))
+    .append(Fatina.tween(star).to({ alpha: 0 }, 950).setEasing('outSine'))
+    .join(Fatina.tween(star).setRelative(true).to({ x: 0, y: 0, rotation: 12}, 1600))
     .onComplete(() => console.log('Sequence finished !'))
     .start();
 ```

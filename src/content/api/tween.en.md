@@ -33,7 +33,7 @@ weight = 3
 {{%expand "See More" %}}
 ```js
 // Create a tween
-let tween = Fatina.tween({},[]).to({}, 100).start();
+let tween = Fatina.tween({}).to({}, 100).start();
 
 // Control this tween
 tween.pause();
@@ -54,7 +54,7 @@ tween.kill();
 var obj = { x: 0 };
 
 // Create a tween with few callbacks
-Fatina.tween(obj, ['x'])
+Fatina.tween(obj)
     .to({ x: 42 }, 100)
     .onStart(() => console.log('onStart'))
     .onUpdate((dt, progress) => console.log('onUpdate', dt, progress)) // progress: float between 0 and 1
@@ -81,7 +81,7 @@ Fatina.tween(obj, ['x'])
 var obj = { x: 0 };
 
 // A normal Tween
-Fatina.tween(obj, ['x'])
+Fatina.tween(obj)
     .from({ x: -10 }) // to define the starting value
     .to({ x: 10 }, 200) // to define the final value (absolute by default, for relative use .SetRelative(true))
     .setLoop(2) // play this tween twice
@@ -89,7 +89,7 @@ Fatina.tween(obj, ['x'])
     .start(); // start the tween
 
 // Convert to a sequence to use interval
-Fatina.tween(obj, ['x'])
+Fatina.tween(obj)
     .from({ x: -10 })
     .to({ x: 10 }, 200)
     .toSequence()
@@ -141,7 +141,7 @@ To see what they look like : [Easings.net](http://easings.net)
 var obj = { x: 0 };
 
 // A tween with easing
-Fatina.tween(obj, ['x'])
+Fatina.tween(obj)
     .from({ x: -10 })
     .to({ x: 10 }, 200)
     .setEasing('inOutQuad')

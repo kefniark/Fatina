@@ -35,7 +35,7 @@
 </style>
 
 <script src="/Fatina/benchmark/tina.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
 
 <div style="display: none; height: 5px; position: absolute;">
     <h2>Fatina</h2>
@@ -323,33 +323,36 @@
     </script>
 
     <script>
+        let tweenJsTime = 0;
+
         function TestTweenUpdate() {
-            TWEEN.update();
+            tweenJsTime++
+            TWEEN.update(tweenJsTime);
         }
 
         function TestTween() {
-            return new TWEEN.Tween({x:0}, ['x']).to({x:100}, 10).start();
+            return new TWEEN.Tween({x:0}).to({x:100}, 10).start(tweenJsTime);
         }
 
         function TestTweenAdvanced() {
-            return new TWEEN.Tween({x:0, y:0, z:0, a:0}, ['x', 'y', 'z', 'a'])
+            return new TWEEN.Tween({x:0, y:0, z:0, a:0})
                 .to({x:100, y:2, z:69, a:-71602}, Math.random() * 5 + 10)
                 .easing(TWEEN.Easing.Quadratic.InOut)
                 .repeat(2)
                 .onStart(() => {})
                 .onComplete(() => {})
-                .start();
+                .start(tweenJsTime);
         }
 
         function TestTweenSequence() {
-            let tweenA = new TWEEN.Tween({x:0}, ['x']).to({x:2}, 2);
-            let tweenB = new TWEEN.Tween({x:0}, ['x']).to({x:5}, 3).delay(1);
-            let tweenC = new TWEEN.Tween({x:0}, ['x']).to({x:-5}, 1);
-            let tweenD = new TWEEN.Tween({x:0}, ['x']).to({x:0}, 2);
+            let tweenA = new TWEEN.Tween({x:0}).to({x:2}, 2);
+            let tweenB = new TWEEN.Tween({x:0}).to({x:5}, 3).delay(1);
+            let tweenC = new TWEEN.Tween({x:0}).to({x:-5}, 1);
+            let tweenD = new TWEEN.Tween({x:0}).to({x:0}, 2);
             tweenC.chain(tweenD);
             tweenB.chain(tweenC);
             tweenA.chain(tweenB);
-            tweenA.start();
+            tweenA.start(tweenJsTime);
         }
     </script>
 

@@ -39,7 +39,7 @@ Fatina.init();
 
 // Create a tween to move an object during 250 ms.
 var obj = { x: 0, y: 0 };
-ftina.tween(obj, ['x', 'y'])
+ftina.tween(obj)
     .to({ x: 42, y: 42 }, 250)
     .start();
 ```
@@ -81,7 +81,7 @@ var uiTicker = Fatina.ticker('ui');
 uiTicker.SsetTimescale(0.8);
 
 // You just have to tell to the tween or the sequence to use those ticker and not the default one
-Fatina.tween(obj, ['x']).setParent(gameTicker).to({x: 5}, 5).start();
-Fatina.tween(obj, ['y']).setParent(uiTicker).to({y: 5}, 5).start();
+Fatina.tween(obj).setParent(gameTicker).to({x: 5}, 5).start();
+Fatina.tween(obj).setParent(uiTicker).to({y: 5}, 5).start();
 ```
 {{% /expand%}}
