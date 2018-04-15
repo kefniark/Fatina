@@ -5,9 +5,9 @@
 
         var obj5 = { x: 0, y: 0, rotate:0 };
         var sequence = Fatina.sequence()
-            .append(Fatina.tween(obj5, ['x']).to({x: 500}, 1250).setEasing('inOutQuad'))
-            .append(Fatina.tween(obj5, ['x']).to({x: 0}, 1250).setEasing('inOutQuad'))
-            .join(Fatina.tween(obj5, ['rotate']).to({rotate: 360}, 1250).setEasing('inOutQuad').setTimescale(2))
+            .append(Fatina.tween(obj5).to({x: 500}, 1250).setEasing('inOutQuad'))
+            .append(Fatina.tween(obj5).to({x: 0}, 1250).setEasing('inOutQuad'))
+            .join(Fatina.tween(obj5).to({rotate: 360}, 1250).setEasing('inOutQuad').setTimescale(2))
             .onUpdate(() => {
                 elem5.style.left = obj5.x + "px";
                 elem5.style.transform = "rotate(" + obj5.rotate + "deg)"

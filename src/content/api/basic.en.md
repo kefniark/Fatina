@@ -24,7 +24,7 @@ If instead you prefer to initialize it yourself (recommended), call the method <
 ### Methods
 * **init**(): `void` <small>This method has to be called once to initialize Fatina</small>
 * **update**(dt: number): `void`
-* **tween**(obj, properties): `Tween` <small>Method used to create new tween</small>
+* **tween**(obj): `Tween` <small>Method used to create new tween</small>
 * **sequence**(): `Sequence` <small>Method used to create new sequence</small>
 * **delay**(duration) `Delay`
 * **setTimeout**(fn, duration): `void` This is just a simple helper around Fatina.Delay

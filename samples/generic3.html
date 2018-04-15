@@ -5,10 +5,10 @@
 
         var obj3 = { x: 0, y: 0, rotate:0 };
         Fatina.sequence()
-            .append(Fatina.tween(obj3, ['x']).to({x: 500}, 1250).setEasing('inOutSine'))
+            .append(Fatina.tween(obj3).to({x: 500}, 1250).setEasing('inOutSine'))
             .appendInterval(0.2)
-            .append(Fatina.tween(obj3, ['x']).to({x: 0}, 1250).setEasing('inOutSine'))
-            .join(Fatina.tween(obj3, ['rotate']).to({rotate: 360}, 1250).setEasing('inOutCubic'))
+            .append(Fatina.tween(obj3).to({x: 0}, 1250).setEasing('inOutSine'))
+            .join(Fatina.tween(obj3).to({rotate: 360}, 1250).setEasing('inOutCubic'))
             .onUpdate(() => {
                 elem3.style.left = obj3.x + "px";
                 elem3.style.transform = "rotate(" + obj3.rotate + "deg)"

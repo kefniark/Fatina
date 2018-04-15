@@ -4,7 +4,7 @@
         var elem = document.getElementById("sample1");
 
         var obj = { x: 0, y: 0 };
-        Fatina.tween(obj, ['x'])
+        Fatina.tween(obj)
             .from({x: 0})
             .to({x: 500}, 2500)
             .onStart(() => console.log("tween1 start"))

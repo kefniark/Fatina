@@ -11,11 +11,11 @@
   <meta name="description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
 Demonic Star Looping Sequence var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000});document.getElementById(&#39;canvas2&#39;).appendChild(app.view);var star = new PIXI.Container();star.x &#43;= 100;star.y &#43;= 50;app.stage.addChild(star);// Create 250 spritesfor (let i = 0; i A demonic star with 250 moving sprites along a defined path
 Read the code
-Golden Stars Use Modifier for curve and gravity var app4 = new PIXI.">
+Golden Stars Use Modifier for curve and gravity    var app4 = new PIXI.">
   <meta property="og:description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
 Demonic Star Looping Sequence var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000});document.getElementById(&#39;canvas2&#39;).appendChild(app.view);var star = new PIXI.Container();star.x &#43;= 100;star.y &#43;= 50;app.stage.addChild(star);// Create 250 spritesfor (let i = 0; i A demonic star with 250 moving sprites along a defined path
 Read the code
-Golden Stars Use Modifier for curve and gravity var app4 = new PIXI.">
+Golden Stars Use Modifier for curve and gravity    var app4 = new PIXI.">
   <meta name="twitter:description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
 Demonic Star Looping Sequence var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000}); …">
   <meta name="author" content="Kevin Destrem"/>
@@ -179,7 +179,7 @@ Demonic Star Looping Sequence var app = new PIXI.Application(1024 / 2, 768 / 2
   <div class="row">
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
       <article role="main" class="blog-post">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.2/pixi.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.7.3/pixi.min.js"></script>
 
 <p>Few examples of <strong>Fatina</strong> working with <a href="http://www.pixijs.com/">Pixi.js</a> (<small>HTML 5 2D rendering engine</small>)</p>
 
@@ -241,7 +241,7 @@ Demonic Star Looping Sequence var app = new PIXI.Application(1024 / 2, 768 / 2
 
     let counter = 0;
     let delta = 0;
-    let move = Fatina.tween(emitter, ['x'])
+    let move = Fatina.tween(emitter)
         .from({x: app4.renderer.width / 2 - 200})
         .to({x: app4.renderer.width / 2 + 200}, 5000)
         .onUpdate((dt, progress) => {
@@ -273,7 +273,7 @@ Demonic Star Looping Sequence var app = new PIXI.Application(1024 / 2, 768 / 2
 
         app4.stage.addChild(prestar);
 
-        let tween = Fatina.tween(prestar, ['x', 'y', 'rotation'])
+        let tween = Fatina.tween(prestar)
             .to({ x: destX, y: destY, rotation: 0}, 900)
             .setEasing('outQuad')
             .onUpdate((dt, progress) => tween.modify({ x: 5 - progress * 5 }, false))
@@ -299,7 +299,7 @@ Demonic Star Looping Sequence var app = new PIXI.Application(1024 / 2, 768 / 2
         star.alpha = 0;
         star.tint = 0xf4ee42;
 
-        let smoke = Fatina.tween(star, ['x', 'y', 'rotation'])
+        let smoke = Fatina.tween(star)
             .setRelative(true)
             .to({ x: Math.random() * 300 - 150, y: multi * (Math.random() * 200 + 200), rotation: Math.random() * 12 - 6}, 1600)
             .onUpdate((dt) => {
@@ -308,8 +308,8 @@ Demonic Star Looping Sequence var app = new PIXI.Application(1024 / 2, 768 / 2
             })
             .onComplete(() => star.destroy());
 
-        let fadeIn = Fatina.tween(star, ['alpha']).to({ alpha: Math.random() * 0.4 + 0.6 }, 250);
-        let fadeOut = Fatina.tween(star, ['alpha']).to({ alpha: 0 }, 950).setEasing('outSine');
+        let fadeIn = Fatina.tween(star).to({ alpha: Math.random() * 0.4 + 0.6 }, 250);
+        let fadeOut = Fatina.tween(star).to({ alpha: 0 }, 950).setEasing('outSine');
 
         let sequence = Fatina.sequence()
             .append(fadeIn)
@@ -344,20 +344,20 @@ Demonic Star Looping Sequence var app = new PIXI.Application(1024 / 2, 768 / 2
         let ball = AddSprite('/Fatina/pixi/ball.png', app.stage, app.renderer.width - 50, 50, 1);
 
         // Fadein
-        Fatina.tween(ball, ['alpha']).from({ alpha: 0 }).to({ alpha: 1 }, 450).setEasing('outSine').start();
+        Fatina.tween(ball).from({ alpha: 0 }).to({ alpha: 1 }, 450).setEasing('outSine').start();
 
         // Move horizontaly
-        Fatina.tween(ball, ['x']).to({ x: - 100}, 5000 / xSpeed).start();
-        Fatina.tween(ball, ['rotation']).to({ rotation: -25 }, 5000).start();
+        Fatina.tween(ball).to({ x: - 100}, 5000 / xSpeed).start();
+        Fatina.tween(ball).to({ rotation: -25 }, 5000).start();
 
         let sequence = Fatina.sequence();
-        sequence.append(Fatina.tween(ball, ['y']).to({ y: app.renderer.height - 50}, 800).setEasing('inCirc'));
-        sequence.append(Fatina.tween(ball, ['y']).to({ y: 100 / yRebounce }, 800).setEasing('outCirc'));
-        sequence.append(Fatina.tween(ball, ['y']).to({ y: app.renderer.height - 50}, 800).setEasing('inCirc'));
-        sequence.append(Fatina.tween(ball, ['y']).to({ y: 150 / yRebounce }, 800).setEasing('outCirc'));
-        sequence.appendCallback(() => Fatina.tween(ball, ['alpha']).to({ alpha: 0 }, 250).setEasing('inSine').start());
-        sequence.append(Fatina.tween(ball, ['y']).to({ y: app.renderer.height - 50}, 800).setEasing('inCirc'));
-        sequence.append(Fatina.tween(ball, ['y']).to({ y: 200 / yRebounce }, 800).setEasing('outCirc'));
+        sequence.append(Fatina.tween(ball).to({ y: app.renderer.height - 50}, 800).setEasing('inCirc'));
+        sequence.append(Fatina.tween(ball).to({ y: 100 / yRebounce }, 800).setEasing('outCirc'));
+        sequence.append(Fatina.tween(ball).to({ y: app.renderer.height - 50}, 800).setEasing('inCirc'));
+        sequence.append(Fatina.tween(ball).to({ y: 150 / yRebounce }, 800).setEasing('outCirc'));
+        sequence.appendCallback(() => Fatina.tween(ball).to({ alpha: 0 }, 250).setEasing('inSine').start());
+        sequence.append(Fatina.tween(ball).to({ y: app.renderer.height - 50}, 800).setEasing('inCirc'));
+        sequence.append(Fatina.tween(ball).to({ y: 200 / yRebounce }, 800).setEasing('outCirc'));
         sequence.appendInterval(1500);
         sequence.onComplete(() => ball.destroy());
         sequence.start();

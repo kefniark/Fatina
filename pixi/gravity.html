@@ -9,7 +9,7 @@
 
     let counter = 0;
     let delta = 0;
-    let move = Fatina.tween(emitter, ['x'])
+    let move = Fatina.tween(emitter)
         .from({x: app4.renderer.width / 2 - 200})
         .to({x: app4.renderer.width / 2 + 200}, 5000)
         .onUpdate((dt, progress) => {
@@ -41,7 +41,7 @@
 
         app4.stage.addChild(prestar);
 
-        let tween = Fatina.tween(prestar, ['x', 'y', 'rotation'])
+        let tween = Fatina.tween(prestar)
             .to({ x: destX, y: destY, rotation: 0}, 900)
             .setEasing('outQuad')
             .onUpdate((dt, progress) => tween.modify({ x: 5 - progress * 5 }, false))
@@ -67,7 +67,7 @@
         star.alpha = 0;
         star.tint = 0xf4ee42;
 
-        let smoke = Fatina.tween(star, ['x', 'y', 'rotation'])
+        let smoke = Fatina.tween(star)
             .setRelative(true)
             .to({ x: Math.random() * 300 - 150, y: multi * (Math.random() * 200 + 200), rotation: Math.random() * 12 - 6}, 1600)
             .onUpdate((dt) => {
@@ -76,8 +76,8 @@
             })
             .onComplete(() => star.destroy());
 
-        let fadeIn = Fatina.tween(star, ['alpha']).to({ alpha: Math.random() * 0.4 + 0.6 }, 250);
-        let fadeOut = Fatina.tween(star, ['alpha']).to({ alpha: 0 }, 950).setEasing('outSine');
+        let fadeIn = Fatina.tween(star).to({ alpha: Math.random() * 0.4 + 0.6 }, 250);
+        let fadeOut = Fatina.tween(star).to({ alpha: 0 }, 950).setEasing('outSine');
 
         let sequence = Fatina.sequence()
             .append(fadeIn)

@@ -269,11 +269,11 @@
         }
 
         function TestFatina() {
-            return Fatina.tween({x:0}, ['x']).to({x:100}, 10).start();
+            return Fatina.tween({x:0}).to({x:100}, 10).start();
         }
 
         function TestFatinaAdvanced() {
-            return Fatina.tween({x:0, y:0, z:0, a:0}, ['x', 'y', 'z', 'a'])
+            return Fatina.tween({x:0, y:0, z:0, a:0})
                 .to({x:100, y:2, z:69, a:-71602}, Math.random() * 5 + 10)
                 .setLoop(2)
                 .setEasing('inOutQuad')
@@ -284,11 +284,11 @@
 
         function TestFatinaSequence() {
             Fatina.sequence([
-                Fatina.tween({x:0}, ['x']).to({x: 2}, 2),
+                Fatina.tween({x:0}).to({x: 2}, 2),
                 Fatina.delay(1),
-                Fatina.tween({x:0}, ['x']).to({x: 5}, 3),
-                Fatina.tween({x:0}, ['x']).to({x: -5}, 1),
-                Fatina.tween({x:0}, ['x']).to({x: 0}, 2)
+                Fatina.tween({x:0}).to({x: 5}, 3),
+                Fatina.tween({x:0}).to({x: -5}, 1),
+                Fatina.tween({x:0}).to({x: 0}, 2)
             ]).start();
         }
     </script>

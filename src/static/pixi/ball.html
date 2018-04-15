@@ -17,20 +17,20 @@
         let ball = AddSprite('/Fatina/pixi/ball.png', app.stage, app.renderer.width - 50, 50, 1);
 
         // Fadein
-        Fatina.tween(ball, ['alpha']).from({ alpha: 0 }).to({ alpha: 1 }, 450).setEasing('outSine').start();
+        Fatina.tween(ball).from({ alpha: 0 }).to({ alpha: 1 }, 450).setEasing('outSine').start();
 
         // Move horizontaly
-        Fatina.tween(ball, ['x']).to({ x: - 100}, 5000 / xSpeed).start();
-        Fatina.tween(ball, ['rotation']).to({ rotation: -25 }, 5000).start();
+        Fatina.tween(ball).to({ x: - 100}, 5000 / xSpeed).start();
+        Fatina.tween(ball).to({ rotation: -25 }, 5000).start();
 
         let sequence = Fatina.sequence();
-        sequence.append(Fatina.tween(ball, ['y']).to({ y: app.renderer.height - 50}, 800).setEasing('inCirc'));
-        sequence.append(Fatina.tween(ball, ['y']).to({ y: 100 / yRebounce }, 800).setEasing('outCirc'));
-        sequence.append(Fatina.tween(ball, ['y']).to({ y: app.renderer.height - 50}, 800).setEasing('inCirc'));
-        sequence.append(Fatina.tween(ball, ['y']).to({ y: 150 / yRebounce }, 800).setEasing('outCirc'));
-        sequence.appendCallback(() => Fatina.tween(ball, ['alpha']).to({ alpha: 0 }, 250).setEasing('inSine').start());
-        sequence.append(Fatina.tween(ball, ['y']).to({ y: app.renderer.height - 50}, 800).setEasing('inCirc'));
-        sequence.append(Fatina.tween(ball, ['y']).to({ y: 200 / yRebounce }, 800).setEasing('outCirc'));
+        sequence.append(Fatina.tween(ball).to({ y: app.renderer.height - 50}, 800).setEasing('inCirc'));
+        sequence.append(Fatina.tween(ball).to({ y: 100 / yRebounce }, 800).setEasing('outCirc'));
+        sequence.append(Fatina.tween(ball).to({ y: app.renderer.height - 50}, 800).setEasing('inCirc'));
+        sequence.append(Fatina.tween(ball).to({ y: 150 / yRebounce }, 800).setEasing('outCirc'));
+        sequence.appendCallback(() => Fatina.tween(ball).to({ alpha: 0 }, 250).setEasing('inSine').start());
+        sequence.append(Fatina.tween(ball).to({ y: app.renderer.height - 50}, 800).setEasing('inCirc'));
+        sequence.append(Fatina.tween(ball).to({ y: 200 / yRebounce }, 800).setEasing('outCirc'));
         sequence.appendInterval(1500);
         sequence.onComplete(() => ball.destroy());
         sequence.start();

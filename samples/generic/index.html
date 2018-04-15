@@ -9,9 +9,9 @@
   <meta property="og:title" content="Basics Samples" />
   <meta name="twitter:title" content="Basics Samples" />
   <meta name="description" content=".imgTest { position: relative; margin: 0; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html elements but you can tween almost any kind of object and data. PlayAll 
-Linear tween function sample1() {var elem = document.getElementById(&#34;sample1&#34;);var obj = { x: 0, y: 0 };Fatina.tween(obj, [&#39;x&#39;]).from({x: 0}).to({x: 500}, 2500).">
+Linear tween  function sample1() { var elem = document.getElementById(&#34;sample1&#34;); var obj = { x: 0, y: 0 }; Fatina.tween(obj) .from({x: 0}) .to({x: 500}, 2500) .">
   <meta property="og:description" content=".imgTest { position: relative; margin: 0; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html elements but you can tween almost any kind of object and data. PlayAll 
-Linear tween function sample1() {var elem = document.getElementById(&#34;sample1&#34;);var obj = { x: 0, y: 0 };Fatina.tween(obj, [&#39;x&#39;]).from({x: 0}).to({x: 500}, 2500).">
+Linear tween  function sample1() { var elem = document.getElementById(&#34;sample1&#34;); var obj = { x: 0, y: 0 }; Fatina.tween(obj) .from({x: 0}) .to({x: 500}, 2500) .">
   <meta name="twitter:description" content=".imgTest { position: relative; margin: 0; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
@@ -203,7 +203,7 @@ The following example are moving html elements but you can tween almost any kind
         var elem = document.getElementById("sample1");
 
         var obj = { x: 0, y: 0 };
-        Fatina.tween(obj, ['x'])
+        Fatina.tween(obj)
             .from({x: 0})
             .to({x: 500}, 2500)
             .onStart(() => console.log("tween1 start"))
@@ -230,7 +230,7 @@ The following example are moving html elements but you can tween almost any kind
         var elem = document.getElementById(&amp;#34;sample1&amp;#34;);
 
         var obj = { x: 0, y: 0 };
-        Fatina.tween(obj, [&amp;#39;x&amp;#39;])
+        Fatina.tween(obj)
             .from({x: 0})
             .to({x: 500}, 2500)
             .onStart(() =&amp;gt; console.log(&amp;#34;tween1 start&amp;#34;))
@@ -256,7 +256,7 @@ The following example are moving html elements but you can tween almost any kind
         var elem2 = document.getElementById("sample2");
 
         var obj2 = { x: 0, y: 0 };
-        Fatina.tween(obj2, ['x'])
+        Fatina.tween(obj2)
             .to({x: 500}, 2500)
             .setEasing('inOutQuad')
             .onStart(() => console.log("tween2 start"))
@@ -283,7 +283,7 @@ The following example are moving html elements but you can tween almost any kind
         var elem2 = document.getElementById(&amp;#34;sample2&amp;#34;);
 
         var obj2 = { x: 0, y: 0 };
-        Fatina.tween(obj2, [&amp;#39;x&amp;#39;])
+        Fatina.tween(obj2)
             .to({x: 500}, 2500)
             .setEasing(&amp;#39;inOutQuad&amp;#39;)
             .onStart(() =&amp;gt; console.log(&amp;#34;tween2 start&amp;#34;))
@@ -309,10 +309,10 @@ The following example are moving html elements but you can tween almost any kind
 
         var obj3 = { x: 0, y: 0, rotate:0 };
         Fatina.sequence()
-            .append(Fatina.tween(obj3, ['x']).to({x: 500}, 1250).setEasing('inOutSine'))
+            .append(Fatina.tween(obj3).to({x: 500}, 1250).setEasing('inOutSine'))
             .appendInterval(0.2)
-            .append(Fatina.tween(obj3, ['x']).to({x: 0}, 1250).setEasing('inOutSine'))
-            .join(Fatina.tween(obj3, ['rotate']).to({rotate: 360}, 1250).setEasing('inOutCubic'))
+            .append(Fatina.tween(obj3).to({x: 0}, 1250).setEasing('inOutSine'))
+            .join(Fatina.tween(obj3).to({rotate: 360}, 1250).setEasing('inOutCubic'))
             .onUpdate(() => {
                 elem3.style.left = obj3.x + "px";
                 elem3.style.transform = "rotate(" + obj3.rotate + "deg)"
@@ -339,10 +339,10 @@ The following example are moving html elements but you can tween almost any kind
 
         var obj3 = { x: 0, y: 0, rotate:0 };
         Fatina.sequence()
-            .append(Fatina.tween(obj3, [&amp;#39;x&amp;#39;]).to({x: 500}, 1250).setEasing(&amp;#39;inOutSine&amp;#39;))
+            .append(Fatina.tween(obj3).to({x: 500}, 1250).setEasing(&amp;#39;inOutSine&amp;#39;))
             .appendInterval(0.2)
-            .append(Fatina.tween(obj3, [&amp;#39;x&amp;#39;]).to({x: 0}, 1250).setEasing(&amp;#39;inOutSine&amp;#39;))
-            .join(Fatina.tween(obj3, [&amp;#39;rotate&amp;#39;]).to({rotate: 360}, 1250).setEasing(&amp;#39;inOutCubic&amp;#39;))
+            .append(Fatina.tween(obj3).to({x: 0}, 1250).setEasing(&amp;#39;inOutSine&amp;#39;))
+            .join(Fatina.tween(obj3).to({rotate: 360}, 1250).setEasing(&amp;#39;inOutCubic&amp;#39;))
             .onUpdate(() =&amp;gt; {
                 elem3.style.left = obj3.x &amp;#43; &amp;#34;px&amp;#34;;
                 elem3.style.transform = &amp;#34;rotate(&amp;#34; &amp;#43; obj3.rotate &amp;#43; &amp;#34;deg)&amp;#34;
@@ -366,9 +366,9 @@ The following example are moving html elements but you can tween almost any kind
 
         var obj4 = { x: 0, y: 0, rotate:0 };
         var sequence = Fatina.sequence()
-            .append(Fatina.tween(obj4, ['x']).to({x: 500}, 1250).setEasing('inOutQuad'))
-            .append(Fatina.tween(obj4, ['x']).to({x: 0}, 1250).setEasing('inOutQuad'))
-            .join(Fatina.tween(obj4, ['rotate']).to({rotate: 360}, 1250).setEasing('inOutQuad'))
+            .append(Fatina.tween(obj4).to({x: 500}, 1250).setEasing('inOutQuad'))
+            .append(Fatina.tween(obj4).to({x: 0}, 1250).setEasing('inOutQuad'))
+            .join(Fatina.tween(obj4).to({rotate: 360}, 1250).setEasing('inOutQuad'))
             .onUpdate(() => {
                 elem4.style.left = obj4.x + "px";
                 elem4.style.transform = "rotate(" + obj4.rotate + "deg)"
@@ -398,9 +398,9 @@ The following example are moving html elements but you can tween almost any kind
 
         var obj4 = { x: 0, y: 0, rotate:0 };
         var sequence = Fatina.sequence()
-            .append(Fatina.tween(obj4, [&amp;#39;x&amp;#39;]).to({x: 500}, 1250).setEasing(&amp;#39;inOutQuad&amp;#39;))
-            .append(Fatina.tween(obj4, [&amp;#39;x&amp;#39;]).to({x: 0}, 1250).setEasing(&amp;#39;inOutQuad&amp;#39;))
-            .join(Fatina.tween(obj4, [&amp;#39;rotate&amp;#39;]).to({rotate: 360}, 1250).setEasing(&amp;#39;inOutQuad&amp;#39;))
+            .append(Fatina.tween(obj4).to({x: 500}, 1250).setEasing(&amp;#39;inOutQuad&amp;#39;))
+            .append(Fatina.tween(obj4).to({x: 0}, 1250).setEasing(&amp;#39;inOutQuad&amp;#39;))
+            .join(Fatina.tween(obj4).to({rotate: 360}, 1250).setEasing(&amp;#39;inOutQuad&amp;#39;))
             .onUpdate(() =&amp;gt; {
                 elem4.style.left = obj4.x &amp;#43; &amp;#34;px&amp;#34;;
                 elem4.style.transform = &amp;#34;rotate(&amp;#34; &amp;#43; obj4.rotate &amp;#43; &amp;#34;deg)&amp;#34;
@@ -427,9 +427,9 @@ The following example are moving html elements but you can tween almost any kind
 
         var obj5 = { x: 0, y: 0, rotate:0 };
         var sequence = Fatina.sequence()
-            .append(Fatina.tween(obj5, ['x']).to({x: 500}, 1250).setEasing('inOutQuad'))
-            .append(Fatina.tween(obj5, ['x']).to({x: 0}, 1250).setEasing('inOutQuad'))
-            .join(Fatina.tween(obj5, ['rotate']).to({rotate: 360}, 1250).setEasing('inOutQuad').setTimescale(2))
+            .append(Fatina.tween(obj5).to({x: 500}, 1250).setEasing('inOutQuad'))
+            .append(Fatina.tween(obj5).to({x: 0}, 1250).setEasing('inOutQuad'))
+            .join(Fatina.tween(obj5).to({rotate: 360}, 1250).setEasing('inOutQuad').setTimescale(2))
             .onUpdate(() => {
                 elem5.style.left = obj5.x + "px";
                 elem5.style.transform = "rotate(" + obj5.rotate + "deg)"
@@ -457,9 +457,9 @@ The following example are moving html elements but you can tween almost any kind
 
         var obj5 = { x: 0, y: 0, rotate:0 };
         var sequence = Fatina.sequence()
-            .append(Fatina.tween(obj5, [&amp;#39;x&amp;#39;]).to({x: 500}, 1250).setEasing(&amp;#39;inOutQuad&amp;#39;))
-            .append(Fatina.tween(obj5, [&amp;#39;x&amp;#39;]).to({x: 0}, 1250).setEasing(&amp;#39;inOutQuad&amp;#39;))
-            .join(Fatina.tween(obj5, [&amp;#39;rotate&amp;#39;]).to({rotate: 360}, 1250).setEasing(&amp;#39;inOutQuad&amp;#39;).setTimescale(2))
+            .append(Fatina.tween(obj5).to({x: 500}, 1250).setEasing(&amp;#39;inOutQuad&amp;#39;))
+            .append(Fatina.tween(obj5).to({x: 0}, 1250).setEasing(&amp;#39;inOutQuad&amp;#39;))
+            .join(Fatina.tween(obj5).to({rotate: 360}, 1250).setEasing(&amp;#39;inOutQuad&amp;#39;).setTimescale(2))
             .onUpdate(() =&amp;gt; {
                 elem5.style.left = obj5.x &amp;#43; &amp;#34;px&amp;#34;;
                 elem5.style.transform = &amp;#34;rotate(&amp;#34; &amp;#43; obj5.rotate &amp;#43; &amp;#34;deg)&amp;#34;
@@ -484,7 +484,7 @@ The following example are moving html elements but you can tween almost any kind
         var obj6 = { x: 0, y: 0, rotate:0 };
 
         // Create moving tween (loop twice)
-        Fatina.tween(obj6, ['x'])
+        Fatina.tween(obj6)
             .from({ x: 0 })
             .to({x: 500}, 1250)
             .setLoop(2)
@@ -499,7 +499,7 @@ The following example are moving html elements but you can tween almost any kind
         // Create a sequence of infinite rotation
         Fatina.sequence()
             .join(
-                Fatina.tween(obj6, ['rotate'])
+                Fatina.tween(obj6)
                     .from({rotate:0})
                     .to({rotate: 360}, 550)
             )
@@ -529,7 +529,7 @@ The following example are moving html elements but you can tween almost any kind
         var obj6 = { x: 0, y: 0, rotate:0 };
 
         // Create moving tween (loop twice)
-        Fatina.tween(obj6, [&amp;#39;x&amp;#39;])
+        Fatina.tween(obj6)
             .from({ x: 0 })
             .to({x: 500}, 1250)
             .setLoop(2)
@@ -544,7 +544,7 @@ The following example are moving html elements but you can tween almost any kind
         // Create a sequence of infinite rotation
         Fatina.sequence()
             .join(
-                Fatina.tween(obj6, [&amp;#39;rotate&amp;#39;])
+                Fatina.tween(obj6)
                     .from({rotate:0})
                     .to({rotate: 360}, 550)
             )
@@ -572,7 +572,7 @@ The following example are moving html elements but you can tween almost any kind
         var elem7 = document.getElementById("sample7");
 
         var obj7 = { x: 0, y: 0 };
-        Fatina.tween(obj7, ['x'])
+        Fatina.tween(obj7)
             .to({x: 500}, 2500)
             .setEasing('inOutSine')
             .setSteps(15)
@@ -600,7 +600,7 @@ The following example are moving html elements but you can tween almost any kind
         var elem7 = document.getElementById(&amp;#34;sample7&amp;#34;);
 
         var obj7 = { x: 0, y: 0 };
-        Fatina.tween(obj7, [&amp;#39;x&amp;#39;])
+        Fatina.tween(obj7)
             .to({x: 500}, 2500)
             .setEasing(&amp;#39;inOutSine&amp;#39;)
             .setSteps(15)
@@ -627,7 +627,7 @@ The following example are moving html elements but you can tween almost any kind
         var elem8 = document.getElementById("sample8");
 
         var obj8 = { x: 0, y: 0 };
-        Fatina.tween(obj8, ['x'])
+        Fatina.tween(obj8)
             .to({x: 500}, 2000)
             .setEasing('inOutSine')
             .yoyo(5)
@@ -655,7 +655,7 @@ The following example are moving html elements but you can tween almost any kind
         var elem8 = document.getElementById(&amp;#34;sample8&amp;#34;);
 
         var obj8 = { x: 0, y: 0 };
-        Fatina.tween(obj8, [&amp;#39;x&amp;#39;])
+        Fatina.tween(obj8)
             .to({x: 500}, 2000)
             .setEasing(&amp;#39;inOutSine&amp;#39;)
             .yoyo(5)

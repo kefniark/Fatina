@@ -5,7 +5,7 @@ toc = true
 weight = 3
 
 +++
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.2/pixi.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.7.3/pixi.min.js"></script>
 
 Few examples of **Fatina** working with [Pixi.js](http://www.pixijs.com/) (<small>HTML 5 2D rendering engine</small>)
 

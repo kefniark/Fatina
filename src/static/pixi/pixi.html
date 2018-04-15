@@ -18,7 +18,7 @@
     app.stage.addChild(unitychan);
 
     // Tween to update unity chan sprite
-    Fatina.tween({}, [])
+    Fatina.tween({})
     .to({}, 1800)
     .onUpdate((dt, progress) => {
         let index = Math.round(progress * (textures.length - 1));
@@ -29,9 +29,9 @@
 
     // Tween to update unity chan position
     Fatina.sequence()
-        .append(Fatina.tween(unitychan, ['x']).setRelative(true).to({ x : -20}, 3000).setEasing('outQuad'))
-        .append(Fatina.tween(unitychan, ['x']).setRelative(true).to({ x : 40}, 3000).setEasing('inOutQuad'))
-        .append(Fatina.tween(unitychan, ['x']).setRelative(true).to({ x : -20}, 3000).setEasing('inQuad'))
+        .append(Fatina.tween(unitychan).setRelative(true).to({ x : -20}, 3000).setEasing('outQuad'))
+        .append(Fatina.tween(unitychan).setRelative(true).to({ x : 40}, 3000).setEasing('inOutQuad'))
+        .append(Fatina.tween(unitychan).setRelative(true).to({ x : -20}, 3000).setEasing('inQuad'))
         .setLoop(-1)
         .start();
 
@@ -61,9 +61,9 @@
 
         // Apply a vertical sin on the cloud
         Fatina.sequence()
-            .append(Fatina.tween(layerSky, ['y']).setRelative(true).to({ y : -10}, 5000).setEasing('outSine'))
-            .append(Fatina.tween(layerSky, ['y']).setRelative(true).to({ y : 20}, 10000).setEasing('inOutSine'))
-            .append(Fatina.tween(layerSky, ['y']).setRelative(true).to({ y : -10}, 5000).setEasing('inSine'))
+            .append(Fatina.tween(layerSky).setRelative(true).to({ y : -10}, 5000).setEasing('outSine'))
+            .append(Fatina.tween(layerSky).setRelative(true).to({ y : 20}, 10000).setEasing('inOutSine'))
+            .append(Fatina.tween(layerSky).setRelative(true).to({ y : -10}, 5000).setEasing('inSine'))
             .setLoop(-1)
             .start();
 
@@ -86,7 +86,7 @@
     }
 
     function AutoMove(container, duration) {
-        Fatina.tween(container, ['x'])
+        Fatina.tween(container)
             .from({x: 0})
             .to({x: -app.renderer.width }, duration)
             .setLoop(-1)

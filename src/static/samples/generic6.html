@@ -5,7 +5,7 @@
         var obj6 = { x: 0, y: 0, rotate:0 };
 
         // Create moving tween (loop twice)
-        Fatina.tween(obj6, ['x'])
+        Fatina.tween(obj6)
             .from({ x: 0 })
             .to({x: 500}, 1250)
             .setLoop(2)
@@ -20,7 +20,7 @@
         // Create a sequence of infinite rotation
         Fatina.sequence()
             .join(
-                Fatina.tween(obj6, ['rotate'])
+                Fatina.tween(obj6)
                     .from({rotate:0})
                     .to({rotate: 360}, 550)
             )
