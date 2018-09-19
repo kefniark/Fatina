@@ -28,7 +28,7 @@
     "email": "kef1@free.fr"
   },
   "dependencies": {
-    "npm": "^5.8.0"
+    "npm": "^6.4.1"
   },
   "side-effects": false,
   "scripts": {
@@ -54,24 +54,24 @@
     "update": "npm-check --update"
   },
   "devDependencies": {
-    "@types/node": "^9.6.5",
+    "@types/node": "^10.10.1",
     "@types/tape": "^4.2.32",
-    "coveralls": "^3.0.0",
+    "coveralls": "^3.0.2",
     "dts-bundle": "0.7.3",
-    "npm-check": "^5.6.0",
-    "npm-run-all": "^4.1.2",
-    "nyc": "^11.6.0",
+    "npm-check": "^5.9.0",
+    "npm-run-all": "^4.1.3",
+    "nyc": "^13.0.1",
     "rimraf": "^2.6.2",
-    "tap-spec": "4.1.1",
-    "tape": "^4.9.0",
-    "ts-loader": "^4.2.0",
-    "ts-node": "^5.0.1",
-    "tslint": "^5.9.1",
-    "tslint-eslint-rules": "^5.1.0",
-    "typedoc": "^0.11.1",
-    "typescript": "^2.8.1",
-    "webpack": "^4.5.0",
-    "webpack-cli": "^2.0.14"
+    "tap-spec": "^5.0.0",
+    "tape": "^4.9.1",
+    "ts-loader": "^5.1.1",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "typedoc": "^0.12.0",
+    "typescript": "^3.0.3",
+    "webpack": "^4.19.1",
+    "webpack-cli": "^3.1.0"
   },
   "nyc": {
     "include": [
