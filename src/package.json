@@ -11,6 +11,6 @@
     "serve": "hugo server -w"
   },
   "devDependencies": {
-    "hugo-bin": "^0.7.0"
+    "hugo-bin": "^0.42.0"
   }
 }
