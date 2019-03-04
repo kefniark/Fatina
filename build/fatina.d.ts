@@ -520,7 +520,7 @@ export const enum State {
     Run = 1,
     Pause = 2,
     Finished = 3,
-    Killed = 4,
+    Killed = 4
 }
 
 /**
@@ -575,7 +575,7 @@ export const enum EasingType {
     InOutBack = "inOutBack",
     InBounce = "inBounce",
     OutBounce = "outBounce",
-    InOutBounce = "inOutBounce",
+    InOutBounce = "inOutBounce"
 }
 
 /**

@@ -350,10 +350,10 @@ class Fatina {
         this.settings = {
             logLevel: 0 /* None */,
             safe: true,
-            smooth: true,
+            smooth: false,
             maxFrameDt: 50,
             maxFrameNumber: 40,
-            maxDt: 15000 // 15s of animation
+            maxDt: 500 // 500ms of animation
         };
         // properties
         this.time = 0;

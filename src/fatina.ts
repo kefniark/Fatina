@@ -40,10 +40,10 @@ export class Fatina {
 	private readonly settings = {
 		logLevel: Log.None,
 		safe: true,
-		smooth: true,
+		smooth: false,
 		maxFrameDt: 50, // 3 frames
 		maxFrameNumber: 40, // 40 x 3 frames ~2s.
-		maxDt: 15000 // 15s of animation
+		maxDt: 500 // 500ms of animation
 	} as ISettings;
 
 	// properties
