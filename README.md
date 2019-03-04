@@ -25,9 +25,9 @@ A comprehensive and easy to use animation library for **Typescript** / **Javascr
 ## Getting Started
 
 ### Install
-If you use directly the minified version
+If you want to use the CDN version:
 ```ts
-<script src="fatina.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fatina@latest/build/fatina.min.js"></script>
 ```
 Or if you use NPM
 ```ts
