@@ -48,7 +48,7 @@
 		"no-unnecessary-callback-wrapper": true,
 		"no-unnecessary-initializer": false,
 		"cyclomatic-complexity": [true, 20],
-		"max-file-line-count": [true, 800],
+		"max-file-line-count": [true, 1000],
 		"max-line-length": [true, 200],
 
 		// unused
