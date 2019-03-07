@@ -611,6 +611,30 @@ test('[Fatina.Tween] Test Yoyo 2', (t: Test) => {
 	t.end();
 });
 
+test('[Fatina.Tween] Test Yoyo Infinite', (t: Test) => {
+	const ticker = new Ticker();
+	ticker.start();
+
+	const obj = { x: 0 };
+	let complete = 0;
+	const tween = new Tween(obj)
+		.setRelative(true)
+		.to({ x: 10 }, 5)
+		.yoyo(-1)
+		.setParent(ticker)
+		.onComplete(() => complete++)
+		.start();
+
+	ticker.tick(2.5);
+	t.equal(obj.x, 5);
+	ticker.tick(10000);
+	t.equal(obj.x, 5);
+
+	t.ok(!tween.isFinished);
+
+	t.end();
+});
+
 test('[Fatina.Tween] Test Modify', (t: Test) => {
 	const ticker = new Ticker();
 	ticker.start();

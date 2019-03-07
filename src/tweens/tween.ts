@@ -152,7 +152,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 			this.remains = this.elapsed - this.duration;
 
 			// Yoyo effect ( A -> B -> A )
-			if (this.yo && this.yo.value > 0) {
+			if (this.yo && this.yo.value !== 0) {
 				this.reverse();
 				this.resetAndStart(0);
 				this.yo.value--;
