@@ -39,7 +39,7 @@ And load it with
 var Fatina = require('fatina');
 // OR
 // standard import with typescript (typed version)
-import * as Fatina from 'fatina';
+import Fatina from 'fatina';
 ```
 * [More Information](https://kefniark.github.io/Fatina/basics/download/)
 

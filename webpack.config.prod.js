@@ -1,28 +1,6 @@
 "use strict";
 
 const path = require("path");
-const webpack = require("webpack");
-
-// Generate the description file d.ts
-function DtsBundlePlugin() { }
-DtsBundlePlugin.prototype.apply = function (compiler) {
-	compiler.plugin("done", function () {
-		var dts = require("dts-bundle");
-
-		dts.bundle({
-			name: "Fatina",
-			baseDir: "lib",
-			main: "./lib/src/index.d.ts",
-			out: "../build/fatina.d.ts",
-			exclude: (file, external) => {
-				return file.indexOf("tests") !== -1;
-			},
-			removeSource: true,
-			verbose: false,
-			outputAsModuleFolder: true // to use npm in-package typings
-		});
-	});
-};
 
 module.exports = {
 	mode: "production",
@@ -47,8 +25,5 @@ module.exports = {
 				]
 			}
 		]
-	},
-	plugins: [
-		new DtsBundlePlugin()
-	]
+	}
 };
