@@ -6,7 +6,7 @@
 	else if(typeof exports === 'object')
 		exports["Fatina"] = factory();
 	else
-		root["Fatina"] = factory();
+		root["Fatina"] = factory().default;
 })(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -305,6 +305,60 @@ e.inOutBounce = (t) => {
     return e.outBounce(t * 2 - 1) * 0.5 + 0.5;
 };
 exports.easeNames = e;
+
+
+/***/ }),
+
+/***/ "./src/easing/easingType.ts":
+/*!**********************************!*\
+  !*** ./src/easing/easingType.ts ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * List of all easing methods
+ *
+ * @export
+ * @enum {number}
+ */
+var EasingType;
+(function (EasingType) {
+    EasingType["Linear"] = "linear";
+    EasingType["InQuad"] = "inQuad";
+    EasingType["OutQuad"] = "outQuad";
+    EasingType["InOutQuad"] = "inOutQuad";
+    EasingType["InCubic"] = "inCubic";
+    EasingType["OutCubic"] = "outCubic";
+    EasingType["InOutCubic"] = "inOutCubic";
+    EasingType["InQuart"] = "inQuart";
+    EasingType["OutQuart"] = "outQuart";
+    EasingType["InOutQuart"] = "inOutQuart";
+    EasingType["InSine"] = "inSine";
+    EasingType["OutSine"] = "outSine";
+    EasingType["InOutSine"] = "inOutSine";
+    EasingType["InCirc"] = "inCirc";
+    EasingType["OutCirc"] = "outCirc";
+    EasingType["InOutCirc"] = "inOutCirc";
+    EasingType["InQuint"] = "inQuint";
+    EasingType["OutQuint"] = "outQuint";
+    EasingType["InOutQuint"] = "inOutQuint";
+    EasingType["InExponential"] = "inExponential";
+    EasingType["OutExponential"] = "outExponential";
+    EasingType["InOutExponential"] = "inOutExponential";
+    EasingType["InElastic"] = "inElastic";
+    EasingType["OutElastic"] = "outElastic";
+    EasingType["InOutElastic"] = "inOutElastic";
+    EasingType["InBack"] = "inBack";
+    EasingType["OutBack"] = "outBack";
+    EasingType["InOutBack"] = "inOutBack";
+    EasingType["InBounce"] = "inBounce";
+    EasingType["OutBounce"] = "outBounce";
+    EasingType["InOutBounce"] = "inOutBounce";
+})(EasingType = exports.EasingType || (exports.EasingType = {}));
 
 
 /***/ }),
@@ -664,8 +718,11 @@ exports.Fatina = Fatina;
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", { value: true });
 const fatina_1 = __webpack_require__(/*! ./fatina */ "./src/fatina.ts");
-module.exports = new fatina_1.Fatina();
+exports.default = new fatina_1.Fatina();
+var easingType_1 = __webpack_require__(/*! ./easing/easingType */ "./src/easing/easingType.ts");
+exports.EasingType = easingType_1.EasingType;
 
 
 /***/ }),

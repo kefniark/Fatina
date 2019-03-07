@@ -13,6 +13,7 @@
 		"pretty": true,
 		"declaration": true,
 		"preserveConstEnums": true,
+		"allowSyntheticDefaultImports": true,
 
 		// strict
 		"strict": true,
