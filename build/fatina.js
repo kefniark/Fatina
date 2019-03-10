@@ -1,4 +1,4 @@
-// [Fatina]  Build: 3.0.0-beta.1 - Sunday, March 10th, 2019, 9:19:23 PM  
+// [Fatina]  Build: 3.0.0-beta.2 - Monday, March 11th, 2019, 12:07:51 AM  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -96,6 +96,300 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ })
 /************************************************************************/
 /******/ ({
+
+/***/ "./src/advanced/curve.ts":
+/*!*******************************!*\
+  !*** ./src/advanced/curve.ts ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const helper_1 = __webpack_require__(/*! ./helper */ "./src/advanced/helper.ts");
+/**
+ * Bezier curve calculation method
+ *
+ * @param {number} t
+ * @param {number} start
+ * @param {number} ctr1
+ * @param {number} ctr2
+ * @param {number} dest
+ * @returns
+ */
+function cubicBezier(t, start, ctr1, ctr2, dest) {
+    const t2 = t * t;
+    const t3 = t2 * t;
+    return start +
+        (-start * 3 + t * (3 * start - start * t)) * t +
+        (3 * ctr1 + t * (-6 * ctr1 + ctr1 * 3 * t)) * t +
+        (ctr2 * 3 - ctr2 * 3 * t) * t2 +
+        dest * t3;
+}
+function curve(fatina, obj, settings) {
+    const defaults = {
+        posX: 'position.x',
+        posY: 'position.y',
+        ctr1: { x: 0, y: 0 },
+        ctr2: { x: 0, y: 0 },
+        to: { x: 0, y: 0 },
+        duration: 2000
+    };
+    const pa = Object.assign({}, defaults, (settings || {}));
+    const root = helper_1.getRoot(obj, pa.posX);
+    const from = { x: root[helper_1.getProp(pa.posX)], y: root[helper_1.getProp(pa.posY)] };
+    return fatina.tween({})
+        .to({}, pa.duration)
+        .onUpdate((_dt, progress) => {
+        root[helper_1.getProp(pa.posX)] = cubicBezier(progress, from.x, pa.ctr1.x, pa.ctr2.x, pa.to.x);
+        root[helper_1.getProp(pa.posY)] = cubicBezier(progress, from.y, pa.ctr1.y, pa.ctr2.y, pa.to.y);
+    })
+        .onKilled(() => {
+        root[helper_1.getProp(pa.posX)] = pa.to.x;
+        root[helper_1.getProp(pa.posY)] = pa.to.y;
+    });
+}
+exports.curve = curve;
+
+
+/***/ }),
+
+/***/ "./src/advanced/helper.ts":
+/*!********************************!*\
+  !*** ./src/advanced/helper.ts ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Get Root object
+ *
+ * @ignore
+ * @private
+ * @param {*} obj
+ * @param {string} property
+ * @returns
+ */
+function getRoot(obj, property) {
+    const path = property.split('.');
+    let ret = obj;
+    for (let i = 0; i < path.length - 1; i++) {
+        ret = ret[path[i]];
+    }
+    return ret;
+}
+exports.getRoot = getRoot;
+/**
+ * Get Object Property
+ *
+ * @ignore
+ * @private
+ * @param {string} property
+ * @returns
+ */
+function getProp(property) {
+    const path = property.split('.');
+    return path[path.length - 1];
+}
+exports.getProp = getProp;
+/**
+ * Get Object Property object
+ *
+ * @ignore
+ * @private
+ * @param {string} property
+ * @param {*} value
+ * @returns
+ */
+function getData(property, value) {
+    const data = {};
+    data[getProp(property)] = value;
+    return data;
+}
+exports.getData = getData;
+
+
+/***/ }),
+
+/***/ "./src/advanced/preset.ts":
+/*!********************************!*\
+  !*** ./src/advanced/preset.ts ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const easing_1 = __webpack_require__(/*! ../easing/easing */ "./src/easing/easing.ts");
+const helper_1 = __webpack_require__(/*! ./helper */ "./src/advanced/helper.ts");
+/**
+ * Sonar Preset
+ *
+ * @ignore
+ * @export
+ * @param {Fatina} fatina
+ * @param {*} obj
+ * @param {ISonarPresetParams} [settings]
+ * @returns
+ */
+function sonarPreset(fatina, obj, settings) {
+    const defaults = {
+        alpha: 'alpha',
+        scaleX: 'scale.x',
+        scaleY: 'scale.y',
+        amplitude: 4,
+        duration: 2000
+    };
+    const pa = Object.assign({}, defaults, (settings || {}));
+    const rs = helper_1.getRoot(obj, pa.scaleX);
+    const ra = helper_1.getRoot(obj, pa.alpha);
+    const sx = helper_1.getProp(pa.scaleX);
+    const sy = helper_1.getProp(pa.scaleY);
+    const alpha = helper_1.getProp(pa.alpha);
+    const src = { x: rs[sx], y: rs[sy] };
+    const p = easing_1.easeNames["outCubic" /* OutCubic */];
+    return fatina.tween({})
+        .to({}, pa.duration)
+        .onUpdate((_dt, progress) => {
+        ra[alpha] = 1 - easing_1.easeNames["inSine" /* InSine */](progress);
+        rs[sx] = src.x + pa.amplitude * p(progress);
+        rs[sy] = src.y + pa.amplitude * p(progress);
+    })
+        .onKilled(() => {
+        ra[alpha] = 1;
+        rs[sx] = src.x;
+        rs[sy] = src.y;
+    });
+}
+exports.sonarPreset = sonarPreset;
+/**
+ * Pulse Preset
+ *
+ * @ignore
+ * @export
+ * @param {Fatina} fatina
+ * @param {*} obj
+ * @param {IPulsePresetParams} [settings]
+ * @returns
+ */
+function pulsePreset(fatina, obj, settings) {
+    const defaults = {
+        alpha: 'alpha',
+        duration: 2000
+    };
+    const pa = Object.assign({}, defaults, (settings || {}));
+    const rootAlpha = helper_1.getRoot(obj, pa.alpha);
+    return fatina.tween(rootAlpha)
+        .to(helper_1.getData(pa.alpha, 0), pa.duration / 2)
+        .setEasing("inOutQuad" /* InOutQuad */)
+        .toSequence()
+        .append(fatina.tween(rootAlpha)
+        .to(helper_1.getData(pa.alpha, 1), pa.duration / 2)
+        .setEasing("inOutQuad" /* InOutQuad */))
+        .onKilled(() => rootAlpha[helper_1.getProp(pa.alpha)] = 1);
+}
+exports.pulsePreset = pulsePreset;
+/**
+ * Scale Preset
+ *
+ * @ignore
+ * @export
+ * @param {Fatina} fatina
+ * @param {*} obj
+ * @param {IScalePresetParams} [settings]
+ * @returns
+ */
+function scalePreset(fatina, obj, settings) {
+    const defaults = {
+        scaleX: 'scale.x',
+        scaleY: 'scale.y',
+        amplitude: 0.5,
+        duration: 2000,
+        bounce: 5,
+        friction: 2,
+        sinX: 0
+    };
+    const pa = Object.assign({}, defaults, (settings || {}));
+    const root = helper_1.getRoot(obj, pa.scaleX);
+    const x = helper_1.getProp(pa.scaleX);
+    const y = helper_1.getProp(pa.scaleY);
+    const src = { x: root[x], y: root[y] };
+    return fatina.tween({}).to({}, pa.duration)
+        .setEasing("inOutCubic" /* InOutCubic */)
+        .onUpdate((_dt, progress) => {
+        const friction = Math.pow(1 - progress, pa.friction);
+        const p = (progress * pa.bounce) % pa.duration;
+        root[x] = src.x + Math.sin(pa.sinX + p * Math.PI * 2) * pa.amplitude * friction;
+        root[y] = src.y + Math.sin(p * Math.PI * 2) * pa.amplitude * friction;
+    })
+        .onKilled(() => {
+        root[x] = src.x;
+        root[y] = src.y;
+    });
+}
+exports.scalePreset = scalePreset;
+/**
+ * Wobble Preset
+ *
+ * @ignore
+ * @export
+ * @param {Fatina} fatina
+ * @param {*} obj
+ * @param {IScalePresetParams} [settings]
+ * @returns
+ */
+function wobblePreset(fatina, obj, settings) {
+    const defaults = { sinX: Math.PI };
+    return scalePreset(fatina, obj, Object.assign({}, defaults, (settings || {})));
+}
+exports.wobblePreset = wobblePreset;
+/**
+ * Shake Preset
+ *
+ * @ignore
+ * @export
+ * @param {Fatina} fatina
+ * @param {*} obj
+ * @param {IShakePresetParams} [settings]
+ * @returns
+ */
+function shakePreset(fatina, obj, settings) {
+    const defaults = {
+        posX: 'position.x',
+        posY: 'position.y',
+        amplitude: 1.5,
+        duration: 2000,
+        bounce: 10,
+        friction: 2
+    };
+    const pa = Object.assign({}, defaults, (settings || {}));
+    const root = helper_1.getRoot(obj, pa.posX);
+    const x = helper_1.getProp(pa.posX);
+    const y = helper_1.getProp(pa.posY);
+    const src = { x: root[x], y: root[y] };
+    const rnd = { x: 0.5 + Math.random(), y: 0.5 + Math.random() };
+    return fatina.tween({})
+        .to({}, pa.duration)
+        .onUpdate((_dt, progress) => {
+        const friction = Math.pow(1 - progress, pa.friction);
+        const p = (progress * pa.bounce) % pa.duration;
+        root[x] = src.x + Math.sin(Math.PI + (p + rnd.x) * Math.PI * 2) * pa.amplitude * friction;
+        root[y] = src.y + Math.sin((p + rnd.y) * Math.PI * 2) * pa.amplitude * friction;
+    })
+        .onKilled(() => {
+        root[x] = src.x;
+        root[y] = src.y;
+    });
+}
+exports.shakePreset = shakePreset;
+
+
+/***/ }),
 
 /***/ "./src/easing/easing.ts":
 /*!******************************!*\
@@ -398,7 +692,8 @@ var EasingType;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const preset_1 = __webpack_require__(/*! ./preset */ "./src/preset.ts");
+const curve_1 = __webpack_require__(/*! ./advanced/curve */ "./src/advanced/curve.ts");
+const preset_1 = __webpack_require__(/*! ./advanced/preset */ "./src/advanced/preset.ts");
 const ticker_1 = __webpack_require__(/*! ./ticker */ "./src/ticker.ts");
 const delay_1 = __webpack_require__(/*! ./tweens/delay */ "./src/tweens/delay.ts");
 const sequence_1 = __webpack_require__(/*! ./tweens/sequence */ "./src/tweens/sequence.ts");
@@ -465,7 +760,7 @@ class Fatina {
         /**
          * @readonly
          */
-        this.version = '3.0.0-beta.1';
+        this.version = '3.0.0-beta.2';
         this.time = 0;
         /**
          * @private
@@ -524,6 +819,10 @@ class Fatina {
          * @returns {ISequence}
          */
         this.shake = (obj, settings) => preset_1.shakePreset(this, obj, settings);
+        /**
+         *
+         */
+        this.curve = (obj, settings) => curve_1.curve(this, obj, settings);
     }
     get elapsed() {
         return this.manager.elapsed;
@@ -848,232 +1147,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fatina_1 = __webpack_require__(/*! ./fatina */ "./src/fatina.ts");
 /**
  * @export
- * @ignore
- */
-exports.default = new fatina_1.Fatina();
-/**
- * @export
  */
 var easingType_1 = __webpack_require__(/*! ./easing/easingType */ "./src/easing/easingType.ts");
 exports.EasingType = easingType_1.EasingType;
-
-
-/***/ }),
-
-/***/ "./src/preset.ts":
-/*!***********************!*\
-  !*** ./src/preset.ts ***!
-  \***********************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const easing_1 = __webpack_require__(/*! ./easing/easing */ "./src/easing/easing.ts");
 /**
- * Get Root object
- *
- * @ignore
- * @private
- * @param {*} obj
- * @param {string} property
- * @returns
- */
-function getRoot(obj, property) {
-    const path = property.split('.');
-    let ret = obj;
-    for (let i = 0; i < path.length - 1; i++) {
-        ret = ret[path[i]];
-    }
-    return ret;
-}
-/**
- * Get Object Property
- *
- * @ignore
- * @private
- * @param {string} property
- * @returns
- */
-function getProp(property) {
-    const path = property.split('.');
-    return path[path.length - 1];
-}
-/**
- * Get Object Property object
- *
- * @ignore
- * @private
- * @param {string} property
- * @param {*} value
- * @returns
- */
-function getData(property, value) {
-    const data = {};
-    data[getProp(property)] = value;
-    return data;
-}
-/**
- * Sonar Preset
- *
- * @ignore
  * @export
- * @param {Fatina} fatina
- * @param {*} obj
- * @param {ISonarPresetParams} [settings]
- * @returns
  */
-function sonarPreset(fatina, obj, settings) {
-    const defaults = {
-        alpha: 'alpha',
-        scaleX: 'scale.x',
-        scaleY: 'scale.y',
-        amplitude: 4,
-        duration: 2000
-    };
-    const pa = Object.assign({}, defaults, (settings || {}));
-    const rs = getRoot(obj, pa.scaleX);
-    const ra = getRoot(obj, pa.alpha);
-    const sx = getProp(pa.scaleX);
-    const sy = getProp(pa.scaleY);
-    const alpha = getProp(pa.alpha);
-    const src = { x: rs[sx], y: rs[sy] };
-    const p = easing_1.easeNames["outCubic" /* OutCubic */];
-    return fatina.tween({})
-        .to({}, pa.duration)
-        .onUpdate((_dt, progress) => {
-        ra[alpha] = 1 - easing_1.easeNames["inSine" /* InSine */](progress);
-        rs[sx] = src.x + pa.amplitude * p(progress);
-        rs[sy] = src.y + pa.amplitude * p(progress);
-    })
-        .onKilled(() => {
-        ra[alpha] = 1;
-        rs[sx] = src.x;
-        rs[sy] = src.y;
-    });
-}
-exports.sonarPreset = sonarPreset;
-/**
- * Pulse Preset
- *
- * @ignore
- * @export
- * @param {Fatina} fatina
- * @param {*} obj
- * @param {IPulsePresetParams} [settings]
- * @returns
- */
-function pulsePreset(fatina, obj, settings) {
-    const defaults = {
-        alpha: 'alpha',
-        duration: 2000
-    };
-    const pa = Object.assign({}, defaults, (settings || {}));
-    const rootAlpha = getRoot(obj, pa.alpha);
-    return fatina.tween(rootAlpha)
-        .to(getData(pa.alpha, 0), pa.duration / 2)
-        .setEasing("inOutQuad" /* InOutQuad */)
-        .toSequence()
-        .append(fatina.tween(rootAlpha)
-        .to(getData(pa.alpha, 1), pa.duration / 2)
-        .setEasing("inOutQuad" /* InOutQuad */))
-        .onKilled(() => rootAlpha[getProp(pa.alpha)] = 1);
-}
-exports.pulsePreset = pulsePreset;
-/**
- * Scale Preset
- *
- * @ignore
- * @export
- * @param {Fatina} fatina
- * @param {*} obj
- * @param {IScalePresetParams} [settings]
- * @returns
- */
-function scalePreset(fatina, obj, settings) {
-    const defaults = {
-        scaleX: 'scale.x',
-        scaleY: 'scale.y',
-        amplitude: 0.5,
-        duration: 2000,
-        bounce: 5,
-        friction: 2,
-        sinX: 0
-    };
-    const pa = Object.assign({}, defaults, (settings || {}));
-    const root = getRoot(obj, pa.scaleX);
-    const x = getProp(pa.scaleX);
-    const y = getProp(pa.scaleY);
-    const src = { x: root[x], y: root[y] };
-    return fatina.tween({}).to({}, pa.duration)
-        .setEasing("inOutCubic" /* InOutCubic */)
-        .onUpdate((_dt, progress) => {
-        const friction = Math.pow(1 - progress, pa.friction);
-        const p = (progress * pa.bounce) % pa.duration;
-        root[x] = src.x + Math.sin(pa.sinX + p * Math.PI * 2) * pa.amplitude * friction;
-        root[y] = src.y + Math.sin(p * Math.PI * 2) * pa.amplitude * friction;
-    })
-        .onKilled(() => {
-        root[x] = src.x;
-        root[y] = src.y;
-    });
-}
-exports.scalePreset = scalePreset;
-/**
- * Wobble Preset
- *
- * @ignore
- * @export
- * @param {Fatina} fatina
- * @param {*} obj
- * @param {IScalePresetParams} [settings]
- * @returns
- */
-function wobblePreset(fatina, obj, settings) {
-    const defaults = { sinX: Math.PI };
-    return scalePreset(fatina, obj, Object.assign({}, defaults, (settings || {})));
-}
-exports.wobblePreset = wobblePreset;
-/**
- * Shake Preset
- *
- * @ignore
- * @export
- * @param {Fatina} fatina
- * @param {*} obj
- * @param {IShakePresetParams} [settings]
- * @returns
- */
-function shakePreset(fatina, obj, settings) {
-    const defaults = {
-        posX: 'position.x',
-        posY: 'position.y',
-        amplitude: 1.5,
-        duration: 2000,
-        bounce: 10,
-        friction: 2
-    };
-    const pa = Object.assign({}, defaults, (settings || {}));
-    const root = getRoot(obj, pa.posX);
-    const x = getProp(pa.posX);
-    const y = getProp(pa.posY);
-    const src = { x: root[x], y: root[y] };
-    const rnd = { x: 0.5 + Math.random(), y: 0.5 + Math.random() };
-    return fatina.tween({})
-        .to({}, pa.duration)
-        .onUpdate((_dt, progress) => {
-        const friction = Math.pow(1 - progress, pa.friction);
-        const p = (progress * pa.bounce) % pa.duration;
-        root[x] = src.x + Math.sin(Math.PI + (p + rnd.x) * Math.PI * 2) * pa.amplitude * friction;
-        root[y] = src.y + Math.sin((p + rnd.y) * Math.PI * 2) * pa.amplitude * friction;
-    })
-        .onKilled(() => {
-        root[x] = src.x;
-        root[y] = src.y;
-    });
-}
-exports.shakePreset = shakePreset;
+exports.default = new fatina_1.Fatina();
 
 
 /***/ }),

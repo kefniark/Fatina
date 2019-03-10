@@ -1,4 +1,6 @@
 
+import { curve } from './advanced/curve';
+import { pulsePreset, scalePreset, shakePreset, sonarPreset, wobblePreset } from './advanced/preset';
 import { Log } from './core/enum/log';
 import { IControl } from './core/interfaces/IControl';
 import { IPlayable } from './core/interfaces/IPlayable';
@@ -7,7 +9,6 @@ import { ISequence } from './core/interfaces/ISequence';
 import { ISettings } from './core/interfaces/ISettings';
 import { ITicker } from './core/interfaces/ITicker';
 import { ITween } from './core/interfaces/ITween';
-import { pulsePreset, scalePreset, shakePreset, sonarPreset, wobblePreset } from './preset';
 import { Ticker } from './ticker';
 import { Delay } from './tweens/delay';
 import { Sequence } from './tweens/sequence';
@@ -153,7 +154,10 @@ export class Fatina {
 	 * @returns {ISequence}
 	 */
 	public shake = (obj: any, settings?: any): ITween => shakePreset(this, obj, settings);
-
+	/**
+	 *
+	 */
+	public curve = (obj: any, settings?: any): ITween => curve(this, obj, settings);
 	/**
 	 * Method used when Fatina is used for the first time.
 	 * Can take few ms. (pool initialization & object creation)

@@ -1,0 +1,139 @@
+<html>
+
+<head>
+	<script src="./fatina.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
+	<style>
+		.menu {
+			position: absolute;
+			top: 10px;
+			left: 10px;
+			z-index: 5;
+		}
+
+		canvas {
+			margin-top: 50px;
+			margin-left: auto;
+			margin-right: auto;
+			padding-left: 0;
+			padding-right: 0;
+			display: block;
+		}
+	</style>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+</head>
+
+<body onload="init()">
+	<script>
+		let app;
+		let bunny1;
+		let bunny2;
+		let t1;
+		let t2;
+
+		function init() {
+			// hack to work with webpack-dev-server
+			window.Fatina = window.Fatina.default;
+
+			Fatina.init();
+
+			// The application will create a renderer using WebGL, if possible,
+			// with a fallback to a canvas render. It will also setup the ticker
+			// and the root stage PIXI.Container
+			app = new PIXI.Application();
+
+			// The application will create a canvas element for you that you
+			// can then insert into the DOM
+			document.body.appendChild(app.view);
+
+			// This creates a texture from a 'bunny.png' image
+			bunny1 = new PIXI.Sprite.fromImage('https://pixijs.io/examples/examples/assets/bunny.png')
+
+			// Setup the position of the bunny
+			bunny1.x = app.renderer.width / 2 - 160;
+			bunny1.y = app.renderer.height / 2;
+
+			// Rotate around the center
+			bunny1.anchor.x = 0.5;
+			bunny1.anchor.y = 0.5;
+
+			bunny1.scale.x = 2;
+			bunny1.scale.y = 2;
+
+			// This creates a texture from a 'bunny.png' image
+			bunny2 = new PIXI.Sprite.fromImage('https://pixijs.io/examples/examples/assets/bunny.png')
+
+			// Setup the position of the bunny
+			bunny2.x = app.renderer.width / 2 - 160;
+			bunny2.y = app.renderer.height / 2;
+
+			// Rotate around the center
+			bunny2.anchor.x = 0.5;
+			bunny2.anchor.y = 0.5;
+
+			bunny2.scale.x = 3;
+			bunny2.scale.y = 3;
+
+			var graphics = new PIXI.Graphics();
+			graphics.lineStyle(5, 0xFF0000);
+			graphics.moveTo(bunny1.x, bunny1.y);
+			graphics.bezierCurveTo(
+				bunny1.x + 200, bunny1.y - 20,
+				bunny1.x + 800, bunny1.y + 550,
+				bunny1.x + 80, bunny1.y - 240
+			);
+
+			app.stage.addChild(graphics);
+
+			var str = new PIXI.Graphics();
+			str.lineStyle(5, 0x0000FF);
+			str.drawCircle(bunny1.x, bunny1.y, 8);
+			app.stage.addChild(str);
+
+			var dest = new PIXI.Graphics();
+			dest.lineStyle(5, 0x0000FF);
+			dest.drawCircle(bunny1.x + 80, bunny1.y - 240, 8);
+			app.stage.addChild(dest);
+
+			var ctr1 = new PIXI.Graphics();
+			ctr1.lineStyle(5, 0xFFFFFF);
+			ctr1.drawCircle(bunny1.x + 200, bunny1.y - 20, 5);
+			app.stage.addChild(ctr1);
+
+			var ctr2 = new PIXI.Graphics();
+			ctr2.lineStyle(5, 0xFFFFFF);
+			ctr2.drawCircle(bunny1.x + 500, bunny1.y + 250, 5);
+			app.stage.addChild(ctr2);
+
+			// Add the bunny to the scene we are building
+			app.stage.addChild(bunny1);
+			app.stage.addChild(bunny2);
+		}
+
+		function curve() {
+			if (t1) t1.kill();
+			if (t2) t2.kill();
+
+			bunny1.x = app.renderer.width / 2 - 160;
+			bunny1.y = app.renderer.height / 2;
+			bunny2.x = app.renderer.width / 2 - 160;
+			bunny2.y = app.renderer.height / 2;
+
+			t1 = Fatina.curve(bunny1, {
+				ctr1: { x: bunny1.x + 200, y: bunny1.y - 20 },
+				ctr2: { x: bunny1.x + 800, y: bunny1.y + 550 },
+				to: { x: bunny1.x + 80, y: bunny1.y - 240 },
+				duration: 2500
+			}).start();
+			t2 = Fatina.tween(bunny2)
+				.to({ x: bunny1.x + 80, y: bunny1.y - 240 }, 2500)
+				.start();
+		}
+	</script>
+
+	<div class="menu">
+		<input class="button" type="button" onclick="curve()" value="Curve" />
+	</div>
+</body>
+
+</html>

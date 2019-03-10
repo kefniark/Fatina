@@ -63,6 +63,7 @@ module.exports = {
 			new ClosurePlugin({
 				mode: "STANDARD"
 			}, {
+				language_in: "ECMASCRIPT_2017",
 				languageOut: "ECMASCRIPT6"
 			})
 		]
