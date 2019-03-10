@@ -1,9 +1,9 @@
 "use strict";
 
 const path = require("path");
-const ClosurePlugin = require('closure-webpack-plugin');
-const WebpackShellPlugin = require('webpack-shell-plugin');
-const TypedocWebpackPlugin = require('typedoc-webpack-plugin');
+const ClosurePlugin = require("closure-webpack-plugin");
+const WebpackShellPlugin = require("webpack-shell-plugin");
+const TypedocWebpackPlugin = require("typedoc-webpack-plugin");
 
 module.exports = {
 	mode: "production",
@@ -31,26 +31,26 @@ module.exports = {
 	},
 	plugins: [
 		new WebpackShellPlugin({
-			onBuildEnd: ['node tools/fix-prod.js']
+			onBuildEnd: ["node tools/fix-prod.js"]
 		}),
 		new TypedocWebpackPlugin({
-			name: 'Fatina',
-			theme: 'minimal',
-			out: './docs',
-			mode: 'file',
+			name: "Fatina",
+			theme: "minimal",
+			out: "./docs",
+			mode: "file",
 			excludePrivate: true,
 			excludeProtected: true
-		}, './src/')
+		}, "./src/")
 	],
 	optimization: {
 		concatenateModules: false,
 		minimizer: [
 			new ClosurePlugin({
-				mode: 'STANDARD'
+				mode: "STANDARD"
 			}, {
 				languageIn: "ECMASCRIPT6",
-				languageOut: 'ECMASCRIPT6',
-				compilation_level: 'SIMPLE'
+				languageOut: "ECMASCRIPT6",
+				compilation_level: "SIMPLE"
 			})
 		]
 	}

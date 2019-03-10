@@ -13,6 +13,24 @@ function getSprite() {
 	};
 }
 
+test('[Fatina.Preset] Preset Kill', (t: Test) => {
+	const tween1 = fatina.wobble(getSprite()).start();
+	const tween2 = fatina.scale(getSprite()).start();
+	const tween3 = fatina.pulse(getSprite()).start();
+	const tween4 = fatina.sonar(getSprite()).start();
+	const tween5 = fatina.shake(getSprite()).start();
+
+	fatina.update(5);
+
+	tween1.kill();
+	tween2.kill();
+	tween3.kill();
+	tween4.kill();
+	tween5.kill();
+
+	t.end();
+});
+
 test('[Fatina.Preset] Wobble', (t: Test) => {
 	const obj = getSprite();
 
