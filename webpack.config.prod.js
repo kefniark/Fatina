@@ -4,6 +4,7 @@ const path = require("path");
 const ClosurePlugin = require("closure-webpack-plugin");
 const WebpackShellPlugin = require("webpack-shell-plugin");
 const TypedocWebpackPlugin = require("typedoc-webpack-plugin");
+const WebpackAutoInject = require("webpack-auto-inject-version");
 
 module.exports = {
 	mode: "production",
@@ -40,7 +41,21 @@ module.exports = {
 			mode: "file",
 			excludePrivate: true,
 			excludeProtected: true
-		}, "./src/")
+		}, "./src/"),
+		new WebpackAutoInject({
+			SHORT: "Fatina",
+			SILENT: true,
+			components: {
+				AutoIncreaseVersion: false,
+				InjectAsComment: true,
+				InjectByTag: true
+			},
+			componentsOptions: {
+				InjectAsComment: {
+					tag: "Build: {version} - {date}"
+				}
+			}
+		})
 	],
 	optimization: {
 		concatenateModules: false,

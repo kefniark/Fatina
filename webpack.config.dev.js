@@ -2,6 +2,7 @@
 
 const path = require("path");
 const WebpackShellPlugin = require("webpack-shell-plugin");
+const WebpackAutoInject = require("webpack-auto-inject-version");
 
 module.exports = {
 	mode: "development",
@@ -32,6 +33,20 @@ module.exports = {
 		new WebpackShellPlugin({
 			onBuildEnd: ["node tools/fix-dev.js"],
 			dev: true
+		}),
+		new WebpackAutoInject({
+			SHORT: "Fatina",
+			SILENT: true,
+			components: {
+				AutoIncreaseVersion: false,
+				InjectAsComment: true,
+				InjectByTag: true
+			},
+			componentsOptions: {
+				InjectAsComment: {
+					tag: "Build: {version} - {date}"
+				}
+			}
 		})
 	],
 	devServer: {

@@ -1,4 +1,5 @@
-(function webpackUniversalModuleDefinition(root, factory) {
+// [Fatina]  Build: 3.0.0-beta.1 - Sunday, March 10th, 2019, 9:19:23 PM  
+ (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -461,6 +462,10 @@ class Fatina {
             maxDt: 500 // 500ms of animation
         };
         // properties
+        /**
+         * @readonly
+         */
+        this.version = '3.0.0-beta.1';
         this.time = 0;
         /**
          * @private
@@ -548,6 +553,7 @@ class Fatina {
         if (typeof (window) !== 'undefined' && !disableAutoTick) {
             lastFrame = requestFrame(this.updateLoop.bind(this));
         }
+        console.log(' %c Fatina - Tweening library for games (' + this.version + ') https://github.com/kefniark/Fatina ', 'background: #222; color: #9fbff4; padding: 5px');
         this.initialized = true;
         return true;
     }
@@ -2373,4 +2379,4 @@ exports.Tween = Tween;
 
 /******/ });
 });
-//# sourceMappingURL=fatina.js.map
+//# sourceMappingURL=fatina.js.map 
