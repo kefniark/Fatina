@@ -408,7 +408,6 @@ const tween_1 = __webpack_require__(/*! ./tweens/tween */ "./src/tweens/tween.ts
 /**
  * @ignore
  * @private
- * @const
  */
 let lastFrame;
 /**
@@ -1621,7 +1620,6 @@ class Callback extends baseTween_1.BaseTween {
     /**
      * Creates an instance of Callback.
      *
-     * @constructor
      * @param {() => void} cb
      */
     constructor(cb) {
@@ -1669,7 +1667,6 @@ class Delay extends baseTween_1.BaseTween {
     /**
      * Creates an instance of Delay.
      *
-     * @constructor
      * @param {number} duration
      */
     constructor(duration) {
@@ -1744,7 +1741,6 @@ class Sequence extends baseTween_1.BaseTween {
     /**
      * Creates an instance of Sequence.
      *
-     * @constructor
      * @param {(ITween[] | ISequence[] | IPlayable[])} [tweens]
      */
     constructor(tweens) {
@@ -2061,7 +2057,6 @@ class Tween extends baseTween_1.BaseTween {
     /**
      * Creates an instance of Tween.
      *
-     * @constructor
      * @param {*} object
      */
     constructor(object) {

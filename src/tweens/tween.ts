@@ -76,7 +76,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	/**
 	 * Creates an instance of Tween.
 	 *
-	 * @constructor
 	 * @param {*} object
 	 */
 	constructor(object: any) {

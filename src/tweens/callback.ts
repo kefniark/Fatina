@@ -18,7 +18,6 @@ export class Callback extends BaseTween<Callback> implements IPlayable {
 	/**
 	 * Creates an instance of Callback.
 	 *
-	 * @constructor
 	 * @param {() => void} cb
 	 */
 	constructor(cb: () => void) {

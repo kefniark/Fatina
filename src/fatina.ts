@@ -19,7 +19,6 @@ import { Tween } from './tweens/tween';
 /**
  * @ignore
  * @private
- * @const
  */
 let lastFrame: any;
 /**

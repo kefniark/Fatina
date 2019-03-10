@@ -48,9 +48,7 @@ module.exports = {
 			new ClosurePlugin({
 				mode: "STANDARD"
 			}, {
-				languageIn: "ECMASCRIPT6",
-				languageOut: "ECMASCRIPT6",
-				compilation_level: "SIMPLE"
+				languageOut: "ECMASCRIPT6"
 			})
 		]
 	}

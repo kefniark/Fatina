@@ -18,7 +18,6 @@ export class Delay extends BaseTween<Delay> implements IPlayable {
 	/**
 	 * Creates an instance of Delay.
 	 *
-	 * @constructor
 	 * @param {number} duration
 	 */
 	constructor(duration: number) {

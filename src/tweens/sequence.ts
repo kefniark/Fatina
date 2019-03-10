@@ -55,7 +55,6 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 	/**
 	 * Creates an instance of Sequence.
 	 *
-	 * @constructor
 	 * @param {(ITween[] | ISequence[] | IPlayable[])} [tweens]
 	 */
 	constructor(tweens?: ITween[] | ISequence[] | IPlayable[]) {
