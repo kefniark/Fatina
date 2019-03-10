@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <title>Fatina Dev Samples</title>
+
+        <style>
+            #samples {
+                border: 0px;
+                width: 100vw;
+                height: 100vh;
+            }
+
+            #menu {
+                position: absolute;
+                right: 20px;
+                top: 0;
+                text-align: right;
+            }
+            #menu .button {
+                margin: 5px;
+            }
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    </head>
+    <body>
+        <ul id="menu">
+            <li><a class="button is-link" href="./generic.html" target="frame">Generic</a></li>
+            <li><a class="button is-link" href="./preset.html" target="frame">Preset</a></li>
+            <li><a class="button is-link" href="./benchmark.html" target="frame">Benchmark</a></li>
+        </ul>
+
+        <iframe id="samples" name="frame" src="./generic.html"></iframe>
+    </body>
+</html>

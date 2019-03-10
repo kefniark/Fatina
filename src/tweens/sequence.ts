@@ -20,18 +20,43 @@ import { Delay } from './delay';
  * @implements {IPlayable}
  */
 export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker, IPlayable {
+	/**
+	 * @private
+	 */
 	private readonly evtTick: Set<{(dt: number): void}> = new Set();
+	/**
+	 * @private
+	 */
 	private readonly tweens: ((ITween | IPlayable)[])[] = [];
+	/**
+	 * @private
+	 */
 	private index = 0;
 
 	// cache
+	/**
+	 * @private
+	 */
 	private cur: (ITween | IPlayable)[] | undefined;
+	/**
+	 * @private
+	 */
 	private remains = 0;
-
+	/**
+	 * Number of tween in this sequence
+	 *
+	 * @readonly
+	 * @type {number}
+	 */
 	public get count(): number {
 		return this.tweens.length;
 	}
 
+	/**
+	 * Creates an instance of Sequence.
+	 *
+	 * @param {(ITween[] | ISequence[] | IPlayable[])} [tweens]
+	 */
 	constructor(tweens?: ITween[] | ISequence[] | IPlayable[]) {
 		super();
 		this.tickCb = this.tick.bind(this);
@@ -45,6 +70,9 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		}
 	}
 
+	/**
+	 * @protected
+	 */
 	protected loopInit() {
 		this.index = 0;
 		for (const tweenArray of this.tweens) {
@@ -54,14 +82,28 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		}
 	}
 
+	/**
+	 * Add a child to tick
+	 *
+	 * @param {(dt: number) => void} cb
+	 */
 	public addTick(cb: (dt: number) => void): void {
 		this.evtTick.add(cb);
 	}
 
+	/**
+	 * Remove a child to tick
+	 *
+	 * @param {(dt: number) => void} cb
+	 * @memberof Sequence
+	 */
 	public removeTick(cb: (dt: number) => void): void {
 		this.evtTick.delete(cb);
 	}
 
+	/**
+	 * @private
+	 */
 	private tick(dt: number) {
 		if (this.state >= 3) {
 			return;
@@ -71,6 +113,12 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		this.localTick(this.remains);
 	}
 
+	/**
+	 * @private
+	 * @param {number} dt
+	 * @param {boolean} [remains]
+	 * @returns
+	 */
 	private localTick(dt: number, remains?: boolean) {
 		// If no current tween, take the first one and start it
 		if (!this.cur) {
@@ -126,6 +174,9 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		}
 	}
 
+	/**
+	 * @private
+	 */
 	private nextTween() {
 		this.cur = this.tweens[this.index];
 		if (!this.cur) {
@@ -141,12 +192,26 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		}
 	}
 
+	/**
+	 *
+	 *
+	 * @param {(ITween | ISequence)} tween
+	 * @returns {ISequence}
+	 * @memberof Sequence
+	 */
 	public append(tween: ITween | ISequence): ISequence {
 		tween.setParent(this);
 		this.tweens[this.tweens.length] = [tween];
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param {() => void} cb
+	 * @returns {ISequence}
+	 * @memberof Sequence
+	 */
 	public appendCallback(cb: () => void): ISequence {
 		const playable = new Callback(cb);
 		playable.setParent(this);
@@ -154,6 +219,13 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param {number} duration
+	 * @returns {ISequence}
+	 * @memberof Sequence
+	 */
 	public appendInterval(duration: number): ISequence {
 		const playable = new Delay(duration);
 		playable.setParent(this);
@@ -161,12 +233,26 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param {(ITween | ISequence)} tween
+	 * @returns {ISequence}
+	 * @memberof Sequence
+	 */
 	public prepend(tween: ITween | ISequence): ISequence {
 		tween.setParent(this);
 		this.tweens.unshift([tween]);
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param {() => void} cb
+	 * @returns {ISequence}
+	 * @memberof Sequence
+	 */
 	public prependCallback(cb: () => void): ISequence {
 		const playable = new Callback(cb);
 		playable.setParent(this);
@@ -174,6 +260,13 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param {number} duration
+	 * @returns {ISequence}
+	 * @memberof Sequence
+	 */
 	public prependInterval(duration: number): ISequence {
 		const playable = new Delay(duration);
 		playable.setParent(this);
@@ -181,6 +274,12 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		return this;
 	}
 
+	/**
+	 * @inheritdoc
+	 *
+	 * @param {boolean} [finalValue]
+	 * @returns {void}
+	 */
 	public skip(finalValue?: boolean): void {
 		if (this.state >= 3) {
 			this.info(Log.Info, 'Cannot skip this tween ', this.state);
@@ -200,6 +299,9 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		super.skip();
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	public kill(): void {
 		if (this.state === State.Killed) {
 			this.info(Log.Info, 'Cannot kill this tween ', this.state);
@@ -215,6 +317,10 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		super.kill();
 	}
 
+	/**
+	 * @param {(ITween | ISequence)} tween
+	 * @returns {ISequence}
+	 */
 	public join(tween: ITween | ISequence): ISequence {
 		if (this.tweens.length === 0) {
 			return this.append(tween);
@@ -224,10 +330,22 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 		return this;
 	}
 
+	/**
+	 *
+	 *
+	 * @param {((index: ITween | IPlayable) => void)} cb
+	 * @returns {ISequence}
+	 */
 	public onStepStart(cb: (index: ITween | IPlayable) => void): ISequence {
 		return this.onEvent('stepStart', cb);
 	}
 
+	/**
+	 *
+	 *
+	 * @param {((index: ITween | IPlayable) => void)} cb
+	 * @returns {ISequence}
+	 */
 	public onStepEnd(cb: (index: ITween | IPlayable) => void): ISequence {
 		return this.onEvent('stepEnd', cb);
 	}

@@ -16,27 +16,68 @@ import { Sequence } from './sequence';
  */
 export class Tween extends BaseTween<Tween> implements ITween {
 	// properties
+	/**
+	 * @private
+	 */
 	private obj: any;
+	/**
+	 * @private
+	 */
 	private readonly prop: string[] = [];
 
 	// user from & to
+	/**
+	 * @private
+	 */
 	private f: any;
+	/**
+	 * @private
+	 */
 	private t: any;
 
 	// current value from & to (can changed based on yoyo, reset, ...)
+	/**
+	 * @private
+	 */
 	private cf: any;
+	/**
+	 * @private
+	 */
 	private ct: any;
 
 	// options
+	/**
+	 * @private
+	 */
 	private steps = 0;
+	/**
+	 * @private
+	 */
 	private relative = false;
+	/**
+	 * @private
+	 */
 	private ease: (t: number) => number;
 
 	// cache
+	/**
+	 * @private
+	 */
 	private p = 0;
+	/**
+	 * @private
+	 */
 	private v = 0;
+	/**
+	 * @private
+	 */
 	private remains = 0;
 
+	/**
+	 * Creates an instance of Tween.
+	 *
+	 * @param {*} object
+	 */
 	constructor(object: any) {
 		super();
 
@@ -48,8 +89,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 * Used to define the object and the properties modified by this tween
 	 *
 	 * @param {*} object
-	 *
-	 * @memberOf Tween
 	 */
 	public init(object: any) {
 		this.obj = object;
@@ -60,8 +99,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 * Method used on start to check the values of this tween
 	 *
 	 * @protected
-	 *
-	 * @memberOf Tween
 	 */
 	protected validate() {
 		// Check the object
@@ -86,8 +123,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 * Method used to calculate currentFrom/currentTo based on the config
 	 *
 	 * @protected
-	 *
-	 * @memberOf Tween
 	 */
 	protected check() {
 		if (!this.cf) {
@@ -115,6 +150,9 @@ export class Tween extends BaseTween<Tween> implements ITween {
 		}
 	}
 
+	/**
+	 * @private
+	 */
 	private tick(dt: number) {
 		if (this.state >= 3) {
 			return;
@@ -179,8 +217,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @param {*} from
 	 * @returns {ITween}
-	 *
-	 * @memberOf Tween
 	 */
 	public from(from: any): ITween {
 		this.f = from;
@@ -194,8 +230,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 * @param {*} to
 	 * @param {number} duration
 	 * @returns {ITween}
-	 *
-	 * @memberOf Tween
 	 */
 	public to(to: any, duration: number): ITween {
 		this.t = to;
@@ -228,8 +262,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @param {boolean} relative
 	 * @returns {ITween}
-	 *
-	 * @memberOf Tween
 	 */
 	public setRelative(relative: boolean): ITween {
 		this.relative = relative;
@@ -241,8 +273,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @param {*} diff
 	 * @param {boolean} updateTo
-	 *
-	 * @memberOf Tween
 	 */
 	public modify(diff: any, updateTo: boolean): void {
 		for (const prop of this.prop) {
@@ -264,7 +294,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 * Overwrite the Reset (just for yoyo)
 	 *
 	 * @param {boolean} [skipParent]
-	 * @memberOf Tween
 	 */
 	public reset(skipParent?: boolean): void {
 		if (this.yo) {
@@ -288,8 +317,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 
 	/**
 	 * Method used to reverse the tween
-	 *
-	 * @memberOf Tween
 	 */
 	public reverse(): void {
 		let previous = this.cf;
@@ -314,8 +341,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @param {number} time
 	 * @returns {ITween}
-	 *
-	 * @memberOf Tween
 	 */
 	public yoyo(time: number): ITween {
 		if (!this.yo) {
@@ -331,8 +356,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @param {number} steps
 	 * @returns {ITween}
-	 *
-	 * @memberOf Tween
 	 */
 	public setSteps(steps: number): ITween {
 		this.steps = steps;
@@ -344,8 +367,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 * Usually used with .AppendInterval(1250) or .PrependInterval(160) to add a delay
 	 *
 	 * @returns {ISequence}
-	 *
-	 * @memberOf Tween
 	 */
 	public toSequence(): ISequence {
 		if (!this.parent) {
@@ -359,8 +380,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 *
 	 * @param {(EasingType | string)} type
 	 * @returns {ITween}
-	 *
-	 * @memberOf Tween
 	 */
 	public setEasing(type: EasingType | string): ITween {
 		if (!(type in easeNames)) {
@@ -375,8 +394,6 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 * Method used when the tween is reset (loop)
 	 *
 	 * @protected
-	 *
-	 * @memberOf Tween
 	 */
 	protected loopInit() {
 		this.elapsed = 0;

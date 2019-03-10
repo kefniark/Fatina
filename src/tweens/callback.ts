@@ -10,14 +10,25 @@ import { BaseTween } from './baseTween';
  * @implements {IPlayable}
  */
 export class Callback extends BaseTween<Callback> implements IPlayable {
+	/**
+	 * @private
+	 */
 	private readonly callback: () => void;
 
+	/**
+	 * Creates an instance of Callback.
+	 *
+	 * @param {() => void} cb
+	 */
 	constructor(cb: () => void) {
 		super();
 		this.callback = cb;
 		this.tickCb = this.tick.bind(this);
 	}
-
+	/**
+	 * @private
+	 * @param {number} dt
+	 */
 	private tick(dt: number) {
 		this.elapsed += dt;
 		this.duration = 0;

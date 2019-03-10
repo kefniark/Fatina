@@ -1,6 +1,7 @@
 "use strict";
 
 const path = require("path");
+const WebpackShellPlugin = require("webpack-shell-plugin");
 
 module.exports = {
 	mode: "development",
@@ -26,5 +27,18 @@ module.exports = {
 				]
 			}
 		]
+	},
+	plugins: [
+		new WebpackShellPlugin({
+			onBuildEnd: ["node tools/fix-dev.js"],
+			dev: true
+		})
+	],
+	devServer: {
+		contentBase: [
+			path.join(__dirname, "./build"),
+			path.join(__dirname, "./samples")
+		],
+		index: "samples/index.html"
 	}
 };

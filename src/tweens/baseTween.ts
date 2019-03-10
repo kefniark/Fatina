@@ -17,44 +17,103 @@ import { ITweenProperty } from '../core/interfaces/ITweenProperty';
  */
 export abstract class BaseTween<T extends BaseTween<any>> {
 	// events
+	/**
+	 * @protected
+	 */
 	protected events: { [id: string]: any } = {};
 
 	// public properties
+	/**
+	 * Time elapsed
+	 * @type {number}
+	 * @export
+	 */
 	public elapsed = 0;
+	/**
+	 * Total duration of the tween
+	 * @type {number}
+	 * @export
+	 */
 	public duration = 0;
+	/**
+	 * Timescale of the tween
+	 * @type {number}
+	 * @export
+	 */
 	public timescale = 1;
+	/**
+	 * Current state of the tween
+	 * @type {State}
+	 * @export
+	 */
 	public state: State = State.Idle;
 
 	// private properties
+	/**
+	 * @protected
+	 */
 	protected loop: ITweenProperty | undefined;
+	/**
+	 * @protected
+	 */
 	protected yo: ITweenProperty | undefined;
+	/**
+	 * @protected
+	 */
 	protected parent: ITicker;
+	/**
+	 * @protected
+	 */
 	protected tickCb: (dt: number) => void;
+	/**
+	 * @private
+	 */
 	private first = true;
+	/**
+	 * @private
+	 */
 	private settings?: ISettings;
 
+	/**
+	 * Is this tween idle (based on state)
+	 * @readonly
+	 * @type {boolean}
+	 * @export
+	 */
 	public get isIdle(): boolean {
 		return this.state === State.Idle;
 	}
-
+	/**
+	 * Is this tween runs (based on state)
+	 * @readonly
+	 * @type {boolean}
+	 * @export
+	 */
 	public get isRunning(): boolean {
 		return this.state === State.Run;
 	}
-
+	/**
+	 * Is this tween over (based on state)
+	 * @readonly
+	 * @type {boolean}
+	 * @export
+	 */
 	public get isFinished(): boolean {
 		return this.state >= 3;
 	}
-
+	/**
+	 * Is this tween paused (based on state)
+	 * @readonly
+	 * @type {boolean}
+	 * @export
+	 */
 	public get isPaused(): boolean {
 		return this. state === State.Pause;
 	}
 
 	/**
-	 * Method used to start a tween
-	 *
-	 * @returns {T}
-	 *
-	 * @memberOf BaseTween
+	 * Start the tween
+	 * @export
 	 */
 	public start(): T {
 		if (this.state !== State.Idle) {
@@ -78,19 +137,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	}
 
 	/**
-	 * Reset a tween to be reusable (with start)
-	 *
-	 * @memberOf BaseTween
-	 */
-	public recycle() {
-		this.reset(true);
-		this.first = true;
-	}
-
-	/**
-	 * To Reset a Tween already finished (example looping sequence)
-	 *
-	 * @memberOf BaseTween
+	 * @readonly
 	 */
 	public reset(skipParent?: boolean): void {
 		this.state = State.Idle;
@@ -111,8 +158,6 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 * This is faster than calling manually Reset() & Start() & Tick()
 	 *
 	 * @param {number} dtRemains
-	 *
-	 * @memberOf BaseTween
 	 */
 	public resetAndStart(dtRemains: number) {
 		this.loopInit();
@@ -130,8 +175,6 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 *
 	 * @param {ITicker} ticker
 	 * @returns {T}
-	 *
-	 * @memberOf BaseTween
 	 */
 	public setParent(ticker: ITicker): T {
 		this.removeParent();
@@ -144,8 +187,6 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 *
 	 * @param {number} scale
 	 * @returns {T}
-	 *
-	 * @memberOf BaseTween
 	 */
 	public setTimescale(scale: number): T {
 		this.timescale = scale;
@@ -156,8 +197,6 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 * Method used to pause a tween or a sequence (only work if the tween runs)
 	 *
 	 * @returns {void}
-	 *
-	 * @memberOf BaseTween
 	 */
 	public pause(): void {
 		if (this.state !== State.Run) {
@@ -171,10 +210,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 
 	/**
 	 * Method used to resume a tween or a sequence (only work if the tween is paused)
-	 *
-	 * @returns {void}
-	 *
-	 * @memberOf BaseTween
+	 * @export
 	 */
 	public resume(): void {
 		if (this.state !== State.Pause) {
@@ -189,9 +225,9 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	/**
 	 * Method used to Skip this tween or sequence and directly finish it
 	 *
+	 * @export
 	 * @param {boolean} [finalValue]
 	 * @returns {void}
-	 * @memberOf BaseTween
 	 */
 	public skip(finalValue?: boolean): void {
 		if (this.state >= 3) {
@@ -215,10 +251,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 
 	/**
 	 * Method used to Stop/Kill a tween or a sequence
-	 *
-	 * @returns {void}
-	 *
-	 * @memberOf BaseTween
+	 * @export
 	 */
 	public kill(): void {
 		if (this.state === State.Killed) {
@@ -237,8 +270,6 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 *
 	 * @param {number} loop
 	 * @returns {ITween}
-	 *
-	 * @memberOf Tween
 	 */
 	public setLoop(loop: number): T {
 		if (!this.loop) {
@@ -258,6 +289,9 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 		return this as any;
 	}
 
+	/**
+	 * @protected
+	 */
 	protected complete(): void {
 		if (this.state >= 3) {
 			this.info(Log.Info, 'Cannot complete this tween ', this.state);
@@ -269,18 +303,33 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 		this.emitEvent(this.events.complete);
 	}
 
+	/**
+	 * @protected
+	 */
 	protected removeParent() {
 		if (this.parent) {
 			this.parent.removeTick(this.tickCb);
 		}
 	}
 
+	/**
+	 * @protected
+	 */
 	protected check(): void {}
+	/**
+	 * @protected
+	 */
 	protected validate(): void {}
+	/**
+	 * @protected
+	 */
 	protected loopInit(): void {
 		this.elapsed = 0;
 	}
 
+	/**
+	 * @protected
+	 */
 	protected info(level: Log, message: string, data?: any) {
 		if (!this.settings || level > this.settings.logLevel) {
 			return;
@@ -288,6 +337,9 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 		console.log(message, data);
 	}
 
+	/**
+	 * @private
+	 */
 	private emit(func: any, args: any) {
 		if (this.settings && !this.settings.safe) {
 			return func.apply(this, args);
@@ -299,6 +351,9 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 		}
 	}
 
+	/**
+	 * @protected
+	 */
 	protected emitEvent(listeners: any, args?: any) {
 		if (!listeners) {
 			return;
@@ -318,8 +373,6 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 *
 	 * @param {() => void} cb
 	 * @returns {T}
-	 *
-	 * @memberOf BaseTween
 	 */
 	public onStart(cb: () => void): T {
 		return this.onEvent('start', cb);
@@ -330,8 +383,6 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 *
 	 * @param {() => void} cb
 	 * @returns {T}
-	 *
-	 * @memberOf BaseTween
 	 */
 	public onRestart(cb: () => void): T {
 		return this.onEvent('restart', cb);
@@ -342,8 +393,6 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 *
 	 * @param {(dt: number, progress: number) => void} cb
 	 * @returns {T}
-	 *
-	 * @memberOf BaseTween
 	 */
 	public onUpdate(cb: (dt: number, progress: number) => void): T {
 		return this.onEvent('update', cb);
@@ -354,8 +403,6 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 *
 	 * @param {() => void} cb
 	 * @returns {T}
-	 *
-	 * @memberOf BaseTween
 	 */
 	public onKilled(cb: () => void): T {
 		return this.onEvent('kill', cb);
@@ -366,13 +413,14 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 *
 	 * @param {() => void} cb
 	 * @returns {T}
-	 *
-	 * @memberOf BaseTween
 	 */
 	public onComplete(cb: () => void): T {
 		return this.onEvent('complete', cb);
 	}
 
+	/**
+	 * @protected
+	 */
 	protected onEvent(name: string, cb: any): T {
 		if (!this.events[name]) {
 			this.events[name] = cb;

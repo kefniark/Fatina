@@ -454,14 +454,6 @@ test('[Fatina.Sequence] Test Reuse complexe sequence', (t: Test) => {
 	t.equal(callback, 1);
 	t.equal(callback2, 1);
 
-	(sequence as any).recycle();
-	sequence.start();
-	ticker.tick(16);
-
-	t.equal(callback, 2);
-	t.equal(callback2, 2);
-
-	ticker.tick(10);
 	(sequence as any).skip(true);
 
 	t.end();

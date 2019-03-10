@@ -4,9 +4,33 @@
  * Mostly based on http://easings.net/
  */
 // tslint:disable:no-parameter-reassignment
+/**
+ * @ignore
+ * @private
+ * @const
+ * @readonly
+ */
 const PI = Math.PI;
+/**
+ * @ignore
+ * @private
+ * @const
+ * @readonly
+ */
 const PI_OVER_TWO = Math.PI / 2;
+/**
+ * @ignore
+ * @private
+ * @const
+ * @readonly
+ */
 const BACK = 1.70158;
+/**
+ * @ignore
+ * @private
+ * @const
+ * @readonly
+ */
 const e: { [id: string]: (t: number) => number } = {};
 
 // Linear

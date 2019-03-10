@@ -34,14 +34,13 @@
   "scripts": {
     "all": "npm run deps && npm run build && npm run dev",
     "deps": "npm install .",
-    "build": "run-s build:pre && run-p build:dist:* && run-p build:post:* && run-s build:clean",
+    "build": "run-s build:pre && run-p build:dist:* && run-p build:definition && run-s build:clean",
     "build:pre": "tsc && rimraf build",
     "build:dist:dev": "webpack --config=webpack.config.dev.js",
     "build:dist:prod": "webpack --config=webpack.config.prod.js",
-    "build:post:fix": "node tools/fix-default.js",
-    "build:post:definition": "tsc --p ./tsconfig.json --declaration true --emitDeclarationOnly true --outDir ./build/declarations",
+    "build:definition": "tsc --p ./tsconfig.json --declaration true --emitDeclarationOnly true --outDir ./build/declarations",
     "build:clean": "rimraf lib && rimraf build/lib && rimraf build/declarations/tests",
-    "dev": "webpack-dev-server",
+    "dev": "webpack-dev-server --config webpack.config.dev.js",
     "clean": "run-s clean:**",
     "clean:build": "rimraf \"./build\" && rimraf lib",
     "clean:docs": "rimraf \"./docs\"",
@@ -57,13 +56,15 @@
     "update": "npm-check --update"
   },
   "devDependencies": {
-    "@types/node": "^11.10.5",
+    "@types/node": "^11.11.0",
     "@types/tape": "^4.2.33",
+    "closure-webpack-plugin": "^2.0.1",
     "coveralls": "^3.0.3",
+    "google-closure-compiler": "^20190301.0.0",
     "npm-check": "^5.9.0",
     "npm-run-all": "^4.1.5",
     "nyc": "^13.3.0",
-    "replace-in-file": "^3.4.3",
+    "replace-in-file": "^3.4.4",
     "rimraf": "^2.6.3",
     "tap-spec": "^5.0.0",
     "tape": "^4.10.1",
@@ -72,9 +73,12 @@
     "tslint": "^5.13.1",
     "tslint-eslint-rules": "^5.4.0",
     "typedoc": "^0.14.2",
+    "typedoc-webpack-plugin": "^1.1.4",
     "typescript": "^3.3.3333",
     "webpack": "^4.29.6",
-    "webpack-cli": "^3.2.3"
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.1",
+    "webpack-shell-plugin": "^0.5.0"
   },
   "nyc": {
     "include": [
