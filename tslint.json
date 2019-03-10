@@ -15,7 +15,7 @@
 		// code style
 		"class-name": true,
 		"interface-name": [true, "always-prefix"],
-		"variable-name": [true, "ban-keywords", "check-format"],
+		"variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
 		"semicolon": [true, "always"],
 		"indent": [true, "tabs", 4],
 		"quotemark": [true, "single"],

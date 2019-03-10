@@ -1,0 +1,375 @@
+<html>
+
+<head>
+	<style>
+		.menu {
+			position: absolute;
+			top: 10px;
+			left: 10px;
+			z-index: 5;
+		}
+
+		.imgTest {
+			position: relative;
+			margin: 0;
+		}
+
+		.demo {
+			margin-top: 30px;
+			margin-left: calc((100% - 500px)/2);
+		}
+
+		.demo-title {
+			margin-left: -300px;
+			width: 300px;
+			text-align: right;
+			position: absolute;
+		}
+	</style>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+	<script src="../build/fatina.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
+</head>
+
+<body>
+	<div class="menu">
+		<div style="position: absolute; right: 5px;">
+			Tween counter: ~<small id="counter" style="font-weight: bold;">0</small>k
+		</div>
+
+		<button class="btn button btn-success" onclick="RunAll();">Run All</button>
+	</div>
+	<div class="demo">
+		<div id="part1">
+			<h4 class="subtitle is-4">Normal tweens</h4>
+			<div class="table-responsive">
+				<table class="table table-bordered table-striped">
+					<tr>
+						<th width="20%">#</th>
+						<th width="20%">Fatina</th>
+					</tr>
+					<tr>
+						<th>Scenario 1</th>
+						<td><div class="testresult fatina1"></div></td>
+					</tr>
+					<tr>
+						<th>Scenario 2</th>
+						<td><div class="testresult fatina2"></div></td>
+					</tr>
+					<tr>
+						<th>Scenario 3</th>
+						<td><div class="testresult fatina3"></div></td>
+					</tr>
+					<tr>
+						<th>Scenario 4</th>
+						<td><div class="testresult fatina4"></div></td>
+					</tr>
+					<tr>
+						<th>Scenario 5</th>
+						<td><div class="testresult fatina5"></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<hr>
+
+		<div id="part2">
+			<h4 class="subtitle is-4">Complicated tweens (callback, loop, easing)</h4>
+			<div class="table-responsive">
+				<table class="table table-bordered table-striped">
+					<tr>
+						<th width="20%">#</th>
+						<th width="20%">Fatina</th>
+					</tr>
+					<tr>
+						<th>Scenario 1</th>
+						<td><div class="testresult fatina10"></div></td>
+					</tr>
+					<tr>
+						<th>Scenario 2</th>
+						<td><div class="testresult fatina11"></div></td>
+					</tr>
+					<tr>
+						<th>Scenario 3</th>
+						<td><div class="testresult fatina12"></div></td>
+					</tr>
+					<tr>
+						<th>Scenario 4</th>
+						<td><div class="testresult fatina13"></div></td>
+					</tr>
+					<tr>
+						<th>Scenario 5</th>
+						<td><div class="testresult fatina14"></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<hr>
+
+		<div id="part3">
+			<h4 class="subtitle is-4">Sequence / Chains</h4>
+			<div class="table-responsive">
+				<table class="table table-bordered table-striped">
+					<tr>
+						<th width="20%">#</th>
+						<th width="20%">Fatina</th>
+					</tr>
+					<tr>
+						<th>Scenario 1</th>
+						<td><div class="testresult fatina20"></div></td>
+					</tr>
+					<tr>
+						<th>Scenario 2</th>
+						<td><div class="testresult fatina21"></div></td>
+					</tr>
+					<tr>
+						<th>Scenario 3</th>
+						<td><div class="testresult fatina22"></div></td>
+					</tr>
+					<tr>
+						<th>Scenario 4</th>
+						<td><div class="testresult fatina23"></div></td>
+					</tr>
+					<tr>
+						<th>Scenario 5</th>
+						<td><div class="testresult fatina24"></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<div style="display: none; height: 5px; position: absolute;">
+			<h2>Fatina</h2>
+
+			<h3>Normal Tween</h3>
+			<div class="row">
+				<div class="col-md-2">
+					<button class="btn test"
+						onclick="Test('Fatina Normal', 'fatina1', TestFatina, TestFatinaUpdate, 200, 100, 50);">50x 200
+						tweens</button>
+					<div class="fatina1"></div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn test"
+						onclick="Test('Fatina Normal', 'fatina2', TestFatina, TestFatinaUpdate, 1000, 500, 100);">100x
+						1k tweens</button>
+					<div class="fatina2"></div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn test"
+						onclick="Test('Fatina Normal', 'fatina3', TestFatina, TestFatinaUpdate, 2000, 200, 5);">5x 2k
+						tweens</button>
+					<div class="fatina3"></div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn test"
+						onclick="Test('Fatina Normal', 'fatina4', TestFatina, TestFatinaUpdate, 5000, 200, 5);">5x 5k
+						tweens</button>
+					<div class="fatina4"></div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn test"
+						onclick="Test('Fatina Normal', 'fatina5', TestFatina, TestFatinaUpdate, 10000, 500, 5);">5x 10k
+						tweens</button>
+					<div class="fatina5"></div>
+				</div>
+			</div>
+
+			<h3>Complicated Tween</h3>
+			<div class="row">
+				<div class="col-md-2">
+					<button class="btn test"
+						onclick="Test('Fatina Advanced', 'fatina10', TestFatinaAdvanced, TestFatinaUpdate, 200, 100, 50);">50x
+						200 tweens</button>
+					<div class="fatina10"></div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn test"
+						onclick="Test('Fatina Advanced', 'fatina11', TestFatinaAdvanced, TestFatinaUpdate, 1000, 500, 200);">200x
+						1k tweens</button>
+					<div class="fatina11"></div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn test"
+						onclick="Test('Fatina Advanced', 'fatina12', TestFatinaAdvanced, TestFatinaUpdate, 2000, 200, 5);">5x
+						2k tweens</button>
+					<div class="fatina12"></div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn test"
+						onclick="Test('Fatina Advanced', 'fatina13', TestFatinaAdvanced, TestFatinaUpdate, 5000, 200, 5);">5x
+						5k tweens</button>
+					<div class="fatina13"></div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn test"
+						onclick="Test('Fatina Advanced', 'fatina14', TestFatinaAdvanced, TestFatinaUpdate, 10000, 500, 5);">5x
+						10k tweens</button>
+					<div class="fatina14"></div>
+				</div>
+			</div>
+
+			<h3>Sequence</h3>
+			<div class="row">
+				<div class="col-md-2">
+					<button class="btn test"
+						onclick="Test('Fatina Sequence', 'fatina20', TestFatinaSequence, TestFatinaUpdate, 200, 100, 50);">50x
+						200 tweens</button>
+					<div class="fatina20"></div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn test"
+						onclick="Test('Fatina Sequence', 'fatina21', TestFatinaSequence, TestFatinaUpdate, 1000, 500, 200);">200x
+						1k tweens</button>
+					<div class="fatina21"></div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn test"
+						onclick="Test('Fatina Sequence', 'fatina22', TestFatinaSequence, TestFatinaUpdate, 2000, 200, 5);">5x
+						2k tweens</button>
+					<div class="fatina22"></div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn test"
+						onclick="Test('Fatina Sequence', 'fatina23', TestFatinaSequence, TestFatinaUpdate, 5000, 200, 5);">5x
+						5k tweens</button>
+					<div class="fatina23"></div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn test"
+						onclick="Test('Fatina Sequence', 'fatina24', TestFatinaSequence, TestFatinaUpdate, 10000, 500, 5);">5x
+						10k tweens</button>
+					<div class="fatina24"></div>
+				</div>
+			</div>
+
+			<script>
+				function TestFatinaUpdate() {
+					Fatina.update(1);
+				}
+
+				function TestFatina() {
+					return Fatina.tween({ x: 0 }).to({ x: 100 }, 10).start();
+				}
+
+				function TestFatinaAdvanced() {
+					return Fatina.tween({ x: 0, y: 0, z: 0, a: 0 })
+						.to({ x: 100, y: 2, z: 69, a: -71602 }, Math.random() * 5 + 10)
+						.setLoop(2)
+						.setEasing('inOutQuad')
+						.onStart(() => { })
+						.onComplete(() => { })
+						.start();
+				}
+
+				function TestFatinaSequence() {
+					Fatina.sequence([
+						Fatina.tween({ x: 0 }).to({ x: 2 }, 2),
+						Fatina.delay(1),
+						Fatina.tween({ x: 0 }).to({ x: 5 }, 3),
+						Fatina.tween({ x: 0 }).to({ x: -5 }, 1),
+						Fatina.tween({ x: 0 }).to({ x: 0 }, 2)
+					]).start();
+				}
+			</script>
+
+			<script>
+				// default fatina setup
+				Fatina.init(true);
+
+				let counter = document.getElementById('counter');
+				let counterValue = 0;
+				let test = document.getElementsByClassName('test');
+				function RunAll() {
+					let buttons = document.getElementsByClassName('test');
+					buttons = [].slice.call(buttons);
+					RunTest(buttons);
+				}
+
+				function RunTest(buttons) {
+					if (buttons.length === 0) {
+						return;
+					}
+
+					let button = buttons.shift();
+					button.onclick();
+
+					// cooldown between 2 tests (execute bunch of updates)
+					setTimeout(() => {
+						for (let i = 0; i < 20; i++) {
+							TestFatinaUpdate();
+						}
+					}, 50);
+					setTimeout(() => RunTest(buttons), 300);
+				}
+
+				function Test(name, spanResult, method, update, totalTween, frameNumber, iterate) {
+					let timeStart = Date.now();
+					console.log("Run:");
+					console.log(" * " + name + ": with " + totalTween + " tweens updated over " + frameNumber + " frames");
+					for (let i = 0; i < iterate; i++) {
+						TestExec(method, update, totalTween, frameNumber);
+					}
+
+					let result = Date.now() - timeStart;
+					let average = result / iterate;
+					let averageByFrame = average / frameNumber;
+					console.log(" * Result: elapsed time : " + result + 'ms. , average: ' + average + 'ms. (' + averageByFrame + 'ms./frame)');
+
+					counter.innerHTML = Math.round(counterValue / 1000);
+
+					let results = document.getElementsByClassName(spanResult);
+					results = [].slice.call(results);
+					for (let elem of results) {
+						elem.innerHTML = average + 'ms.';
+						elem.duration = average;
+
+						let parent = elem.parentElement.parentElement;
+						if (parent.nodeName === 'TR') {
+							let elems = [].slice.call(parent.getElementsByClassName('testresult'));
+							let durations = elems.map(x => x.duration).filter(x => x !== undefined);
+							let min = 10000;
+							let max = 0;
+
+							for (let dur of durations) {
+								min = min > dur ? dur : min;
+								max = max < dur ? dur : max;
+							}
+
+							for (let elem of elems) {
+								elem.parentElement.classList.remove("best");
+								elem.parentElement.classList.remove("worst");
+								elem.parentElement.classList.remove("normal");
+								if (elem.duration === min) {
+									elem.parentElement.classList.add("best");
+								} else if (elem.duration === max) {
+									elem.parentElement.classList.add("worst");
+								} else {
+									elem.parentElement.classList.add("normal");
+								}
+							}
+						}
+					}
+				}
+
+				function TestExec(method, update, totalTween, frameNumber) {
+					let timeStart = Date.now();
+					for (let frame = 0; frame < frameNumber; frame++) {
+						if (frame < frameNumber / 2) {
+							for (let i = 0; i < totalTween / (frameNumber / 2); i++) {
+								method();
+								counterValue++;
+							}
+						}
+
+						update();
+					}
+				}
+			</script>
+		</div>
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,238 @@
+<html>
+    <head>
+        <script src="../build/fatina.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
+
+        <style>
+            .menu {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                z-index: 5;
+            }
+
+            .imgTest {
+                position: relative;
+                margin: 0;
+            }
+            .demo {
+                margin-top: 30px;
+                margin-left: calc((100% - 500px)/2);
+            }
+            .demo-title {
+                margin-left: -300px;
+                width: 300px;
+                text-align: right;
+                position: absolute;
+            }
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    </head>
+    <body onload="init()">
+        <div class="menu">
+            <input class="button" type="button" value="Click" onclick="startAll();"/>
+        </div>
+        <div class="demo">
+        <h4 class="demo-title subtitle is-4">Linear</h4>
+        <img id="sample1" class="imgTest" src="./Yuko_Blink_2.png"/><hr>
+        <script>
+            // hack to work with webpack-dev-server
+            function init() {
+              //window.Fatina = window.Fatina.default;
+              Fatina.init();
+            }
+            console.log(Fatina);
+
+            function startAll() {
+                sample1();
+                sample2();
+                sample3();
+                sample4();
+                sample5();
+                sample6();
+                sample7();
+                sample8();
+            }
+
+            function sample1() {
+                var elem = document.getElementById("sample1");
+
+                var obj = { x: 0, y: 0 };
+                Fatina.tween(obj)
+                    .from({x: 0})
+                    .to({x: 500}, 2500)
+                    .onStart(() => console.log("tween1 start"))
+                    .onUpdate((dt, progress) => {
+                        elem.style.left = obj.x + "px";
+                    })
+                    .onComplete(() => console.log("tween1 complete"))
+                    .start();
+            }
+        </script>
+
+        <h4 class="demo-title subtitle is-4">Easing</h4>
+        <img id="sample2" class="imgTest" src="./Yuko_Blink_2.png"/><hr>
+        <script>
+            function sample2() {
+                var elem2 = document.getElementById("sample2");
+
+                var obj2 = { x: 0, y: 0 };
+                Fatina.tween(obj2)
+                    .to({x: 500}, 2500)
+                    .setEasing('inOutQuad')
+                    .onStart(() => console.log("tween2 start"))
+                    .onUpdate((dt, progress) => {
+                        elem2.style.left = obj2.x + "px";
+                    })
+                    .onComplete(() => console.log("tween2 complete"))
+                    .start();
+            }
+        </script>
+
+        <h4 class="demo-title subtitle is-4">Sequence</h4>
+        <img id="sample3" class="imgTest" src="./Yuko_Blink_2.png"/><hr>
+        <script>
+            function sample3() {
+                var elem3 = document.getElementById("sample3");
+
+                var obj3 = { x: 0, y: 0, rotate:0 };
+                Fatina.sequence()
+                    .append(Fatina.tween(obj3).to({x: 500}, 1250).setEasing('inOutSine'))
+                    .appendInterval(0.2)
+                    .append(Fatina.tween(obj3).to({x: 0}, 1250).setEasing('inOutSine'))
+                    .join(Fatina.tween(obj3).to({rotate: 360}, 1250).setEasing('inOutCubic'))
+                    .onUpdate(() => {
+                        elem3.style.left = obj3.x + "px";
+                        elem3.style.transform = "rotate(" + obj3.rotate + "deg)"
+                    })
+                    .onStart(() => console.log("tween3 start"))
+                    .onComplete(() => console.log("tween3 complete"))
+                    .start();
+            }
+        </script>
+
+        <h4 class="demo-title subtitle is-4">Complex sequence</h4>
+        <img id="sample4" class="imgTest" src="./Yuko_Blink_2.png"/><hr>
+        <script>
+            function sample4() {
+                var elem4 = document.getElementById("sample4");
+
+                var obj4 = { x: 0, y: 0, rotate:0 };
+                var sequence = Fatina.sequence()
+                    .append(Fatina.tween(obj4).to({x: 500}, 1250).setEasing('inOutQuad'))
+                    .append(Fatina.tween(obj4).to({x: 0}, 1250).setEasing('inOutQuad'))
+                    .join(Fatina.tween(obj4).to({rotate: 360}, 1250).setEasing('inOutQuad'))
+                    .onUpdate(() => {
+                        elem4.style.left = obj4.x + "px";
+                        elem4.style.transform = "rotate(" + obj4.rotate + "deg)"
+                    })
+                    .onStart(() => console.log("tween4 start"))
+                    .onComplete(() => console.log("tween4 complete"));
+                sequence.start();
+
+                setTimeout(() => sequence.pause(), 1250);
+                setTimeout(() => sequence.resume(), 2000);
+            }
+        </script>
+
+        <h4 class="demo-title subtitle is-4">Timescale</h4>
+        <img id="sample5" class="imgTest" src="./Yuko_Blink_2.png"/><hr>
+        <script>
+            function sample5() {
+                var elem5 = document.getElementById("sample5");
+
+                var obj5 = { x: 0, y: 0, rotate:0 };
+                var sequence = Fatina.sequence()
+                    .append(Fatina.tween(obj5).to({x: 500}, 1250).setEasing('inOutQuad'))
+                    .append(Fatina.tween(obj5).to({x: 0}, 1250).setEasing('inOutQuad'))
+                    .join(Fatina.tween(obj5).to({rotate: 360}, 1250).setEasing('inOutQuad').setTimescale(2))
+                    .onUpdate(() => {
+                        elem5.style.left = obj5.x + "px";
+                        elem5.style.transform = "rotate(" + obj5.rotate + "deg)"
+                    })
+                    .setTimescale(0.75)
+                    .onStart(() => console.log("tween5 start"))
+                    .onComplete(() => console.log("tween5 complete"));
+                sequence.start();
+            }
+        </script>
+
+        <h4 class="demo-title subtitle is-4">Loop</h4>
+        <img id="sample6" class="imgTest" src="./Yuko_Blink_2.png"/><hr>
+        <script>
+            function sample6() {
+                var elem6 = document.getElementById("sample6");
+                var obj6 = { x: 0, y: 0, rotate:0 };
+
+                // Create moving tween (loop twice)
+                Fatina.tween(obj6)
+                    .from({ x: 0 })
+                    .to({x: 500}, 1250)
+                    .setLoop(2)
+                    .setEasing('inOutQuad')
+                    .onStart(() => console.log("tween6 start"))
+                    .onUpdate((dt, progress) => {
+                        elem6.style.left = obj6.x + "px";
+                    })
+                    .onComplete(() => console.log("tween6 move complete"))
+                    .start();
+
+                // Create a sequence of infinite rotation
+                Fatina.sequence()
+                    .join(
+                        Fatina.tween(obj6)
+                            .from({rotate:0})
+                            .to({rotate: 360}, 550)
+                    )
+                    .onUpdate(() => {
+                        elem6.style.transform = "rotate(" + obj6.rotate + "deg)"
+                    })
+                    .setLoop(-1)
+                    .onStart(() => console.log("tween6 rotation start"))
+                    .onComplete(() => console.log("tween6 rotation complete"))
+                    .start();
+            }
+        </script>
+
+        <h4 class="demo-title subtitle is-4">Steps</h4>
+        <img id="sample7" class="imgTest" src="./Yuko_Blink_2.png"/><hr>
+        <script>
+            function sample7() {
+                var elem7 = document.getElementById("sample7");
+
+                var obj7 = { x: 0, y: 0 };
+                Fatina.tween(obj7)
+                    .to({x: 500}, 2500)
+                    .setEasing('inOutSine')
+                    .setSteps(15)
+                    .onStart(() => console.log("tween7 start"))
+                    .onUpdate((dt, progress) => {
+                        elem7.style.left = obj7.x + "px";
+                    })
+                    .onComplete(() => console.log("tween7 complete"))
+                    .start();
+            }
+        </script>
+
+        <h4 class="demo-title subtitle is-4">Yoyo</h4>
+        <img id="sample8" class="imgTest" src="./Yuko_Blink_2.png"/>
+        <script>
+            function sample8() {
+                var elem8 = document.getElementById("sample8");
+
+                var obj8 = { x: 0, y: 0 };
+                Fatina.tween(obj8)
+                    .to({x: 500}, 2000)
+                    .setEasing('inOutSine')
+                    .yoyo(5)
+                    .onStart(() => console.log("tween8 start"))
+                    .onUpdate((dt, progress) => {
+                        elem8.style.left = obj8.x + "px";
+                    })
+                    .onComplete(() => console.log("tween8 complete"))
+                    .start();
+            }
+        </script>
+        </div>
+    </body>
+</html>
