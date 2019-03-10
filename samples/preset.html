@@ -1,6 +1,6 @@
 <html>
     <head>
-        <script src="../build/fatina.min.js"></script>
+        <script src="./fatina.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
         <style>
             .menu {
@@ -31,7 +31,7 @@
 
             function init() {
                 // hack to work with webpack-dev-server
-                //window.Fatina = window.Fatina.default;
+                window.Fatina = window.Fatina.default;
 
                 Fatina.init();
 

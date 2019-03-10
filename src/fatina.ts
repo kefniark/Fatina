@@ -106,6 +106,52 @@ export class Fatina {
 	}
 
 	/**
+	 * Pulse Animation
+	 *
+	 * @export
+	 * @param {any} obj
+	 * @param {any} settings
+	 * @returns {ISequence}
+	 */
+	public pulse = (obj: any, settings?: any): ISequence => pulsePreset(this, obj, settings);
+	/**
+	 * Strobe Animation
+	 *
+	 * @export
+	 * @param {any} obj
+	 * @param {any} settings
+	 * @returns {ITween}
+	 */
+	public scale = (obj: any, settings?: any): ITween => scalePreset(this, obj, settings);
+	/**
+	 * Wobble Animation
+	 *
+	 * @export
+	 * @param {any} obj
+	 * @param {any} settings
+	 * @returns {ITween}
+	 */
+	public wobble = (obj: any, settings?: any): ITween => wobblePreset(this, obj, settings);
+	/**
+	 * Sonar Animation
+	 *
+	 * @export
+	 * @param {any} obj
+	 * @param {any} settings
+	 * @returns {ITween}
+	 */
+	public sonar = (obj: any, settings?: any): ITween => sonarPreset(this, obj, settings);
+	/**
+	 * Sonar Animation
+	 *
+	 * @export
+	 * @param {any} obj
+	 * @param {any} settings
+	 * @returns {ISequence}
+	 */
+	public shake = (obj: any, settings?: any): ITween => shakePreset(this, obj, settings);
+
+	/**
 	 * Method used when Fatina is used for the first time.
 	 * Can take few ms. (pool initialization & object creation)
 	 *
