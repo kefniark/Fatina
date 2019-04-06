@@ -1,6 +1,4 @@
 
-import { arc, curve, IArcParams, ICurveParams, IPathParams, path } from './advanced/interpolation';
-import { IPulsePresetParams, IScalePresetParams, IShakePresetParams, ISonarPresetParams, pulsePreset, scalePreset, shakePreset, sonarPreset, wobblePreset } from './advanced/preset';
 import { Log } from './core/enum/log';
 import { IControl } from './core/interfaces/IControl';
 import { IPlayable } from './core/interfaces/IPlayable';
@@ -108,86 +106,6 @@ export class Fatina {
 		}
 		return this.manager;
 	}
-
-	/**
-	 * Pulse Animation
-	 *
-	 * @export
-	 * @param {any} obj
-	 * @param {IPulsePresetParams} settings
-	 * @returns {ISequence}
-	 */
-	public pulse = (obj: any, settings?: IPulsePresetParams | any): ISequence => pulsePreset(this, obj, settings);
-
-	/**
-	 * Strobe Animation
-	 *
-	 * @export
-	 * @param {any} obj
-	 * @param {IScalePresetParams} settings
-	 * @returns {ITween}
-	 */
-	public scale = (obj: any, settings?: IScalePresetParams | any): ITween => scalePreset(this, obj, settings);
-
-	/**
-	 * Wobble Animation
-	 *
-	 * @export
-	 * @param {any} obj
-	 * @param {IScalePresetParams} settings
-	 * @returns {ITween}
-	 */
-	public wobble = (obj: any, settings?: IScalePresetParams | any): ITween => wobblePreset(this, obj, settings);
-
-	/**
-	 * Sonar Animation
-	 *
-	 * @export
-	 * @param {any} obj
-	 * @param {ISonarPresetParams} settings
-	 * @returns {ITween}
-	 */
-	public sonar = (obj: any, settings?: ISonarPresetParams | any): ITween => sonarPreset(this, obj, settings);
-
-	/**
-	 * Sonar Animation
-	 *
-	 * @export
-	 * @param {any} obj
-	 * @param {IShakePresetParams} settings
-	 * @returns {ISequence}
-	 */
-	public shake = (obj: any, settings?: IShakePresetParams | any): ITween => shakePreset(this, obj, settings);
-
-	/**
-	 * Bezier Curve Animation
-	 *
-	 * @exports
-	 * @param {any} obj
-	 * @param {ICurveParams} settings
-	 * @returns {ITween}
-	 */
-	public curve = (obj: any, settings?: ICurveParams | any): ITween => curve(this, obj, settings);
-
-	/**
-	 * Arc Curve Animation
-	 *
-	 * @exports
-	 * @param {any} obj
-	 * @param {IArcParams} settings
-	 * @returns {ITween}
-	 */
-	public arc = (obj: any, settings?: IArcParams | any): ITween => arc(this, obj, settings);
-
-	/**
-	 * Path Animation
-	 *
-	 * @exports
-	 * @param {any} obj
-	 * @param {IPathParams} settings
-	 * @returns {ISequence}
-	 */
-	public path = (obj: any, settings?: IPathParams | any): ISequence => path(this, obj, settings);
 
 	/**
 	 * Method used when Fatina is used for the first time.
@@ -433,6 +351,7 @@ export class Fatina {
 	public loadPlugin(newPlugin: IPlugin) {
 		newPlugin.init(this);
 		this.loadedPlugins.push(newPlugin);
+		console.log(' %c Fatina - Loaded Plugin ' + newPlugin.name, 'background: #222; color: #9fbff4; padding: 5px');
 		this.info(Log.Debug, 'Plugin Loaded', newPlugin.name);
 	}
 

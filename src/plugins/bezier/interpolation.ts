@@ -1,60 +1,6 @@
-import { Fatina } from '../fatina';
-import { getProp, getRoot } from './helper';
-
-export const enum BezierType {
-	Cubic = 'cubic',
-	Quadratic = 'quadratic',
-	Catmull = 'catmull'
-}
-
-export const enum PathType {
-	Linear = 'linear',
-	Catmull = 'catmull'
-}
-
-export interface IVector2 {
-	x: number;
-	y: number;
-}
-
-export interface ICircle {
-	x: number;
-	y: number;
-	r: number;
-}
-
-export interface ICurveParams {
-	posX: string;
-	posY: string;
-	rot: string;
-	rotAdd: number;
-	autoRotate: boolean;
-	from: IVector2;
-	to: IVector2;
-	ctr1: IVector2;
-	ctr2: IVector2;
-	duration: number;
-	method: BezierType | string;
-}
-
-export interface IArcParams {
-	posX: string;
-	posY: string;
-	rot: string;
-	rotAdd: number;
-	autoRotate: boolean;
-	ctr1: IVector2;
-	to: IVector2;
-	duration: number;
-}
-
-export interface IPathParams {
-	posX: string;
-	posY: string;
-	points: IVector2[];
-	duration: number;
-	method: PathType;
-}
+import { Fatina } from '../../fatina';
+import { getProp, getRoot } from '../helper';
+import { BezierType, IArcParams, ICircle, ICurveParams, IPathParams, IVector2, PathType } from './core';
 
 const e: { [id: string]: (t: number, start: number, ctr: number[], dest: number) => number } = {};
 
@@ -179,14 +125,14 @@ export function path(fatina: Fatina, obj: any, settings?: IPathParams) {
 				sequence.append(fatina.tween(root).to({ x: pa.points[i].x, y: pa.points[i].y }, dur));
 				break;
 			case PathType.Catmull:
-				sequence.append(fatina.curve(obj, {
+				sequence.append(curve(fatina, obj, {
 					ctr1: (i < 2) ? from : pa.points[i - 2],
 					ctr2: (i >= pa.points.length - 1) ? pa.points[pa.points.length - 1] : pa.points[i + 1],
 					from: ptStart,
 					to: ptTo,
 					method: BezierType.Catmull,
 					duration: dur
-				}));
+				} as ICurveParams));
 				break;
 		}
 	}

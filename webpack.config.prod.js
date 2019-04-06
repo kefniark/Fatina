@@ -8,11 +8,18 @@ const WebpackAutoInject = require("webpack-auto-inject-version");
 
 module.exports = {
 	mode: "production",
-	entry: "./src/index.ts",
+	entry: {
+		Fatina: "./src/index.ts",
+		fatinaBezier: "./src/plugins/bezier/index.ts",
+		fatinaPreset: "./src/plugins/preset/index.ts"
+	},
 	output: {
 		path: path.resolve(__dirname, "build"),
-		filename: "fatina.min.js",
-		library: "Fatina",
+		filename: (arg) => {
+			if (arg.chunk.name === "Fatina") return "fatina.min.js";
+			return "plugins/[name].min.js"
+		},
+		library: "[customInterpolateName]",
 		libraryTarget: "umd",
 		umdNamedDefine: true,
 		globalObject: "typeof self !== 'undefined' ? self : this"

@@ -1,15 +1,8 @@
-import { easeNames } from '../easing/easing';
-import { Fatina } from '../fatina';
-import { EasingType } from '../index';
-import { getData, getProp, getRoot } from './helper';
-
-export interface ISonarPresetParams {
-	alpha: string;
-	scaleX: string;
-	scaleY: string;
-	amplitude: number;
-	duration: number;
-}
+import { easeNames } from '../../easing/easing';
+import { Fatina } from '../../fatina';
+import { EasingType } from '../../index';
+import { getData, getProp, getRoot } from '../helper';
+import { ISonarPresetParams } from './core';
 
 /**
  * Sonar Preset
