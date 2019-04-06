@@ -360,6 +360,59 @@
 				ctr1: { x: bunny1.x + vecCtr1.x, y: bunny1.y + vecCtr1.y },
 				ctr2: { x: bunny1.x + vecCtr2.x, y: bunny1.y + vecCtr2.y },
 				to: { x: bunny1.x + vecTo.x, y: bunny1.y + vecTo.y },
+				duration: 2500,
+				autoRotate: false
+			}).setEasing('inOutQuad').start();
+			t2 = Fatina.curve(bunny2, {
+				ctr1: { x: bunny1.x + vecCtr1.x, y: bunny1.y + vecCtr1.y },
+				to: { x: bunny1.x + vecTo.x, y: bunny1.y + vecTo.y },
+				method: 'quadratic',
+				duration: 2500,
+				autoRotate: false
+			}).setEasing('inOutQuad').start();
+			t3 = Fatina.arc(bunny3, {
+				ctr1: { x: bunny1.x + vecCtr1.x, y: bunny1.y + vecCtr1.y },
+				to: { x: bunny1.x + vecTo.x, y: bunny1.y + vecTo.y },
+				duration: 2500,
+				autoRotate: false
+			}).setEasing('inOutQuad').start();
+			t4 = Fatina.tween(bunny4)
+				.to({ x: bunny4.x + vecTo.x, y: bunny4.y + vecTo.y }, 2500)
+				.setEasing('inOutQuad')
+				.start();
+			t5 = Fatina.curve(bunny5, {
+				from: { x: 230, y: 60 },
+				ctr1: { x: -170, y: 220 },
+				ctr2: { x: 600, y: 550 },
+				to: { x: 470, y: 220 },
+				method: 'catmull',
+				duration: 2500,
+				autoRotate: false
+			}).setEasing('inOutQuad').start();
+		}
+
+		function curveRot() {
+			if (t1) t1.kill();
+			if (t2) t2.kill();
+			if (t3) t3.kill();
+			if (t4) t4.kill();
+			if (t5) t5.kill();
+
+			bunny1.x = app.renderer.width / 2 + vecStart.x;
+			bunny1.y = app.renderer.height / 2 + vecStart.y;
+			bunny2.x = app.renderer.width / 2 + vecStart.x;
+			bunny2.y = app.renderer.height / 2 + vecStart.y;
+			bunny3.x = app.renderer.width / 2 + vecStart.x;
+			bunny3.y = app.renderer.height / 2 + vecStart.y;
+			bunny4.x = app.renderer.width / 2 + vecStart.x;
+			bunny4.y = app.renderer.height / 2 + vecStart.y;
+			bunny5.x = app.renderer.width / 2 + vecStart.x;
+			bunny5.y = app.renderer.height / 2 + vecStart.y;
+
+			t1 = Fatina.curve(bunny1, {
+				ctr1: { x: bunny1.x + vecCtr1.x, y: bunny1.y + vecCtr1.y },
+				ctr2: { x: bunny1.x + vecCtr2.x, y: bunny1.y + vecCtr2.y },
+				to: { x: bunny1.x + vecTo.x, y: bunny1.y + vecTo.y },
 				duration: 2500
 			}).setEasing('inOutQuad').start();
 			t2 = Fatina.curve(bunny2, {
@@ -377,16 +430,6 @@
 				.to({ x: bunny4.x + vecTo.x, y: bunny4.y + vecTo.y }, 2500)
 				.setEasing('inOutQuad')
 				.start();
-			/*
-			t5 = Fatina.curve(bunny5, {
-					ctr1: { x: bunny1.x + vecCtr2.x, y: bunny1.y + vecCtr2.y },
-					ctr2: { x: bunny1.x + vecCtr1.x, y: bunny1.y + vecCtr1.y },
-					to: { x: bunny1.x + vecTo.x, y: bunny1.y + vecTo.y },
-					method: 'catmull',
-					duration: 2500
-				}).setEasing('inOutQuad').start();
-			*/
-
 			t5 = Fatina.curve(bunny5, {
 				from: { x: 230, y: 60 },
 				ctr1: { x: -170, y: 220 },
@@ -419,10 +462,74 @@
 					{ x: bunny10.x + vecTo.x, y: bunny10.y + vecTo.y }
 				],
 				method: 'linear',
+				duration: 7500,
+				autoRotate: false
+			}).start();
+
+			t11 = Fatina.sequence()
+				.append(Fatina.curve(bunny11, {
+					ctr1: { x: bunny11.x - vecCtr1.x, y: bunny11.y + vecCtr1.y },
+					to: { x: bunny11.x + vecTo.x, y: bunny11.y + vecTo.y },
+					method: 'quadratic',
+					duration: 2500,
+					autoRotate: false
+				}))
+				.append(Fatina.curve(bunny11, {
+					ctr1: { x: bunny11.x + vecCtr1.x, y: bunny11.y + vecCtr1.y },
+					to: { x: bunny11.x + vecCtr2.x, y: bunny11.y + vecCtr2.y },
+					method: 'quadratic',
+					duration: 2500,
+					autoRotate: false
+				}))
+				.append(Fatina.curve(bunny11, {
+					ctr1: { x: vecStart.x, y: vecStart.y },
+					to: { x: bunny11.x + vecTo.x, y: bunny11.y + vecTo.y },
+					method: 'quadratic',
+					duration: 2500,
+					autoRotate: false
+				}))
+				.start();
+
+			t12 = Fatina.path(bunny12, {
+				points: [
+					{ x: bunny12.x - vecCtr1.x, y: bunny12.y + vecCtr1.y },
+					{ x: bunny12.x + vecTo.x, y: bunny12.y + vecTo.y },
+					{ x: bunny12.x + vecCtr1.x, y: bunny12.y + vecCtr1.y },
+					{ x: bunny12.x + vecCtr2.x, y: bunny12.y + vecCtr2.y },
+					{ x: bunny12.x, y: bunny12.y },
+					{ x: bunny12.x + vecTo.x, y: bunny12.y + vecTo.y }
+				],
+				method: 'catmull',
+				duration: 7500,
+				autoRotate: false
+			}).start();
+		}
+
+		function sequenceRot() {
+			if (t10) t10.kill();
+			if (t11) t11.kill();
+			if (t12) t12.kill();
+
+			bunny10.x = app.renderer.width / 2 + vecStart.x;
+			bunny10.y = app.renderer.height / 2 + vecStart.y;
+			bunny11.x = app.renderer.width / 2 + vecStart.x;
+			bunny11.y = app.renderer.height / 2 + vecStart.y;
+			bunny12.x = app.renderer.width / 2 + vecStart.x;
+			bunny12.y = app.renderer.height / 2 + vecStart.y;
+
+			t10 = Fatina.path(bunny10, {
+				points: [
+					{ x: bunny10.x - vecCtr1.x, y: bunny10.y + vecCtr1.y },
+					{ x: bunny10.x + vecTo.x, y: bunny10.y + vecTo.y },
+					{ x: bunny10.x + vecCtr1.x, y: bunny10.y + vecCtr1.y },
+					{ x: bunny10.x + vecCtr2.x, y: bunny10.y + vecCtr2.y },
+					{ x: bunny10.x, y: bunny10.y },
+					{ x: bunny10.x + vecTo.x, y: bunny10.y + vecTo.y }
+				],
+				method: 'linear',
 				duration: 7500
 			}).start();
 
-			/*
 			t11 = Fatina.sequence()
 				.append(Fatina.curve(bunny11, {
 					ctr1: { x: bunny11.x - vecCtr1.x, y: bunny11.y + vecCtr1.y },
@@ -443,7 +550,7 @@
 					duration: 2500
 				}))
 				.start();
-			*/
+
 			t12 = Fatina.path(bunny12, {
 				points: [
 					{ x: bunny12.x - vecCtr1.x, y: bunny12.y + vecCtr1.y },
@@ -461,7 +568,9 @@
 
 	<div class="menu">
 		<input class="button" type="button" onclick="curve()" value="Curve" />
+		<input class="button" type="button" onclick="curveRot()" value="Curve + Rotation" />
 		<input class="button" type="button" onclick="sequence()" value="Sequence" />
+		<input class="button" type="button" onclick="sequenceRot()" value="Sequence + Rotation" />
 	</div>
 </body>
 

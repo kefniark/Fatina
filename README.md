@@ -56,3 +56,7 @@ Fatina.tween(sprite)
 ```
 * [Documentation](https://kefniark.github.io/Fatina/api/basic/)
 * [Samples](https://kefniark.github.io/Fatina/samples/generic/)
+
+## Plugins
+* [Bezier / Curves](./src/plugins/bezier)
+* [Animation Preset](./src/plugins/preset)

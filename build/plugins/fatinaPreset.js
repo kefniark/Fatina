@@ -1,4 +1,4 @@
-// [Fatina]  Build: 3.0.0-beta.3 - Saturday, April 6th, 2019, 5:43:57 PM  
+// [Fatina]  Build: 3.0.0-beta.3 - Saturday, April 6th, 2019, 7:44:30 PM  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -415,11 +415,8 @@ class FatinaPluginPreset {
         this.initialized = false;
     }
     init(fatina) {
-        if (this.initialized) {
-            throw new Error('Try to init the plugin twice : ' + name);
-        }
-        if (fatina === undefined || fatina === null || fatina.plugin === null) {
-            throw new Error('Try to init the plugin without fatina : ' + name);
+        if (this.initialized || !fatina || fatina.plugin === null) {
+            throw new Error('Cannot initialize ' + this.name);
         }
         const plugin = fatina;
         plugin.pulse = (obj, settings) => preset_1.pulsePreset(fatina, obj, settings);

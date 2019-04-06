@@ -1,4 +1,4 @@
-// [Fatina]  Build: 3.0.0-beta.3 - Saturday, April 6th, 2019, 5:43:57 PM  
+// [Fatina]  Build: 3.0.0-beta.3 - Saturday, April 6th, 2019, 7:44:30 PM  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();

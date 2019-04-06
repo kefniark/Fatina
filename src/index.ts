@@ -36,6 +36,14 @@ export { ITween } from './core/interfaces/ITween';
  * @export
  */
 export { ITweenProperty } from './core/interfaces/ITweenProperty';
+/**
+ * @export
+ */
+export { IFatinaPluginBezier } from './core/plugins/bezier';
+/**
+ * @export
+ */
+export { IFatinaPluginPreset } from './core/plugins/preset';
 
 /**
  * @export

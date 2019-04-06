@@ -1,3 +1,12 @@
+import { Fatina } from '../../fatina';
+import { ISequence } from '../interfaces/ISequence';
+import { ITween } from '../interfaces/ITween';
+
+export interface IFatinaPluginBezier extends Fatina {
+	curve: (obj: any, settings?: ICurveParams | any) => ITween;
+	arc: (obj: any, settings?: IArcParams | any) => ITween;
+	path: (obj: any, settings?: IPathParams | any) => ISequence;
+}
 
 export const enum BezierType {
 	Cubic = 'cubic',

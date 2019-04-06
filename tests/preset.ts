@@ -1,11 +1,16 @@
 import * as test from 'tape';
 import { Test } from 'tape';
+import { IFatinaPluginPreset } from '../src/core/plugins/preset';
 import { Fatina } from '../src/fatina';
-import { get, IFatinaPluginPreset } from '../src/plugins/preset';
+import { get } from '../src/plugins/preset';
 
 const src = new Fatina();
 src.init(false);
-src.loadPlugin(get());
+const plugin = get();
+src.loadPlugin(plugin);
+try {
+	src.loadPlugin(plugin);
+} catch {}
 const fatina = src as IFatinaPluginPreset;
 
 function getSprite() {

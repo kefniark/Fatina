@@ -14,8 +14,10 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, "build"),
 		filename: (arg) => {
-			if (arg.chunk.name === "Fatina") return "fatina.js";
-			return "plugins/[name].js"
+			if (arg.chunk.name === "Fatina") {
+				return "fatina.js";
+			}
+			return "plugins/[name].js";
 		},
 		library: "[name]",
 		libraryTarget: "umd",

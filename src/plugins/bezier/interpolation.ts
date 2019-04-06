@@ -1,6 +1,6 @@
+import { BezierType, IArcParams, ICircle, ICurveParams, IPathParams, IVector2, PathType } from '../../core/plugins/bezier';
 import { Fatina } from '../../fatina';
 import { getProp, getRoot } from '../helper';
-import { BezierType, IArcParams, ICircle, ICurveParams, IPathParams, IVector2, PathType } from './core';
 
 const e: { [id: string]: (t: number, start: number, ctr: number[], dest: number) => number } = {};
 

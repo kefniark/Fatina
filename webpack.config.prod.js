@@ -16,10 +16,12 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, "build"),
 		filename: (arg) => {
-			if (arg.chunk.name === "Fatina") return "fatina.min.js";
-			return "plugins/[name].min.js"
+			if (arg.chunk.name === "Fatina") {
+				return "fatina.min.js";
+			}
+			return "plugins/[name].min.js";
 		},
-		library: "[customInterpolateName]",
+		library: "[name]",
 		libraryTarget: "umd",
 		umdNamedDefine: true,
 		globalObject: "typeof self !== 'undefined' ? self : this"
@@ -71,7 +73,7 @@ module.exports = {
 				mode: "STANDARD"
 			}, {
 				language_in: "ECMASCRIPT_2017",
-				languageOut: "ECMASCRIPT6"
+				language_out: "ECMASCRIPT6"
 			})
 		]
 	}

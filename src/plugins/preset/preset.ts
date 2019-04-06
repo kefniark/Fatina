@@ -1,8 +1,8 @@
+import { IPulsePresetParams, IScalePresetParams, IShakePresetParams, ISonarPresetParams } from '../../core/plugins/preset';
 import { easeNames } from '../../easing/easing';
 import { Fatina } from '../../fatina';
 import { EasingType } from '../../index';
 import { getData, getProp, getRoot } from '../helper';
-import { ISonarPresetParams } from './core';
 
 /**
  * Sonar Preset
@@ -45,11 +45,6 @@ export function sonarPreset(fatina: Fatina, obj: any, settings?: ISonarPresetPar
 		});
 }
 
-export interface IPulsePresetParams {
-	alpha: string;
-	duration: number;
-}
-
 /**
  * Pulse Preset
  *
@@ -77,16 +72,6 @@ export function pulsePreset(fatina: Fatina, obj: any, settings?: IPulsePresetPar
 			.setEasing(EasingType.InOutQuad)
 		)
 		.onKilled(() => rootAlpha[getProp(pa.alpha)] = 1);
-}
-
-export interface IScalePresetParams {
-	scaleX: string;
-	scaleY: string;
-	amplitude: number;
-	duration: number;
-	bounce: number;
-	friction: number;
-	sinX: number;
 }
 
 /**
@@ -141,15 +126,6 @@ export function scalePreset(fatina: Fatina, obj: any, settings?: IScalePresetPar
 export function wobblePreset(fatina: Fatina, obj: any, settings?: IScalePresetParams) {
 	const defaults = { sinX: Math.PI };
 	return scalePreset(fatina, obj, { ...defaults, ...(settings || {}) } as IScalePresetParams);
-}
-
-export interface IShakePresetParams {
-	posX: string;
-	posY: string;
-	amplitude: number;
-	duration: number;
-	bounce: number;
-	friction: number;
 }
 
 /**
