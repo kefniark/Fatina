@@ -50,7 +50,6 @@
     "test:lint": "tslint --project tsconfig.json \"./src/**/*.ts\" \"tests/**/*.ts\"",
     "test:unittest": "ts-node node_modules/tape/bin/tape ./tests/**/*.ts | tspec",
     "test:depencencies": "npm-check --production || echo \"Run 'npm run update' to interactively update dependencies for this project\"",
-    "docs": "typedoc --out ./docs ./src/",
     "coverage": "nyc --all --reporter=html --reporter=text npm run test:unittest",
     "coveralls": "nyc --all --reporter=text-lcov npm run test:unittest | coveralls",
     "update": "npm-check --update"

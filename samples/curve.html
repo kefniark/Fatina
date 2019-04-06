@@ -28,8 +28,41 @@
 		let app;
 		let bunny1;
 		let bunny2;
+		let bunny3;
+		let bunny4;
+		let bunny5;
+		let bunny10;
+		let bunny11;
+		let bunny12;
 		let t1;
 		let t2;
+		let t3;
+		let t4;
+		let t5;
+		let t10;
+		let t11;
+		let t12;
+
+		function circle3Points(a, b, c) {
+			const d1 = { x: b.y - a.y, y: a.x - b.x };
+			const d2 = { x: c.y - a.y, y: a.x - c.x };
+			const k = d2.x * d1.y - d2.y * d1.x;
+			const s1 = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+			const s2 = { x: (a.x + c.x) / 2, y: (a.y + c.y) / 2 };
+			const l = d1.x * (s2.y - s1.y) - d1.y * (s2.x - s1.x);
+			const m = l / k;
+			const center = { x: s2.x + m * d2.x, y: s2.y + m * d2.y };
+			const dx = center.x - a.x;
+			const dy = center.y - a.y;
+			const radius = Math.sqrt(dx * dx + dy * dy);
+			return { x: center.x, y: center.y, r: radius }
+		}
+
+		const vecStart = { x: - 250, y: 100 };
+		const vecCtr1 = { x: 320, y: -180 };
+		const vecCtr2 = { x: 450, y: 150 };
+		const vecCtr3 = { x: 520, y: -360 };
+		const vecTo = { x: 80, y: -340 };
 
 		function init() {
 			// hack to work with webpack-dev-server
@@ -50,40 +83,208 @@
 			bunny1 = new PIXI.Sprite.fromImage('https://pixijs.io/examples/examples/assets/bunny.png')
 
 			// Setup the position of the bunny
-			bunny1.x = app.renderer.width / 2 - 160;
-			bunny1.y = app.renderer.height / 2;
+			bunny1.x = app.renderer.width / 2 + vecStart.x;
+			bunny1.y = app.renderer.height / 2 + vecStart.y;
 
 			// Rotate around the center
 			bunny1.anchor.x = 0.5;
 			bunny1.anchor.y = 0.5;
 
-			bunny1.scale.x = 2;
-			bunny1.scale.y = 2;
+			bunny1.scale.x = 3;
+			bunny1.scale.y = 3;
+
+			const t1 = new PIXI.Text('Cubic bezier',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
+			t1.position.x = -10;
+			t1.position.y = 20;
+			t1.scale.x = 0.2;
+			t1.scale.y = 0.2;
+			bunny1.addChild(t1);
 
 			// This creates a texture from a 'bunny.png' image
 			bunny2 = new PIXI.Sprite.fromImage('https://pixijs.io/examples/examples/assets/bunny.png')
 
 			// Setup the position of the bunny
-			bunny2.x = app.renderer.width / 2 - 160;
-			bunny2.y = app.renderer.height / 2;
+			bunny2.x = app.renderer.width / 2 + vecStart.x;
+			bunny2.y = app.renderer.height / 2 + vecStart.y;
 
 			// Rotate around the center
 			bunny2.anchor.x = 0.5;
 			bunny2.anchor.y = 0.5;
 
-			bunny2.scale.x = 3;
-			bunny2.scale.y = 3;
+			bunny2.scale.x = 2;
+			bunny2.scale.y = 2;
+
+			const t2 = new PIXI.Text('Quadratic bezier',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
+			t2.position.x = -20;
+			t2.position.y = 20;
+			t2.scale.x = 0.2 * 1.5;
+			t2.scale.y = 0.2 * 1.5;
+			bunny2.addChild(t2);
+
+			// This creates a texture from a 'bunny.png' image
+			bunny3 = new PIXI.Sprite.fromImage('https://pixijs.io/examples/examples/assets/bunny.png')
+
+			// Setup the position of the bunny
+			bunny3.x = app.renderer.width / 2 + vecStart.x;
+			bunny3.y = app.renderer.height / 2 + vecStart.y;
+
+			// Rotate around the center
+			bunny3.anchor.x = 0.5;
+			bunny3.anchor.y = 0.5;
+
+			bunny3.scale.x = 1.5;
+			bunny3.scale.y = 1.5;
+
+			const t3 = new PIXI.Text('Arc',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
+			t3.position.x = -8;
+			t3.position.y = 20;
+			t3.scale.x = 0.2 * 2;
+			t3.scale.y = 0.2 * 2;
+			bunny3.addChild(t3);
+
+			// This creates a texture from a 'bunny.png' image
+			bunny4 = new PIXI.Sprite.fromImage('https://pixijs.io/examples/examples/assets/bunny.png')
+
+			// Setup the position of the bunny
+			bunny4.x = app.renderer.width / 2 + vecStart.x;
+			bunny4.y = app.renderer.height / 2 + vecStart.y;
+
+			// Rotate around the center
+			bunny4.anchor.x = 0.5;
+			bunny4.anchor.y = 0.5;
+
+			bunny4.scale.x = 0.75;
+			bunny4.scale.y = 0.75;
+
+			const t4 = new PIXI.Text('Linear',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
+			t4.position.x = -30;
+			t4.position.y = 20;
+			t4.scale.x = 0.2 * 4;
+			t4.scale.y = 0.2 * 4;
+			bunny4.addChild(t4);
+
+			// This creates a texture from a 'bunny.png' image
+			bunny5 = new PIXI.Sprite.fromImage('https://pixijs.io/examples/examples/assets/bunny.png')
+
+			// Setup the position of the bunny
+			bunny5.x = app.renderer.width / 2 + vecStart.x;
+			bunny5.y = app.renderer.height / 2 + vecStart.y;
+
+			// Rotate around the center
+			bunny5.anchor.x = 0.5;
+			bunny5.anchor.y = 0.5;
+
+			bunny5.scale.x = 0.75;
+			bunny5.scale.y = 0.75;
+
+			const t5 = new PIXI.Text('Catmull',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
+			t5.position.x = -30;
+			t5.position.y = 20;
+			t5.scale.x = 0.2 * 4;
+			t5.scale.y = 0.2 * 4;
+			bunny5.addChild(t5);
+
+			// This creates a texture from a 'bunny.png' image
+			bunny10 = new PIXI.Sprite.fromImage('https://pixijs.io/examples/examples/assets/bunny.png')
+
+			// Setup the position of the bunny
+			bunny10.x = app.renderer.width / 2 + vecStart.x;
+			bunny10.y = app.renderer.height / 2 + vecStart.y;
+
+			// Rotate around the center
+			bunny10.anchor.x = 0.5;
+			bunny10.anchor.y = 0.5;
+
+			bunny10.scale.x = 0.75;
+			bunny10.scale.y = 0.75;
+
+			const t10 = new PIXI.Text('Sequence',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
+			t10.position.x = -30;
+			t10.position.y = 20;
+			t10.scale.x = 0.2 * 4;
+			t10.scale.y = 0.2 * 4;
+			bunny10.addChild(t10);
+
+			// This creates a texture from a 'bunny.png' image
+			bunny11 = new PIXI.Sprite.fromImage('https://pixijs.io/examples/examples/assets/bunny.png')
+
+			// Setup the position of the bunny
+			bunny11.x = app.renderer.width / 2 + vecStart.x;
+			bunny11.y = app.renderer.height / 2 + vecStart.y;
+
+			// Rotate around the center
+			bunny11.anchor.x = 0.5;
+			bunny11.anchor.y = 0.5;
+
+			bunny11.scale.x = 0.75;
+			bunny11.scale.y = 0.75;
+
+			const t11 = new PIXI.Text('Quad Seq',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
+			t11.position.x = -30;
+			t11.position.y = 20;
+			t11.scale.x = 0.2 * 4;
+			t11.scale.y = 0.2 * 4;
+			bunny11.addChild(t11);
+
+			// This creates a texture from a 'bunny.png' image
+			bunny12 = new PIXI.Sprite.fromImage('https://pixijs.io/examples/examples/assets/bunny.png')
+
+			// Setup the position of the bunny
+			bunny12.x = app.renderer.width / 2 + vecStart.x;
+			bunny12.y = app.renderer.height / 2 + vecStart.y;
+
+			// Rotate around the center
+			bunny12.anchor.x = 0.5;
+			bunny12.anchor.y = 0.5;
+
+			bunny12.scale.x = 0.75;
+			bunny12.scale.y = 0.75;
+
+			const t12 = new PIXI.Text('Catmull',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
+			t12.position.x = -30;
+			t12.position.y = 20;
+			t12.scale.x = 0.2 * 4;
+			t12.scale.y = 0.2 * 4;
+			bunny12.addChild(t12);
 
 			var graphics = new PIXI.Graphics();
-			graphics.lineStyle(5, 0xFF0000);
+			graphics.lineStyle(1, 0xFF0000);
 			graphics.moveTo(bunny1.x, bunny1.y);
 			graphics.bezierCurveTo(
-				bunny1.x + 200, bunny1.y - 20,
-				bunny1.x + 800, bunny1.y + 550,
-				bunny1.x + 80, bunny1.y - 240
+				bunny1.x + vecCtr1.x, bunny1.y + vecCtr1.y,
+				bunny1.x + vecCtr2.x, bunny1.y + vecCtr2.y,
+				bunny1.x + vecTo.x, bunny1.y + vecTo.y
 			);
 
 			app.stage.addChild(graphics);
+
+			const pt1 = new PIXI.Text('Start',{fontFamily : 'Arial', fontSize: 24, fill : 0x1010ff, align : 'center'});
+			pt1.position.x = app.renderer.width / 2 + vecStart.x - 20;
+			pt1.position.y = app.renderer.height / 2 + vecStart.y + 20;
+			pt1.scale.x = 0.8;
+			pt1.scale.y = 0.8;
+			app.stage.addChild(pt1);
+
+			const pt2 = new PIXI.Text('End',{fontFamily : 'Arial', fontSize: 24, fill : 0x1010ff, align : 'center'});
+			pt2.position.x = app.renderer.width / 2 + vecStart.x + vecTo.x - 20;
+			pt2.position.y = app.renderer.height / 2 + vecStart.y + vecTo.y - 35;
+			pt2.scale.x = 0.8;
+			pt2.scale.y = 0.8;
+			app.stage.addChild(pt2);
+
+			const pt3 = new PIXI.Text('Ctrl Pt1',{fontFamily : 'Arial', fontSize: 24, fill : 0xffffff, align : 'center'});
+			pt3.position.x = app.renderer.width / 2 + vecStart.x + vecCtr1.x + 20;
+			pt3.position.y = app.renderer.height / 2 + vecStart.y + vecCtr1.y - 5;
+			pt3.scale.x = 0.5;
+			pt3.scale.y = 0.5;
+			app.stage.addChild(pt3);
+
+			const pt4 = new PIXI.Text('Ctrl Pt2',{fontFamily : 'Arial', fontSize: 24, fill : 0xffffff, align : 'center'});
+			pt4.position.x = app.renderer.width / 2 + vecStart.x + vecCtr2.x - 20;
+			pt4.position.y = app.renderer.height / 2 + vecStart.y + vecCtr2.y - 35;
+			pt4.scale.x = 0.5;
+			pt4.scale.y = 0.5;
+			app.stage.addChild(pt4);
 
 			var str = new PIXI.Graphics();
 			str.lineStyle(5, 0x0000FF);
@@ -92,47 +293,171 @@
 
 			var dest = new PIXI.Graphics();
 			dest.lineStyle(5, 0x0000FF);
-			dest.drawCircle(bunny1.x + 80, bunny1.y - 240, 8);
+			dest.drawCircle(bunny1.x + vecTo.x, bunny1.y + vecTo.y, 8);
 			app.stage.addChild(dest);
 
 			var ctr1 = new PIXI.Graphics();
 			ctr1.lineStyle(5, 0xFFFFFF);
-			ctr1.drawCircle(bunny1.x + 200, bunny1.y - 20, 5);
+			ctr1.drawCircle(bunny1.x + vecCtr1.x, bunny1.y + vecCtr1.y, 5);
 			app.stage.addChild(ctr1);
 
 			var ctr2 = new PIXI.Graphics();
 			ctr2.lineStyle(5, 0xFFFFFF);
-			ctr2.drawCircle(bunny1.x + 500, bunny1.y + 250, 5);
+			ctr2.drawCircle(bunny1.x + vecCtr2.x, bunny1.y + vecCtr2.y, 5);
 			app.stage.addChild(ctr2);
+
+			var c = circle3Points(
+				{ x: bunny1.x, y: bunny1.y },
+				{ x: bunny1.x + vecCtr1.x, y: bunny1.y + vecCtr1.y },
+				{ x: bunny1.x + vecTo.x, y: bunny1.y + vecTo.y },
+			);
+
+			var circle = new PIXI.Graphics();
+			circle.lineStyle(1, 0x0088FF);
+			circle.drawCircle(c.x, c.y, c.r);
+			app.stage.addChild(circle);
+
+			var line = new PIXI.Graphics();
+			line.lineStyle(1, 0x008888);
+			line.moveTo(bunny1.x, bunny1.y);
+			line.lineTo(bunny1.x + vecTo.x, bunny1.y + vecTo.y);
+			app.stage.addChild(line);
 
 			// Add the bunny to the scene we are building
 			app.stage.addChild(bunny1);
 			app.stage.addChild(bunny2);
+			app.stage.addChild(bunny3);
+			app.stage.addChild(bunny4);
+			app.stage.addChild(bunny5);
+			app.stage.addChild(bunny10);
+			app.stage.addChild(bunny11);
+			app.stage.addChild(bunny12);
 		}
 
 		function curve() {
 			if (t1) t1.kill();
 			if (t2) t2.kill();
+			if (t3) t3.kill();
+			if (t4) t4.kill();
+			if (t5) t5.kill();
 
-			bunny1.x = app.renderer.width / 2 - 160;
-			bunny1.y = app.renderer.height / 2;
-			bunny2.x = app.renderer.width / 2 - 160;
-			bunny2.y = app.renderer.height / 2;
+			bunny1.x = app.renderer.width / 2 + vecStart.x;
+			bunny1.y = app.renderer.height / 2 + vecStart.y;
+			bunny2.x = app.renderer.width / 2 + vecStart.x;
+			bunny2.y = app.renderer.height / 2 + vecStart.y;
+			bunny3.x = app.renderer.width / 2 + vecStart.x;
+			bunny3.y = app.renderer.height / 2 + vecStart.y;
+			bunny4.x = app.renderer.width / 2 + vecStart.x;
+			bunny4.y = app.renderer.height / 2 + vecStart.y;
+			bunny5.x = app.renderer.width / 2 + vecStart.x;
+			bunny5.y = app.renderer.height / 2 + vecStart.y;
 
 			t1 = Fatina.curve(bunny1, {
-				ctr1: { x: bunny1.x + 200, y: bunny1.y - 20 },
-				ctr2: { x: bunny1.x + 800, y: bunny1.y + 550 },
-				to: { x: bunny1.x + 80, y: bunny1.y - 240 },
+				ctr1: { x: bunny1.x + vecCtr1.x, y: bunny1.y + vecCtr1.y },
+				ctr2: { x: bunny1.x + vecCtr2.x, y: bunny1.y + vecCtr2.y },
+				to: { x: bunny1.x + vecTo.x, y: bunny1.y + vecTo.y },
 				duration: 2500
-			}).start();
-			t2 = Fatina.tween(bunny2)
-				.to({ x: bunny1.x + 80, y: bunny1.y - 240 }, 2500)
+			}).setEasing('inOutQuad').start();
+			t2 = Fatina.curve(bunny2, {
+				ctr1: { x: bunny1.x + vecCtr1.x, y: bunny1.y + vecCtr1.y },
+				to: { x: bunny1.x + vecTo.x, y: bunny1.y + vecTo.y },
+				method: 'quadratic',
+				duration: 2500
+			}).setEasing('inOutQuad').start();
+			t3 = Fatina.arc(bunny3, {
+				ctr1: { x: bunny1.x + vecCtr1.x, y: bunny1.y + vecCtr1.y },
+				to: { x: bunny1.x + vecTo.x, y: bunny1.y + vecTo.y },
+				duration: 2500
+			}).setEasing('inOutQuad').start();
+			t4 = Fatina.tween(bunny4)
+				.to({ x: bunny4.x + vecTo.x, y: bunny4.y + vecTo.y }, 2500)
+				.setEasing('inOutQuad')
 				.start();
+			/*
+			t5 = Fatina.curve(bunny5, {
+					ctr1: { x: bunny1.x + vecCtr2.x, y: bunny1.y + vecCtr2.y },
+					ctr2: { x: bunny1.x + vecCtr1.x, y: bunny1.y + vecCtr1.y },
+					to: { x: bunny1.x + vecTo.x, y: bunny1.y + vecTo.y },
+					method: 'catmull',
+					duration: 2500
+				}).setEasing('inOutQuad').start();
+			*/
+
+			t5 = Fatina.curve(bunny5, {
+				from: { x: 230, y: 60 },
+				ctr1: { x: -170, y: 220 },
+				ctr2: { x: 600, y: 550 },
+				to: { x: 470, y: 220 },
+				method: 'catmull',
+				duration: 2500
+			}).setEasing('inOutQuad').start();
+		}
+
+		function sequence() {
+			if (t10) t10.kill();
+			if (t11) t11.kill();
+			if (t12) t12.kill();
+
+			bunny10.x = app.renderer.width / 2 + vecStart.x;
+			bunny10.y = app.renderer.height / 2 + vecStart.y;
+			bunny11.x = app.renderer.width / 2 + vecStart.x;
+			bunny11.y = app.renderer.height / 2 + vecStart.y;
+			bunny12.x = app.renderer.width / 2 + vecStart.x;
+			bunny12.y = app.renderer.height / 2 + vecStart.y;
+
+			t10 = Fatina.path(bunny10, {
+				points: [
+					{ x: bunny10.x - vecCtr1.x, y: bunny10.y + vecCtr1.y },
+					{ x: bunny10.x + vecTo.x, y: bunny10.y + vecTo.y },
+					{ x: bunny10.x + vecCtr1.x, y: bunny10.y + vecCtr1.y },
+					{ x: bunny10.x + vecCtr2.x, y: bunny10.y + vecCtr2.y },
+					{ x: bunny10.x, y: bunny10.y },
+					{ x: bunny10.x + vecTo.x, y: bunny10.y + vecTo.y }
+				],
+				method: 'linear',
+				duration: 7500
+			}).start();
+
+			/*
+			t11 = Fatina.sequence()
+				.append(Fatina.curve(bunny11, {
+					ctr1: { x: bunny11.x - vecCtr1.x, y: bunny11.y + vecCtr1.y },
+					to: { x: bunny11.x + vecTo.x, y: bunny11.y + vecTo.y },
+					method: 'quadratic',
+					duration: 2500
+				}))
+				.append(Fatina.curve(bunny11, {
+					ctr1: { x: bunny11.x + vecCtr1.x, y: bunny11.y + vecCtr1.y },
+					to: { x: bunny11.x + vecCtr2.x, y: bunny11.y + vecCtr2.y },
+					method: 'quadratic',
+					duration: 2500
+				}))
+				.append(Fatina.curve(bunny11, {
+					ctr1: { x: vecStart.x, y: vecStart.y },
+					to: { x: bunny11.x + vecTo.x, y: bunny11.y + vecTo.y },
+					method: 'quadratic',
+					duration: 2500
+				}))
+				.start();
+			*/
+			t12 = Fatina.path(bunny12, {
+				points: [
+					{ x: bunny12.x - vecCtr1.x, y: bunny12.y + vecCtr1.y },
+					{ x: bunny12.x + vecTo.x, y: bunny12.y + vecTo.y },
+					{ x: bunny12.x + vecCtr1.x, y: bunny12.y + vecCtr1.y },
+					{ x: bunny12.x + vecCtr2.x, y: bunny12.y + vecCtr2.y },
+					{ x: bunny12.x, y: bunny12.y },
+					{ x: bunny12.x + vecTo.x, y: bunny12.y + vecTo.y }
+				],
+				method: 'catmull',
+				duration: 7500
+			}).start();
 		}
 	</script>
 
 	<div class="menu">
 		<input class="button" type="button" onclick="curve()" value="Curve" />
+		<input class="button" type="button" onclick="sequence()" value="Sequence" />
 	</div>
 </body>
 

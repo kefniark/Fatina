@@ -180,7 +180,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 			}
 
 			if (this.events.update) {
-				this.emitEvent(this.events.update, [this.remains, this.p]);
+				this.emitEvent(this.events.update, [this.remains, this.v]);
 			}
 
 			if (this.elapsed < this.duration) {

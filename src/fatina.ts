@@ -1,6 +1,6 @@
 
-import { curve } from './advanced/curve';
-import { pulsePreset, scalePreset, shakePreset, sonarPreset, wobblePreset } from './advanced/preset';
+import { arc, curve, IArcParams, ICurveParams, IPathParams, path } from './advanced/interpolation';
+import { IPulsePresetParams, IScalePresetParams, IShakePresetParams, ISonarPresetParams, pulsePreset, scalePreset, shakePreset, sonarPreset, wobblePreset } from './advanced/preset';
 import { Log } from './core/enum/log';
 import { IControl } from './core/interfaces/IControl';
 import { IPlayable } from './core/interfaces/IPlayable';
@@ -114,50 +114,81 @@ export class Fatina {
 	 *
 	 * @export
 	 * @param {any} obj
-	 * @param {any} settings
+	 * @param {IPulsePresetParams} settings
 	 * @returns {ISequence}
 	 */
-	public pulse = (obj: any, settings?: any): ISequence => pulsePreset(this, obj, settings);
+	public pulse = (obj: any, settings?: IPulsePresetParams | any): ISequence => pulsePreset(this, obj, settings);
+
 	/**
 	 * Strobe Animation
 	 *
 	 * @export
 	 * @param {any} obj
-	 * @param {any} settings
+	 * @param {IScalePresetParams} settings
 	 * @returns {ITween}
 	 */
-	public scale = (obj: any, settings?: any): ITween => scalePreset(this, obj, settings);
+	public scale = (obj: any, settings?: IScalePresetParams | any): ITween => scalePreset(this, obj, settings);
+
 	/**
 	 * Wobble Animation
 	 *
 	 * @export
 	 * @param {any} obj
-	 * @param {any} settings
+	 * @param {IScalePresetParams} settings
 	 * @returns {ITween}
 	 */
-	public wobble = (obj: any, settings?: any): ITween => wobblePreset(this, obj, settings);
+	public wobble = (obj: any, settings?: IScalePresetParams | any): ITween => wobblePreset(this, obj, settings);
+
 	/**
 	 * Sonar Animation
 	 *
 	 * @export
 	 * @param {any} obj
-	 * @param {any} settings
+	 * @param {ISonarPresetParams} settings
 	 * @returns {ITween}
 	 */
-	public sonar = (obj: any, settings?: any): ITween => sonarPreset(this, obj, settings);
+	public sonar = (obj: any, settings?: ISonarPresetParams | any): ITween => sonarPreset(this, obj, settings);
+
 	/**
 	 * Sonar Animation
 	 *
 	 * @export
 	 * @param {any} obj
-	 * @param {any} settings
+	 * @param {IShakePresetParams} settings
 	 * @returns {ISequence}
 	 */
-	public shake = (obj: any, settings?: any): ITween => shakePreset(this, obj, settings);
+	public shake = (obj: any, settings?: IShakePresetParams | any): ITween => shakePreset(this, obj, settings);
+
 	/**
+	 * Bezier Curve Animation
 	 *
+	 * @exports
+	 * @param {any} obj
+	 * @param {ICurveParams} settings
+	 * @returns {ITween}
 	 */
-	public curve = (obj: any, settings?: any): ITween => curve(this, obj, settings);
+	public curve = (obj: any, settings?: ICurveParams | any): ITween => curve(this, obj, settings);
+
+	/**
+	 * Arc Curve Animation
+	 *
+	 * @exports
+	 * @param {any} obj
+	 * @param {IArcParams} settings
+	 * @returns {ITween}
+	 */
+	public arc = (obj: any, settings?: IArcParams | any): ITween => arc(this, obj, settings);
+
+	/**
+	 * Path Animation
+	 *
+	 * @exports
+	 * @param {any} obj
+	 * @param {IPathParams} settings
+	 * @returns {ISequence}
+	 */
+	public path = (obj: any, settings?: IPathParams | any): ISequence => path(this, obj, settings);
+
 	/**
 	 * Method used when Fatina is used for the first time.
 	 * Can take few ms. (pool initialization & object creation)
@@ -367,7 +398,9 @@ export class Fatina {
 	 */
 	private updateLoop(timestamp: number) {
 		this.dt += timestamp - this.lastTime;
-		if (this.dt > this.settings.maxDt) {
+		if (this.dt > this.settings.maxDt / 2 && this.lastTime === 0) {
+			this.dt = 0;
+		} else if (this.dt > this.settings.maxDt) {
 			console.warn(`dt too high ${Math.round(this.dt)}ms. , Capped to ${this.settings.maxDt}ms.`);
 			this.dt = this.settings.maxDt;
 		}

@@ -137,7 +137,7 @@ e.outQuint = (t: number): number => {
 	return --t * t * t * t * t + 1;
 };
 
-e.InOutQuint = (t: number): number => {
+e.inOutQuint = (t: number): number => {
 	t *= 2;
 	if (t < 1) {
 		return 0.5 * t * t * t * t * t;
