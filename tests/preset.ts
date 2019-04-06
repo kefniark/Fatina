@@ -1,7 +1,7 @@
 import * as test from 'tape';
 import { Test } from 'tape';
-import { Fatina } from '../../src/fatina';
-import { get, IFatinaPluginPreset } from '../../src/plugins/preset';
+import { Fatina } from '../src/fatina';
+import { get, IFatinaPluginPreset } from '../src/plugins/preset';
 
 const src = new Fatina();
 src.init(false);
