@@ -1,7 +1,6 @@
 "use strict";
 
 const path = require("path");
-const ClosurePlugin = require("closure-webpack-plugin");
 const WebpackShellPlugin = require("webpack-shell-plugin");
 const TypedocWebpackPlugin = require("typedoc-webpack-plugin");
 const WebpackAutoInject = require("webpack-auto-inject-version");
@@ -56,15 +55,5 @@ module.exports = {
 				}
 			}
 		})
-	],
-	optimization: {
-		concatenateModules: false,
-		minimizer: [
-			new ClosurePlugin({
-				mode: "STANDARD"
-			}, {
-				languageOut: "ECMASCRIPT6"
-			})
-		]
-	}
+	]
 };

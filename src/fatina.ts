@@ -173,10 +173,9 @@ export class Fatina {
 		}
 
 		if (typeof(window) !== 'undefined' && !disableAutoTick) {
+			console.log(' %c Fatina - Tweening library for games (' + this.version + ') https://github.com/kefniark/Fatina ', 'background: #222; color: #9fbff4; padding: 5px');
 			lastFrame = requestFrame(this.updateLoop.bind(this));
 		}
-
-		console.log(' %c Fatina - Tweening library for games (' + this.version + ') https://github.com/kefniark/Fatina ', 'background: #222; color: #9fbff4; padding: 5px');
 
 		this.initialized = true;
 		return true;

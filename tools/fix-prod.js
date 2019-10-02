@@ -9,6 +9,6 @@ const replace = require("replace-in-file");
 // fix build/fatina.min.js
 replace({
     files: "build/fatina.min.js",
-    from: /:c.Fatina=d\(\)\}/g,
-    to: ":c.Fatina=d().default}"
+    from: /:t.Fatina=e\(\)\}/g,
+    to: ":t.Fatina=e().default}"
 });

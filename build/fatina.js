@@ -1,4 +1,4 @@
-// [Fatina]  Build: 3.0.0-beta.1 - Sunday, March 10th, 2019, 9:19:23 PM  
+// [Fatina]  Build: 3.0.0-beta.2 - Thursday, October 3rd, 2019, 2:11:41 AM  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -465,7 +465,7 @@ class Fatina {
         /**
          * @readonly
          */
-        this.version = '3.0.0-beta.1';
+        this.version = '3.0.0-beta.2';
         this.time = 0;
         /**
          * @private
@@ -551,9 +551,9 @@ class Fatina {
             this.manager.start();
         }
         if (typeof (window) !== 'undefined' && !disableAutoTick) {
+            console.log(' %c Fatina - Tweening library for games (' + this.version + ') https://github.com/kefniark/Fatina ', 'background: #222; color: #9fbff4; padding: 5px');
             lastFrame = requestFrame(this.updateLoop.bind(this));
         }
-        console.log(' %c Fatina - Tweening library for games (' + this.version + ') https://github.com/kefniark/Fatina ', 'background: #222; color: #9fbff4; padding: 5px');
         this.initialized = true;
         return true;
     }
@@ -932,7 +932,7 @@ function sonarPreset(fatina, obj, settings) {
         amplitude: 4,
         duration: 2000
     };
-    const pa = Object.assign({}, defaults, (settings || {}));
+    const pa = Object.assign(Object.assign({}, defaults), (settings || {}));
     const rs = getRoot(obj, pa.scaleX);
     const ra = getRoot(obj, pa.alpha);
     const sx = getProp(pa.scaleX);
@@ -969,7 +969,7 @@ function pulsePreset(fatina, obj, settings) {
         alpha: 'alpha',
         duration: 2000
     };
-    const pa = Object.assign({}, defaults, (settings || {}));
+    const pa = Object.assign(Object.assign({}, defaults), (settings || {}));
     const rootAlpha = getRoot(obj, pa.alpha);
     return fatina.tween(rootAlpha)
         .to(getData(pa.alpha, 0), pa.duration / 2)
@@ -1001,7 +1001,7 @@ function scalePreset(fatina, obj, settings) {
         friction: 2,
         sinX: 0
     };
-    const pa = Object.assign({}, defaults, (settings || {}));
+    const pa = Object.assign(Object.assign({}, defaults), (settings || {}));
     const root = getRoot(obj, pa.scaleX);
     const x = getProp(pa.scaleX);
     const y = getProp(pa.scaleY);
@@ -1032,7 +1032,7 @@ exports.scalePreset = scalePreset;
  */
 function wobblePreset(fatina, obj, settings) {
     const defaults = { sinX: Math.PI };
-    return scalePreset(fatina, obj, Object.assign({}, defaults, (settings || {})));
+    return scalePreset(fatina, obj, Object.assign(Object.assign({}, defaults), (settings || {})));
 }
 exports.wobblePreset = wobblePreset;
 /**
@@ -1054,7 +1054,7 @@ function shakePreset(fatina, obj, settings) {
         bounce: 10,
         friction: 2
     };
-    const pa = Object.assign({}, defaults, (settings || {}));
+    const pa = Object.assign(Object.assign({}, defaults), (settings || {}));
     const root = getRoot(obj, pa.posX);
     const x = getProp(pa.posX);
     const y = getProp(pa.posY);
