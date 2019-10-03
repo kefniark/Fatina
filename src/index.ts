@@ -1,4 +1,16 @@
 import { Fatina } from './fatina';
+/**
+ * @export
+ * @ignore
+ */
+export default new Fatina();
 
-// Expose fatina
-export = new Fatina();
+/**
+ * @export
+ */
+export { EasingType } from './easing/easingType';
+
+/**
+ * @export
+ */
+export { ITween } from './core/interfaces/ITween';

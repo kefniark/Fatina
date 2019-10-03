@@ -6,6 +6,7 @@ Small & Light tweening library for **Games** / **Web**
 * **Website**: [Here](https://kefniark.github.io/Fatina/)
 * **API**: [Here](https://kefniark.github.io/Fatina/api/basic/)
 * **Samples**: [Here](https://kefniark.github.io/Fatina/samples/generic/)
+* **Online Demo**: [Here](https://runkit.com/kefniark/runkit-npm-fatina)
 
 [![NPM Version](https://img.shields.io/npm/v/fatina.svg)](https://npmjs.org/package/fatina)
 [![NPM Downloads](https://img.shields.io/npm/dm/fatina.svg)](https://npmjs.org/package/fatina)
@@ -39,7 +40,7 @@ And load it with
 var Fatina = require('fatina');
 // OR
 // standard import with typescript (typed version)
-import * as Fatina from 'fatina';
+import Fatina from 'fatina';
 ```
 * [More Information](https://kefniark.github.io/Fatina/basics/download/)
 
@@ -56,3 +57,32 @@ Fatina.tween(sprite)
 ```
 * [Documentation](https://kefniark.github.io/Fatina/api/basic/)
 * [Samples](https://kefniark.github.io/Fatina/samples/generic/)
+
+---
+
+## Development
+
+### Getting Started
+If you want to take a look at the code or help, it's quite easy to get started
+
+```sh
+npm install
+npm run dev
+```
+
+This will start a server on http://localhost:8080/ where you can test few samples with the current version
+
+### Tests
+When you are done with your change, just make sure to run tests `npm run test`
+
+### Other
+
+To make a build (generated in `build/`)
+```sh
+npm run build
+```
+
+To generate the **API docs** (generated in `build/docs/`)
+```sh
+npm run docs
+```

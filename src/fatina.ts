@@ -7,6 +7,7 @@ import { ISequence } from './core/interfaces/ISequence';
 import { ISettings } from './core/interfaces/ISettings';
 import { ITicker } from './core/interfaces/ITicker';
 import { ITween } from './core/interfaces/ITween';
+import { pulsePreset, scalePreset, shakePreset, sonarPreset, wobblePreset } from './preset';
 import { Ticker } from './ticker';
 import { Delay } from './tweens/delay';
 import { Sequence } from './tweens/sequence';
@@ -15,8 +16,22 @@ import { Tween } from './tweens/tween';
 /**
  * This part manage the auto-update loop if necessary (browser only)
  */
+/**
+ * @ignore
+ * @private
+ */
 let lastFrame: any;
+/**
+ * @ignore
+ * @private
+ * @const
+ */
 let requestFrame: any;
+/**
+ * @ignore
+ * @private
+ * @const
+ */
 let cancelFrame: any;
 if (typeof(window) !== 'undefined') {
 	requestFrame = window.requestAnimationFrame || (window as any).mozRequestAnimationFrame
@@ -32,11 +47,24 @@ if (typeof(window) !== 'undefined') {
  */
 export class Fatina {
 	// plugins
+	/**
+	 * @export
+	 */
 	public plugin: any = {};
+
+	/**
+	 * @private
+	 */
 	private readonly loadedPlugins: IPlugin[] = [];
+	/**
+	 * @private
+	 */
 	private readonly eventCreated: {(control: IControl): void}[] = [];
 
-	// settings
+	/**
+	 * Settings
+	 * @private
+	 */
 	private readonly settings = {
 		logLevel: Log.None,
 		safe: true,
@@ -47,11 +75,27 @@ export class Fatina {
 	} as ISettings;
 
 	// properties
+	/**
+	 * @readonly
+	 */
+	public version = '[AIV]{version}[/AIV]';
 	public time = 0;
+	/**
+	 * @private
+	 */
 	private dt = 0;
+	/**
+	 * @private
+	 */
 	private lastTime = 0;
+	/**
+	 * @private
+	 */
 	private initialized = false;
-	public manager: Ticker;
+	/**
+	 * @private
+	 */
+	private manager: Ticker;
 
 	public get elapsed(): number {
 		return this.manager.elapsed;
@@ -63,6 +107,52 @@ export class Fatina {
 		}
 		return this.manager;
 	}
+
+	/**
+	 * Pulse Animation
+	 *
+	 * @export
+	 * @param {any} obj
+	 * @param {any} settings
+	 * @returns {ISequence}
+	 */
+	public pulse = (obj: any, settings?: any): ISequence => pulsePreset(this, obj, settings);
+	/**
+	 * Strobe Animation
+	 *
+	 * @export
+	 * @param {any} obj
+	 * @param {any} settings
+	 * @returns {ITween}
+	 */
+	public scale = (obj: any, settings?: any): ITween => scalePreset(this, obj, settings);
+	/**
+	 * Wobble Animation
+	 *
+	 * @export
+	 * @param {any} obj
+	 * @param {any} settings
+	 * @returns {ITween}
+	 */
+	public wobble = (obj: any, settings?: any): ITween => wobblePreset(this, obj, settings);
+	/**
+	 * Sonar Animation
+	 *
+	 * @export
+	 * @param {any} obj
+	 * @param {any} settings
+	 * @returns {ITween}
+	 */
+	public sonar = (obj: any, settings?: any): ITween => sonarPreset(this, obj, settings);
+	/**
+	 * Sonar Animation
+	 *
+	 * @export
+	 * @param {any} obj
+	 * @param {any} settings
+	 * @returns {ISequence}
+	 */
+	public shake = (obj: any, settings?: any): ITween => shakePreset(this, obj, settings);
 
 	/**
 	 * Method used when Fatina is used for the first time.
@@ -83,6 +173,7 @@ export class Fatina {
 		}
 
 		if (typeof(window) !== 'undefined' && !disableAutoTick) {
+			console.log(' %c Fatina - Tweening library for games (' + this.version + ') https://github.com/kefniark/Fatina ', 'background: #222; color: #9fbff4; padding: 5px');
 			lastFrame = requestFrame(this.updateLoop.bind(this));
 		}
 
@@ -226,6 +317,7 @@ export class Fatina {
 	/**
 	 * Private method to set common data to every object (the parent ticker, safe mode, verbose mode)
 	 *
+	 * @private
 	 * @param {(IPlayable | ITween | ISequence)} obj
 	 */
 	private addContext(obj: IPlayable | ITween | ISequence): void {
@@ -265,6 +357,9 @@ export class Fatina {
 		return tick;
 	}
 
+	/**
+	 * @private
+	 */
 	private updateLoop(timestamp: number) {
 		this.dt += timestamp - this.lastTime;
 		if (this.dt > this.settings.maxDt) {
@@ -303,6 +398,9 @@ export class Fatina {
 		this.info(Log.Debug, 'Plugin Loaded', newPlugin.name);
 	}
 
+	/**
+	 * @private
+	 */
 	private info(level: Log, message: string, data?: any) {
 		if (level > this.settings.logLevel) {
 			return;
@@ -314,6 +412,9 @@ export class Fatina {
 		}
 	}
 
+	/**
+	 * @private
+	 */
 	private emit(func: any, control: IControl) {
 		if (!this.settings.safe) {
 			return func(control);
@@ -326,6 +427,9 @@ export class Fatina {
 		}
 	}
 
+	/**
+	 * @private
+	 */
 	private emitCreated(control: IControl) {
 		for (const event of this.eventCreated) {
 			this.emit(event, control);
@@ -334,6 +438,7 @@ export class Fatina {
 
 	/**
 	 * Add a listener method on tween/sequence creation
+	 * (Used by plugin as a factory hook)
 	 *
 	 * @export
 	 * @param {(control: IControl) => void} cb
@@ -344,6 +449,7 @@ export class Fatina {
 
 	/**
 	 * Remove a listener method on tween/sequence creation
+	 * (Used by plugin as a factory hook)
 	 *
 	 * @export
 	 * @param {(control: IControl) => void} cb

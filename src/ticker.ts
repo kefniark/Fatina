@@ -12,14 +12,32 @@ import { ITicker } from './core/interfaces/ITicker';
  */
 export class Ticker implements ITicker {
 	public state = State.Idle;
+	/**
+	 * @private
+	 */
 	private timescale = 1;
 	public elapsed = 0;
 	public duration = 0;
 
+	/**
+	 * @private
+	 */
 	private tickCb: (dt: number) => void | undefined;
+	/**
+	 * @private
+	 */
 	private readonly ticks: Set<(dt: number) => void> = new Set();
+	/**
+	 * @private
+	 */
 	private readonly newTicks: Set<(dt: number) => void> = new Set();
+	/**
+	 * @private
+	 */
 	private parent: ITicker;
+	/**
+	 * @private
+	 */
 	private dt: number = 0;
 
 	public setParent(parent: ITicker, tick: (dt: number) => void) {
@@ -31,8 +49,6 @@ export class Ticker implements ITicker {
 	 * Method used to change the timescale
 	 *
 	 * @param {number} scale
-	 *
-	 * @memberOf Ticker
 	 */
 	public setTimescale(scale: number): void {
 		this.timescale = scale;
@@ -42,8 +58,6 @@ export class Ticker implements ITicker {
 	 * Method used by the child to be updated
 	 *
 	 * @param {(dt: number) => void} cb
-	 *
-	 * @memberOf Ticker
 	 */
 	public addTick(cb: (dt: number) => void): void {
 		this.newTicks.add(cb);
@@ -53,8 +67,6 @@ export class Ticker implements ITicker {
 	 * Method used by the child to not receive update anymore
 	 *
 	 * @param {(dt: number) => void} cb
-	 *
-	 * @memberOf Ticker
 	 */
 	public removeTick(cb: (dt: number) => void): void {
 		if (!this.ticks.delete(cb)) {
@@ -67,8 +79,6 @@ export class Ticker implements ITicker {
 	 *
 	 * @param {number} dt
 	 * @returns
-	 *
-	 * @memberOf Ticker
 	 */
 	public tick(dt: number) {
 		if (this.state !== State.Run) {

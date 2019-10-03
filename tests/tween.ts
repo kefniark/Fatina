@@ -9,7 +9,7 @@ import { Tween } from '../src/tweens/tween';
 
 test('[Fatina.Tween] Get tween data', (t: Test) => {
 	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
-	const dest = { x: 44, y: 44 };
+	const dest = { x: 44, y: 44, nano: 1 };
 
 	const ticker = new Ticker();
 	ticker.start();
@@ -607,6 +607,30 @@ test('[Fatina.Tween] Test Yoyo 2', (t: Test) => {
 		.start();
 	ticker.tick(2.5);
 	tween.reset();
+
+	t.end();
+});
+
+test('[Fatina.Tween] Test Yoyo Infinite', (t: Test) => {
+	const ticker = new Ticker();
+	ticker.start();
+
+	const obj = { x: 0 };
+	let complete = 0;
+	const tween = new Tween(obj)
+		.setRelative(true)
+		.to({ x: 10 }, 5)
+		.yoyo(-1)
+		.setParent(ticker)
+		.onComplete(() => complete++)
+		.start();
+
+	ticker.tick(2.5);
+	t.equal(obj.x, 5);
+	ticker.tick(10000);
+	t.equal(obj.x, 5);
+
+	t.ok(!tween.isFinished);
 
 	t.end();
 });

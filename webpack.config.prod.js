@@ -1,28 +1,9 @@
 "use strict";
 
 const path = require("path");
-const webpack = require("webpack");
-
-// Generate the description file d.ts
-function DtsBundlePlugin() { }
-DtsBundlePlugin.prototype.apply = function (compiler) {
-	compiler.plugin("done", function () {
-		var dts = require("dts-bundle");
-
-		dts.bundle({
-			name: "Fatina",
-			baseDir: "lib",
-			main: "./lib/src/index.d.ts",
-			out: "../build/fatina.d.ts",
-			exclude: (file, external) => {
-				return file.indexOf("tests") !== -1;
-			},
-			removeSource: true,
-			verbose: false,
-			outputAsModuleFolder: true // to use npm in-package typings
-		});
-	});
-};
+const WebpackShellPlugin = require("webpack-shell-plugin");
+const TypedocWebpackPlugin = require("typedoc-webpack-plugin");
+const WebpackAutoInject = require("webpack-auto-inject-version");
 
 module.exports = {
 	mode: "production",
@@ -49,6 +30,30 @@ module.exports = {
 		]
 	},
 	plugins: [
-		new DtsBundlePlugin()
+		new WebpackShellPlugin({
+			onBuildEnd: ["node tools/fix-prod.js"]
+		}),
+		new TypedocWebpackPlugin({
+			name: "Fatina",
+			theme: "minimal",
+			out: "./docs",
+			mode: "file",
+			excludePrivate: true,
+			excludeProtected: true
+		}, "./src/"),
+		new WebpackAutoInject({
+			SHORT: "Fatina",
+			SILENT: true,
+			components: {
+				AutoIncreaseVersion: false,
+				InjectAsComment: true,
+				InjectByTag: true
+			},
+			componentsOptions: {
+				InjectAsComment: {
+					tag: "Build: {version} - {date}"
+				}
+			}
+		})
 	]
 };

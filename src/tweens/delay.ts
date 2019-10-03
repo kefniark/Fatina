@@ -10,14 +10,28 @@ import { BaseTween } from './baseTween';
  * @implements {IPlayable}
  */
 export class Delay extends BaseTween<Delay> implements IPlayable {
+	/**
+	 * @private
+	 */
 	private remains = 0;
 
+	/**
+	 * Creates an instance of Delay.
+	 *
+	 * @param {number} duration
+	 */
 	constructor(duration: number) {
 		super();
 		this.duration = duration;
 		this.tickCb = this.tick.bind(this);
 	}
 
+	/**
+	 * @private
+	 * @param {number} dt
+	 * @returns
+	 * @memberof Delay
+	 */
 	private tick(dt: number) {
 		this.remains = dt * this.timescale;
 

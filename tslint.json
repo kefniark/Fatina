@@ -15,7 +15,7 @@
 		// code style
 		"class-name": true,
 		"interface-name": [true, "always-prefix"],
-		"variable-name": [true, "ban-keywords", "check-format"],
+		"variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
 		"semicolon": [true, "always"],
 		"indent": [true, "tabs", 4],
 		"quotemark": [true, "single"],
@@ -48,7 +48,7 @@
 		"no-unnecessary-callback-wrapper": true,
 		"no-unnecessary-initializer": false,
 		"cyclomatic-complexity": [true, 20],
-		"max-file-line-count": [true, 800],
+		"max-file-line-count": [true, 1000],
 		"max-line-length": [true, 200],
 
 		// unused

@@ -1,0 +1,23 @@
+# Remove IDE
+.idea/
+.nyc_output/
+coverage/
+node_modules/
+public/
+lib/
+
+.DS_Store
+npm-debug.log
+
+# remove dev code from npm publish
+.vscode
+samples/
+src/
+tests/
+tools/
+.coveralls.yml
+.travis.yml
+tsconfig.json
+tslint.json
+webpack.config.dev.js
+webpack.config.prod.js
