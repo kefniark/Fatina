@@ -19,19 +19,15 @@ Small & Light tweening library for **Games** / **Web**
 ## Description
 A comprehensive and easy to use animation library for **Typescript** / **Javascript**
 
-* Easy to use (API strongly inspired by Dotween)
+* Easy to use, API strongly inspired by [Dotween (C# tweening library)](http://dotween.demigiant.com/documentation.php)
 * Lightweight with no dependencies ( < 20KB )
 * Unit tested + code coverage
-* Open source and MIT License (use it as you please)
+* Open source and MIT License
 
 ## Getting Started
 
 ### Install
-If you want to use the CDN version:
-```ts
-<script src="https://cdn.jsdelivr.net/npm/fatina/build/fatina.min.js"></script>
-```
-Or if you use NPM
+If you use NPM
 ```ts
 > npm install fatina
 ```
@@ -42,6 +38,10 @@ import Fatina from 'fatina';
 // OR
 // standard node.js require
 var fatina = require('fatina').default;
+```
+And if you want to use the CDN version:
+```ts
+<script src="https://cdn.jsdelivr.net/npm/fatina/build/fatina.min.js"></script>
 ```
 * [More Information](https://kefniark.github.io/Fatina/basics/download/)
 
