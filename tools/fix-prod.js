@@ -9,6 +9,12 @@ const replace = require("replace-in-file");
 // fix build/fatina.min.js
 replace({
     files: "build/fatina.min.js",
-    from: /:t.Fatina=e\(\)\}/g,
-    to: ":t.Fatina=e().default}"
+    from: /.\.Fatina=.\(\)\}/g,
+    to: (match) => {
+		var src = match;
+		match = match.slice(0, -1);
+		match += ".default}";
+		console.log('Fix Import: ', src, '=>', match);
+		return match;
+	}
 });

@@ -9,7 +9,7 @@ import { Tween } from '../src/tweens/tween';
 
 test('[Fatina.Tween] Get tween data', (t: Test) => {
 	const obj = { name: 'nano', x: 22, y: -42, alpha: 1 };
-	const dest = { x: 44, y: 44 };
+	const dest = { x: 44, y: 44, nano: 1 };
 
 	const ticker = new Ticker();
 	ticker.start();

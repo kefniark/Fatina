@@ -1,7 +1,7 @@
 {
   "name": "fatina",
   "description": "Small & Light tweening library for web / games",
-  "version": "3.0.0-beta.2",
+  "version": "3.0.0",
   "homepage": "https://kefniark.github.io/Fatina/",
   "main": "build/fatina.js",
   "types": "build/declarations/src/index.d.ts",
@@ -76,7 +76,7 @@
     "webpack": "^4.41.0",
     "webpack-auto-inject-version": "^1.2.2",
     "webpack-cli": "^3.3.9",
-    "webpack-dev-server": "^3.8.1",
+    "webpack-dev-server": "^3.8.2",
     "webpack-shell-plugin": "^0.5.0"
   },
   "nyc": {

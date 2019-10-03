@@ -1,4 +1,4 @@
-// [Fatina]  Build: 3.0.0-beta.2 - Thursday, October 3rd, 2019, 2:11:41 AM  
+// [Fatina]  Build: 3.0.0 - Thursday, October 3rd, 2019, 9:56:12 PM  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -465,7 +465,7 @@ class Fatina {
         /**
          * @readonly
          */
-        this.version = '3.0.0-beta.2';
+        this.version = '3.0.0';
         this.time = 0;
         /**
          * @private
