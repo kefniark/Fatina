@@ -26,7 +26,7 @@ let lastFrame: any;
  * @private
  * @const
  */
-let requestFrame: any;
+let raf: any;
 /**
  * @ignore
  * @private
@@ -34,7 +34,7 @@ let requestFrame: any;
  */
 let cancelFrame: any;
 if (typeof(window) !== 'undefined') {
-	requestFrame = window.requestAnimationFrame || (window as any).mozRequestAnimationFrame
+	raf = window.requestAnimationFrame || (window as any).mozRequestAnimationFrame
 		|| window.webkitRequestAnimationFrame || (window as any).msRequestAnimationFrame;
 	cancelFrame = window.cancelAnimationFrame || (window as any).mozCancelAnimationFrame;
 }
@@ -172,9 +172,17 @@ export class Fatina {
 			this.manager.start();
 		}
 
+		// browser init requestAnimationFrame, after onLoad() event
 		if (typeof(window) !== 'undefined' && !disableAutoTick) {
 			console.log(' %c Fatina - Tweening library for games (' + this.version + ') https://github.com/kefniark/Fatina ', 'background: #222; color: #9fbff4; padding: 5px');
-			lastFrame = requestFrame(this.updateLoop.bind(this));
+			this.lastTime = -1;
+			if (document.readyState !== 'loading') {
+				lastFrame = raf(this.updateLoop.bind(this));
+			} else {
+				document.addEventListener('DOMContentLoaded', () => {
+					lastFrame = raf(this.updateLoop.bind(this));
+				});
+			}
 		}
 
 		this.initialized = true;
@@ -361,7 +369,8 @@ export class Fatina {
 	 * @private
 	 */
 	private updateLoop(timestamp: number) {
-		this.dt += timestamp - this.lastTime;
+		this.dt = this.lastTime < 0 ? 16 : this.dt + timestamp - this.lastTime;
+
 		if (this.dt > this.settings.maxDt) {
 			console.warn(`dt too high ${Math.round(this.dt)}ms. , Capped to ${this.settings.maxDt}ms.`);
 			this.dt = this.settings.maxDt;
@@ -383,7 +392,7 @@ export class Fatina {
 		}
 
 		this.lastTime = timestamp;
-		lastFrame = requestFrame(this.updateLoop.bind(this));
+		lastFrame = raf(this.updateLoop.bind(this));
 	}
 
 	/**
