@@ -1,5 +1,4 @@
 +++
-date = "2017-05-21T13:06:37+09:00"
 title = "Fatina API"
 toc = true
 weight = 2
@@ -26,6 +25,11 @@ If instead you prefer to initialize it yourself (recommended), call the method <
 * **update**(dt: number): `void`
 * **tween**(obj): `Tween` <small>Method used to create new tween</small>
 * **sequence**(): `Sequence` <small>Method used to create new sequence</small>
+* **pulse**(obj, settings): `ISequence` Pulse preset
+* **scale**(obj, settings): `ISequence` Scale preset
+* **wobble**(obj, settings): `ISequence` Wobble preset
+* **sonar**(obj, settings): `ISequence` Sonar preset
+* **shake**(obj, settings): `ISequence` Shake preset
 * **delay**(duration) `Delay`
 * **setTimeout**(fn, duration): `void` This is just a simple helper around Fatina.Delay
 * **setInterval**(fn, duration): `void` This is just a simple helper around Fatina.Delay

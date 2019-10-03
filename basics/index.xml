@@ -5,7 +5,6 @@
     <link>https://kefniark.github.io/Fatina/basics/</link>
     <description>Recent content in Basics on Fatina</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sun, 21 May 2017 13:06:37 +0900</lastBuildDate>
     
 	<atom:link href="https://kefniark.github.io/Fatina/basics/index.xml" rel="self" type="application/rss+xml" />
     
@@ -13,16 +12,16 @@
     <item>
       <title>Benchmark</title>
       <link>https://kefniark.github.io/Fatina/basics/benchmark/</link>
-      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/basics/benchmark/</guid>
-      <description>Tween counter: ~0kRun AllWhat is happening here:Bellow, 5 scenario are tested over different configuration / libraries:1. Normal usage : 200 tween over 100 frames x 50 times2. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC)3. Medium usage : 2k tween over 200 frames x 5 times4. Heavy usage : 5k tween over 200 frames x 5 times5.</description>
+      <description>Tween counter: ~0k  Run All What is happening here: Bellow, 5 scenario are tested over different configuration / libraries:  1. Normal usage : 200 tween over 100 frames x 50 times 2. Long duration usage : 1000 tween over 500 frames x 100 times (to test long term usage and GC) 3. Medium usage : 2k tween over 200 frames x 5 times 4. Heavy usage : 5k tween over 200 frames x 5 times 5.</description>
     </item>
     
     <item>
       <title>Getting Started</title>
       <link>https://kefniark.github.io/Fatina/basics/download/</link>
-      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/basics/download/</guid>
       <description>1. Manual Installation Download the library and include it in your code:
@@ -35,7 +34,7 @@ npm install fatina  Then include the Fatina module :
     <item>
       <title>About Fatina</title>
       <link>https://kefniark.github.io/Fatina/basics/about/</link>
-      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/basics/about/</guid>
       <description>Special thanks to  Unity-chan for all those sprites, thanks to her I was able to make cute samples &amp;hellip; Tina.js who made me rage so much with all those nasty bugs everywhere  Why this name ?  Fat Tina: Because everyone knows typescript is fat, heavy and slow Reference to Fatina from Tower of Druaga    License MIT License A short and simple permissive licence with conditions only requiring preservation of copyright and licence notices.</description>
@@ -44,7 +43,7 @@ npm install fatina  Then include the Fatina module :
     <item>
       <title>Tips</title>
       <link>https://kefniark.github.io/Fatina/basics/tips/</link>
-      <pubDate>Sun, 21 May 2017 13:06:37 +0900</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/basics/tips/</guid>
       <description>How to write tweens ?  Keep them simple: a Tween should do only one thing (avoid nesting and complexity) Split them in smaller tween to have more control (like splitting a x and y movement in two separated tweens) Group them in Sequence and prefer using .append() and .join() When you destroy an object like a sprite, Try to clean tweens related Avoid SetTimeout() and prefer Fatina.setTimeout(): All the objects/events should be ticked together, normal settimeout cannot be paused &amp;hellip;  How to go farther ?</description>

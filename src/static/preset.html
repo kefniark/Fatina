@@ -1,0 +1,151 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
+
+<div class="menu">
+    <input class="button" type="button" onclick="wobble()" value="Wobble"/>
+    <input class="button" type="button" onclick="scale()" value="Scale"/>
+    <input class="button" type="button" onclick="pulse()" value="Pulse"/>
+    <input class="button" type="button" onclick="sonar()" value="Sonar"/>
+    <input class="button" type="button" onclick="shake()" value="Shake"/>
+</div>
+
+<br/>
+
+<div style="text-align:center">
+    <div id="demo-container"></div>
+</div>
+
+<script>
+    let bunny1;
+    let bunny2;
+
+    let t1;
+    let t2;
+
+    function init() {
+        // The application will create a renderer using WebGL, if possible,
+        // with a fallback to a canvas render. It will also setup the ticker
+        // and the root stage PIXI.Container
+        const app = new PIXI.Application();
+
+        // The application will create a canvas element for you that you
+        // can then insert into the DOM
+        document.getElementById('demo-container').appendChild(app.view);
+
+        // This creates a texture from a 'bunny.png' image
+        bunny1 = new PIXI.Sprite.fromImage('https://pixijs.io/examples/examples/assets/bunny.png')
+
+        // Setup the position of the bunny
+        bunny1.x = app.renderer.width / 2 - 65;
+        bunny1.y = app.renderer.height / 2;
+
+        // Rotate around the center
+        bunny1.anchor.x = 0.5;
+        bunny1.anchor.y = 0.5;
+
+        bunny1.scale.x = 2;
+        bunny1.scale.y = 2;
+
+        // This creates a texture from a 'bunny.png' image
+        bunny2 = new PIXI.Sprite.fromImage('https://pixijs.io/examples/examples/assets/bunny.png')
+
+        // Setup the position of the bunny
+        bunny2.x = app.renderer.width / 2 + 65;
+        bunny2.y = app.renderer.height / 2;
+
+        // Rotate around the center
+        bunny2.anchor.x = 0.5;
+        bunny2.anchor.y = 0.5;
+
+        bunny2.scale.x = 3;
+        bunny2.scale.y = 3;
+
+        // Add the bunny to the scene we are building
+        app.stage.addChild(bunny1);
+        app.stage.addChild(bunny2);
+    }
+
+    function wobble() {
+        if (t1) t1.kill();
+        if (t2) t2.kill();
+
+        t1 = Fatina.wobble(bunny1, {
+            scaleFactor: 1.5,
+            duration: 1200,
+            bounce: 5,
+            friction: 1.5
+        }).setLoop(3).start();
+
+        t2 = Fatina.wobble(bunny2, {
+            scaleFactor: 0.6,
+            duration: 2500,
+            bounce: 8,
+            friction: 0.6
+        }).setLoop(3).start();
+    }
+
+    function scale() {
+        if (t1) t1.kill();
+        if (t2) t2.kill();
+
+        t1 = Fatina.scale(bunny1, {
+            scaleFactor: 1,
+            duration: 1200,
+            friction: 1.5
+        }).setLoop(3).start();
+
+        t2 = Fatina.scale(bunny2, {
+            scaleFactor: 2.5,
+            duration: 2500,
+            bounce: 15
+        }).setLoop(3).start();
+    }
+
+    function pulse() {
+        if (t1) t1.kill();
+        if (t2) t2.kill();
+
+        t1 = Fatina.pulse(bunny1, {
+            duration: 200
+        }).setLoop(3).start();
+
+        t2 = Fatina.pulse(bunny2, {
+            duration: 2500,
+            number: 5
+        }).setLoop(3).start();
+    }
+
+    function sonar() {
+        if (t1) t1.kill();
+        if (t2) t2.kill();
+
+        t1 = Fatina.sonar(bunny1, {
+            duration: 1200
+        }).setLoop(3).start();
+
+        t2 = Fatina.sonar(bunny2, {
+            duration: 2500,
+            scaleFactor: 2,
+            number: 4
+        }).setLoop(3).start();
+    }
+
+    function shake() {
+        if (t1) t1.kill();
+        if (t2) t2.kill();
+
+        t1 = Fatina.shake(bunny1, {
+            amplitude: 15,
+            duration: 1200
+        }).setLoop(3).start();
+
+        t2 = Fatina.shake(bunny2, {
+            duration: 2500,
+            bounce: 3,
+            scaleFactor: 2,
+            amplitude: 40,
+            number: 4
+        }).setLoop(3).start();
+    }
+
+    init();
+</script>

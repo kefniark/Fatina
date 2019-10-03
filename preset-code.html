@@ -1,0 +1,43 @@
+// Wobble (based on `.scale.x`, `.scale.y` properties)
+var sequenceWobble = Fatina.wobble(sprite, {
+    scaleFactor: 1.5,
+    duration: 1200,
+    bounce: 5,
+    friction: 1.5
+});
+
+// Scale (based on `.scale.x`, `.scale.y` properties)
+var sequenceScale = Fatina.scale(sprite, {
+    scaleFactor: 1,
+    duration: 1200,
+    friction: 1.5
+});
+
+// Pulse (based on `.alpha` property)
+var sequencePulse = Fatina.pulse(sprite, {
+    duration: 200,
+    number: 5
+});
+
+// Sonar (based on `.alpha`, `.scale.x`, `.scale.y` properties)
+var sequenceSonar = Fatina.sonar(sprite, {
+    duration: 2500,
+    scaleFactor: 2,
+    number: 4
+});
+
+// Shake (based on `.position.x`, `.position.y` properties)
+var sequenceShake = Fatina.shake(sprite, {
+    duration: 2500,
+    bounce: 3,
+    scaleFactor: 2,
+    amplitude: 40,
+    number: 4
+});
+
+// start sequences
+sequenceWobble.start();
+sequenceScale.start();
+sequencePulse.start();
+sequenceSonar.start();
+sequenceShake.start();

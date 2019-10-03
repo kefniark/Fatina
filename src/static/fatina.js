@@ -1,4 +1,5 @@
-(function webpackUniversalModuleDefinition(root, factory) {
+// [Fatina]  Build: 3.0.0 - Thursday, October 3rd, 2019, 9:56:12 PM  
+ (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -6,7 +7,7 @@
 	else if(typeof exports === 'object')
 		exports["Fatina"] = factory();
 	else
-		root["Fatina"] = factory();
+		root["Fatina"] = factory().default;
 })(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -112,9 +113,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Mostly based on http://easings.net/
  */
 // tslint:disable:no-parameter-reassignment
+/**
+ * @ignore
+ * @private
+ * @const
+ * @readonly
+ */
 const PI = Math.PI;
+/**
+ * @ignore
+ * @private
+ * @const
+ * @readonly
+ */
 const PI_OVER_TWO = Math.PI / 2;
+/**
+ * @ignore
+ * @private
+ * @const
+ * @readonly
+ */
 const BACK = 1.70158;
+/**
+ * @ignore
+ * @private
+ * @const
+ * @readonly
+ */
 const e = {};
 // Linear
 e.linear = (t) => {
@@ -309,6 +334,60 @@ exports.easeNames = e;
 
 /***/ }),
 
+/***/ "./src/easing/easingType.ts":
+/*!**********************************!*\
+  !*** ./src/easing/easingType.ts ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * List of all easing methods
+ *
+ * @export
+ * @enum {number}
+ */
+var EasingType;
+(function (EasingType) {
+    EasingType["Linear"] = "linear";
+    EasingType["InQuad"] = "inQuad";
+    EasingType["OutQuad"] = "outQuad";
+    EasingType["InOutQuad"] = "inOutQuad";
+    EasingType["InCubic"] = "inCubic";
+    EasingType["OutCubic"] = "outCubic";
+    EasingType["InOutCubic"] = "inOutCubic";
+    EasingType["InQuart"] = "inQuart";
+    EasingType["OutQuart"] = "outQuart";
+    EasingType["InOutQuart"] = "inOutQuart";
+    EasingType["InSine"] = "inSine";
+    EasingType["OutSine"] = "outSine";
+    EasingType["InOutSine"] = "inOutSine";
+    EasingType["InCirc"] = "inCirc";
+    EasingType["OutCirc"] = "outCirc";
+    EasingType["InOutCirc"] = "inOutCirc";
+    EasingType["InQuint"] = "inQuint";
+    EasingType["OutQuint"] = "outQuint";
+    EasingType["InOutQuint"] = "inOutQuint";
+    EasingType["InExponential"] = "inExponential";
+    EasingType["OutExponential"] = "outExponential";
+    EasingType["InOutExponential"] = "inOutExponential";
+    EasingType["InElastic"] = "inElastic";
+    EasingType["OutElastic"] = "outElastic";
+    EasingType["InOutElastic"] = "inOutElastic";
+    EasingType["InBack"] = "inBack";
+    EasingType["OutBack"] = "outBack";
+    EasingType["InOutBack"] = "inOutBack";
+    EasingType["InBounce"] = "inBounce";
+    EasingType["OutBounce"] = "outBounce";
+    EasingType["InOutBounce"] = "inOutBounce";
+})(EasingType = exports.EasingType || (exports.EasingType = {}));
+
+
+/***/ }),
+
 /***/ "./src/fatina.ts":
 /*!***********************!*\
   !*** ./src/fatina.ts ***!
@@ -319,6 +398,7 @@ exports.easeNames = e;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const preset_1 = __webpack_require__(/*! ./preset */ "./src/preset.ts");
 const ticker_1 = __webpack_require__(/*! ./ticker */ "./src/ticker.ts");
 const delay_1 = __webpack_require__(/*! ./tweens/delay */ "./src/tweens/delay.ts");
 const sequence_1 = __webpack_require__(/*! ./tweens/sequence */ "./src/tweens/sequence.ts");
@@ -326,8 +406,22 @@ const tween_1 = __webpack_require__(/*! ./tweens/tween */ "./src/tweens/tween.ts
 /**
  * This part manage the auto-update loop if necessary (browser only)
  */
+/**
+ * @ignore
+ * @private
+ */
 let lastFrame;
+/**
+ * @ignore
+ * @private
+ * @const
+ */
 let requestFrame;
+/**
+ * @ignore
+ * @private
+ * @const
+ */
 let cancelFrame;
 if (typeof (window) !== 'undefined') {
     requestFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame
@@ -343,23 +437,93 @@ if (typeof (window) !== 'undefined') {
 class Fatina {
     constructor() {
         // plugins
+        /**
+         * @export
+         */
         this.plugin = {};
+        /**
+         * @private
+         */
         this.loadedPlugins = [];
+        /**
+         * @private
+         */
         this.eventCreated = [];
-        // settings
+        /**
+         * Settings
+         * @private
+         */
         this.settings = {
             logLevel: 0 /* None */,
             safe: true,
-            smooth: true,
+            smooth: false,
             maxFrameDt: 50,
             maxFrameNumber: 40,
-            maxDt: 15000 // 15s of animation
+            maxDt: 500 // 500ms of animation
         };
         // properties
+        /**
+         * @readonly
+         */
+        this.version = '3.0.0';
         this.time = 0;
+        /**
+         * @private
+         */
         this.dt = 0;
+        /**
+         * @private
+         */
         this.lastTime = 0;
+        /**
+         * @private
+         */
         this.initialized = false;
+        /**
+         * Pulse Animation
+         *
+         * @export
+         * @param {any} obj
+         * @param {any} settings
+         * @returns {ISequence}
+         */
+        this.pulse = (obj, settings) => preset_1.pulsePreset(this, obj, settings);
+        /**
+         * Strobe Animation
+         *
+         * @export
+         * @param {any} obj
+         * @param {any} settings
+         * @returns {ITween}
+         */
+        this.scale = (obj, settings) => preset_1.scalePreset(this, obj, settings);
+        /**
+         * Wobble Animation
+         *
+         * @export
+         * @param {any} obj
+         * @param {any} settings
+         * @returns {ITween}
+         */
+        this.wobble = (obj, settings) => preset_1.wobblePreset(this, obj, settings);
+        /**
+         * Sonar Animation
+         *
+         * @export
+         * @param {any} obj
+         * @param {any} settings
+         * @returns {ITween}
+         */
+        this.sonar = (obj, settings) => preset_1.sonarPreset(this, obj, settings);
+        /**
+         * Sonar Animation
+         *
+         * @export
+         * @param {any} obj
+         * @param {any} settings
+         * @returns {ISequence}
+         */
+        this.shake = (obj, settings) => preset_1.shakePreset(this, obj, settings);
     }
     get elapsed() {
         return this.manager.elapsed;
@@ -387,6 +551,7 @@ class Fatina {
             this.manager.start();
         }
         if (typeof (window) !== 'undefined' && !disableAutoTick) {
+            console.log(' %c Fatina - Tweening library for games (' + this.version + ') https://github.com/kefniark/Fatina ', 'background: #222; color: #9fbff4; padding: 5px');
             lastFrame = requestFrame(this.updateLoop.bind(this));
         }
         this.initialized = true;
@@ -516,6 +681,7 @@ class Fatina {
     /**
      * Private method to set common data to every object (the parent ticker, safe mode, verbose mode)
      *
+     * @private
      * @param {(IPlayable | ITween | ISequence)} obj
      */
     addContext(obj) {
@@ -548,6 +714,9 @@ class Fatina {
         this.emitCreated(tick);
         return tick;
     }
+    /**
+     * @private
+     */
     updateLoop(timestamp) {
         this.dt += timestamp - this.lastTime;
         if (this.dt > this.settings.maxDt) {
@@ -583,6 +752,9 @@ class Fatina {
         this.loadedPlugins.push(newPlugin);
         this.info(2 /* Debug */, 'Plugin Loaded', newPlugin.name);
     }
+    /**
+     * @private
+     */
     info(level, message, data) {
         if (level > this.settings.logLevel) {
             return;
@@ -594,6 +766,9 @@ class Fatina {
             console.log(message);
         }
     }
+    /**
+     * @private
+     */
     emit(func, control) {
         if (!this.settings.safe) {
             return func(control);
@@ -605,6 +780,9 @@ class Fatina {
             console.warn(e);
         }
     }
+    /**
+     * @private
+     */
     emitCreated(control) {
         for (const event of this.eventCreated) {
             this.emit(event, control);
@@ -612,6 +790,7 @@ class Fatina {
     }
     /**
      * Add a listener method on tween/sequence creation
+     * (Used by plugin as a factory hook)
      *
      * @export
      * @param {(control: IControl) => void} cb
@@ -621,6 +800,7 @@ class Fatina {
     }
     /**
      * Remove a listener method on tween/sequence creation
+     * (Used by plugin as a factory hook)
      *
      * @export
      * @param {(control: IControl) => void} cb
@@ -664,8 +844,236 @@ exports.Fatina = Fatina;
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", { value: true });
 const fatina_1 = __webpack_require__(/*! ./fatina */ "./src/fatina.ts");
-module.exports = new fatina_1.Fatina();
+/**
+ * @export
+ * @ignore
+ */
+exports.default = new fatina_1.Fatina();
+/**
+ * @export
+ */
+var easingType_1 = __webpack_require__(/*! ./easing/easingType */ "./src/easing/easingType.ts");
+exports.EasingType = easingType_1.EasingType;
+
+
+/***/ }),
+
+/***/ "./src/preset.ts":
+/*!***********************!*\
+  !*** ./src/preset.ts ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const easing_1 = __webpack_require__(/*! ./easing/easing */ "./src/easing/easing.ts");
+/**
+ * Get Root object
+ *
+ * @ignore
+ * @private
+ * @param {*} obj
+ * @param {string} property
+ * @returns
+ */
+function getRoot(obj, property) {
+    const path = property.split('.');
+    let ret = obj;
+    for (let i = 0; i < path.length - 1; i++) {
+        ret = ret[path[i]];
+    }
+    return ret;
+}
+/**
+ * Get Object Property
+ *
+ * @ignore
+ * @private
+ * @param {string} property
+ * @returns
+ */
+function getProp(property) {
+    const path = property.split('.');
+    return path[path.length - 1];
+}
+/**
+ * Get Object Property object
+ *
+ * @ignore
+ * @private
+ * @param {string} property
+ * @param {*} value
+ * @returns
+ */
+function getData(property, value) {
+    const data = {};
+    data[getProp(property)] = value;
+    return data;
+}
+/**
+ * Sonar Preset
+ *
+ * @ignore
+ * @export
+ * @param {Fatina} fatina
+ * @param {*} obj
+ * @param {ISonarPresetParams} [settings]
+ * @returns
+ */
+function sonarPreset(fatina, obj, settings) {
+    const defaults = {
+        alpha: 'alpha',
+        scaleX: 'scale.x',
+        scaleY: 'scale.y',
+        amplitude: 4,
+        duration: 2000
+    };
+    const pa = Object.assign(Object.assign({}, defaults), (settings || {}));
+    const rs = getRoot(obj, pa.scaleX);
+    const ra = getRoot(obj, pa.alpha);
+    const sx = getProp(pa.scaleX);
+    const sy = getProp(pa.scaleY);
+    const alpha = getProp(pa.alpha);
+    const src = { x: rs[sx], y: rs[sy] };
+    const p = easing_1.easeNames["outCubic" /* OutCubic */];
+    return fatina.tween({})
+        .to({}, pa.duration)
+        .onUpdate((_dt, progress) => {
+        ra[alpha] = 1 - easing_1.easeNames["inSine" /* InSine */](progress);
+        rs[sx] = src.x + pa.amplitude * p(progress);
+        rs[sy] = src.y + pa.amplitude * p(progress);
+    })
+        .onKilled(() => {
+        ra[alpha] = 1;
+        rs[sx] = src.x;
+        rs[sy] = src.y;
+    });
+}
+exports.sonarPreset = sonarPreset;
+/**
+ * Pulse Preset
+ *
+ * @ignore
+ * @export
+ * @param {Fatina} fatina
+ * @param {*} obj
+ * @param {IPulsePresetParams} [settings]
+ * @returns
+ */
+function pulsePreset(fatina, obj, settings) {
+    const defaults = {
+        alpha: 'alpha',
+        duration: 2000
+    };
+    const pa = Object.assign(Object.assign({}, defaults), (settings || {}));
+    const rootAlpha = getRoot(obj, pa.alpha);
+    return fatina.tween(rootAlpha)
+        .to(getData(pa.alpha, 0), pa.duration / 2)
+        .setEasing("inOutQuad" /* InOutQuad */)
+        .toSequence()
+        .append(fatina.tween(rootAlpha)
+        .to(getData(pa.alpha, 1), pa.duration / 2)
+        .setEasing("inOutQuad" /* InOutQuad */))
+        .onKilled(() => rootAlpha[getProp(pa.alpha)] = 1);
+}
+exports.pulsePreset = pulsePreset;
+/**
+ * Scale Preset
+ *
+ * @ignore
+ * @export
+ * @param {Fatina} fatina
+ * @param {*} obj
+ * @param {IScalePresetParams} [settings]
+ * @returns
+ */
+function scalePreset(fatina, obj, settings) {
+    const defaults = {
+        scaleX: 'scale.x',
+        scaleY: 'scale.y',
+        amplitude: 0.5,
+        duration: 2000,
+        bounce: 5,
+        friction: 2,
+        sinX: 0
+    };
+    const pa = Object.assign(Object.assign({}, defaults), (settings || {}));
+    const root = getRoot(obj, pa.scaleX);
+    const x = getProp(pa.scaleX);
+    const y = getProp(pa.scaleY);
+    const src = { x: root[x], y: root[y] };
+    return fatina.tween({}).to({}, pa.duration)
+        .setEasing("inOutCubic" /* InOutCubic */)
+        .onUpdate((_dt, progress) => {
+        const friction = Math.pow(1 - progress, pa.friction);
+        const p = (progress * pa.bounce) % pa.duration;
+        root[x] = src.x + Math.sin(pa.sinX + p * Math.PI * 2) * pa.amplitude * friction;
+        root[y] = src.y + Math.sin(p * Math.PI * 2) * pa.amplitude * friction;
+    })
+        .onKilled(() => {
+        root[x] = src.x;
+        root[y] = src.y;
+    });
+}
+exports.scalePreset = scalePreset;
+/**
+ * Wobble Preset
+ *
+ * @ignore
+ * @export
+ * @param {Fatina} fatina
+ * @param {*} obj
+ * @param {IScalePresetParams} [settings]
+ * @returns
+ */
+function wobblePreset(fatina, obj, settings) {
+    const defaults = { sinX: Math.PI };
+    return scalePreset(fatina, obj, Object.assign(Object.assign({}, defaults), (settings || {})));
+}
+exports.wobblePreset = wobblePreset;
+/**
+ * Shake Preset
+ *
+ * @ignore
+ * @export
+ * @param {Fatina} fatina
+ * @param {*} obj
+ * @param {IShakePresetParams} [settings]
+ * @returns
+ */
+function shakePreset(fatina, obj, settings) {
+    const defaults = {
+        posX: 'position.x',
+        posY: 'position.y',
+        amplitude: 1.5,
+        duration: 2000,
+        bounce: 10,
+        friction: 2
+    };
+    const pa = Object.assign(Object.assign({}, defaults), (settings || {}));
+    const root = getRoot(obj, pa.posX);
+    const x = getProp(pa.posX);
+    const y = getProp(pa.posY);
+    const src = { x: root[x], y: root[y] };
+    const rnd = { x: 0.5 + Math.random(), y: 0.5 + Math.random() };
+    return fatina.tween({})
+        .to({}, pa.duration)
+        .onUpdate((_dt, progress) => {
+        const friction = Math.pow(1 - progress, pa.friction);
+        const p = (progress * pa.bounce) % pa.duration;
+        root[x] = src.x + Math.sin(Math.PI + (p + rnd.x) * Math.PI * 2) * pa.amplitude * friction;
+        root[y] = src.y + Math.sin((p + rnd.y) * Math.PI * 2) * pa.amplitude * friction;
+    })
+        .onKilled(() => {
+        root[x] = src.x;
+        root[y] = src.y;
+    });
+}
+exports.shakePreset = shakePreset;
 
 
 /***/ }),
@@ -692,11 +1100,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class Ticker {
     constructor() {
         this.state = 0 /* Idle */;
+        /**
+         * @private
+         */
         this.timescale = 1;
         this.elapsed = 0;
         this.duration = 0;
+        /**
+         * @private
+         */
         this.ticks = new Set();
+        /**
+         * @private
+         */
         this.newTicks = new Set();
+        /**
+         * @private
+         */
         this.dt = 0;
     }
     setParent(parent, tick) {
@@ -707,8 +1127,6 @@ class Ticker {
      * Method used to change the timescale
      *
      * @param {number} scale
-     *
-     * @memberOf Ticker
      */
     setTimescale(scale) {
         this.timescale = scale;
@@ -717,8 +1135,6 @@ class Ticker {
      * Method used by the child to be updated
      *
      * @param {(dt: number) => void} cb
-     *
-     * @memberOf Ticker
      */
     addTick(cb) {
         this.newTicks.add(cb);
@@ -727,8 +1143,6 @@ class Ticker {
      * Method used by the child to not receive update anymore
      *
      * @param {(dt: number) => void} cb
-     *
-     * @memberOf Ticker
      */
     removeTick(cb) {
         if (!this.ticks.delete(cb)) {
@@ -740,8 +1154,6 @@ class Ticker {
      *
      * @param {number} dt
      * @returns
-     *
-     * @memberOf Ticker
      */
     tick(dt) {
         if (this.state !== 1 /* Run */) {
@@ -825,32 +1237,79 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class BaseTween {
     constructor() {
         // events
+        /**
+         * @protected
+         */
         this.events = {};
         // public properties
+        /**
+         * Time elapsed
+         * @type {number}
+         * @export
+         */
         this.elapsed = 0;
+        /**
+         * Total duration of the tween
+         * @type {number}
+         * @export
+         */
         this.duration = 0;
+        /**
+         * Timescale of the tween
+         * @type {number}
+         * @export
+         */
         this.timescale = 1;
+        /**
+         * Current state of the tween
+         * @type {State}
+         * @export
+         */
         this.state = 0 /* Idle */;
+        /**
+         * @private
+         */
         this.first = true;
     }
+    /**
+     * Is this tween idle (based on state)
+     * @readonly
+     * @type {boolean}
+     * @export
+     */
     get isIdle() {
         return this.state === 0 /* Idle */;
     }
+    /**
+     * Is this tween runs (based on state)
+     * @readonly
+     * @type {boolean}
+     * @export
+     */
     get isRunning() {
         return this.state === 1 /* Run */;
     }
+    /**
+     * Is this tween over (based on state)
+     * @readonly
+     * @type {boolean}
+     * @export
+     */
     get isFinished() {
         return this.state >= 3;
     }
+    /**
+     * Is this tween paused (based on state)
+     * @readonly
+     * @type {boolean}
+     * @export
+     */
     get isPaused() {
         return this.state === 2 /* Pause */;
     }
     /**
-     * Method used to start a tween
-     *
-     * @returns {T}
-     *
-     * @memberOf BaseTween
+     * Start the tween
+     * @export
      */
     start() {
         if (this.state !== 0 /* Idle */) {
@@ -871,18 +1330,7 @@ class BaseTween {
         return this;
     }
     /**
-     * Reset a tween to be reusable (with start)
-     *
-     * @memberOf BaseTween
-     */
-    recycle() {
-        this.reset(true);
-        this.first = true;
-    }
-    /**
-     * To Reset a Tween already finished (example looping sequence)
-     *
-     * @memberOf BaseTween
+     * @readonly
      */
     reset(skipParent) {
         this.state = 0 /* Idle */;
@@ -900,8 +1348,6 @@ class BaseTween {
      * This is faster than calling manually Reset() & Start() & Tick()
      *
      * @param {number} dtRemains
-     *
-     * @memberOf BaseTween
      */
     resetAndStart(dtRemains) {
         this.loopInit();
@@ -917,8 +1363,6 @@ class BaseTween {
      *
      * @param {ITicker} ticker
      * @returns {T}
-     *
-     * @memberOf BaseTween
      */
     setParent(ticker) {
         this.removeParent();
@@ -930,8 +1374,6 @@ class BaseTween {
      *
      * @param {number} scale
      * @returns {T}
-     *
-     * @memberOf BaseTween
      */
     setTimescale(scale) {
         this.timescale = scale;
@@ -941,8 +1383,6 @@ class BaseTween {
      * Method used to pause a tween or a sequence (only work if the tween runs)
      *
      * @returns {void}
-     *
-     * @memberOf BaseTween
      */
     pause() {
         if (this.state !== 1 /* Run */) {
@@ -954,10 +1394,7 @@ class BaseTween {
     }
     /**
      * Method used to resume a tween or a sequence (only work if the tween is paused)
-     *
-     * @returns {void}
-     *
-     * @memberOf BaseTween
+     * @export
      */
     resume() {
         if (this.state !== 2 /* Pause */) {
@@ -970,9 +1407,9 @@ class BaseTween {
     /**
      * Method used to Skip this tween or sequence and directly finish it
      *
+     * @export
      * @param {boolean} [finalValue]
      * @returns {void}
-     * @memberOf BaseTween
      */
     skip(finalValue) {
         if (this.state >= 3) {
@@ -992,10 +1429,7 @@ class BaseTween {
     }
     /**
      * Method used to Stop/Kill a tween or a sequence
-     *
-     * @returns {void}
-     *
-     * @memberOf BaseTween
+     * @export
      */
     kill() {
         if (this.state === 4 /* Killed */) {
@@ -1012,8 +1446,6 @@ class BaseTween {
      *
      * @param {number} loop
      * @returns {ITween}
-     *
-     * @memberOf Tween
      */
     setLoop(loop) {
         if (!this.loop) {
@@ -1032,6 +1464,9 @@ class BaseTween {
         }
         return this;
     }
+    /**
+     * @protected
+     */
     complete() {
         if (this.state >= 3) {
             this.info(1 /* Info */, 'Cannot complete this tween ', this.state);
@@ -1041,22 +1476,40 @@ class BaseTween {
         this.removeParent();
         this.emitEvent(this.events.complete);
     }
+    /**
+     * @protected
+     */
     removeParent() {
         if (this.parent) {
             this.parent.removeTick(this.tickCb);
         }
     }
+    /**
+     * @protected
+     */
     check() { }
+    /**
+     * @protected
+     */
     validate() { }
+    /**
+     * @protected
+     */
     loopInit() {
         this.elapsed = 0;
     }
+    /**
+     * @protected
+     */
     info(level, message, data) {
         if (!this.settings || level > this.settings.logLevel) {
             return;
         }
         console.log(message, data);
     }
+    /**
+     * @private
+     */
     emit(func, args) {
         if (this.settings && !this.settings.safe) {
             return func.apply(this, args);
@@ -1068,6 +1521,9 @@ class BaseTween {
             console.warn(e);
         }
     }
+    /**
+     * @protected
+     */
     emitEvent(listeners, args) {
         if (!listeners) {
             return;
@@ -1086,8 +1542,6 @@ class BaseTween {
      *
      * @param {() => void} cb
      * @returns {T}
-     *
-     * @memberOf BaseTween
      */
     onStart(cb) {
         return this.onEvent('start', cb);
@@ -1097,8 +1551,6 @@ class BaseTween {
      *
      * @param {() => void} cb
      * @returns {T}
-     *
-     * @memberOf BaseTween
      */
     onRestart(cb) {
         return this.onEvent('restart', cb);
@@ -1108,8 +1560,6 @@ class BaseTween {
      *
      * @param {(dt: number, progress: number) => void} cb
      * @returns {T}
-     *
-     * @memberOf BaseTween
      */
     onUpdate(cb) {
         return this.onEvent('update', cb);
@@ -1119,8 +1569,6 @@ class BaseTween {
      *
      * @param {() => void} cb
      * @returns {T}
-     *
-     * @memberOf BaseTween
      */
     onKilled(cb) {
         return this.onEvent('kill', cb);
@@ -1130,12 +1578,13 @@ class BaseTween {
      *
      * @param {() => void} cb
      * @returns {T}
-     *
-     * @memberOf BaseTween
      */
     onComplete(cb) {
         return this.onEvent('complete', cb);
     }
+    /**
+     * @protected
+     */
     onEvent(name, cb) {
         if (!this.events[name]) {
             this.events[name] = cb;
@@ -1174,11 +1623,20 @@ const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/tweens/baseTwe
  * @implements {IPlayable}
  */
 class Callback extends baseTween_1.BaseTween {
+    /**
+     * Creates an instance of Callback.
+     *
+     * @param {() => void} cb
+     */
     constructor(cb) {
         super();
         this.callback = cb;
         this.tickCb = this.tick.bind(this);
     }
+    /**
+     * @private
+     * @param {number} dt
+     */
     tick(dt) {
         this.elapsed += dt;
         this.duration = 0;
@@ -1212,12 +1670,26 @@ const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/tweens/baseTwe
  * @implements {IPlayable}
  */
 class Delay extends baseTween_1.BaseTween {
+    /**
+     * Creates an instance of Delay.
+     *
+     * @param {number} duration
+     */
     constructor(duration) {
         super();
+        /**
+         * @private
+         */
         this.remains = 0;
         this.duration = duration;
         this.tickCb = this.tick.bind(this);
     }
+    /**
+     * @private
+     * @param {number} dt
+     * @returns
+     * @memberof Delay
+     */
     tick(dt) {
         this.remains = dt * this.timescale;
         while (this.remains > 0) {
@@ -1272,11 +1744,28 @@ const delay_1 = __webpack_require__(/*! ./delay */ "./src/tweens/delay.ts");
  * @implements {IPlayable}
  */
 class Sequence extends baseTween_1.BaseTween {
+    /**
+     * Creates an instance of Sequence.
+     *
+     * @param {(ITween[] | ISequence[] | IPlayable[])} [tweens]
+     */
     constructor(tweens) {
         super();
+        /**
+         * @private
+         */
         this.evtTick = new Set();
+        /**
+         * @private
+         */
         this.tweens = [];
+        /**
+         * @private
+         */
         this.index = 0;
+        /**
+         * @private
+         */
         this.remains = 0;
         this.tickCb = this.tick.bind(this);
         if (tweens) {
@@ -1287,9 +1776,18 @@ class Sequence extends baseTween_1.BaseTween {
             }
         }
     }
+    /**
+     * Number of tween in this sequence
+     *
+     * @readonly
+     * @type {number}
+     */
     get count() {
         return this.tweens.length;
     }
+    /**
+     * @protected
+     */
     loopInit() {
         this.index = 0;
         for (const tweenArray of this.tweens) {
@@ -1298,12 +1796,26 @@ class Sequence extends baseTween_1.BaseTween {
             }
         }
     }
+    /**
+     * Add a child to tick
+     *
+     * @param {(dt: number) => void} cb
+     */
     addTick(cb) {
         this.evtTick.add(cb);
     }
+    /**
+     * Remove a child to tick
+     *
+     * @param {(dt: number) => void} cb
+     * @memberof Sequence
+     */
     removeTick(cb) {
         this.evtTick.delete(cb);
     }
+    /**
+     * @private
+     */
     tick(dt) {
         if (this.state >= 3) {
             return;
@@ -1312,6 +1824,12 @@ class Sequence extends baseTween_1.BaseTween {
         this.elapsed += this.remains;
         this.localTick(this.remains);
     }
+    /**
+     * @private
+     * @param {number} dt
+     * @param {boolean} [remains]
+     * @returns
+     */
     localTick(dt, remains) {
         // If no current tween, take the first one and start it
         if (!this.cur) {
@@ -1356,6 +1874,9 @@ class Sequence extends baseTween_1.BaseTween {
             this.complete();
         }
     }
+    /**
+     * @private
+     */
     nextTween() {
         this.cur = this.tweens[this.index];
         if (!this.cur) {
@@ -1368,40 +1889,88 @@ class Sequence extends baseTween_1.BaseTween {
             this.emitEvent(this.events.stepStart, this.cur[0]);
         }
     }
+    /**
+     *
+     *
+     * @param {(ITween | ISequence)} tween
+     * @returns {ISequence}
+     * @memberof Sequence
+     */
     append(tween) {
         tween.setParent(this);
         this.tweens[this.tweens.length] = [tween];
         return this;
     }
+    /**
+     *
+     *
+     * @param {() => void} cb
+     * @returns {ISequence}
+     * @memberof Sequence
+     */
     appendCallback(cb) {
         const playable = new callback_1.Callback(cb);
         playable.setParent(this);
         this.tweens[this.tweens.length] = [playable];
         return this;
     }
+    /**
+     *
+     *
+     * @param {number} duration
+     * @returns {ISequence}
+     * @memberof Sequence
+     */
     appendInterval(duration) {
         const playable = new delay_1.Delay(duration);
         playable.setParent(this);
         this.tweens[this.tweens.length] = [playable];
         return this;
     }
+    /**
+     *
+     *
+     * @param {(ITween | ISequence)} tween
+     * @returns {ISequence}
+     * @memberof Sequence
+     */
     prepend(tween) {
         tween.setParent(this);
         this.tweens.unshift([tween]);
         return this;
     }
+    /**
+     *
+     *
+     * @param {() => void} cb
+     * @returns {ISequence}
+     * @memberof Sequence
+     */
     prependCallback(cb) {
         const playable = new callback_1.Callback(cb);
         playable.setParent(this);
         this.tweens.unshift([playable]);
         return this;
     }
+    /**
+     *
+     *
+     * @param {number} duration
+     * @returns {ISequence}
+     * @memberof Sequence
+     */
     prependInterval(duration) {
         const playable = new delay_1.Delay(duration);
         playable.setParent(this);
         this.tweens.unshift([playable]);
         return this;
     }
+    /**
+     * @inheritdoc
+     *
+     * @param {boolean} [finalValue]
+     * @returns {void}
+     */
     skip(finalValue) {
         if (this.state >= 3) {
             this.info(1 /* Info */, 'Cannot skip this tween ', this.state);
@@ -1418,6 +1987,9 @@ class Sequence extends baseTween_1.BaseTween {
         }
         super.skip();
     }
+    /**
+     * @inheritdoc
+     */
     kill() {
         if (this.state === 4 /* Killed */) {
             this.info(1 /* Info */, 'Cannot kill this tween ', this.state);
@@ -1430,6 +2002,10 @@ class Sequence extends baseTween_1.BaseTween {
         }
         super.kill();
     }
+    /**
+     * @param {(ITween | ISequence)} tween
+     * @returns {ISequence}
+     */
     join(tween) {
         if (this.tweens.length === 0) {
             return this.append(tween);
@@ -1438,9 +2014,21 @@ class Sequence extends baseTween_1.BaseTween {
         this.tweens[this.tweens.length - 1].push(tween);
         return this;
     }
+    /**
+     *
+     *
+     * @param {((index: ITween | IPlayable) => void)} cb
+     * @returns {ISequence}
+     */
     onStepStart(cb) {
         return this.onEvent('stepStart', cb);
     }
+    /**
+     *
+     *
+     * @param {((index: ITween | IPlayable) => void)} cb
+     * @returns {ISequence}
+     */
     onStepEnd(cb) {
         return this.onEvent('stepEnd', cb);
     }
@@ -1472,15 +2060,38 @@ const sequence_1 = __webpack_require__(/*! ./sequence */ "./src/tweens/sequence.
  * @implements {ITween}
  */
 class Tween extends baseTween_1.BaseTween {
+    /**
+     * Creates an instance of Tween.
+     *
+     * @param {*} object
+     */
     constructor(object) {
         super();
+        /**
+         * @private
+         */
         this.prop = [];
         // options
+        /**
+         * @private
+         */
         this.steps = 0;
+        /**
+         * @private
+         */
         this.relative = false;
         // cache
+        /**
+         * @private
+         */
         this.p = 0;
+        /**
+         * @private
+         */
         this.v = 0;
+        /**
+         * @private
+         */
         this.remains = 0;
         this.obj = object;
         this.tickCb = this.tick.bind(this);
@@ -1489,8 +2100,6 @@ class Tween extends baseTween_1.BaseTween {
      * Used to define the object and the properties modified by this tween
      *
      * @param {*} object
-     *
-     * @memberOf Tween
      */
     init(object) {
         this.obj = object;
@@ -1500,8 +2109,6 @@ class Tween extends baseTween_1.BaseTween {
      * Method used on start to check the values of this tween
      *
      * @protected
-     *
-     * @memberOf Tween
      */
     validate() {
         // Check the object
@@ -1522,8 +2129,6 @@ class Tween extends baseTween_1.BaseTween {
      * Method used to calculate currentFrom/currentTo based on the config
      *
      * @protected
-     *
-     * @memberOf Tween
      */
     check() {
         if (!this.cf) {
@@ -1550,6 +2155,9 @@ class Tween extends baseTween_1.BaseTween {
             }
         }
     }
+    /**
+     * @private
+     */
     tick(dt) {
         if (this.state >= 3) {
             return;
@@ -1579,7 +2187,7 @@ class Tween extends baseTween_1.BaseTween {
             }
             this.remains = this.elapsed - this.duration;
             // Yoyo effect ( A -> B -> A )
-            if (this.yo && this.yo.value > 0) {
+            if (this.yo && this.yo.value !== 0) {
                 this.reverse();
                 this.resetAndStart(0);
                 this.yo.value--;
@@ -1603,8 +2211,6 @@ class Tween extends baseTween_1.BaseTween {
      *
      * @param {*} from
      * @returns {ITween}
-     *
-     * @memberOf Tween
      */
     from(from) {
         this.f = from;
@@ -1617,8 +2223,6 @@ class Tween extends baseTween_1.BaseTween {
      * @param {*} to
      * @param {number} duration
      * @returns {ITween}
-     *
-     * @memberOf Tween
      */
     to(to, duration) {
         this.t = to;
@@ -1647,8 +2251,6 @@ class Tween extends baseTween_1.BaseTween {
      *
      * @param {boolean} relative
      * @returns {ITween}
-     *
-     * @memberOf Tween
      */
     setRelative(relative) {
         this.relative = relative;
@@ -1659,8 +2261,6 @@ class Tween extends baseTween_1.BaseTween {
      *
      * @param {*} diff
      * @param {boolean} updateTo
-     *
-     * @memberOf Tween
      */
     modify(diff, updateTo) {
         for (const prop of this.prop) {
@@ -1680,7 +2280,6 @@ class Tween extends baseTween_1.BaseTween {
      * Overwrite the Reset (just for yoyo)
      *
      * @param {boolean} [skipParent]
-     * @memberOf Tween
      */
     reset(skipParent) {
         if (this.yo) {
@@ -1700,8 +2299,6 @@ class Tween extends baseTween_1.BaseTween {
     }
     /**
      * Method used to reverse the tween
-     *
-     * @memberOf Tween
      */
     reverse() {
         let previous = this.cf;
@@ -1722,8 +2319,6 @@ class Tween extends baseTween_1.BaseTween {
      *
      * @param {number} time
      * @returns {ITween}
-     *
-     * @memberOf Tween
      */
     yoyo(time) {
         if (!this.yo) {
@@ -1738,8 +2333,6 @@ class Tween extends baseTween_1.BaseTween {
      *
      * @param {number} steps
      * @returns {ITween}
-     *
-     * @memberOf Tween
      */
     setSteps(steps) {
         this.steps = steps;
@@ -1750,8 +2343,6 @@ class Tween extends baseTween_1.BaseTween {
      * Usually used with .AppendInterval(1250) or .PrependInterval(160) to add a delay
      *
      * @returns {ISequence}
-     *
-     * @memberOf Tween
      */
     toSequence() {
         if (!this.parent) {
@@ -1764,8 +2355,6 @@ class Tween extends baseTween_1.BaseTween {
      *
      * @param {(EasingType | string)} type
      * @returns {ITween}
-     *
-     * @memberOf Tween
      */
     setEasing(type) {
         if (!(type in easing_1.easeNames)) {
@@ -1778,8 +2367,6 @@ class Tween extends baseTween_1.BaseTween {
      * Method used when the tween is reset (loop)
      *
      * @protected
-     *
-     * @memberOf Tween
      */
     loopInit() {
         this.elapsed = 0;
@@ -1792,4 +2379,4 @@ exports.Tween = Tween;
 
 /******/ });
 });
-//# sourceMappingURL=fatina.js.map
+//# sourceMappingURL=fatina.js.map 

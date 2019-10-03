@@ -9,9 +9,9 @@
   <meta property="og:title" content="Basics Samples" />
   <meta name="twitter:title" content="Basics Samples" />
   <meta name="description" content=".imgTest { position: relative; margin: 0; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html elements but you can tween almost any kind of object and data. PlayAll 
-Linear tween function sample1() {var elem = document.getElementById(&#34;sample1&#34;);var obj = { x: 0, y: 0 };Fatina.tween(obj).from({x: 0}).to({x: 500}, 2500).">
+Linear tween  function sample1() { var elem = document.getElementById(&#34;sample1&#34;); var obj = { x: 0, y: 0 }; Fatina.tween(obj) .from({x: 0}) .to({x: 500}, 2500) .">
   <meta property="og:description" content=".imgTest { position: relative; margin: 0; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html elements but you can tween almost any kind of object and data. PlayAll 
-Linear tween function sample1() {var elem = document.getElementById(&#34;sample1&#34;);var obj = { x: 0, y: 0 };Fatina.tween(obj).from({x: 0}).to({x: 500}, 2500).">
+Linear tween  function sample1() { var elem = document.getElementById(&#34;sample1&#34;); var obj = { x: 0, y: 0 }; Fatina.tween(obj) .from({x: 0}) .to({x: 500}, 2500) .">
   <meta name="twitter:description" content=".imgTest { position: relative; margin: 0; } hr { border-top: 1px dashed #8c8b8b; border-bottom: 1px dashed #fff; margin-top: 25px !important; clear: both; }   The following example are moving html …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
@@ -71,6 +71,8 @@ Linear tween function sample1() {var elem = document.getElementById(&#34;sampl
                   <a href="/Fatina/samples/advanced/">Advanced</a>
                 
                   <a href="/Fatina/samples/game/">Games</a>
+                
+                  <a href="/Fatina/samples/presets/">Presets</a>
                 
               </div>
             </li>
@@ -684,9 +686,9 @@ The following example are moving html elements but you can tween almost any kind
         sample8();
     }
 
-    (function() {
-        setTimeout(() => playAll(), 500);
-    })();
+    document.addEventListener("DOMContentLoaded", () => {
+        playAll();
+    });
 </script>
 
       </article>
@@ -729,7 +731,7 @@ The following example are moving html elements but you can tween almost any kind
         <p class="credits copyright text-muted">
           Kevin Destrem
           &nbsp;&bull;&nbsp;
-          2017
+          2019
 
           
             &nbsp;&bull;&nbsp;

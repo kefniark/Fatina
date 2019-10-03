@@ -5,20 +5,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <title>Animator Plugin - Getting Started</title>
-  <meta property="og:title" content="Animator Plugin - Getting Started" />
-  <meta name="twitter:title" content="Animator Plugin - Getting Started" />
-  <meta name="description" content="Animator Getting Started API  The installation process is explained in the README.
-After setup, you can use this plugin:
-// Global animator manager Fatina.plugin.animatorManager; // Global tick manager to be able to pause / resume group of objects Fatina.plugin.tickerManager; // Add a Animator component to any object Fatina.plugin.animatorManager.addAnimatorTo(object);  
-Import &amp; Initialize // require fatina let fatina = require(&#39;fatina&#39;); let fatinaAnimator = require(&#39;fatina-plugin-animator&#39;); // initialize fatina fatina.init(); fatina.">
-  <meta property="og:description" content="Animator Getting Started API  The installation process is explained in the README.
-After setup, you can use this plugin:
-// Global animator manager Fatina.plugin.animatorManager; // Global tick manager to be able to pause / resume group of objects Fatina.plugin.tickerManager; // Add a Animator component to any object Fatina.plugin.animatorManager.addAnimatorTo(object);  
-Import &amp; Initialize // require fatina let fatina = require(&#39;fatina&#39;); let fatinaAnimator = require(&#39;fatina-plugin-animator&#39;); // initialize fatina fatina.init(); fatina.">
-  <meta name="twitter:description" content="Animator Getting Started API  The installation process is explained in the README.
-After setup, you can use this plugin:
-// Global animator manager Fatina.plugin.animatorManager; // Global tick …">
+  <title>Presets</title>
+  <meta property="og:title" content="Presets" />
+  <meta name="twitter:title" content="Presets" />
+  <meta name="description" content="Fatina provide few preset for usual effects. These effect are just sequence with a bit of math. They are not really new features but just helpers, and up to you to implement more of them for your own project.       let bunny1; let bunny2; let t1; let t2; function init() { // The application will create a renderer using WebGL, if possible, // with a fallback to a canvas render.">
+  <meta property="og:description" content="Fatina provide few preset for usual effects. These effect are just sequence with a bit of math. They are not really new features but just helpers, and up to you to implement more of them for your own project.       let bunny1; let bunny2; let t1; let t2; function init() { // The application will create a renderer using WebGL, if possible, // with a fallback to a canvas render.">
+  <meta name="twitter:description" content="Fatina provide few preset for usual effects. These effect are just sequence with a bit of math. They are not really new features but just helpers, and up to you to implement more of them for your own …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -26,12 +18,12 @@ After setup, you can use this plugin:
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@kefniark" />
   <meta name="twitter:creator" content="@kefniark" />
-  <meta property="og:url" content="https://kefniark.github.io/Fatina/plugins/animator-usage/" />
+  <meta property="og:url" content="https://kefniark.github.io/Fatina/samples/presets/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Fatina" />
 
   <meta name="generator" content="Hugo 0.54.0" />
-  <link rel="canonical" href="https://kefniark.github.io/Fatina/plugins/animator-usage/" />
+  <link rel="canonical" href="https://kefniark.github.io/Fatina/samples/presets/" />
   <link rel="alternate" href="https://kefniark.github.io/Fatina/index.xml" type="application/rss+xml" title="Fatina">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -165,8 +157,8 @@ After setup, you can use this plugin:
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="plugins-heading">
-              <h1>Animator Plugin - Getting Started</h1>
+            <div class="samples-heading">
+              <h1>Presets</h1>
                 
                 
             </div>
@@ -182,66 +174,221 @@ After setup, you can use this plugin:
   <div class="row">
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
       <article role="main" class="blog-post">
-        
+        <p>
+Fatina provide few preset for usual effects.<br/>
+These effect are just sequence with a bit of math. They are not really new features but just helpers, and up to you to implement more of them for your own project.
+</p>
 
-<div style="text-align: center">
-    <a class="btn btn-default" href="/Fatina/plugins/animator/">Animator</a>
-    <a class="btn btn-primary" href="/Fatina/plugins/animator-usage/">Getting Started</a>
-    <a class="btn btn-default" href="/Fatina/plugins/animator-api/">API</a>
+<p><script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
+
+<div class="menu">
+    <input class="button" type="button" onclick="wobble()" value="Wobble"/>
+    <input class="button" type="button" onclick="scale()" value="Scale"/>
+    <input class="button" type="button" onclick="pulse()" value="Pulse"/>
+    <input class="button" type="button" onclick="sonar()" value="Sonar"/>
+    <input class="button" type="button" onclick="shake()" value="Shake"/>
 </div>
 
-<p>The installation process is explained in the <a href="https://github.com/kefniark/Fatina-Plugin-Animator">README</a>.</p>
+<br/>
 
-<p>After setup, you can use this plugin:</p>
+<div style="text-align:center">
+    <div id="demo-container"></div>
+</div>
 
-<pre><code class="language-js">// Global animator manager
-Fatina.plugin.animatorManager;
+<script>
+    let bunny1;
+    let bunny2;
 
-// Global tick manager to be able to pause / resume group of objects
-Fatina.plugin.tickerManager;
+    let t1;
+    let t2;
 
-// Add a Animator component to any object
-Fatina.plugin.animatorManager.addAnimatorTo(object);
+    function init() {
+        // The application will create a renderer using WebGL, if possible,
+        // with a fallback to a canvas render. It will also setup the ticker
+        // and the root stage PIXI.Container
+        const app = new PIXI.Application();
+
+        // The application will create a canvas element for you that you
+        // can then insert into the DOM
+        document.getElementById('demo-container').appendChild(app.view);
+
+        // This creates a texture from a 'bunny.png' image
+        bunny1 = new PIXI.Sprite.fromImage('https://pixijs.io/examples/examples/assets/bunny.png')
+
+        // Setup the position of the bunny
+        bunny1.x = app.renderer.width / 2 - 65;
+        bunny1.y = app.renderer.height / 2;
+
+        // Rotate around the center
+        bunny1.anchor.x = 0.5;
+        bunny1.anchor.y = 0.5;
+
+        bunny1.scale.x = 2;
+        bunny1.scale.y = 2;
+
+        // This creates a texture from a 'bunny.png' image
+        bunny2 = new PIXI.Sprite.fromImage('https://pixijs.io/examples/examples/assets/bunny.png')
+
+        // Setup the position of the bunny
+        bunny2.x = app.renderer.width / 2 + 65;
+        bunny2.y = app.renderer.height / 2;
+
+        // Rotate around the center
+        bunny2.anchor.x = 0.5;
+        bunny2.anchor.y = 0.5;
+
+        bunny2.scale.x = 3;
+        bunny2.scale.y = 3;
+
+        // Add the bunny to the scene we are building
+        app.stage.addChild(bunny1);
+        app.stage.addChild(bunny2);
+    }
+
+    function wobble() {
+        if (t1) t1.kill();
+        if (t2) t2.kill();
+
+        t1 = Fatina.wobble(bunny1, {
+            scaleFactor: 1.5,
+            duration: 1200,
+            bounce: 5,
+            friction: 1.5
+        }).setLoop(3).start();
+
+        t2 = Fatina.wobble(bunny2, {
+            scaleFactor: 0.6,
+            duration: 2500,
+            bounce: 8,
+            friction: 0.6
+        }).setLoop(3).start();
+    }
+
+    function scale() {
+        if (t1) t1.kill();
+        if (t2) t2.kill();
+
+        t1 = Fatina.scale(bunny1, {
+            scaleFactor: 1,
+            duration: 1200,
+            friction: 1.5
+        }).setLoop(3).start();
+
+        t2 = Fatina.scale(bunny2, {
+            scaleFactor: 2.5,
+            duration: 2500,
+            bounce: 15
+        }).setLoop(3).start();
+    }
+
+    function pulse() {
+        if (t1) t1.kill();
+        if (t2) t2.kill();
+
+        t1 = Fatina.pulse(bunny1, {
+            duration: 200
+        }).setLoop(3).start();
+
+        t2 = Fatina.pulse(bunny2, {
+            duration: 2500,
+            number: 5
+        }).setLoop(3).start();
+    }
+
+    function sonar() {
+        if (t1) t1.kill();
+        if (t2) t2.kill();
+
+        t1 = Fatina.sonar(bunny1, {
+            duration: 1200
+        }).setLoop(3).start();
+
+        t2 = Fatina.sonar(bunny2, {
+            duration: 2500,
+            scaleFactor: 2,
+            number: 4
+        }).setLoop(3).start();
+    }
+
+    function shake() {
+        if (t1) t1.kill();
+        if (t2) t2.kill();
+
+        t1 = Fatina.shake(bunny1, {
+            amplitude: 15,
+            duration: 1200
+        }).setLoop(3).start();
+
+        t2 = Fatina.shake(bunny2, {
+            duration: 2500,
+            bounce: 3,
+            scaleFactor: 2,
+            amplitude: 40,
+            number: 4
+        }).setLoop(3).start();
+    }
+
+    init();
+</script>
+
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<span class="btn btn-default">
+    	
+    	See Code
+    	
+    	</span>
+		<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">// Wobble (based on `.scale.x`, `.scale.y` properties)
+var sequenceWobble = Fatina.wobble(sprite, {
+    scaleFactor: 1.5,
+    duration: 1200,
+    bounce: 5,
+    friction: 1.5
+});
+
+// Scale (based on `.scale.x`, `.scale.y` properties)
+var sequenceScale = Fatina.scale(sprite, {
+    scaleFactor: 1,
+    duration: 1200,
+    friction: 1.5
+});
+
+// Pulse (based on `.alpha` property)
+var sequencePulse = Fatina.pulse(sprite, {
+    duration: 200,
+    number: 5
+});
+
+// Sonar (based on `.alpha`, `.scale.x`, `.scale.y` properties)
+var sequenceSonar = Fatina.sonar(sprite, {
+    duration: 2500,
+    scaleFactor: 2,
+    number: 4
+});
+
+// Shake (based on `.position.x`, `.position.y` properties)
+var sequenceShake = Fatina.shake(sprite, {
+    duration: 2500,
+    bounce: 3,
+    scaleFactor: 2,
+    amplitude: 40,
+    number: 4
+});
+
+// start sequences
+sequenceWobble.start();
+sequenceScale.start();
+sequencePulse.start();
+sequenceSonar.start();
+sequenceShake.start();
+
 </code></pre>
 
-<p><br></p>
-
-<h3 id="import-initialize">Import &amp; Initialize</h3>
-
-<pre><code class="language-js">// require fatina
-let fatina = require('fatina');
-let fatinaAnimator = require('fatina-plugin-animator');
-
-// initialize fatina
-fatina.init();
-fatina.loadPlugin(fatinaAnimator.get());
-</code></pre>
-
-<p><br></p>
-
-<h3 id="register-a-shared-animation">Register a shared animation</h3>
-
-<pre><code class="language-js">fatina.plugin.animatorManager.register('move', (obj: any, params: any) =&gt; {
-    return Fatina.tween(obj.position, ['x']).setRelative(true).to({ x: params }, 500);
-}, 'newTicker');
-</code></pre>
-
-<p><br></p>
-
-<h3 id="play-animation">Play Animation</h3>
-
-<pre><code class="language-js">// let's create a phaser sprite
-var test = new Phaser.Sprite(this.game, 2, 80, 'hudBg');
-
-// add a component animator to that sprite and add 2 animations
-fatina.plugin.animatorManager.addAnimatorTo(test)
-    .addAnimation('moveRight', 'move', { group: 'move' }, 5)
-	.addAnimation('moveLeft', 'move', { group: 'move' }, -5);
-
-// now you can use those animation easily
-test.animator.play('moveLeft');
-test.animator.play('moveRight');
-</code></pre>
+    </div>
+</div></p>
 
       </article>
 

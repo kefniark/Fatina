@@ -81,6 +81,12 @@ theme = "beautifulhugo"
     url = "samples/game/"
     weight = 4
 
+[[menu.main]]
+    parent = "samples"
+    name = "Presets"
+    url = "samples/presets/"
+    weight = 5
+
 #[[menu.main]]
 #    parent = "samples"
 #    name = "three.js"

@@ -1,5 +1,5 @@
 +++
-date = "2017-05-21T13:06:37+09:00"
+date = "2019-10-01T13:06:37+09:00"
 title = "Basics Samples"
 toc = true
 weight = 1
@@ -118,8 +118,8 @@ The following example are moving html elements but you can tween almost any kind
         sample8();
     }
 
-    (function() {
-        setTimeout(() => playAll(), 500);
-    })();
+    document.addEventListener("DOMContentLoaded", () => {
+        playAll();
+    });
 </script>
 
