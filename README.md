@@ -9,7 +9,8 @@ Small & Light tweening library for **Games** / **Web**
 * **Online Demo**: [Here](https://runkit.com/kefniark/sample-fatina)
 
 [![NPM Version](https://img.shields.io/npm/v/fatina.svg)](https://npmjs.org/package/fatina)
-[![NPM Downloads](https://img.shields.io/npm/dm/fatina.svg)](https://npmjs.org/package/fatina)
+[![NPM Download](https://img.shields.io/npm/dm/fatina.svg)](https://npmjs.org/package/fatina)
+[![CDN Download](https://data.jsdelivr.com/v1/package/npm/fatina/badge)](https://www.jsdelivr.com/package/npm/fatina)
 [![Build Status](https://img.shields.io/travis/kefniark/Fatina/master.svg)](https://travis-ci.org/kefniark/Fatina)
 [![Coverage Status](https://coveralls.io/repos/github/kefniark/Fatina/badge.svg?branch=master)](https://coveralls.io/github/kefniark/Fatina?branch=develop)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f0451df42a9d43fa810f32f20005f9aa)](https://www.codacy.com/app/kefniark/Fatina?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=kefniark/Fatina&amp;utm_campaign=Badge_Grade)
@@ -28,7 +29,7 @@ A comprehensive and easy to use animation library for **Typescript** / **Javascr
 ### Install
 If you want to use the CDN version:
 ```ts
-<script src="https://cdn.jsdelivr.net/npm/fatina@latest/build/fatina.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fatina/build/fatina.min.js"></script>
 ```
 Or if you use NPM
 ```ts
