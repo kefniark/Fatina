@@ -1,4 +1,4 @@
-// [Fatina]  Build: 3.0.0 - Thursday, October 3rd, 2019, 9:56:12 PM  
+// [Fatina]  Build: 3.0.1 - Friday, October 4th, 2019, 12:49:50 AM  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -416,7 +416,7 @@ let lastFrame;
  * @private
  * @const
  */
-let requestFrame;
+let raf;
 /**
  * @ignore
  * @private
@@ -424,7 +424,7 @@ let requestFrame;
  */
 let cancelFrame;
 if (typeof (window) !== 'undefined') {
-    requestFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame
+    raf = window.requestAnimationFrame || window.mozRequestAnimationFrame
         || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
     cancelFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 }
@@ -465,7 +465,7 @@ class Fatina {
         /**
          * @readonly
          */
-        this.version = '3.0.0';
+        this.version = '3.0.1';
         this.time = 0;
         /**
          * @private
@@ -550,9 +550,18 @@ class Fatina {
             this.manager = new ticker_1.Ticker();
             this.manager.start();
         }
+        // browser init requestAnimationFrame, after onLoad() event
         if (typeof (window) !== 'undefined' && !disableAutoTick) {
             console.log(' %c Fatina - Tweening library for games (' + this.version + ') https://github.com/kefniark/Fatina ', 'background: #222; color: #9fbff4; padding: 5px');
-            lastFrame = requestFrame(this.updateLoop.bind(this));
+            this.lastTime = -1;
+            if (document.readyState !== 'loading') {
+                lastFrame = raf(this.updateLoop.bind(this));
+            }
+            else {
+                document.addEventListener('DOMContentLoaded', () => {
+                    lastFrame = raf(this.updateLoop.bind(this));
+                });
+            }
         }
         this.initialized = true;
         return true;
@@ -718,7 +727,7 @@ class Fatina {
      * @private
      */
     updateLoop(timestamp) {
-        this.dt += timestamp - this.lastTime;
+        this.dt = this.lastTime < 0 ? 16 : this.dt + timestamp - this.lastTime;
         if (this.dt > this.settings.maxDt) {
             console.warn(`dt too high ${Math.round(this.dt)}ms. , Capped to ${this.settings.maxDt}ms.`);
             this.dt = this.settings.maxDt;
@@ -739,7 +748,7 @@ class Fatina {
             }
         }
         this.lastTime = timestamp;
-        lastFrame = requestFrame(this.updateLoop.bind(this));
+        lastFrame = raf(this.updateLoop.bind(this));
     }
     /**
      * Initialize a plugin by passing fatina object to it

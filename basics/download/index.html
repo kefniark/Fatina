@@ -12,12 +12,14 @@
 &lt;script src=&quot;fatina.min.js&quot;&gt;&lt;/script&gt;  
 1 bis. NPM Installation More advanced users might want to use npm
 npm install fatina  Then include the Fatina module :
-// standard node.js require var Fatina = require(&#39;fatina&#39;); // OR // standard import with typescript (typed version) import Fatina from &#39;fatina&#39;;  2. Done ! Now you can use Fatina properly :">
+// standard import with typescript import Fatina from &#39;fatina&#39;; // OR // standard node.js require var Fatina = require(&#39;fatina&#39;).default;  2. Done ! Now you can use Fatina properly :
+Fatina.tween( /* etc */ ).">
   <meta property="og:description" content="1. Manual Installation Download the library and include it in your code:
 &lt;script src=&quot;fatina.min.js&quot;&gt;&lt;/script&gt;  
 1 bis. NPM Installation More advanced users might want to use npm
 npm install fatina  Then include the Fatina module :
-// standard node.js require var Fatina = require(&#39;fatina&#39;); // OR // standard import with typescript (typed version) import Fatina from &#39;fatina&#39;;  2. Done ! Now you can use Fatina properly :">
+// standard import with typescript import Fatina from &#39;fatina&#39;; // OR // standard node.js require var Fatina = require(&#39;fatina&#39;).default;  2. Done ! Now you can use Fatina properly :
+Fatina.tween( /* etc */ ).">
   <meta name="twitter:description" content="1. Manual Installation Download the library and include it in your code:
 &lt;script src=&quot;fatina.min.js&quot;&gt;&lt;/script&gt;  
 1 bis. NPM Installation More advanced users might want to use npm …">
@@ -204,13 +206,11 @@ npm install fatina  Then include the Fatina module :
 
 <p>Then include the Fatina module :</p>
 
-<pre><code class="language-javascript">// standard node.js require
-var Fatina = require('fatina');
-
-// OR
-
-// standard import with typescript (typed version)
+<pre><code class="language-javascript">// standard import with typescript
 import Fatina from 'fatina';
+// OR
+// standard node.js require
+var Fatina = require('fatina').default;
 </code></pre>
 
 <h3 id="2-done">2. Done !</h3>

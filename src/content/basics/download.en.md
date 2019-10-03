@@ -26,13 +26,11 @@ npm install fatina
 Then include the Fatina module :
 
 ```javascript
-// standard node.js require
-var Fatina = require('fatina');
-
-// OR
-
-// standard import with typescript (typed version)
+// standard import with typescript
 import Fatina from 'fatina';
+// OR
+// standard node.js require
+var Fatina = require('fatina').default;
 ```
 
 ### 2. Done !

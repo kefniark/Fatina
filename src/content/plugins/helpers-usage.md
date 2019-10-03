@@ -23,7 +23,7 @@ Fatina.plugin.addHelpers(obj);
 ### 1. Example (with Phaser)
 ```js
 // require fatina
-let fatina = require('fatina');
+let fatina = require('fatina').default;
 let fatinaHelpers = require('fatina-plugin-helpers');
 
 // initialize fatina

@@ -30,7 +30,7 @@ Fatina.plugin.animatorManager.addAnimatorTo(object);
 ### Import & Initialize
 ```js
 // require fatina
-let fatina = require('fatina');
+let fatina = require('fatina').default;
 let fatinaAnimator = require('fatina-plugin-animator');
 
 // initialize fatina

@@ -8,8 +8,8 @@
   <title>Presets</title>
   <meta property="og:title" content="Presets" />
   <meta name="twitter:title" content="Presets" />
-  <meta name="description" content="Fatina provide few preset for usual effects. These effect are just sequence with a bit of math. They are not really new features but just helpers, and up to you to implement more of them for your own project.       let bunny1; let bunny2; let t1; let t2; function init() { // The application will create a renderer using WebGL, if possible, // with a fallback to a canvas render.">
-  <meta property="og:description" content="Fatina provide few preset for usual effects. These effect are just sequence with a bit of math. They are not really new features but just helpers, and up to you to implement more of them for your own project.       let bunny1; let bunny2; let t1; let t2; function init() { // The application will create a renderer using WebGL, if possible, // with a fallback to a canvas render.">
+  <meta name="description" content="Fatina provide few preset for usual effects. These effect are just sequence with a bit of math. They are not really new features but just helpers, and up to you to implement more of them for your own project.       let bunny1; let bunny2; let t1; let t2; function init() { Fatina.init(); // The application will create a renderer using WebGL, if possible, // with a fallback to a canvas render.">
+  <meta property="og:description" content="Fatina provide few preset for usual effects. These effect are just sequence with a bit of math. They are not really new features but just helpers, and up to you to implement more of them for your own project.       let bunny1; let bunny2; let t1; let t2; function init() { Fatina.init(); // The application will create a renderer using WebGL, if possible, // with a fallback to a canvas render.">
   <meta name="twitter:description" content="Fatina provide few preset for usual effects. These effect are just sequence with a bit of math. They are not really new features but just helpers, and up to you to implement more of them for your own …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
@@ -203,6 +203,8 @@ These effect are just sequence with a bit of math. They are not really new featu
     let t2;
 
     function init() {
+        Fatina.init();
+
         // The application will create a renderer using WebGL, if possible,
         // with a fallback to a canvas render. It will also setup the ticker
         // and the root stage PIXI.Container

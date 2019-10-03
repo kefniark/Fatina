@@ -36,7 +36,7 @@ Unity Chan GO!!! Parallax   var app = new PIXI.Application(1024 / 2, 768 / 2, {b
       <pubDate>Tue, 01 Oct 2019 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/samples/presets/</guid>
-      <description>Fatina provide few preset for usual effects. These effect are just sequence with a bit of math. They are not really new features but just helpers, and up to you to implement more of them for your own project.       let bunny1; let bunny2; let t1; let t2; function init() { // The application will create a renderer using WebGL, if possible, // with a fallback to a canvas render.</description>
+      <description>Fatina provide few preset for usual effects. These effect are just sequence with a bit of math. They are not really new features but just helpers, and up to you to implement more of them for your own project.       let bunny1; let bunny2; let t1; let t2; function init() { Fatina.init(); // The application will create a renderer using WebGL, if possible, // with a fallback to a canvas render.</description>
     </item>
     
     <item>
@@ -98,7 +98,7 @@ Golden Stars Use Modifier for curve and gravity    var app4 = new PIXI.</descrip
       <guid>https://kefniark.github.io/Fatina/plugins/helpers-usage/</guid>
       <description>Helpers Getting Started API  The installation process is explained in the README.
 After setup, you can use this plugin on any object:
-Fatina.plugin.addHelpers(obj);  1. Example (with Phaser) // require fatina let fatina = require(&#39;fatina&#39;); let fatinaHelpers = require(&#39;fatina-plugin-helpers&#39;); // initialize fatina fatina.init(); fatina.loadPlugin(fatinaHelpers.get()); ... // let&#39;s create a phaser sprite var test = new Phaser.Sprite(this.game, 2, 80, &#39;hudBg&#39;); // use the plugin on this sprite fatina.plugin.addHelpers(test); // use one helper function to move horizontaly the sprite to the position x = 50 in 1s.</description>
+Fatina.plugin.addHelpers(obj);  1. Example (with Phaser) // require fatina let fatina = require(&#39;fatina&#39;).default; let fatinaHelpers = require(&#39;fatina-plugin-helpers&#39;); // initialize fatina fatina.init(); fatina.loadPlugin(fatinaHelpers.get()); ... // let&#39;s create a phaser sprite var test = new Phaser.Sprite(this.game, 2, 80, &#39;hudBg&#39;); // use the plugin on this sprite fatina.plugin.addHelpers(test); // use one helper function to move horizontaly the sprite to the position x = 50 in 1s.</description>
     </item>
     
     <item>
@@ -141,7 +141,7 @@ Animations  addAnimation(name: string, animationName: string, options?</descript
       <description>Animator Getting Started API  The installation process is explained in the README.
 After setup, you can use this plugin:
 // Global animator manager Fatina.plugin.animatorManager; // Global tick manager to be able to pause / resume group of objects Fatina.plugin.tickerManager; // Add a Animator component to any object Fatina.plugin.animatorManager.addAnimatorTo(object);  
-Import &amp;amp; Initialize // require fatina let fatina = require(&#39;fatina&#39;); let fatinaAnimator = require(&#39;fatina-plugin-animator&#39;); // initialize fatina fatina.init(); fatina.</description>
+Import &amp;amp; Initialize // require fatina let fatina = require(&#39;fatina&#39;).default; let fatinaAnimator = require(&#39;fatina-plugin-animator&#39;); // initialize fatina fatina.init(); fatina.</description>
     </item>
     
     <item>
@@ -164,7 +164,8 @@ Import &amp;amp; Initialize // require fatina let fatina = require(&#39;fatina&#
 &amp;lt;script src=&amp;quot;fatina.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;  
 1 bis. NPM Installation More advanced users might want to use npm
 npm install fatina  Then include the Fatina module :
-// standard node.js require var Fatina = require(&#39;fatina&#39;); // OR // standard import with typescript (typed version) import Fatina from &#39;fatina&#39;;  2. Done ! Now you can use Fatina properly :</description>
+// standard import with typescript import Fatina from &#39;fatina&#39;; // OR // standard node.js require var Fatina = require(&#39;fatina&#39;).default;  2. Done ! Now you can use Fatina properly :
+Fatina.tween( /* etc */ ).</description>
     </item>
     
     <item>
