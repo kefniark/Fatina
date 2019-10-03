@@ -6,7 +6,7 @@ Small & Light tweening library for **Games** / **Web**
 * **Website**: [Here](https://kefniark.github.io/Fatina/)
 * **API**: [Here](https://kefniark.github.io/Fatina/api/basic/)
 * **Samples**: [Here](https://kefniark.github.io/Fatina/samples/generic/)
-* **Online Demo**: [Here](https://runkit.com/kefniark/runkit-npm-fatina)
+* **Online Demo**: [Here](https://runkit.com/kefniark/sample-fatina)
 
 [![NPM Version](https://img.shields.io/npm/v/fatina.svg)](https://npmjs.org/package/fatina)
 [![NPM Downloads](https://img.shields.io/npm/dm/fatina.svg)](https://npmjs.org/package/fatina)
@@ -36,11 +36,11 @@ Or if you use NPM
 ```
 And load it with
 ```ts
-// standard node.js require
-var Fatina = require('fatina');
-// OR
-// standard import with typescript (typed version)
+// standard import with esm module or typescript
 import Fatina from 'fatina';
+// OR
+// standard node.js require
+var fatina = require('fatina').default;
 ```
 * [More Information](https://kefniark.github.io/Fatina/basics/download/)
 

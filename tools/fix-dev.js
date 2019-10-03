@@ -7,8 +7,12 @@
 const replace = require("replace-in-file");
 
 // fix build/fatina.js
-replace({
-    files: "build/fatina.js",
-    from: /root\["Fatina"\] = factory\(\);/g,
-    to: "root[\"Fatina\"] = factory().default;"
-});
+
+(async () => {
+	// For browser direct usage (dont need .default)
+	await replace({
+		files: "build/fatina.js",
+		from: /root\["Fatina"\] = factory\(\);/g,
+		to: "root[\"Fatina\"] = factory().default;"
+	});
+})();

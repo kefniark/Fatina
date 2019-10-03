@@ -7,12 +7,16 @@
 const replace = require("replace-in-file");
 
 // fix build/fatina.min.js
-replace({
-    files: "build/fatina.min.js",
-    from: /.\.Fatina=.\(\)\}/g,
-    to: (match) => {
-		match = match.slice(0, -1);
-		match += ".default}";
-		return match;
-	}
-});
+
+(async () => {
+	// For browser direct usage (dont need .default)
+	await replace({
+		files: "build/fatina.min.js",
+		from: /.\.Fatina=.\(\)\}/g,
+		to: (match) => {
+			match = match.slice(0, -1);
+			match += ".default}";
+			return match;
+		}
+	});
+})();
