@@ -23,7 +23,7 @@ Linear tween  function sample1() { var elem = document.getElementById(&#34;sampl
     <item>
       <title>Games Samples</title>
       <link>https://kefniark.github.io/Fatina/samples/game/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 01 Oct 2019 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/samples/game/</guid>
       <description>Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine).  Those are just samples, not real games :P Thanks Unity-chan for her help 
@@ -33,7 +33,7 @@ Unity Chan GO!!! Parallax   var app = new PIXI.Application(1024 / 2, 768 / 2, {b
     <item>
       <title>Presets</title>
       <link>https://kefniark.github.io/Fatina/samples/presets/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 01 Oct 2019 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/samples/presets/</guid>
       <description>Fatina provide few preset for usual effects. These effect are just sequence with a bit of math. They are not really new features but just helpers, and up to you to implement more of them for your own project.       let bunny1; let bunny2; let t1; let t2; function init() { // The application will create a renderer using WebGL, if possible, // with a fallback to a canvas render.</description>
@@ -42,7 +42,7 @@ Unity Chan GO!!! Parallax   var app = new PIXI.Application(1024 / 2, 768 / 2, {b
     <item>
       <title>Advanced Samples</title>
       <link>https://kefniark.github.io/Fatina/samples/advanced/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 01 Oct 2019 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/samples/advanced/</guid>
       <description>Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)

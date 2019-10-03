@@ -1,8 +1,8 @@
 +++
+date = "2019-10-01T13:06:37+09:00"
 title = "Presets"
 toc = true
 weight = 1
-
 +++
 
 <p>

@@ -9,54 +9,72 @@
   
   <url>
     <loc>https://kefniark.github.io/Fatina/samples/game/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://kefniark.github.io/Fatina/samples/presets/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://kefniark.github.io/Fatina/basics/benchmark/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://kefniark.github.io/Fatina/api/basic/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://kefniark.github.io/Fatina/samples/advanced/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://kefniark.github.io/Fatina/plugins/helpers/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://kefniark.github.io/Fatina/plugins/helpers-api/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://kefniark.github.io/Fatina/plugins/helpers-usage/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://kefniark.github.io/Fatina/api/tween/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://kefniark.github.io/Fatina/plugins/animator/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://kefniark.github.io/Fatina/plugins/animator-api/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://kefniark.github.io/Fatina/plugins/animator-usage/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://kefniark.github.io/Fatina/api/sequence/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://kefniark.github.io/Fatina/basics/download/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
   </url>
   
   <url>
@@ -65,24 +83,24 @@
   </url>
   
   <url>
-    <loc>https://kefniark.github.io/Fatina/basics/download/</loc>
-  </url>
-  
-  <url>
     <loc>https://kefniark.github.io/Fatina/basics/about/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://kefniark.github.io/Fatina/basics/tips/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://kefniark.github.io/Fatina/api/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://kefniark.github.io/Fatina/basics/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -93,6 +111,7 @@
   
   <url>
     <loc>https://kefniark.github.io/Fatina/plugins/</loc>
+    <lastmod>2019-10-01T13:06:37+09:00</lastmod>
     <priority>0</priority>
   </url>
   

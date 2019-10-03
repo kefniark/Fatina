@@ -5,6 +5,7 @@
     <link>https://kefniark.github.io/Fatina/plugins/</link>
     <description>Recent content in Plugins on Fatina</description>
     <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Tue, 01 Oct 2019 13:06:37 +0900</lastBuildDate>
     
 	<atom:link href="https://kefniark.github.io/Fatina/plugins/index.xml" rel="self" type="application/rss+xml" />
     
@@ -12,7 +13,7 @@
     <item>
       <title>Helpers Plugin</title>
       <link>https://kefniark.github.io/Fatina/plugins/helpers/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 01 Oct 2019 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/plugins/helpers/</guid>
       <description>Description This plugin is a set of helpers to provide a better integration of Fatina with javascript games library like PixiJs or Phaser. It provides helpers to animate:
@@ -23,7 +24,7 @@
     <item>
       <title>Helpers Plugin - API</title>
       <link>https://kefniark.github.io/Fatina/plugins/helpers-api/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 01 Oct 2019 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/plugins/helpers-api/</guid>
       <description>Helpers Getting Started API  Position Following methods use .position.x and .position.y
@@ -33,7 +34,7 @@
     <item>
       <title>Helpers Plugin - Getting Started</title>
       <link>https://kefniark.github.io/Fatina/plugins/helpers-usage/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 01 Oct 2019 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/plugins/helpers-usage/</guid>
       <description>Helpers Getting Started API  The installation process is explained in the README.
@@ -44,7 +45,7 @@ Fatina.plugin.addHelpers(obj);  1. Example (with Phaser) // require fatina let f
     <item>
       <title>Animator Plugin</title>
       <link>https://kefniark.github.io/Fatina/plugins/animator/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 01 Oct 2019 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/plugins/animator/</guid>
       <description>Description This plugin was designed to provide an easy way to write game animations with Fatina.
@@ -55,7 +56,7 @@ It was design to solve few common issues related to game animations:
     <item>
       <title>Animator Plugin - API</title>
       <link>https://kefniark.github.io/Fatina/plugins/animator-api/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 01 Oct 2019 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/plugins/animator-api/</guid>
       <description>Animator Getting Started API  AnimatorManager  animations: string[] names of registered animations labels: string[] register(name: string, onCreate: (object: any, params?: any) =&amp;gt; IControl, label?: string): AnimatorManager; addAnimatorTo(obj: any): Animator;  TickerManager  get(name: string): ITicker; pauseAll(name: string): void; resumeAll(name: string): void; killAll(name: string): void;  Animator Animator component added to object you want to animate. This keep track of your animations and manage their states for you.
@@ -65,7 +66,7 @@ Animations  addAnimation(name: string, animationName: string, options?</descript
     <item>
       <title>Animator Plugin - Getting Started</title>
       <link>https://kefniark.github.io/Fatina/plugins/animator-usage/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 01 Oct 2019 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/plugins/animator-usage/</guid>
       <description>Animator Getting Started API  The installation process is explained in the README.

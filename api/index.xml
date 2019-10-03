@@ -5,6 +5,7 @@
     <link>https://kefniark.github.io/Fatina/api/</link>
     <description>Recent content in Apis on Fatina</description>
     <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Tue, 01 Oct 2019 13:06:37 +0900</lastBuildDate>
     
 	<atom:link href="https://kefniark.github.io/Fatina/api/index.xml" rel="self" type="application/rss+xml" />
     
@@ -12,7 +13,7 @@
     <item>
       <title>Fatina API</title>
       <link>https://kefniark.github.io/Fatina/api/basic/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 01 Oct 2019 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/api/basic/</guid>
       <description>Fatina Tween Sequence  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  pause() / resume(): void setTimescale(scale: number): void  Methods  init(): void This method has to be called once to initialize Fatina update(dt: number): void tween(obj): Tween Method used to create new tween sequence(): Sequence Method used to create new sequence pulse(obj, settings): ISequence Pulse preset scale(obj, settings): ISequence Scale preset wobble(obj, settings): ISequence Wobble preset sonar(obj, settings): ISequence Sonar preset shake(obj, settings): ISequence Shake preset delay(duration) Delay setTimeout(fn, duration): void This is just a simple helper around Fatina.</description>
@@ -21,7 +22,7 @@
     <item>
       <title>Tween API</title>
       <link>https://kefniark.github.io/Fatina/api/tween/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 01 Oct 2019 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/api/tween/</guid>
       <description>Fatina Tween Sequence   A Tween that takes control of values and animates them.
@@ -31,7 +32,7 @@
     <item>
       <title>Sequence API</title>
       <link>https://kefniark.github.io/Fatina/api/sequence/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 01 Oct 2019 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/api/sequence/</guid>
       <description>Fatina Tween Sequence   A Sequence is special tween that, instead of taking control of a value, takes control of other tweens and animates them as a group.
