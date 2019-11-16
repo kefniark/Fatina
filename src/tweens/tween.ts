@@ -73,11 +73,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	 */
 	private remains = 0;
 
-	/**
-	 * Creates an instance of Tween.
-	 *
-	 * @param {*} object
-	 */
+	// Creates an instance of Tween.
 	constructor(object: any) {
 		super();
 
@@ -86,9 +82,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	}
 
 	/**
-	 * Used to define the object and the properties modified by this tween
-	 *
-	 * @param {*} object
+	 * @inheritdoc
 	 */
 	public init(object: any) {
 		this.obj = object;
@@ -213,10 +207,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	}
 
 	/**
-	 * Method used to set the values at the beginning of the tween
-	 *
-	 * @param {*} from
-	 * @returns {ITween}
+	 * @inheritdoc
 	 */
 	public from(from: any): ITween {
 		this.f = from;
@@ -225,11 +216,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	}
 
 	/**
-	 * Method used to set the values at the end of the tween
-	 *
-	 * @param {*} to
-	 * @param {number} duration
-	 * @returns {ITween}
+	 * @inheritdoc
 	 */
 	public to(to: any, duration: number): ITween {
 		this.t = to;
@@ -258,10 +245,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	}
 
 	/**
-	 * Method used to define if the tween as to work in relative or not
-	 *
-	 * @param {boolean} relative
-	 * @returns {ITween}
+	 * @inheritdoc
 	 */
 	public setRelative(relative: boolean): ITween {
 		this.relative = relative;
@@ -269,10 +253,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	}
 
 	/**
-	 * To apply a modifier on a current tween
-	 *
-	 * @param {*} diff
-	 * @param {boolean} updateTo
+	 * @inheritdoc
 	 */
 	public modify(diff: any, updateTo: boolean): void {
 		for (const prop of this.prop) {
@@ -316,7 +297,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	}
 
 	/**
-	 * Method used to reverse the tween
+	 * @inheritdoc
 	 */
 	public reverse(): void {
 		let previous = this.cf;
@@ -337,10 +318,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	}
 
 	/**
-	 * Method used to reverse the tween N times at the end
-	 *
-	 * @param {number} time
-	 * @returns {ITween}
+	 * @inheritdoc
 	 */
 	public yoyo(time: number): ITween {
 		if (!this.yo) {
@@ -352,10 +330,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	}
 
 	/**
-	 * Method used to Quantify the tween value to a certain amount of steps
-	 *
-	 * @param {number} steps
-	 * @returns {ITween}
+	 * @inheritdoc
 	 */
 	public setSteps(steps: number): ITween {
 		this.steps = steps;
@@ -363,10 +338,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	}
 
 	/**
-	 * Method used to create a sequence with this tween as first value.
-	 * Usually used with .AppendInterval(1250) or .PrependInterval(160) to add a delay
-	 *
-	 * @returns {ISequence}
+	 * @inheritdoc
 	 */
 	public toSequence(): ISequence {
 		if (!this.parent) {
@@ -376,10 +348,7 @@ export class Tween extends BaseTween<Tween> implements ITween {
 	}
 
 	/**
-	 * Method used to set the type of easing for this tween
-	 *
-	 * @param {(EasingType | string)} type
-	 * @returns {ITween}
+	 * @inheritdoc
 	 */
 	public setEasing(type: EasingType | string): ITween {
 		if (!(type in easeNames)) {

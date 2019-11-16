@@ -24,15 +24,11 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 
 	// public properties
 	/**
-	 * Time elapsed
-	 * @type {number}
-	 * @export
+	 * @inheritdoc
 	 */
 	public elapsed = 0;
 	/**
-	 * Total duration of the tween
-	 * @type {number}
-	 * @export
+	 * @inheritdoc
 	 */
 	public duration = 0;
 	/**
@@ -42,9 +38,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	 */
 	public timescale = 1;
 	/**
-	 * Current state of the tween
-	 * @type {State}
-	 * @export
+	 * @inheritdoc
 	 */
 	public state: State = State.Idle;
 
@@ -75,45 +69,32 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	private settings?: ISettings;
 
 	/**
-	 * Is this tween idle (based on state)
-	 * @readonly
-	 * @type {boolean}
-	 * @export
+	 * @inheritdoc
 	 */
 	public get isIdle(): boolean {
 		return this.state === State.Idle;
 	}
 	/**
-	 * Is this tween runs (based on state)
-	 * @readonly
-	 * @type {boolean}
-	 * @export
+	 * @inheritdoc
 	 */
 	public get isRunning(): boolean {
 		return this.state === State.Run;
 	}
 	/**
-	 * Is this tween over (based on state)
-	 * @readonly
-	 * @type {boolean}
-	 * @export
+	 * @inheritdoc
 	 */
 	public get isFinished(): boolean {
 		return this.state >= 3;
 	}
 	/**
-	 * Is this tween paused (based on state)
-	 * @readonly
-	 * @type {boolean}
-	 * @export
+	 * @inheritdoc
 	 */
 	public get isPaused(): boolean {
-		return this. state === State.Pause;
+		return this.state === State.Pause;
 	}
 
 	/**
-	 * Start the tween
-	 * @export
+	 * @inheritdoc
 	 */
 	public start(): T {
 		if (this.state !== State.Idle) {
@@ -137,6 +118,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	}
 
 	/**
+	 * @inheritdoc
 	 * @readonly
 	 */
 	public reset(skipParent?: boolean): void {
@@ -170,11 +152,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	}
 
 	/**
-	 * Method used to define the ticker of this tween
-	 * When Fatina.Tween is used, the main ticker is automatically defined as parent
-	 *
-	 * @param {ITicker} ticker
-	 * @returns {T}
+	 * @inheritdoc
 	 */
 	public setParent(ticker: ITicker): T {
 		this.removeParent();
@@ -183,10 +161,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	}
 
 	/**
-	 * Method used to change the timescale of the tween
-	 *
-	 * @param {number} scale
-	 * @returns {T}
+	 * @inheritdoc
 	 */
 	public setTimescale(scale: number): T {
 		this.timescale = scale;
@@ -194,9 +169,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	}
 
 	/**
-	 * Method used to pause a tween or a sequence (only work if the tween runs)
-	 *
-	 * @returns {void}
+	 * @inheritdoc
 	 */
 	public pause(): void {
 		if (this.state !== State.Run) {
@@ -209,8 +182,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	}
 
 	/**
-	 * Method used to resume a tween or a sequence (only work if the tween is paused)
-	 * @export
+	 * @inheritdoc
 	 */
 	public resume(): void {
 		if (this.state !== State.Pause) {
@@ -223,11 +195,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	}
 
 	/**
-	 * Method used to Skip this tween or sequence and directly finish it
-	 *
-	 * @export
-	 * @param {boolean} [finalValue]
-	 * @returns {void}
+	 * @inheritdoc
 	 */
 	public skip(finalValue?: boolean): void {
 		if (this.state >= 3) {
@@ -250,8 +218,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	}
 
 	/**
-	 * Method used to Stop/Kill a tween or a sequence
-	 * @export
+	 * @inheritdoc
 	 */
 	public kill(): void {
 		if (this.state === State.Killed) {
@@ -315,11 +282,11 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 	/**
 	 * @protected
 	 */
-	protected check(): void {}
+	protected check(): void { }
 	/**
 	 * @protected
 	 */
-	protected validate(): void {}
+	protected validate(): void { }
 	/**
 	 * @protected
 	 */
@@ -428,7 +395,7 @@ export abstract class BaseTween<T extends BaseTween<any>> {
 			this.events[name].push(cb);
 		} else {
 			this.events[name] = [this.events[name], cb];
- 		}
+		}
 		return this as any;
 	}
 }

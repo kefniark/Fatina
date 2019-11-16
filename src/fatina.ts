@@ -96,16 +96,17 @@ export class Fatina {
 	 * @private
 	 */
 	private manager: Ticker;
-
-	public get elapsed(): number {
-		return this.manager.elapsed;
-	}
+	private defaultTicker: ITicker;
 
 	public get mainTicker(): ITicker {
 		if (!this.initialized) {
 			this.init();
 		}
 		return this.manager;
+	}
+
+	public get elapsed(): number {
+		return this.manager.elapsed;
 	}
 
 	/**
@@ -170,6 +171,7 @@ export class Fatina {
 		if (!this.manager) {
 			this.manager = new Ticker();
 			this.manager.start();
+			this.defaultTicker = this.manager;
 		}
 
 		// browser init requestAnimationFrame, after onLoad() event
@@ -198,6 +200,16 @@ export class Fatina {
 	public setTimescale(scale: number): void {
 		this.init();
 		this.manager.setTimescale(scale);
+	}
+
+	/**
+	 * Set the default Ticker (the one where all the new tween, sequences, ... are attached to)
+	 *
+	 * @param {ITicker} ticker
+	 * @memberof Fatina
+	 */
+	public setDefaultTicker(ticker: ITicker) {
+		this.defaultTicker = ticker;
 	}
 
 	/**
@@ -333,7 +345,7 @@ export class Fatina {
 			this.init();
 		}
 
-		obj.setParent(this.manager as ITicker);
+		obj.setParent(this.defaultTicker);
 
 		if (this.settings.logLevel !== Log.None || !this.settings.safe) {
 			obj.setSettings(this.settings);

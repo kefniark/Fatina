@@ -331,20 +331,14 @@ export class Sequence extends BaseTween<Sequence> implements ISequence, ITicker,
 	}
 
 	/**
-	 *
-	 *
-	 * @param {((index: ITween | IPlayable) => void)} cb
-	 * @returns {ISequence}
+	 * @inheritdoc
 	 */
 	public onStepStart(cb: (index: ITween | IPlayable) => void): ISequence {
 		return this.onEvent('stepStart', cb);
 	}
 
 	/**
-	 *
-	 *
-	 * @param {((index: ITween | IPlayable) => void)} cb
-	 * @returns {ISequence}
+	 * @inheritdoc
 	 */
 	public onStepEnd(cb: (index: ITween | IPlayable) => void): ISequence {
 		return this.onEvent('stepEnd', cb);
