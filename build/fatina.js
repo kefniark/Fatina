@@ -1,4 +1,4 @@
-// [Fatina]  Build: 3.0.1 - Friday, October 4th, 2019, 12:49:50 AM  
+// [Fatina]  Build: 3.0.2 - Saturday, November 16th, 2019, 2:19:01 PM  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -465,7 +465,7 @@ class Fatina {
         /**
          * @readonly
          */
-        this.version = '3.0.1';
+        this.version = '3.0.2';
         this.time = 0;
         /**
          * @private
@@ -525,14 +525,14 @@ class Fatina {
          */
         this.shake = (obj, settings) => preset_1.shakePreset(this, obj, settings);
     }
-    get elapsed() {
-        return this.manager.elapsed;
-    }
     get mainTicker() {
         if (!this.initialized) {
             this.init();
         }
         return this.manager;
+    }
+    get elapsed() {
+        return this.manager.elapsed;
     }
     /**
      * Method used when Fatina is used for the first time.
@@ -549,6 +549,7 @@ class Fatina {
         if (!this.manager) {
             this.manager = new ticker_1.Ticker();
             this.manager.start();
+            this.defaultTicker = this.manager;
         }
         // browser init requestAnimationFrame, after onLoad() event
         if (typeof (window) !== 'undefined' && !disableAutoTick) {
@@ -575,6 +576,15 @@ class Fatina {
     setTimescale(scale) {
         this.init();
         this.manager.setTimescale(scale);
+    }
+    /**
+     * Set the default Ticker (the one where all the new tween, sequences, ... are attached to)
+     *
+     * @param {ITicker} ticker
+     * @memberof Fatina
+     */
+    setDefaultTicker(ticker) {
+        this.defaultTicker = ticker;
     }
     /**
      * This method pause the update loop (update are not called anymore)
@@ -697,7 +707,7 @@ class Fatina {
         if (!this.initialized) {
             this.init();
         }
-        obj.setParent(this.manager);
+        obj.setParent(this.defaultTicker);
         if (this.settings.logLevel !== 0 /* None */ || !this.settings.safe) {
             obj.setSettings(this.settings);
         }
@@ -1252,15 +1262,11 @@ class BaseTween {
         this.events = {};
         // public properties
         /**
-         * Time elapsed
-         * @type {number}
-         * @export
+         * @inheritdoc
          */
         this.elapsed = 0;
         /**
-         * Total duration of the tween
-         * @type {number}
-         * @export
+         * @inheritdoc
          */
         this.duration = 0;
         /**
@@ -1270,9 +1276,7 @@ class BaseTween {
          */
         this.timescale = 1;
         /**
-         * Current state of the tween
-         * @type {State}
-         * @export
+         * @inheritdoc
          */
         this.state = 0 /* Idle */;
         /**
@@ -1281,44 +1285,31 @@ class BaseTween {
         this.first = true;
     }
     /**
-     * Is this tween idle (based on state)
-     * @readonly
-     * @type {boolean}
-     * @export
+     * @inheritdoc
      */
     get isIdle() {
         return this.state === 0 /* Idle */;
     }
     /**
-     * Is this tween runs (based on state)
-     * @readonly
-     * @type {boolean}
-     * @export
+     * @inheritdoc
      */
     get isRunning() {
         return this.state === 1 /* Run */;
     }
     /**
-     * Is this tween over (based on state)
-     * @readonly
-     * @type {boolean}
-     * @export
+     * @inheritdoc
      */
     get isFinished() {
         return this.state >= 3;
     }
     /**
-     * Is this tween paused (based on state)
-     * @readonly
-     * @type {boolean}
-     * @export
+     * @inheritdoc
      */
     get isPaused() {
         return this.state === 2 /* Pause */;
     }
     /**
-     * Start the tween
-     * @export
+     * @inheritdoc
      */
     start() {
         if (this.state !== 0 /* Idle */) {
@@ -1339,6 +1330,7 @@ class BaseTween {
         return this;
     }
     /**
+     * @inheritdoc
      * @readonly
      */
     reset(skipParent) {
@@ -1367,11 +1359,7 @@ class BaseTween {
         }
     }
     /**
-     * Method used to define the ticker of this tween
-     * When Fatina.Tween is used, the main ticker is automatically defined as parent
-     *
-     * @param {ITicker} ticker
-     * @returns {T}
+     * @inheritdoc
      */
     setParent(ticker) {
         this.removeParent();
@@ -1379,19 +1367,14 @@ class BaseTween {
         return this;
     }
     /**
-     * Method used to change the timescale of the tween
-     *
-     * @param {number} scale
-     * @returns {T}
+     * @inheritdoc
      */
     setTimescale(scale) {
         this.timescale = scale;
         return this;
     }
     /**
-     * Method used to pause a tween or a sequence (only work if the tween runs)
-     *
-     * @returns {void}
+     * @inheritdoc
      */
     pause() {
         if (this.state !== 1 /* Run */) {
@@ -1402,8 +1385,7 @@ class BaseTween {
         this.removeParent();
     }
     /**
-     * Method used to resume a tween or a sequence (only work if the tween is paused)
-     * @export
+     * @inheritdoc
      */
     resume() {
         if (this.state !== 2 /* Pause */) {
@@ -1414,11 +1396,7 @@ class BaseTween {
         this.parent.addTick(this.tickCb);
     }
     /**
-     * Method used to Skip this tween or sequence and directly finish it
-     *
-     * @export
-     * @param {boolean} [finalValue]
-     * @returns {void}
+     * @inheritdoc
      */
     skip(finalValue) {
         if (this.state >= 3) {
@@ -1437,8 +1415,7 @@ class BaseTween {
         this.complete();
     }
     /**
-     * Method used to Stop/Kill a tween or a sequence
-     * @export
+     * @inheritdoc
      */
     kill() {
         if (this.state === 4 /* Killed */) {
@@ -2024,19 +2001,13 @@ class Sequence extends baseTween_1.BaseTween {
         return this;
     }
     /**
-     *
-     *
-     * @param {((index: ITween | IPlayable) => void)} cb
-     * @returns {ISequence}
+     * @inheritdoc
      */
     onStepStart(cb) {
         return this.onEvent('stepStart', cb);
     }
     /**
-     *
-     *
-     * @param {((index: ITween | IPlayable) => void)} cb
-     * @returns {ISequence}
+     * @inheritdoc
      */
     onStepEnd(cb) {
         return this.onEvent('stepEnd', cb);
@@ -2069,11 +2040,7 @@ const sequence_1 = __webpack_require__(/*! ./sequence */ "./src/tweens/sequence.
  * @implements {ITween}
  */
 class Tween extends baseTween_1.BaseTween {
-    /**
-     * Creates an instance of Tween.
-     *
-     * @param {*} object
-     */
+    // Creates an instance of Tween.
     constructor(object) {
         super();
         /**
@@ -2106,9 +2073,7 @@ class Tween extends baseTween_1.BaseTween {
         this.tickCb = this.tick.bind(this);
     }
     /**
-     * Used to define the object and the properties modified by this tween
-     *
-     * @param {*} object
+     * @inheritdoc
      */
     init(object) {
         this.obj = object;
@@ -2216,10 +2181,7 @@ class Tween extends baseTween_1.BaseTween {
         }
     }
     /**
-     * Method used to set the values at the beginning of the tween
-     *
-     * @param {*} from
-     * @returns {ITween}
+     * @inheritdoc
      */
     from(from) {
         this.f = from;
@@ -2227,11 +2189,7 @@ class Tween extends baseTween_1.BaseTween {
         return this;
     }
     /**
-     * Method used to set the values at the end of the tween
-     *
-     * @param {*} to
-     * @param {number} duration
-     * @returns {ITween}
+     * @inheritdoc
      */
     to(to, duration) {
         this.t = to;
@@ -2256,20 +2214,14 @@ class Tween extends baseTween_1.BaseTween {
         this.prop.filter((el, i, a) => i === a.indexOf(el));
     }
     /**
-     * Method used to define if the tween as to work in relative or not
-     *
-     * @param {boolean} relative
-     * @returns {ITween}
+     * @inheritdoc
      */
     setRelative(relative) {
         this.relative = relative;
         return this;
     }
     /**
-     * To apply a modifier on a current tween
-     *
-     * @param {*} diff
-     * @param {boolean} updateTo
+     * @inheritdoc
      */
     modify(diff, updateTo) {
         for (const prop of this.prop) {
@@ -2307,7 +2259,7 @@ class Tween extends baseTween_1.BaseTween {
         super.reset(skipParent);
     }
     /**
-     * Method used to reverse the tween
+     * @inheritdoc
      */
     reverse() {
         let previous = this.cf;
@@ -2324,10 +2276,7 @@ class Tween extends baseTween_1.BaseTween {
         }
     }
     /**
-     * Method used to reverse the tween N times at the end
-     *
-     * @param {number} time
-     * @returns {ITween}
+     * @inheritdoc
      */
     yoyo(time) {
         if (!this.yo) {
@@ -2338,20 +2287,14 @@ class Tween extends baseTween_1.BaseTween {
         return this;
     }
     /**
-     * Method used to Quantify the tween value to a certain amount of steps
-     *
-     * @param {number} steps
-     * @returns {ITween}
+     * @inheritdoc
      */
     setSteps(steps) {
         this.steps = steps;
         return this;
     }
     /**
-     * Method used to create a sequence with this tween as first value.
-     * Usually used with .AppendInterval(1250) or .PrependInterval(160) to add a delay
-     *
-     * @returns {ISequence}
+     * @inheritdoc
      */
     toSequence() {
         if (!this.parent) {
@@ -2360,10 +2303,7 @@ class Tween extends baseTween_1.BaseTween {
         return new sequence_1.Sequence().setParent(this.parent).append(this);
     }
     /**
-     * Method used to set the type of easing for this tween
-     *
-     * @param {(EasingType | string)} type
-     * @returns {ITween}
+     * @inheritdoc
      */
     setEasing(type) {
         if (!(type in easing_1.easeNames)) {

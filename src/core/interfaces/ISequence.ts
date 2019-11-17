@@ -12,9 +12,20 @@ import { ITween } from './ITween';
  * @extends {IControl}
  */
 export interface ISequence extends IControl {
-	count: number;
+	/**
+	 * Number of tween in this sequence
+	 * @readonly
+	 * @type {number}
+	 */
+	readonly count: number;
 
+	/**
+	 * @inheritdoc
+	 */
 	start(): ISequence;
+	/**
+	 * @inheritdoc
+	 */
 	setParent(ticker: ITicker): ISequence;
 	setTimescale(scale: number): ISequence;
 	setLoop(loop: number): ISequence;
@@ -28,11 +39,46 @@ export interface ISequence extends IControl {
 	prependInterval(duration: number): ISequence;
 	join(tween: ITween | ISequence): ISequence;
 
+	/**
+	 * Callback called when the sequence is starting
+	 *
+	 * @param {() => void} cb
+	 */
 	onStart(cb: () => void): ISequence;
+	/**
+	 * Callback called when the sequence is restarted
+	 *
+	 * @param {() => void} cb
+	 */
 	onRestart(cb: () => void): ISequence;
-	onStepStart(cb: (tween: ITween | IPlayable) => void): ISequence;
-	onStepEnd(cb: (index: ITween | IPlayable) => void): ISequence;
+	/**
+	 * Callback called when the sequence is updated
+	 *
+	 * @param {(dt: number, progress: number) => void} cb
+	 */
 	onUpdate(cb: (dt: number, progress: number) => void): ISequence;
+	/**
+	 * Callback called when the sequence is killed
+	 *
+	 * @param {() => void} cb
+	 */
 	onKilled(cb: () => void): ISequence;
+	/**
+	 * Callback called when the sequence is complete
+	 *
+	 * @param {() => void} cb
+	 */
 	onComplete(cb: () => void): ISequence;
+	/**
+	 * Callback called when a step start
+	 *
+	 * @param {() => void} cb
+	 */
+	onStepStart(cb: (tween: ITween | IPlayable) => void): ISequence;
+	/**
+	 * Callback called when a step ends
+	 *
+	 * @param {() => void} cb
+	 */
+	onStepEnd(cb: (index: ITween | IPlayable) => void): ISequence;
 }

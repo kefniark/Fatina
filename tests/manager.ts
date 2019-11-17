@@ -227,6 +227,40 @@ test('[Fatina.Manager] Ticker Helpers', (t: Test) => {
 	t.end();
 });
 
+test('[Fatina.Manager] Check Default Ticker', (t: Test) => {
+	let evtOrder = 0;
+
+	const before = fatina.ticker();
+	before.addTick(() => t.equal(++evtOrder, 1));
+
+	const def = fatina.ticker();
+	def.addTick(() => t.equal(++evtOrder, 2));
+
+	const after = fatina.ticker();
+	after.addTick(() => t.equal(++evtOrder, 5));
+
+	// change the default ticker
+	fatina.setDefaultTicker(def);
+
+	const obj = { a: 0, b: 2 };
+	fatina.tween(obj).to({ a : 2 }, 5).onUpdate(() => t.equal(++evtOrder, 3)).start();
+	fatina.tween(obj).to({ b : 0 }, 5).onUpdate(() => t.equal(++evtOrder, 4)).start();
+
+	evtOrder = 0;
+	fatina.update(3);
+
+	evtOrder = 0;
+	fatina.update(3);
+
+	// cleanup
+	fatina.setDefaultTicker(fatina.mainTicker);
+	before.kill();
+	def.kill();
+	after.kill();
+
+	t.end();
+});
+
 test('[Fatina.Manager] Create cascade tween', (t: Test) => {
 	const obj = { x: 0 };
 	const tween = fatina.tween(obj)
