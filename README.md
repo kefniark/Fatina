@@ -28,6 +28,7 @@ A comprehensive and easy to use animation library for **Typescript** / **Javascr
 
 ### Install
 If you use NPM
+
 ```ts
 > npm install fatina
 ```
