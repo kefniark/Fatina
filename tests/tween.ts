@@ -786,8 +786,8 @@ test('[Fatina.Tween] Tween destroyed object/properties', (t: Test) => {
 	ticker.tick(1);
 	t.equal(1, obj.x, 'Check the object moved');
 
-	delete obj.x;
-	delete obj.sub;
+	delete (obj as any).x;
+	delete (obj as any).sub;
 
 	ticker.tick(1);
 

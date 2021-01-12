@@ -1,4 +1,4 @@
-// [Fatina]  Build: 3.0.3 - Tuesday, January 12th, 2021, 8:07:30 PM  
+// [Fatina]  Build: 3.0.5 - Tuesday, January 12th, 2021, 9:21:53 PM  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -107,6 +107,7 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.easeNames = void 0;
 /**
  * List of easing method
  *
@@ -291,6 +292,9 @@ e.inOutElastic = (t) => {
 // Back
 e.inBack = (t) => {
     const s = BACK;
+    if (t === 0) {
+        return 0;
+    }
     return t === 1 ? 1 : t * t * ((s + 1) * t - s);
 };
 e.outBack = (t) => {
@@ -300,6 +304,9 @@ e.outBack = (t) => {
 e.inOutBack = (t) => {
     const s = BACK * 1.525;
     t *= 2;
+    if (t === 0) {
+        return 0;
+    }
     if (t < 1) {
         return 0.5 * (t * t * ((s + 1) * t - s));
     }
@@ -344,6 +351,7 @@ exports.easeNames = e;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.EasingType = void 0;
 /**
  * List of all easing methods
  *
@@ -398,6 +406,7 @@ var EasingType;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Fatina = void 0;
 const preset_1 = __webpack_require__(/*! ./preset */ "./src/preset.ts");
 const ticker_1 = __webpack_require__(/*! ./ticker */ "./src/ticker.ts");
 const delay_1 = __webpack_require__(/*! ./tweens/delay */ "./src/tweens/delay.ts");
@@ -465,7 +474,7 @@ class Fatina {
         /**
          * @readonly
          */
-        this.version = '3.0.3';
+        this.version = '3.0.5';
         this.time = 0;
         /**
          * @private
@@ -864,6 +873,7 @@ exports.Fatina = Fatina;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.EasingType = void 0;
 const fatina_1 = __webpack_require__(/*! ./fatina */ "./src/fatina.ts");
 /**
  * @export
@@ -874,7 +884,7 @@ exports.default = new fatina_1.Fatina();
  * @export
  */
 var easingType_1 = __webpack_require__(/*! ./easing/easingType */ "./src/easing/easingType.ts");
-exports.EasingType = easingType_1.EasingType;
+Object.defineProperty(exports, "EasingType", { enumerable: true, get: function () { return easingType_1.EasingType; } });
 
 
 /***/ }),
@@ -889,6 +899,7 @@ exports.EasingType = easingType_1.EasingType;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.shakePreset = exports.wobblePreset = exports.scalePreset = exports.pulsePreset = exports.sonarPreset = void 0;
 const easing_1 = __webpack_require__(/*! ./easing/easing */ "./src/easing/easing.ts");
 /**
  * Get Root object
@@ -1107,6 +1118,7 @@ exports.shakePreset = shakePreset;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Ticker = void 0;
 /**
  * Main Fatina Ticker
  * Parent of all the normal tween and sequence
@@ -1242,6 +1254,7 @@ exports.Ticker = Ticker;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BaseTween = void 0;
 /**
  * Shared behaviors between different types of tweens and sequence
  * Used mostly to manage:
@@ -1599,6 +1612,7 @@ exports.BaseTween = BaseTween;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Callback = void 0;
 const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/tweens/baseTween.ts");
 /**
  * Fake tween used to append or join callback in a sequence
@@ -1646,6 +1660,7 @@ exports.Callback = Callback;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Delay = void 0;
 const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/tweens/baseTween.ts");
 /**
  * Fake tween used to delay other tweens in a sequence
@@ -1715,6 +1730,7 @@ exports.Delay = Delay;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Sequence = void 0;
 const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/tweens/baseTween.ts");
 const callback_1 = __webpack_require__(/*! ./callback */ "./src/tweens/callback.ts");
 const delay_1 = __webpack_require__(/*! ./delay */ "./src/tweens/delay.ts");
@@ -2028,6 +2044,7 @@ exports.Sequence = Sequence;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Tween = void 0;
 const easing_1 = __webpack_require__(/*! ../easing/easing */ "./src/easing/easing.ts");
 const baseTween_1 = __webpack_require__(/*! ./baseTween */ "./src/tweens/baseTween.ts");
 const sequence_1 = __webpack_require__(/*! ./sequence */ "./src/tweens/sequence.ts");
