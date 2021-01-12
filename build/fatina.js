@@ -1,4 +1,4 @@
-// [Fatina]  Build: 3.0.2 - Saturday, November 16th, 2019, 2:19:01 PM  
+// [Fatina]  Build: 3.0.3 - Tuesday, January 12th, 2021, 8:07:30 PM  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -465,7 +465,7 @@ class Fatina {
         /**
          * @readonly
          */
-        this.version = '3.0.2';
+        this.version = '3.0.3';
         this.time = 0;
         /**
          * @private

@@ -5,7 +5,7 @@ node_modules/
 public/
 lib/
 
-build/declarations/
+build/code/
 build/docs/
 .DS_Store
 npm-debug.log

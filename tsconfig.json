@@ -9,7 +9,7 @@
 		"module": "commonjs",
 
 		// build settings
-		"sourceMap": true,
+		"sourceMap": false,
 		"pretty": true,
 		"declaration": true,
 		"preserveConstEnums": true,
