@@ -1,4 +1,4 @@
-// [Fatina]  Build: 3.0.5 - Tuesday, January 12th, 2021, 9:21:53 PM  
+// [Fatina]  Build: 3.0.5 - Tuesday, August 17th, 2021, 7:21:04 PM  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
