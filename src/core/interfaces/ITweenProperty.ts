@@ -1,4 +1,4 @@
 export interface ITweenProperty {
-	original: number;
-	value: number;
+  original: number
+  value: number
 }

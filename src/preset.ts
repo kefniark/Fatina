@@ -1,6 +1,6 @@
-import { easeNames } from './easing/easing';
-import { Fatina } from './fatina';
-import { EasingType } from './index';
+import { easeNames } from './easing/easing'
+import { Fatina } from './fatina'
+import { EasingType } from './index'
 
 /**
  * Get Root object
@@ -12,12 +12,12 @@ import { EasingType } from './index';
  * @returns
  */
 function getRoot(obj: any, property: string) {
-	const path = property.split('.');
-	let ret = obj;
-	for (let i = 0; i < path.length - 1; i++) {
-		ret = ret[path[i]];
-	}
-	return ret;
+  const path = property.split('.')
+  let ret = obj
+  for (let i = 0; i < path.length - 1; i++) {
+    ret = ret[path[i]]
+  }
+  return ret
 }
 
 /**
@@ -29,8 +29,8 @@ function getRoot(obj: any, property: string) {
  * @returns
  */
 function getProp(property: string) {
-	const path = property.split('.');
-	return path[path.length - 1];
+  const path = property.split('.')
+  return path[path.length - 1]
 }
 
 /**
@@ -43,18 +43,18 @@ function getProp(property: string) {
  * @returns
  */
 function getData(property: string, value: any) {
-	const data = {} as any;
+  const data = {} as any
 
-	data[getProp(property)] = value;
-	return data;
+  data[getProp(property)] = value
+  return data
 }
 
 export interface ISonarPresetParams {
-	alpha: string;
-	scaleX: string;
-	scaleY: string;
-	amplitude: number;
-	duration: number;
+  alpha: string
+  scaleX: string
+  scaleY: string
+  amplitude: number
+  duration: number
 }
 
 /**
@@ -68,39 +68,40 @@ export interface ISonarPresetParams {
  * @returns
  */
 export function sonarPreset(fatina: Fatina, obj: any, settings?: ISonarPresetParams) {
-	const defaults = {
-		alpha: 'alpha',
-		scaleX: 'scale.x',
-		scaleY: 'scale.y',
-		amplitude: 4,
-		duration: 2000
-	};
-	const pa = { ...defaults, ...(settings || {}) } as ISonarPresetParams;
-	const rs = getRoot(obj, pa.scaleX);
-	const ra = getRoot(obj, pa.alpha);
-	const sx = getProp(pa.scaleX);
-	const sy = getProp(pa.scaleY);
-	const alpha = getProp(pa.alpha);
-	const src = { x: rs[sx], y: rs[sy] };
-	const p = easeNames[EasingType.OutCubic];
+  const defaults = {
+    alpha: 'alpha',
+    scaleX: 'scale.x',
+    scaleY: 'scale.y',
+    amplitude: 4,
+    duration: 2000
+  }
+  const pa = { ...defaults, ...(settings || {}) } as ISonarPresetParams
+  const rs = getRoot(obj, pa.scaleX)
+  const ra = getRoot(obj, pa.alpha)
+  const sx = getProp(pa.scaleX)
+  const sy = getProp(pa.scaleY)
+  const alpha = getProp(pa.alpha)
+  const src = { x: rs[sx], y: rs[sy] }
+  const p = easeNames[EasingType.OutCubic]
 
-	return fatina.tween({})
-		.to({}, pa.duration)
-		.onUpdate((_dt, progress) => {
-			ra[alpha] = 1 - easeNames[EasingType.InSine](progress);
-			rs[sx] = src.x + pa.amplitude * p(progress);
-			rs[sy] = src.y + pa.amplitude * p(progress);
-		})
-		.onKilled(() => {
-			ra[alpha] = 1;
-			rs[sx] = src.x;
-			rs[sy] = src.y;
-		});
+  return fatina
+    .tween({})
+    .to({}, pa.duration)
+    .onUpdate((_dt, progress) => {
+      ra[alpha] = 1 - easeNames[EasingType.InSine](progress)
+      rs[sx] = src.x + pa.amplitude * p(progress)
+      rs[sy] = src.y + pa.amplitude * p(progress)
+    })
+    .onKilled(() => {
+      ra[alpha] = 1
+      rs[sx] = src.x
+      rs[sy] = src.y
+    })
 }
 
 export interface IPulsePresetParams {
-	alpha: string;
-	duration: number;
+  alpha: string
+  duration: number
 }
 
 /**
@@ -114,32 +115,34 @@ export interface IPulsePresetParams {
  * @returns
  */
 export function pulsePreset(fatina: Fatina, obj: any, settings?: IPulsePresetParams) {
-	const defaults = {
-		alpha: 'alpha',
-		duration: 2000
-	};
-	const pa = { ...defaults, ...(settings || {}) } as IPulsePresetParams;
-	const rootAlpha = getRoot(obj, pa.alpha);
-	return fatina.tween(rootAlpha)
-		.to(getData(pa.alpha, 0), pa.duration / 2)
-		.setEasing(EasingType.InOutQuad)
-		.toSequence()
-		.append(
-			fatina.tween(rootAlpha)
-			.to(getData(pa.alpha, 1), pa.duration / 2)
-			.setEasing(EasingType.InOutQuad)
-		)
-		.onKilled(() => rootAlpha[getProp(pa.alpha)] = 1);
+  const defaults = {
+    alpha: 'alpha',
+    duration: 2000
+  }
+  const pa = { ...defaults, ...(settings || {}) } as IPulsePresetParams
+  const rootAlpha = getRoot(obj, pa.alpha)
+  return fatina
+    .tween(rootAlpha)
+    .to(getData(pa.alpha, 0), pa.duration / 2)
+    .setEasing(EasingType.InOutQuad)
+    .toSequence()
+    .append(
+      fatina
+        .tween(rootAlpha)
+        .to(getData(pa.alpha, 1), pa.duration / 2)
+        .setEasing(EasingType.InOutQuad)
+    )
+    .onKilled(() => (rootAlpha[getProp(pa.alpha)] = 1))
 }
 
 export interface IScalePresetParams {
-	scaleX: string;
-	scaleY: string;
-	amplitude: number;
-	duration: number;
-	bounce: number;
-	friction: number;
-	sinX: number;
+  scaleX: string
+  scaleY: string
+  amplitude: number
+  duration: number
+  bounce: number
+  friction: number
+  sinX: number
 }
 
 /**
@@ -153,32 +156,34 @@ export interface IScalePresetParams {
  * @returns
  */
 export function scalePreset(fatina: Fatina, obj: any, settings?: IScalePresetParams) {
-	const defaults = {
-		scaleX: 'scale.x',
-		scaleY: 'scale.y',
-		amplitude: 0.5,
-		duration: 2000,
-		bounce: 5,
-		friction: 2,
-		sinX: 0
-	};
-	const pa = { ...defaults, ...(settings || {}) } as IScalePresetParams;
-	const root = getRoot(obj, pa.scaleX);
-	const x = getProp(pa.scaleX);
-	const y = getProp(pa.scaleY);
-	const src = { x: root[x], y: root[y] };
-	return fatina.tween({}).to({}, pa.duration)
-		.setEasing(EasingType.InOutCubic)
-		.onUpdate((_dt, progress) => {
-			const friction = Math.pow(1 - progress, pa.friction);
-			const p = (progress * pa.bounce) % pa.duration;
-			root[x] = src.x + Math.sin(pa.sinX + p * Math.PI * 2) * pa.amplitude * friction;
-			root[y] = src.y + Math.sin(p * Math.PI * 2) * pa.amplitude * friction;
-		})
-		.onKilled(() => {
-			root[x] = src.x;
-			root[y] = src.y;
-		});
+  const defaults = {
+    scaleX: 'scale.x',
+    scaleY: 'scale.y',
+    amplitude: 0.5,
+    duration: 2000,
+    bounce: 5,
+    friction: 2,
+    sinX: 0
+  }
+  const pa = { ...defaults, ...(settings || {}) } as IScalePresetParams
+  const root = getRoot(obj, pa.scaleX)
+  const x = getProp(pa.scaleX)
+  const y = getProp(pa.scaleY)
+  const src = { x: root[x], y: root[y] }
+  return fatina
+    .tween({})
+    .to({}, pa.duration)
+    .setEasing(EasingType.InOutCubic)
+    .onUpdate((_dt, progress) => {
+      const friction = Math.pow(1 - progress, pa.friction)
+      const p = (progress * pa.bounce) % pa.duration
+      root[x] = src.x + Math.sin(pa.sinX + p * Math.PI * 2) * pa.amplitude * friction
+      root[y] = src.y + Math.sin(p * Math.PI * 2) * pa.amplitude * friction
+    })
+    .onKilled(() => {
+      root[x] = src.x
+      root[y] = src.y
+    })
 }
 
 /**
@@ -192,17 +197,17 @@ export function scalePreset(fatina: Fatina, obj: any, settings?: IScalePresetPar
  * @returns
  */
 export function wobblePreset(fatina: Fatina, obj: any, settings?: IScalePresetParams) {
-	const defaults = { sinX: Math.PI };
-	return scalePreset(fatina, obj, { ...defaults, ...(settings || {}) } as IScalePresetParams);
+  const defaults = { sinX: Math.PI }
+  return scalePreset(fatina, obj, { ...defaults, ...(settings || {}) } as IScalePresetParams)
 }
 
 export interface IShakePresetParams {
-	posX: string;
-	posY: string;
-	amplitude: number;
-	duration: number;
-	bounce: number;
-	friction: number;
+  posX: string
+  posY: string
+  amplitude: number
+  duration: number
+  bounce: number
+  friction: number
 }
 
 /**
@@ -216,30 +221,31 @@ export interface IShakePresetParams {
  * @returns
  */
 export function shakePreset(fatina: Fatina, obj: any, settings?: IShakePresetParams) {
-	const defaults = {
-		posX: 'position.x',
-		posY: 'position.y',
-		amplitude: 1.5,
-		duration: 2000,
-		bounce: 10,
-		friction: 2
-	};
-	const pa = { ...defaults, ...(settings || {}) } as IShakePresetParams;
-	const root = getRoot(obj, pa.posX);
-	const x = getProp(pa.posX);
-	const y = getProp(pa.posY);
-	const src = { x: root[x], y: root[y] };
-	const rnd = { x: 0.5 + Math.random(), y: 0.5 + Math.random() };
-	return fatina.tween({})
-		.to({}, pa.duration)
-		.onUpdate((_dt, progress) => {
-			const friction = Math.pow(1 - progress, pa.friction);
-			const p = (progress * pa.bounce) % pa.duration;
-			root[x] = src.x + Math.sin(Math.PI + (p + rnd.x) * Math.PI * 2) * pa.amplitude * friction;
-			root[y] = src.y + Math.sin((p + rnd.y) * Math.PI * 2) * pa.amplitude * friction;
-		})
-		.onKilled(() => {
-			root[x] = src.x;
-			root[y] = src.y;
-		});
+  const defaults = {
+    posX: 'position.x',
+    posY: 'position.y',
+    amplitude: 1.5,
+    duration: 2000,
+    bounce: 10,
+    friction: 2
+  }
+  const pa = { ...defaults, ...(settings || {}) } as IShakePresetParams
+  const root = getRoot(obj, pa.posX)
+  const x = getProp(pa.posX)
+  const y = getProp(pa.posY)
+  const src = { x: root[x], y: root[y] }
+  const rnd = { x: 0.5 + Math.random(), y: 0.5 + Math.random() }
+  return fatina
+    .tween({})
+    .to({}, pa.duration)
+    .onUpdate((_dt, progress) => {
+      const friction = Math.pow(1 - progress, pa.friction)
+      const p = (progress * pa.bounce) % pa.duration
+      root[x] = src.x + Math.sin(Math.PI + (p + rnd.x) * Math.PI * 2) * pa.amplitude * friction
+      root[y] = src.y + Math.sin((p + rnd.y) * Math.PI * 2) * pa.amplitude * friction
+    })
+    .onKilled(() => {
+      root[x] = src.x
+      root[y] = src.y
+    })
 }

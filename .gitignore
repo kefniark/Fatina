@@ -4,6 +4,8 @@ coverage/
 node_modules/
 public/
 lib/
+build/
+dist/
 
 build/code/
 build/docs/

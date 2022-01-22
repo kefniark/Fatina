@@ -1,6 +1,5 @@
 <html>
     <head>
-        <script src="./fatina.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
         <style>
             .menu {
@@ -20,6 +19,11 @@
             }
         </style>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+        <script type="module">
+          import Fatina from '../dist/fatina.esm.js'
+          window.Fatina = Fatina;
+          Fatina.init();
+        </script>
     </head>
     <body onload="init()">
         <script>
@@ -30,11 +34,6 @@
             let t2;
 
             function init() {
-                // hack to work with webpack-dev-server
-                window.Fatina = window.Fatina.default;
-
-                Fatina.init();
-
                 // The application will create a renderer using WebGL, if possible,
                 // with a fallback to a canvas render. It will also setup the ticker
                 // and the root stage PIXI.Container

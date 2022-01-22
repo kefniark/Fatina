@@ -1,4 +1,4 @@
-import { IControl } from './IControl';
+import { IControl } from './IControl'
 
 /**
  * Interface used by any ticker (ticker, sequence)
@@ -8,7 +8,7 @@ import { IControl } from './IControl';
  * @extends {IControl}
  */
 export interface ITicker extends IControl {
-	addTick(cb: (dt: number) => void): void;
-	removeTick(cb: (dt: number) => void): void;
-	setTimescale(scale: number): void;
+  addTick(cb: (dt: number) => void): void
+  removeTick(cb: (dt: number) => void): void
+  setTimescale(scale: number): void
 }

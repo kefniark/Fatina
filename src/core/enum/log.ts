@@ -5,7 +5,7 @@
  * @enum {number}
  */
 export const enum Log {
-	None,
-	Info,
-	Debug
+  None,
+  Info,
+  Debug
 }

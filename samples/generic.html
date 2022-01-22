@@ -1,6 +1,5 @@
 <html>
     <head>
-        <script src="./fatina.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
 
         <style>
@@ -27,8 +26,13 @@
             }
         </style>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+        <script type="module">
+          import Fatina from '../dist/fatina.esm.js'
+          window.Fatina = Fatina;
+          Fatina.init();
+        </script>
     </head>
-    <body onload="init()">
+    <body>
         <div class="menu">
             <input class="button" type="button" value="Click" onclick="startAll();"/>
         </div>
@@ -36,13 +40,6 @@
         <h4 class="demo-title subtitle is-4">Linear</h4>
         <img id="sample1" class="imgTest" src="./Yuko_Blink_2.png"/><hr>
         <script>
-            function init() {
-              // hack to work with webpack-dev-server
-              window.Fatina = window.Fatina.default;
-              Fatina.init();
-            }
-            console.log(Fatina);
-
             function startAll() {
                 sample1();
                 sample2();
@@ -57,6 +54,7 @@
             function sample1() {
                 var elem = document.getElementById("sample1");
 
+                console.log(Fatina)
                 var obj = { x: 0, y: 0 };
                 Fatina.tween(obj)
                     .from({x: 0})

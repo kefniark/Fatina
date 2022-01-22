@@ -5,6 +5,6 @@
  * @interface IPlugin
  */
 export interface IPlugin {
-	readonly name: string;
-	init(fatina: any): void;
+  readonly name: string
+  init(fatina: any): void
 }

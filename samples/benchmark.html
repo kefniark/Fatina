@@ -27,8 +27,12 @@
 		}
 	</style>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
-	<script src="./fatina.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
+  <script type="module">
+    import Fatina from '../dist/fatina.esm.js'
+    window.Fatina = Fatina;
+    Fatina.init();
+  </script>
 </head>
 
 <body>
@@ -276,12 +280,6 @@
 			</script>
 
 			<script>
-				// hack to work with webpack-dev-server
-				window.Fatina = window.Fatina.default;
-
-				// default fatina setup
-				Fatina.init(true);
-
 				let counter = document.getElementById('counter');
 				let counterValue = 0;
 				let test = document.getElementsByClassName('test');

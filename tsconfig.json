@@ -2,8 +2,8 @@
 	"compilerOptions": {
 		// build
 		"typeRoots": ["node_modules/@types"],
-		"lib": ["es2015", "dom"],
-		"target": "es6",
+		"lib": ["es2020", "dom"],
+		"target": "ESNext",
 		"outDir": "./lib",
 		"types": ["node"],
 		"module": "commonjs",
