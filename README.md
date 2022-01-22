@@ -23,7 +23,7 @@ A comprehensive and easy to use animation library for **Typescript** / **Javascr
 - Easy to use, API strongly inspired by [Dotween (C# tweening library)](http://dotween.demigiant.com/documentation.php)
 - Lightweight with no dependencies ( < 20KB )
 - Unit tested + code coverage
-- Compatible with both NodeJS (CommonJS) & Browser (ESM)
+- Compatible with both NodeJS (CommonJS) & Browser (ESM) & Deno
 - Open source and MIT License
 
 ## Getting Started
@@ -40,11 +40,14 @@ npm install fatina
 And load it with
 
 ```ts
-// standard import with esm module or typescript
+// standard import with typescript
 import Fatina from 'fatina'
 
 // OR standard node.js require
-const fatina = require('fatina').default
+const Fatina = require('fatina').default
+
+// OR Deno
+import Fatina from 'https://cdn.skypack.dev/fatina'
 ```
 
 And if you want to use the CDN version (ESM):
