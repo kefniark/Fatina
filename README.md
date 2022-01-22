@@ -14,7 +14,6 @@ Small & Light tweening library for **Games** / **Web**
 [![CDN Download](https://data.jsdelivr.com/v1/package/npm/fatina/badge)](https://www.jsdelivr.com/package/npm/fatina)
 [![Build Status](https://img.shields.io/travis/kefniark/Fatina/master.svg)](https://travis-ci.org/kefniark/Fatina)
 [![Coverage Status](https://coveralls.io/repos/github/kefniark/Fatina/badge.svg?branch=master)](https://coveralls.io/github/kefniark/Fatina?branch=develop)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f0451df42a9d43fa810f32f20005f9aa)](https://www.codacy.com/app/kefniark/Fatina?utm_source=github.com&utm_medium=referral&utm_content=kefniark/Fatina&utm_campaign=Badge_Grade)
 [![License](https://img.shields.io/npm/l/fatina.svg)](https://npmjs.org/package/fatina)
 
 ## Description
