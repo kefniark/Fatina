@@ -33,7 +33,8 @@ A comprehensive and easy to use animation library for **Typescript** / **Javascr
 If you use NPM
 
 ```ts
-> npm install fatina
+npm install fatina
+// or: yarn add fatina
 ```
 
 And load it with
@@ -41,6 +42,7 @@ And load it with
 ```ts
 // standard import with esm module or typescript
 import Fatina from 'fatina'
+
 // OR standard node.js require
 const fatina = require('fatina').default
 ```
