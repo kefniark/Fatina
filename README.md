@@ -41,17 +41,14 @@ And load it with
 ```ts
 // standard import with esm module or typescript
 import Fatina from 'fatina'
-// OR
-// standard node.js require
-var fatina = require('fatina').default
-// OR Deno
-import Fatina from 'https://cdn.jsdelivr.net/npm/fatina'
+// OR standard node.js require
+const fatina = require('fatina').default
 ```
 
-And if you want to use the CDN version:
+And if you want to use the CDN version (ESM):
 
 ```ts
-<script src="https://cdn.jsdelivr.net/npm/fatina"></script>
+<script type="module">import Fatina from 'https://cdn.jsdelivr.net/npm/fatina' // your code</script>
 ```
 
 - [More Information](https://kefniark.github.io/Fatina/basics/download/)
