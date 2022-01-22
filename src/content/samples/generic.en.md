@@ -118,6 +118,8 @@ The following example are moving html elements but you can tween almost any kind
         sample8();
     }
 
-    playAll();
+    document.addEventListener('DOMContentLoaded', () => {
+      playAll();
+    })
 </script>
 

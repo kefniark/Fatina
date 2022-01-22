@@ -50,6 +50,7 @@
     </center>
 
     <script>
+
         // Pixi app Initialization
         var app = new PIXI.Application(1024 / 2, 768 / 2, { backgroundColor: 0x0c243c });
         document.getElementById('canvas1').appendChild(app.view);
@@ -62,54 +63,57 @@
 
         var animUnity, animYuko;
 
-        // Fatina Initialization and load Animation Plugin
-        Fatina.init();
-        Fatina.loadPlugin(FatinaPluginAnimator.get());
+        document.addEventListener('DOMContentLoaded', () => {
 
-        // Register a first animation type: Animation Spritesheet
-        Fatina.plugin.animatorManager.register('spritesheet', (object, params) => {
-            console.log('init Spritesheet Anim', params);
+          // Fatina Initialization and load Animation Plugin
+          Fatina.init();
+          Fatina.loadPlugin(FatinaPluginAnimator.get());
 
-            // Create a tween on a proxy object and use the value to change the sprite
-            let proxy = { index: 0 };
-            const tween = Fatina.tween(proxy, ['index'])
-                .from({ index: 0 })
-                .to({ index: params.number - 1 }, params.duration)
-                .onStart(() => {
-                    if (!params.direction) {
-                        return;
-                    }
+          // Register a first animation type: Animation Spritesheet
+          Fatina.plugin.animatorManager.register('spritesheet', (object, params) => {
+              console.log('init Spritesheet Anim', params);
 
-                    // Change the orientation based on the direction param
-                    object.scale.x = Math.abs(object.scale.x) * params.direction;
-                })
-                .onUpdate(() => object.setTexture(params.textures[proxy.index]))
-                .setSteps(params.number - 1);
+              // Create a tween on a proxy object and use the value to change the sprite
+              let proxy = { index: 0 };
+              const tween = Fatina.tween(proxy, ['index'])
+                  .from({ index: 0 })
+                  .to({ index: params.number - 1 }, params.duration)
+                  .onStart(() => {
+                      if (!params.direction) {
+                          return;
+                      }
 
-            // Some animation don't need loop
-            if (!params.disableLoop) {
-                tween.setLoop(-1);
-            }
+                      // Change the orientation based on the direction param
+                      object.scale.x = Math.abs(object.scale.x) * params.direction;
+                  })
+                  .onUpdate(() => object.setTexture(params.textures[proxy.index]))
+                  .setSteps(params.number - 1);
 
-            return tween;
-        }, 'character');
+              // Some animation don't need loop
+              if (!params.disableLoop) {
+                  tween.setLoop(-1);
+              }
 
-        // Register a second animation type: Jump (a simple relative move with yoyo=1)
-        Fatina.plugin.animatorManager.register('jump', (object, params) => {
-            console.log('Instantiate Jump Anim', object.name, object.position, params);
-            return Fatina.tween(object.position, ['y'])
-                .setRelative(true)
-                .to({ y: - 70 }, 400)
-                .setEasing('outSine')
-                .yoyo(1)
-                .onStart(() => object.animator.play('jump_up'))
-        }, 'character');
+              return tween;
+          }, 'character');
 
-        // Register a third animation type: Fade
-        Fatina.plugin.animatorManager.register('fade', (object, params) => {
-            console.log('Instantiate Fade Anim', params);
-            return Fatina.tween(object, ['alpha']).to({ alpha: params.value }, params.duration)
-        }, 'character');
+          // Register a second animation type: Jump (a simple relative move with yoyo=1)
+          Fatina.plugin.animatorManager.register('jump', (object, params) => {
+              console.log('Instantiate Jump Anim', object.name, object.position, params);
+              return Fatina.tween(object.position, ['y'])
+                  .setRelative(true)
+                  .to({ y: - 70 }, 400)
+                  .setEasing('outSine')
+                  .yoyo(1)
+                  .onStart(() => object.animator.play('jump_up'))
+          }, 'character');
+
+          // Register a third animation type: Fade
+          Fatina.plugin.animatorManager.register('fade', (object, params) => {
+              console.log('Instantiate Fade Anim', params);
+              return Fatina.tween(object, ['alpha']).to({ alpha: params.value }, params.duration)
+          }, 'character');
+        })
 
 
         // Game code, let's create a characters with animation

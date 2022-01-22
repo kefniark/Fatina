@@ -33,7 +33,11 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
   <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/pygment_highlights.css" />
   <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/highlight.min.css" />
-  <script type="text/javascript" src="https://kefniark.github.io/Fatina/fatina.min.js"></script>
+  <script type="module">
+    import Fatina from 'https://cdn.jsdelivr.net/npm/fatina@3.1.0/dist/fatina.esm.js'
+    window.Fatina = Fatina;
+    Fatina.init();
+  </script>
 
 </head>
 
@@ -195,18 +199,21 @@ The main inspiration is the <b>C#</b> library <a href="http://dotween.demigiant.
 <img id="yuko1" class="sprite_unitychan_walk sprite-Unitychan_Walk_1"/>
 
 <script>
-    let elem = document.getElementById('yuko1');
+    document.addEventListener('DOMContentLoaded', () => {
+      let elem = document.getElementById('yuko1');
 
-    // Switch the classname
-    Fatina.tween({})
-        .to({}, 1600)
-        .setLoop(-1)
-        .onUpdate((dt, progress) => {
-            let val = Math.round(progress * 13 + 1);
-            elem.className = 'sprite_unitychan_walk sprite-Unitychan_Walk_' + val;
-        })
-        .start();
+      // Switch the classname
+      Fatina.tween({})
+          .to({}, 1600)
+          .setLoop(-1)
+          .onUpdate((dt, progress) => {
+              let val = Math.round(progress * 13 + 1);
+              elem.className = 'sprite_unitychan_walk sprite-Unitychan_Walk_' + val;
+          })
+          .start();
+    });
 </script>
+
 
 <h2 id="fatina-features">Fatina Features</h2>
 

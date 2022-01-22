@@ -2,15 +2,17 @@
 <img id="yuko1" class="sprite_unitychan_walk sprite-Unitychan_Walk_1"/>
 
 <script>
-    let elem = document.getElementById('yuko1');
+    document.addEventListener('DOMContentLoaded', () => {
+      let elem = document.getElementById('yuko1');
 
-    // Switch the classname
-    Fatina.tween({})
-        .to({}, 1600)
-        .setLoop(-1)
-        .onUpdate((dt, progress) => {
-            let val = Math.round(progress * 13 + 1);
-            elem.className = 'sprite_unitychan_walk sprite-Unitychan_Walk_' + val;
-        })
-        .start();
+      // Switch the classname
+      Fatina.tween({})
+          .to({}, 1600)
+          .setLoop(-1)
+          .onUpdate((dt, progress) => {
+              let val = Math.round(progress * 13 + 1);
+              elem.className = 'sprite_unitychan_walk sprite-Unitychan_Walk_' + val;
+          })
+          .start();
+    });
 </script>

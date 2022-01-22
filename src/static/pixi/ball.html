@@ -1,5 +1,6 @@
 <div id="canvas3"></div>
 <script>
+  document.addEventListener('DOMContentLoaded', () => {
     var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0xFFFFFF});
     document.getElementById('canvas3').appendChild(app.view);
     let cooldown = 0;
@@ -47,4 +48,5 @@
             container.addChild(img);
             return img;
     }
+  })
 </script>

@@ -1,5 +1,6 @@
 <div id="canvas2"></div>
 <script>
+  document.addEventListener('DOMContentLoaded', () => {
     var app2 = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000});
     document.getElementById('canvas2').appendChild(app2.view);
 
@@ -322,4 +323,5 @@
         }
         return textures;
     }
+  })
 </script>

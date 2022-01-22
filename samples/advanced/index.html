@@ -9,15 +9,11 @@
   <meta property="og:title" content="Advanced Samples" />
   <meta name="twitter:title" content="Advanced Samples" />
   <meta name="description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
-Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000}); document.getElementById(&#39;canvas2&#39;).appendChild(app.view); var star = new PIXI.Container(); star.x &#43;= 100; star.y &#43;= 50; app.stage.addChild(star); // Create 250 sprites for (let i = 0; i A demonic star with 250 moving sprites along a defined path
-Read the code
-Golden Stars Use Modifier for curve and gravity    var app4 = new PIXI.">
+Demonic Star Looping Sequence   document.addEventListener(&#39;DOMContentLoaded&#39;, () = { var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000}); document.getElementById(&#39;canvas2&#39;).appendChild(app.view); var star = new PIXI.Container(); star.x &#43;= 100; star.y &#43;= 50; app.stage.addChild(star); // Create 250 sprites for (let i = 0; i A demonic star with 250 moving sprites along a defined path">
   <meta property="og:description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
-Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000}); document.getElementById(&#39;canvas2&#39;).appendChild(app.view); var star = new PIXI.Container(); star.x &#43;= 100; star.y &#43;= 50; app.stage.addChild(star); // Create 250 sprites for (let i = 0; i A demonic star with 250 moving sprites along a defined path
-Read the code
-Golden Stars Use Modifier for curve and gravity    var app4 = new PIXI.">
+Demonic Star Looping Sequence   document.addEventListener(&#39;DOMContentLoaded&#39;, () = { var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000}); document.getElementById(&#39;canvas2&#39;).appendChild(app.view); var star = new PIXI.Container(); star.x &#43;= 100; star.y &#43;= 50; app.stage.addChild(star); // Create 250 sprites for (let i = 0; i A demonic star with 250 moving sprites along a defined path">
   <meta name="twitter:description" content="Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
-Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000}); …">
+Demonic Star Looping Sequence   document.addEventListener(&#39;DOMContentLoaded&#39;, () = { var app = new PIXI.Application(1024 / 2, …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -40,7 +36,11 @@ Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
   <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/pygment_highlights.css" />
   <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/highlight.min.css" />
-  <script type="text/javascript" src="https://kefniark.github.io/Fatina/fatina.min.js"></script>
+  <script type="module">
+    import Fatina from 'https://cdn.jsdelivr.net/npm/fatina@3.1.0/dist/fatina.esm.js'
+    window.Fatina = Fatina;
+    Fatina.init();
+  </script>
 
 </head>
 
@@ -189,6 +189,7 @@ Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2
 
 <div id="canvas2"></div>
 <script>
+  document.addEventListener('DOMContentLoaded', () => {
     var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000});
     document.getElementById('canvas2').appendChild(app.view);
 
@@ -224,6 +225,7 @@ Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2
         container.addChild(img);
         return img;
     }
+  })
 </script>
 
 
@@ -235,6 +237,8 @@ Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2
 <p>
 <div id="canvas4"></div>
 <script>
+  document.addEventListener('DOMContentLoaded', () => {
+
     var app4 = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x0c243c});
     document.getElementById('canvas4').appendChild(app4.view);
 
@@ -322,13 +326,16 @@ Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2
 
         app4.stage.addChild(star);
     }
+  })
 </script>
+
 <a class="btn btn-primary" href="https://github.com/kefniark/Fatina/blob/gh-pages/src/static/pixi/gravity.html" target="_blank">Read the code</a></p>
 
 <h3>Balls</h3>
 
 <p><div id="canvas3"></div>
 <script>
+  document.addEventListener('DOMContentLoaded', () => {
     var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0xFFFFFF});
     document.getElementById('canvas3').appendChild(app.view);
     let cooldown = 0;
@@ -376,7 +383,9 @@ Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2
             container.addChild(img);
             return img;
     }
+  })
 </script>
+
 <a class="btn btn-primary" href="https://github.com/kefniark/Fatina/blob/gh-pages/src/static/pixi/ball.html" target="_blank">Read the code</a></p>
 
       </article>

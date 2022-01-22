@@ -27,7 +27,7 @@ Linear tween  function sample1() { var elem = document.getElementById(&#34;sampl
       
       <guid>https://kefniark.github.io/Fatina/samples/game/</guid>
       <description>Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine).  Those are just samples, not real games :P Thanks Unity-chan for her help 
-Unity Chan GO!!! Parallax   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb}); document.getElementById(&#39;canvas1&#39;).appendChild(app.view); // Create background with parallax CreateBackgrounds(); // Create unity chan let textures = LoadUnityChanTextures(); var unitychan = new PIXI.Sprite(textures[0]); unitychan.anchor.set(0.5); unitychan.scale.x = 1.</description>
+Unity Chan GO!!! Parallax   document.addEventListener(&#39;DOMContentLoaded&#39;, () = { var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb}); document.getElementById(&#39;canvas1&#39;).appendChild(app.view); // Create background with parallax CreateBackgrounds(); // Create unity chan let textures = LoadUnityChanTextures(); var unitychan = new PIXI.</description>
     </item>
     
     <item>
@@ -46,9 +46,7 @@ Unity Chan GO!!! Parallax   var app = new PIXI.Application(1024 / 2, 768 / 2, {b
       
       <guid>https://kefniark.github.io/Fatina/samples/advanced/</guid>
       <description>Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
-Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000}); document.getElementById(&#39;canvas2&#39;).appendChild(app.view); var star = new PIXI.Container(); star.x += 100; star.y += 50; app.stage.addChild(star); // Create 250 sprites for (let i = 0; i A demonic star with 250 moving sprites along a defined path
-Read the code
-Golden Stars Use Modifier for curve and gravity    var app4 = new PIXI.</description>
+Demonic Star Looping Sequence   document.addEventListener(&#39;DOMContentLoaded&#39;, () = { var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000}); document.getElementById(&#39;canvas2&#39;).appendChild(app.view); var star = new PIXI.Container(); star.x += 100; star.y += 50; app.stage.addChild(star); // Create 250 sprites for (let i = 0; i A demonic star with 250 moving sprites along a defined path</description>
     </item>
     
   </channel>

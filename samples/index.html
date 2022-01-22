@@ -30,7 +30,11 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
   <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/pygment_highlights.css" />
   <link rel="stylesheet" href="https://kefniark.github.io/Fatina/css/highlight.min.css" />
-  <script type="text/javascript" src="https://kefniark.github.io/Fatina/fatina.min.js"></script>
+  <script type="module">
+    import Fatina from 'https://cdn.jsdelivr.net/npm/fatina@3.1.0/dist/fatina.esm.js'
+    window.Fatina = Fatina;
+    Fatina.init();
+  </script>
 
 </head>
 
@@ -195,7 +199,7 @@ Linear tween  function sample1() { var elem = document.getElementById("sample1")
               <div class="post-entry">
                 
                   Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine).  Those are just samples, not real games :P Thanks Unity-chan for her help 
-Unity Chan GO!!! Parallax   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb}); document.getElementById('canvas1').appendChild(app.view); // Create background with parallax CreateBackgrounds(); // Create unity chan let textures = LoadUnityChanTextures(); var unitychan = new PIXI.Sprite(textures[0]); unitychan.anchor.set(0.5); unitychan.scale.x = 1.
+Unity Chan GO!!! Parallax   document.addEventListener('DOMContentLoaded', () = { var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x1099bb}); document.getElementById('canvas1').appendChild(app.view); // Create background with parallax CreateBackgrounds(); // Create unity chan let textures = LoadUnityChanTextures(); var unitychan = new PIXI.
                   <a href="https://kefniark.github.io/Fatina/samples/game/" class="post-read-more">[Read More]</a>
                 
               </div>
@@ -238,9 +242,7 @@ Unity Chan GO!!! Parallax   var app = new PIXI.Application(1024 / 2, 768 / 2, {b
               <div class="post-entry">
                 
                   Few examples of Fatina working with Pixi.js (HTML 5 2D rendering engine)
-Demonic Star Looping Sequence   var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000}); document.getElementById('canvas2').appendChild(app.view); var star = new PIXI.Container(); star.x += 100; star.y += 50; app.stage.addChild(star); // Create 250 sprites for (let i = 0; i A demonic star with 250 moving sprites along a defined path
-Read the code
-Golden Stars Use Modifier for curve and gravity    var app4 = new PIXI.
+Demonic Star Looping Sequence   document.addEventListener('DOMContentLoaded', () = { var app = new PIXI.Application(1024 / 2, 768 / 2, {backgroundColor : 0x000000}); document.getElementById('canvas2').appendChild(app.view); var star = new PIXI.Container(); star.x += 100; star.y += 50; app.stage.addChild(star); // Create 250 sprites for (let i = 0; i A demonic star with 250 moving sprites along a defined path
                   <a href="https://kefniark.github.io/Fatina/samples/advanced/" class="post-read-more">[Read More]</a>
                 
               </div>
