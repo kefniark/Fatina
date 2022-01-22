@@ -1,9 +1,10 @@
-import { Fatina } from './fatina'
+import { Fatina as lib } from './fatina'
 /**
  * @export
  * @ignore
  */
-export default new Fatina()
+export const Fatina = new lib()
+export default Fatina
 
 /**
  * @export

@@ -45,12 +45,14 @@ import Fatina from 'fatina'
 // OR
 // standard node.js require
 var fatina = require('fatina').default
+// OR Deno
+import Fatina from 'https://cdn.jsdelivr.net/npm/fatina'
 ```
 
 And if you want to use the CDN version:
 
 ```ts
-<script src="https://cdn.jsdelivr.net/npm/fatina/build/fatina.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fatina"></script>
 ```
 
 - [More Information](https://kefniark.github.io/Fatina/basics/download/)
