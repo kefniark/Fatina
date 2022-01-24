@@ -1,3 +1,4 @@
+import { EasingType } from './easing/easingType'
 import { Log } from './core/enum/log'
 import { IControl } from './core/interfaces/IControl'
 import { IPlayable } from './core/interfaces/IPlayable'
@@ -5,6 +6,7 @@ import { IPlugin } from './core/interfaces/IPlugin'
 import { ISequence } from './core/interfaces/ISequence'
 import { ISettings } from './core/interfaces/ISettings'
 import { ITicker } from './core/interfaces/ITicker'
+import { ITransition } from './core/interfaces/ITransition'
 import { ITween } from './core/interfaces/ITween'
 import { pulsePreset, scalePreset, shakePreset, sonarPreset, wobblePreset } from './preset'
 import { Ticker } from './ticker'
@@ -305,6 +307,84 @@ export class Fatina {
     return d
   }
 
+  /**
+   * Helper to create a Transition
+   *
+   * @export
+   * @param {*} obj
+   * @returns {ITransition}
+   */
+  public transition(obj: any): ITransition {
+    const tweenList: Map<string, [any, ITween]> = new Map()
+
+    const getKey = (to: any) => {
+      const keys = Object.keys(to)
+      keys.sort()
+      return keys.join(',')
+    }
+
+    const delay = (duration: number) => {
+      return this.delay(duration).start()
+    }
+
+    const to = (to: any, duration = 300): ITween => {
+      const key = getKey(to)
+
+      const entry = tweenList.get(key)
+      if (entry) {
+        if (JSON.stringify(to) === JSON.stringify(entry[0])) return entry[1]
+        entry[1].kill()
+        tweenList.delete(entry[0])
+      }
+
+      // keep track of existing tweens
+      const tween = this.tween(obj)
+        .to(to, duration)
+        .setEasing(EasingType.InOutQuad)
+        .onStart(() => console.log('start'))
+        .onUpdate((dt) => console.log('update', dt))
+        .onComplete(() => {
+          console.log('complete')
+          tweenList.delete(key)
+        })
+        .start()
+      tweenList.set(key, [to, tween])
+      return tween
+    }
+
+    const toSpeed = (to: any, speed = 1) => {
+      const key = getKey(to)
+
+      const entry = tweenList.get(key)
+      if (entry) {
+        if (JSON.stringify(to) === JSON.stringify(entry[0])) return entry[1]
+        entry[1].kill()
+        tweenList.delete(entry[0])
+      }
+
+      // keep track of existing tweens
+      const tween = this.tween(obj)
+        .toSpeed(to, speed)
+        .setEasing(EasingType.InOutQuad)
+        .onComplete(() => tweenList.delete(key))
+        .start()
+      tweenList.set(key, [to, tween])
+      return tween
+    }
+
+    return {
+      delay,
+      to,
+      toSpeed,
+      promiseDelay: (duration: number) => delay(duration).toPromise(),
+      promiseTo: (target: any, duration = 300) => to(target, duration).toPromise(),
+      promiseToSpeed: (target: any, speed = 1) => toSpeed(target, speed).toPromise(),
+      kill: () => {
+        tweenList.forEach((x) => x[1].kill())
+        tweenList.clear()
+      }
+    } as ITransition
+  }
   /**
    * Helper used to replace usage of normal js setTimeout() by a tween
    * https://www.w3schools.com/jsref/met_win_settimeout.asp

@@ -33,7 +33,7 @@
     "email": "kef1@free.fr"
   },
   "scripts": {
-    "build": "rimraf dist && run-p build:* && npm run build:version",
+    "build": "rimraf dist && run-s build:*",
     "build:commonjs": "esbuild src/index.ts --bundle --minify --charset=utf8 --platform=node --outfile=dist/fatina.cjs.js",
     "build:esm": "esbuild src/index.ts --bundle --minify --charset=utf8 --platform=browser --format=esm --outfile=dist/fatina.esm.js",
     "build:types": "run-s build:types:*",

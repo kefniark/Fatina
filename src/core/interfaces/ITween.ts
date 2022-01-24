@@ -29,6 +29,11 @@ export interface ITween extends IControl {
    */
   to(to: any, duration: number): ITween
   /**
+   * Method used to set the values at the end of the tween
+   * Compute the duration based on the distance between the position and target
+   */
+  toSpeed(to: any, speed: number): ITween
+  /**
    * To apply a modifier on a current tween (like gravity)
    */
   modify(diff: any, updateTo: boolean): void
@@ -112,4 +117,8 @@ export interface ITween extends IControl {
    * @param {() => void} cb
    */
   onComplete(cb: () => void): ITween
+  /**
+   * Transform this ITween into a Promise<ITween>
+   */
+  toPromise(): Promise<ITween>
 }

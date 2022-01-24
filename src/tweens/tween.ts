@@ -226,6 +226,17 @@ export class Tween extends BaseTween<Tween> implements ITween {
   }
 
   /**
+   * @inheritdoc
+   */
+  public toSpeed(to: any, speed: number): ITween {
+    this.t = to
+    const distance = Math.max(...Object.keys(this.t).map((key) => Math.abs(this.obj[key] - this.t[key])))
+    this.duration = distance / speed
+    this.updateProp()
+    return this
+  }
+
+  /**
    * Compute the properties
    *
    * @private

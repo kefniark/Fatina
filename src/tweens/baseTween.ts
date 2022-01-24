@@ -341,6 +341,19 @@ export abstract class BaseTween<T extends BaseTween<any>> {
    * @param {() => void} cb
    * @returns {T}
    */
+  public toPromise(): Promise<T> {
+    return new Promise((resolve) => {
+      this.onComplete(() => resolve(this as unknown as T))
+      this.onKilled(() => resolve(this as unknown as T))
+    })
+  }
+
+  /**
+   *  Callback called when the tween started
+   *
+   * @param {() => void} cb
+   * @returns {T}
+   */
   public onStart(cb: () => void): T {
     return this.onEvent('start', cb)
   }
