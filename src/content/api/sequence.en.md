@@ -10,32 +10,12 @@ weight = 4
     <a class="btn btn-default" href="/Fatina/api/basic/">Fatina</a>
     <a class="btn btn-default" href="/Fatina/api/tween/">Tween</a>
     <a class="btn btn-primary" href="/Fatina/api/sequence/">Sequence</a>
+    <a class="btn btn-default" href="/Fatina/api/transition/">Transition</a>
 </div>
 
 <blockquote>
     <p>A <b>Sequence</b> is special tween that, instead of taking control of a value, takes control of other tweens and animates them as a group.</p>
 </blockquote>
-
-### Properties
-* **elapsed**: `number` number of ms. elapsed for this sequence <small>(affected by pause &amp; timescale)</small>
-* **isRunning**: `boolean`
-* **isFinished**: `boolean`
-* **isPaused**: `boolean`
-
-### Controls
-* **start**(): `Sequence` By default new tween are not started. Don't forget to call **.start()**
-* **pause**(): `void`
-* **resume**(): `void`
-* **kill**(): `void`
-
-### Callbacks
-* **onStart**(cb: () => void): `Sequence`;
-* **onStepStart**(cb: (tween: ITween | IPlayable) => void): `Sequence` <small>Emitted when a tween start</small>
-* **onStepEnd**(cb: (index: ITween | IPlayable) => void): `Sequence` <small>Emitted when a tween is completed.</small>
-* **onUpdate**(cb: (dt: number, progress: number) => void): `Sequence`
-* **onKilled**(cb: () => void): `Sequence`
-* **onComplete**(cb: () => void): `Sequence`
-* **onRestart**(cb: () => void): `Sequence`
 
 ### Methods
 * **setTimescale**(scale: number): `Sequence`
@@ -59,3 +39,26 @@ Fatina.sequence()
     .start();
 ```
 {{% /expand%}}
+
+### Properties
+* **elapsed**: `number` number of ms. elapsed for this sequence <small>(affected by pause &amp; timescale)</small>
+* **isRunning**: `boolean`
+* **isFinished**: `boolean`
+* **isPaused**: `boolean`
+
+### Controls
+* **start**(): `Sequence` By default new tween are not started. Don't forget to call **.start()**
+* **pause**(): `void`
+* **resume**(): `void`
+* **kill**(): `void`
+
+### Callbacks
+* **onStart**(cb: () => void): `Sequence`;
+* **onStepStart**(cb: (tween: ITween | IPlayable) => void): `Sequence` <small>Emitted when a tween start</small>
+* **onStepEnd**(cb: (index: ITween | IPlayable) => void): `Sequence` <small>Emitted when a tween is completed.</small>
+* **onUpdate**(cb: (dt: number, progress: number) => void): `Sequence`
+* **onKilled**(cb: () => void): `Sequence`
+* **onComplete**(cb: () => void): `Sequence`
+* **onRestart**(cb: () => void): `Sequence`
+* **toPromise**(): `Promise<Sequence>`: Convert the tween into a promise and let you use async/await API
+

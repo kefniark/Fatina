@@ -16,7 +16,7 @@
       <pubDate>Tue, 01 Oct 2019 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/api/basic/</guid>
-      <description>Fatina Tween Sequence  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  pause() / resume(): void setTimescale(scale: number): void  Methods  init(): void This method has to be called once to initialize Fatina update(dt: number): void tween(obj): Tween Method used to create new tween sequence(): Sequence Method used to create new sequence pulse(obj, settings): ISequence Pulse preset scale(obj, settings): ISequence Scale preset wobble(obj, settings): ISequence Wobble preset sonar(obj, settings): ISequence Sonar preset shake(obj, settings): ISequence Shake preset delay(duration) Delay setTimeout(fn, duration): void This is just a simple helper around Fatina.</description>
+      <description>Fatina Tween Sequence Transition  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  pause() / resume(): void setTimescale(scale: number): void  Methods  init(): void This method has to be called once to initialize Fatina update(dt: number): void tween(obj): Tween Method used to create new tween transition(obj): Transition Method used to create new transition sequence(): Sequence Method used to create new sequence pulse(obj, settings): ISequence Pulse preset scale(obj, settings): ISequence Scale preset wobble(obj, settings): ISequence Wobble preset sonar(obj, settings): ISequence Sonar preset shake(obj, settings): ISequence Shake preset delay(duration) Delay setTimeout(fn, duration): void This is just a simple helper around Fatina.</description>
     </item>
     
     <item>
@@ -25,8 +25,8 @@
       <pubDate>Tue, 01 Oct 2019 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/api/tween/</guid>
-      <description>Fatina Tween Sequence   A Tween that takes control of values and animates them.
- Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp;amp; timescale) duration: number duration of this tween in ms. isRunning: boolean isFinished: boolean isPaused: boolean  Controls  start(): Tween By default new tween are not started. Don&amp;rsquo;t forget to call .start() pause(): void resume(): void skip(): void kill(): void  See More    // Create a tween let tween = Fatina.</description>
+      <description>Fatina Tween Sequence Transition   A Tween that takes control of values and animates them.
+ Methods  from(from: any): Tween; to(to: any, duration: number): Tween; modify(force: any, updateTo: boolean): void; setLoop(loop: number): Tween; setRelative(relative: boolean): Tween; setEasing(type: EasingType | string): Tween; setTimescale(scale: number): Tween; setSteps(steps: number): Tween; yoyo(times: number): Tween; reverse(): void; toSequence(): Sequence;  See More    var obj = { x: 0 }; // A normal Tween Fatina.</description>
     </item>
     
     <item>
@@ -35,8 +35,19 @@
       <pubDate>Tue, 01 Oct 2019 13:06:37 +0900</pubDate>
       
       <guid>https://kefniark.github.io/Fatina/api/sequence/</guid>
-      <description>Fatina Tween Sequence   A Sequence is special tween that, instead of taking control of a value, takes control of other tweens and animates them as a group.
- Properties  elapsed: number number of ms. elapsed for this sequence (affected by pause &amp;amp; timescale) isRunning: boolean isFinished: boolean isPaused: boolean  Controls  start(): Sequence By default new tween are not started. Don&amp;rsquo;t forget to call .start() pause(): void resume(): void kill(): void  Callbacks  onStart(cb: () =&amp;gt; void): Sequence; onStepStart(cb: (tween: ITween | IPlayable) =&amp;gt; void): Sequence Emitted when a tween start onStepEnd(cb: (index: ITween | IPlayable) =&amp;gt; void): Sequence Emitted when a tween is completed.</description>
+      <description>Fatina Tween Sequence Transition   A Sequence is special tween that, instead of taking control of a value, takes control of other tweens and animates them as a group.
+ Methods  setTimescale(scale: number): Sequence setLoop(loop: number): Sequence append(tween: ITween | ISequence): Sequence Adds the given tween to the end of the Sequence. appendCallback(cb: () =&amp;gt; void): Sequence appendInterval(duration: number): Sequence prepend(tween: ITween| ISequence): Sequence Adds the given tween to the beginning of the Sequence, pushing forward in time the rest of the contents.</description>
+    </item>
+    
+    <item>
+      <title>Transition API</title>
+      <link>https://kefniark.github.io/Fatina/api/transition/</link>
+      <pubDate>Tue, 01 Oct 2019 13:06:37 +0900</pubDate>
+      
+      <guid>https://kefniark.github.io/Fatina/api/transition/</guid>
+      <description>Fatina Tween Sequence Transition   A Transition is a helper around tween to make their usage easier and less verbose for GUI or Webapps.
+It take care of most anoying parts automatically (defaults, creating tweens, avoiding duplicates, autostart, cleaning old tweens), and expose tween into a more code friendly async/await way.
+ Methods  to(to: any, duration: number): Tween; toSpeed(to: any, speed: number): Tween; delay(duration: number): Tween promiseTo(to: any, duration: number): Promise&amp;lt;Tween&amp;gt;; promiseToSpeed(to: any, speed: number): Promise&amp;lt;Tween&amp;gt;; promiseDelay(duration: number): Promise&amp;lt;Tween&amp;gt; kill(): void;  See More    // Your object const obj = { name: &#39;sprite&#39;, x: 0, y: 0 } // Create a reusable transition around this object, so you dont have to keep a reference to the object everywhere const transition = Fatina.</description>
     </item>
     
   </channel>

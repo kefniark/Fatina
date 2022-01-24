@@ -8,12 +8,12 @@
   <title>Tween API</title>
   <meta property="og:title" content="Tween API" />
   <meta name="twitter:title" content="Tween API" />
-  <meta name="description" content="Fatina Tween Sequence   A Tween that takes control of values and animates them.
- Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp; timescale) duration: number duration of this tween in ms. isRunning: boolean isFinished: boolean isPaused: boolean  Controls  start(): Tween By default new tween are not started. Don&rsquo;t forget to call .start() pause(): void resume(): void skip(): void kill(): void  See More    // Create a tween let tween = Fatina.">
-  <meta property="og:description" content="Fatina Tween Sequence   A Tween that takes control of values and animates them.
- Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp; timescale) duration: number duration of this tween in ms. isRunning: boolean isFinished: boolean isPaused: boolean  Controls  start(): Tween By default new tween are not started. Don&rsquo;t forget to call .start() pause(): void resume(): void skip(): void kill(): void  See More    // Create a tween let tween = Fatina.">
-  <meta name="twitter:description" content="Fatina Tween Sequence   A Tween that takes control of values and animates them.
- Properties  elapsed: number number of ms. elapsed for this tween (affected by pause &amp; timescale) duration: number …">
+  <meta name="description" content="Fatina Tween Sequence Transition   A Tween that takes control of values and animates them.
+ Methods  from(from: any): Tween; to(to: any, duration: number): Tween; modify(force: any, updateTo: boolean): void; setLoop(loop: number): Tween; setRelative(relative: boolean): Tween; setEasing(type: EasingType | string): Tween; setTimescale(scale: number): Tween; setSteps(steps: number): Tween; yoyo(times: number): Tween; reverse(): void; toSequence(): Sequence;  See More    var obj = { x: 0 }; // A normal Tween Fatina.">
+  <meta property="og:description" content="Fatina Tween Sequence Transition   A Tween that takes control of values and animates them.
+ Methods  from(from: any): Tween; to(to: any, duration: number): Tween; modify(force: any, updateTo: boolean): void; setLoop(loop: number): Tween; setRelative(relative: boolean): Tween; setEasing(type: EasingType | string): Tween; setTimescale(scale: number): Tween; setSteps(steps: number): Tween; yoyo(times: number): Tween; reverse(): void; toSequence(): Sequence;  See More    var obj = { x: 0 }; // A normal Tween Fatina.">
+  <meta name="twitter:description" content="Fatina Tween Sequence Transition   A Tween that takes control of values and animates them.
+ Methods  from(from: any): Tween; to(to: any, duration: number): Tween; modify(force: any, updateTo: …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -93,6 +93,8 @@
                   <a href="/Fatina/api/tween/">Tween</a>
                 
                   <a href="/Fatina/api/sequence/">Sequence</a>
+                
+                  <a href="/Fatina/api/transition/">Transition</a>
                 
               </div>
             </li>
@@ -187,11 +189,61 @@
     <a class="btn btn-default" href="/Fatina/api/basic/">Fatina</a>
     <a class="btn btn-primary" href="/Fatina/api/tween/">Tween</a>
     <a class="btn btn-default" href="/Fatina/api/sequence/">Sequence</a>
+    <a class="btn btn-default" href="/Fatina/api/transition/">Transition</a>
 </div>
 
 <blockquote>
     <p>A <b>Tween</b> that takes control of values and animates them.</p>
 </blockquote>
+
+<h3 id="methods">Methods</h3>
+
+<ul>
+<li><strong>from</strong>(from: any): <code>Tween</code>;</li>
+<li><strong>to</strong>(to: any, duration: number): <code>Tween</code>;</li>
+<li><strong>modify</strong>(force: any, updateTo: boolean): <code>void</code>;</li>
+<li><strong>setLoop</strong>(loop: number): <code>Tween</code>;</li>
+<li><strong>setRelative</strong>(relative: boolean): <code>Tween</code>;</li>
+<li><strong>setEasing</strong>(type: EasingType | string): <code>Tween</code>;</li>
+<li><strong>setTimescale</strong>(scale: number): <code>Tween</code>;</li>
+<li><strong>setSteps</strong>(steps: number): <code>Tween</code>;</li>
+<li><strong>yoyo</strong>(times: number): <code>Tween</code>;</li>
+<li><strong>reverse</strong>(): <code>void</code>;</li>
+<li><strong>toSequence</strong>(): <code>Sequence</code>;</li>
+</ul>
+
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<span class="btn btn-default">
+    	
+    	See More
+    	
+    	</span>
+		<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">var obj = { x: 0 };
+
+// A normal Tween
+Fatina.tween(obj)
+    .from({ x: -10 }) // to define the starting value
+    .to({ x: 10 }, 200) // to define the final value (absolute by default, for relative use .SetRelative(true))
+    .setLoop(2) // play this tween twice
+    .setTimescale(0.5) // play the tween at half the normal speed
+    .start(); // start the tween
+
+// Convert to a sequence to use interval
+Fatina.tween(obj)
+    .from({ x: -10 })
+    .to({ x: 10 }, 200)
+    .toSequence()
+    .prependInterval(150)
+    .appendInterval(150)
+    .start();
+</code></pre>
+
+    </div>
+</div>
 
 <h3 id="properties">Properties</h3>
 
@@ -243,6 +295,7 @@ tween.kill();
 <li><strong>onKilled</strong>(cb: () =&gt; void): <code>Tween</code></li>
 <li><strong>onComplete</strong>(cb: () =&gt; void): <code>Tween</code></li>
 <li><strong>onRestart</strong>(cb: () =&gt; void): <code>Tween</code></li>
+<li><strong>toPromise</strong>(): <code>Promise&lt;Tween&gt;</code>: Convert the tween into a promise and let you use async/await API</li>
 </ul>
 
 <div class="expand">
@@ -263,55 +316,6 @@ Fatina.tween(obj)
     .onStart(() =&gt; console.log('onStart'))
     .onUpdate((dt, progress) =&gt; console.log('onUpdate', dt, progress)) // progress: float between 0 and 1
     .onComplete(() =&gt; console.log('onComplete'))
-    .start();
-</code></pre>
-
-    </div>
-</div>
-
-<h3 id="methods">Methods</h3>
-
-<ul>
-<li><strong>from</strong>(from: any): <code>Tween</code>;</li>
-<li><strong>to</strong>(to: any, duration: number): <code>Tween</code>;</li>
-<li><strong>modify</strong>(force: any, updateTo: boolean): <code>void</code>;</li>
-<li><strong>setLoop</strong>(loop: number): <code>Tween</code>;</li>
-<li><strong>setRelative</strong>(relative: boolean): <code>Tween</code>;</li>
-<li><strong>setEasing</strong>(type: EasingType | string): <code>Tween</code>;</li>
-<li><strong>setTimescale</strong>(scale: number): <code>Tween</code>;</li>
-<li><strong>setSteps</strong>(steps: number): <code>Tween</code>;</li>
-<li><strong>yoyo</strong>(times: number): <code>Tween</code>;</li>
-<li><strong>reverse</strong>(): <code>void</code>;</li>
-<li><strong>toSequence</strong>(): <code>Sequence</code>;</li>
-</ul>
-
-<div class="expand">
-    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
-    	<span class="btn btn-default">
-    	
-    	See More
-    	
-    	</span>
-		<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
-    </div>
-    <div class="expand-content" style="display: none;">
-<pre><code class="language-js">var obj = { x: 0 };
-
-// A normal Tween
-Fatina.tween(obj)
-    .from({ x: -10 }) // to define the starting value
-    .to({ x: 10 }, 200) // to define the final value (absolute by default, for relative use .SetRelative(true))
-    .setLoop(2) // play this tween twice
-    .setTimescale(0.5) // play the tween at half the normal speed
-    .start(); // start the tween
-
-// Convert to a sequence to use interval
-Fatina.tween(obj)
-    .from({ x: -10 })
-    .to({ x: 10 }, 200)
-    .toSequence()
-    .prependInterval(150)
-    .appendInterval(150)
     .start();
 </code></pre>
 

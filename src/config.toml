@@ -118,6 +118,12 @@ theme = "beautifulhugo"
     weight = 6
 
 [[menu.main]]
+    name = "Transition"
+    parent = "api"
+    url = "api/transition/"
+    weight = 7
+
+[[menu.main]]
     name = "Plugins"
     identifier = "plugins"
     url = "plugins/helpers/"

@@ -8,9 +8,9 @@
   <title>Fatina API</title>
   <meta property="og:title" content="Fatina API" />
   <meta name="twitter:title" content="Fatina API" />
-  <meta name="description" content="Fatina Tween Sequence  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  pause() / resume(): void setTimescale(scale: number): void  Methods  init(): void This method has to be called once to initialize Fatina update(dt: number): void tween(obj): Tween Method used to create new tween sequence(): Sequence Method used to create new sequence pulse(obj, settings): ISequence Pulse preset scale(obj, settings): ISequence Scale preset wobble(obj, settings): ISequence Wobble preset sonar(obj, settings): ISequence Sonar preset shake(obj, settings): ISequence Shake preset delay(duration) Delay setTimeout(fn, duration): void This is just a simple helper around Fatina.">
-  <meta property="og:description" content="Fatina Tween Sequence  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  pause() / resume(): void setTimescale(scale: number): void  Methods  init(): void This method has to be called once to initialize Fatina update(dt: number): void tween(obj): Tween Method used to create new tween sequence(): Sequence Method used to create new sequence pulse(obj, settings): ISequence Pulse preset scale(obj, settings): ISequence Scale preset wobble(obj, settings): ISequence Wobble preset sonar(obj, settings): ISequence Sonar preset shake(obj, settings): ISequence Shake preset delay(duration) Delay setTimeout(fn, duration): void This is just a simple helper around Fatina.">
-  <meta name="twitter:description" content="Fatina Tween Sequence  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), …">
+  <meta name="description" content="Fatina Tween Sequence Transition  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  pause() / resume(): void setTimescale(scale: number): void  Methods  init(): void This method has to be called once to initialize Fatina update(dt: number): void tween(obj): Tween Method used to create new tween transition(obj): Transition Method used to create new transition sequence(): Sequence Method used to create new sequence pulse(obj, settings): ISequence Pulse preset scale(obj, settings): ISequence Scale preset wobble(obj, settings): ISequence Wobble preset sonar(obj, settings): ISequence Sonar preset shake(obj, settings): ISequence Shake preset delay(duration) Delay setTimeout(fn, duration): void This is just a simple helper around Fatina.">
+  <meta property="og:description" content="Fatina Tween Sequence Transition  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself (recommended), call the method .init() once, BEFORE creating any tween (calling it afterwards will have no effect). Controls  pause() / resume(): void setTimescale(scale: number): void  Methods  init(): void This method has to be called once to initialize Fatina update(dt: number): void tween(obj): Tween Method used to create new tween transition(obj): Transition Method used to create new transition sequence(): Sequence Method used to create new sequence pulse(obj, settings): ISequence Pulse preset scale(obj, settings): ISequence Scale preset wobble(obj, settings): ISequence Wobble preset sonar(obj, settings): ISequence Sonar preset shake(obj, settings): ISequence Shake preset delay(duration) Delay setTimeout(fn, duration): void This is just a simple helper around Fatina.">
+  <meta name="twitter:description" content="Fatina Tween Sequence Transition  Fatina Init The first time you create a tween, Fatina will initialize itself automatically, using default values. If instead you prefer to initialize it yourself …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -90,6 +90,8 @@
                   <a href="/Fatina/api/tween/">Tween</a>
                 
                   <a href="/Fatina/api/sequence/">Sequence</a>
+                
+                  <a href="/Fatina/api/transition/">Transition</a>
                 
               </div>
             </li>
@@ -184,6 +186,7 @@
     <a class="btn btn-primary" href="/Fatina/api/basic/">Fatina</a>
     <a class="btn btn-default" href="/Fatina/api/tween/">Tween</a>
     <a class="btn btn-default" href="/Fatina/api/sequence/">Sequence</a>
+    <a class="btn btn-default" href="/Fatina/api/transition/">Transition</a>
 </div>
 
 <h2 id="fatina">Fatina</h2>
@@ -206,6 +209,7 @@ If instead you prefer to initialize it yourself (recommended), call the method <
 <li><strong>init</strong>(): <code>void</code> <small>This method has to be called once to initialize Fatina</small></li>
 <li><strong>update</strong>(dt: number): <code>void</code></li>
 <li><strong>tween</strong>(obj): <code>Tween</code> <small>Method used to create new tween</small></li>
+<li><strong>transition</strong>(obj): <code>Transition</code> <small>Method used to create new transition</small></li>
 <li><strong>sequence</strong>(): <code>Sequence</code> <small>Method used to create new sequence</small></li>
 <li><strong>pulse</strong>(obj, settings): <code>ISequence</code> Pulse preset</li>
 <li><strong>scale</strong>(obj, settings): <code>ISequence</code> Scale preset</li>

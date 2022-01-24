@@ -5,15 +5,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <title>Helpers Plugin - API</title>
-  <meta property="og:title" content="Helpers Plugin - API" />
-  <meta name="twitter:title" content="Helpers Plugin - API" />
-  <meta name="description" content="Helpers Getting Started API  Position Following methods use .position.x and .position.y
- moveTo(x: number, y: number, duration: number): Move to an absolute position moveXTo(x: number, duration: number) moveYTo(y: number, duration: number) moveToRel(x: number, y: number, duration: number): Move to a relative position moveXToRel(x: number, duration: number) moveYToRel(y: number, duration: number) punchPosition(x: number, y: number, duration: number, iteration: number): Oscillate around the current position shake(x: number, y: number, duration: number, iteration: number): Shake around the current position  Rotation Following methods use .">
-  <meta property="og:description" content="Helpers Getting Started API  Position Following methods use .position.x and .position.y
- moveTo(x: number, y: number, duration: number): Move to an absolute position moveXTo(x: number, duration: number) moveYTo(y: number, duration: number) moveToRel(x: number, y: number, duration: number): Move to a relative position moveXToRel(x: number, duration: number) moveYToRel(y: number, duration: number) punchPosition(x: number, y: number, duration: number, iteration: number): Oscillate around the current position shake(x: number, y: number, duration: number, iteration: number): Shake around the current position  Rotation Following methods use .">
-  <meta name="twitter:description" content="Helpers Getting Started API  Position Following methods use .position.x and .position.y
- moveTo(x: number, y: number, duration: number): Move to an absolute position moveXTo(x: number, duration: …">
+  <title>Transition API</title>
+  <meta property="og:title" content="Transition API" />
+  <meta name="twitter:title" content="Transition API" />
+  <meta name="description" content="Fatina Tween Sequence Transition   A Transition is a helper around tween to make their usage easier and less verbose for GUI or Webapps.
+It take care of most anoying parts automatically (defaults, creating tweens, avoiding duplicates, autostart, cleaning old tweens), and expose tween into a more code friendly async/await way.
+ Methods  to(to: any, duration: number): Tween; toSpeed(to: any, speed: number): Tween; delay(duration: number): Tween promiseTo(to: any, duration: number): Promise&lt;Tween&gt;; promiseToSpeed(to: any, speed: number): Promise&lt;Tween&gt;; promiseDelay(duration: number): Promise&lt;Tween&gt; kill(): void;  See More    // Your object const obj = { name: &#39;sprite&#39;, x: 0, y: 0 } // Create a reusable transition around this object, so you dont have to keep a reference to the object everywhere const transition = Fatina.">
+  <meta property="og:description" content="Fatina Tween Sequence Transition   A Transition is a helper around tween to make their usage easier and less verbose for GUI or Webapps.
+It take care of most anoying parts automatically (defaults, creating tweens, avoiding duplicates, autostart, cleaning old tweens), and expose tween into a more code friendly async/await way.
+ Methods  to(to: any, duration: number): Tween; toSpeed(to: any, speed: number): Tween; delay(duration: number): Tween promiseTo(to: any, duration: number): Promise&lt;Tween&gt;; promiseToSpeed(to: any, speed: number): Promise&lt;Tween&gt;; promiseDelay(duration: number): Promise&lt;Tween&gt; kill(): void;  See More    // Your object const obj = { name: &#39;sprite&#39;, x: 0, y: 0 } // Create a reusable transition around this object, so you dont have to keep a reference to the object everywhere const transition = Fatina.">
+  <meta name="twitter:description" content="Fatina Tween Sequence Transition   A Transition is a helper around tween to make their usage easier and less verbose for GUI or Webapps.
+It take care of most anoying parts automatically (defaults, …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://kefniark.github.io/Fatina/img/avatar-icon.png" />
@@ -21,12 +23,12 @@
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@kefniark" />
   <meta name="twitter:creator" content="@kefniark" />
-  <meta property="og:url" content="https://kefniark.github.io/Fatina/plugins/helpers-api/" />
+  <meta property="og:url" content="https://kefniark.github.io/Fatina/api/transition/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Fatina" />
 
   <meta name="generator" content="Hugo 0.54.0" />
-  <link rel="canonical" href="https://kefniark.github.io/Fatina/plugins/helpers-api/" />
+  <link rel="canonical" href="https://kefniark.github.io/Fatina/api/transition/" />
   <link rel="alternate" href="https://kefniark.github.io/Fatina/index.xml" type="application/rss+xml" title="Fatina">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -166,8 +168,8 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="plugins-heading">
-              <h1>Helpers Plugin - API</h1>
+            <div class="api-heading">
+              <h1>Transition API</h1>
                 
                 
             </div>
@@ -186,71 +188,63 @@
         
 
 <div style="text-align: center">
-    <a class="btn btn-default" href="/Fatina/plugins/helpers/">Helpers</a>
-    <a class="btn btn-default" href="/Fatina/plugins/helpers-usage/">Getting Started</a>
-    <a class="btn btn-primary" href="/Fatina/plugins/helpers-api/">API</a>
+    <a class="btn btn-default" href="/Fatina/api/basic/">Fatina</a>
+    <a class="btn btn-default" href="/Fatina/api/tween/">Tween</a>
+    <a class="btn btn-default" href="/Fatina/api/sequence/">Sequence</a>
+    <a class="btn btn-primary" href="/Fatina/api/transition/">Transition</a>
 </div>
 
-<h3 id="position">Position</h3>
+<blockquote>
+    <p>A <b>Transition</b> is a helper around tween to make their usage easier and less verbose for GUI or Webapps.</p>
+    <p>It take care of most anoying parts automatically (defaults, creating tweens, avoiding duplicates, autostart, cleaning old tweens), and expose tween into a more code friendly async/await way.</p>
+</blockquote>
 
-<p>Following methods use <code>.position.x</code> and <code>.position.y</code></p>
-
-<ul>
-<li><strong>moveTo</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>): Move to an absolute position</li>
-<li><strong>moveXTo</strong>(x: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>moveYTo</strong>(y: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>moveToRel</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>): Move to a relative position</li>
-<li><strong>moveXToRel</strong>(x: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>moveYToRel</strong>(y: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>punchPosition</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>): Oscillate around the current position</li>
-<li><strong>shake</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>): Shake around the current position</li>
-</ul>
-
-<h3 id="rotation">Rotation</h3>
-
-<p>Following methods use <code>.rotation</code></p>
+<h3 id="methods">Methods</h3>
 
 <ul>
-<li><strong>rotateTo</strong>(rad: <code>number</code>, duration: <code>number</code>) : Rotate to a specific angle in radiant (to PI/2)</li>
-<li><strong>rotateToRel</strong>(rad: <code>number</code>, duration: <code>number</code>) : Rotate by a relative radiant angle (+PI/2)</li>
-<li><strong>rotateDegTo</strong>(deg: <code>number</code>, duration: <code>number</code>) : Rotate to a specific angle in degrees (to 90°)</li>
-<li><strong>rotateDegToRel</strong>(deg: <code>number</code>, duration: <code>number</code>) : Rotate to a specific angle in degrees (+90°)</li>
-<li><strong>punchRotate</strong>(rad: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>)</li>
+<li><strong>to</strong>(to: any, duration: number): <code>Tween</code>;</li>
+<li><strong>toSpeed</strong>(to: any, speed: number): <code>Tween</code>;</li>
+<li><strong>delay</strong>(duration: number): <code>Tween</code></li>
+<li><strong>promiseTo</strong>(to: any, duration: number): <code>Promise&lt;Tween&gt;</code>;</li>
+<li><strong>promiseToSpeed</strong>(to: any, speed: number): <code>Promise&lt;Tween&gt;</code>;</li>
+<li><strong>promiseDelay</strong>(duration: number): <code>Promise&lt;Tween&gt;</code></li>
+<li><strong>kill</strong>(): <code>void</code>;</li>
 </ul>
 
-<h3 id="alpha">Alpha</h3>
+<div class="expand">
+    <div class="expand-label" style="cursor: pointer;" onclick="$h = $(this);$h.next('div').slideToggle(100,function () {$h.children('i').attr('class',function () {return $h.next('div').is(':visible') ? 'fa fa-chevron-down' : 'fa fa-chevron-right';});});">
+    	<span class="btn btn-default">
+    	
+    	See More
+    	
+    	</span>
+		<i style="font-size:x-small;" class="fa fa-chevron-right"></i>
+    </div>
+    <div class="expand-content" style="display: none;">
+<pre><code class="language-js">// Your object
+const obj = { name: 'sprite', x: 0, y: 0 }
 
-<p>Following method use <code>.alpha</code></p>
+// Create a reusable transition around this object, so you dont have to keep a reference to the object everywhere
+const transition = Fatina.transition(obj)
 
-<ul>
-<li><strong>fadeTo</strong>(alpha, duration: <code>number</code>) : Alpha is a float between 0 and 1 (1: fadeIn, 0: fadeOut)</li>
-</ul>
+// Creating a UI Animation/Transition becomes one-liners
+transition.to({ x: 1 })
+transition.to({ y: 1 }, 1000)
 
-<h3 id="scale">Scale</h3>
+// Transition return the active tween so you can interact with it and still get the power of tweens API
+transition.to({ x: 0.5 })
+  .setEasing('inOutElastic')
+  .onComplete(() =&gt; console.log('The transition is completed !'))
 
-<p>Following methods use <code>.scale.x</code> and <code>.scale.y</code></p>
+// And it can become even more powerful with async/await, and can partially replace sequences and callbacks while being way more readable
+transition.kill()
+await transition.promiseTo({ x: 0 })
+await transition.promiseDelay(100)
+await transition.promiseTo({ x: 100 })
+</code></pre>
 
-<ul>
-<li><strong>scaleTo</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>) : Scale to a specified value</li>
-<li><strong>scaleXTo</strong>(x: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>scaleYTo</strong>(y: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>scaleToRel</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>scaleXToRel</strong>(x: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>scaleYToRel</strong>(y: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>punchScale</strong>(x: <code>number</code>, y: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>)</li>
-</ul>
-
-<h3 id="color-tint">Color / Tint</h3>
-
-<p>Following methods use <code>.tint</code> or <code>.hue</code> (the color API are slightly different between libs)</p>
-
-<ul>
-<li><strong>colorTo</strong>(r: <code>number</code>, g: <code>number</code>, b: <code>number</code>, duration: <code>number</code>): R,G,B are float between 0-1</li>
-<li><strong>colorToRel</strong>(r: <code>number</code>, g: <code>number</code>, b: <code>number</code>, duration: <code>number</code>)</li>
-<li><strong>colorRGBTo</strong>(color: <code>string</code>, duration: <code>number</code>): color is a string representation &lsquo;#FFFFFF&rsquo;</li>
-<li><strong>colorRGBToRel</strong>(color: <code>string</code>, duration: <code>number</code>)</li>
-<li><strong>punchColor</strong>(r: <code>number</code>, g: <code>number</code>, b: <code>number</code>, duration: <code>number</code>, iteration: <code>number</code>)</li>
-</ul>
+    </div>
+</div>
 
       </article>
 

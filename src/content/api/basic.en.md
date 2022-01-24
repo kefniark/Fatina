@@ -10,6 +10,7 @@ weight = 2
     <a class="btn btn-primary" href="/Fatina/api/basic/">Fatina</a>
     <a class="btn btn-default" href="/Fatina/api/tween/">Tween</a>
     <a class="btn btn-default" href="/Fatina/api/sequence/">Sequence</a>
+    <a class="btn btn-default" href="/Fatina/api/transition/">Transition</a>
 </div>
 
 ## Fatina
@@ -25,6 +26,7 @@ If instead you prefer to initialize it yourself (recommended), call the method <
 * **init**(): `void` <small>This method has to be called once to initialize Fatina</small>
 * **update**(dt: number): `void`
 * **tween**(obj): `Tween` <small>Method used to create new tween</small>
+* **transition**(obj): `Transition` <small>Method used to create new transition</small>
 * **sequence**(): `Sequence` <small>Method used to create new sequence</small>
 * **pulse**(obj, settings): `ISequence` Pulse preset
 * **scale**(obj, settings): `ISequence` Scale preset

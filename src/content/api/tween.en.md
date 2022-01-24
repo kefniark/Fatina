@@ -10,58 +10,12 @@ weight = 3
     <a class="btn btn-default" href="/Fatina/api/basic/">Fatina</a>
     <a class="btn btn-primary" href="/Fatina/api/tween/">Tween</a>
     <a class="btn btn-default" href="/Fatina/api/sequence/">Sequence</a>
+    <a class="btn btn-default" href="/Fatina/api/transition/">Transition</a>
 </div>
 
 <blockquote>
     <p>A <b>Tween</b> that takes control of values and animates them.</p>
 </blockquote>
-
-### Properties
-* **elapsed**: `number` number of ms. elapsed for this tween <small>(affected by pause &amp; timescale)</small>
-* **duration**: `number` duration of this tween in ms.
-* **isRunning**: `boolean`
-* **isFinished**: `boolean`
-* **isPaused**: `boolean`
-
-### Controls
-* **start**(): `Tween` By default new tween are not started. Don't forget to call **.start()**
-* **pause**(): `void`
-* **resume**(): `void`
-* **skip**(): `void`
-* **kill**(): `void`
-
-{{%expand "See More" %}}
-```js
-// Create a tween
-let tween = Fatina.tween({}).to({}, 100).start();
-
-// Control this tween
-tween.pause();
-tween.resume();
-tween.kill();
-```
-{{% /expand%}}
-
-### Callbacks
-* **onStart**(cb: () => void): `Tween`
-* **onUpdate**(cb: (dt: number, progress: number) => void): `Tween`
-* **onKilled**(cb: () => void): `Tween`
-* **onComplete**(cb: () => void): `Tween`
-* **onRestart**(cb: () => void): `Tween`
-
-{{%expand "See More" %}}
-```js
-var obj = { x: 0 };
-
-// Create a tween with few callbacks
-Fatina.tween(obj)
-    .to({ x: 42 }, 100)
-    .onStart(() => console.log('onStart'))
-    .onUpdate((dt, progress) => console.log('onUpdate', dt, progress)) // progress: float between 0 and 1
-    .onComplete(() => console.log('onComplete'))
-    .start();
-```
-{{% /expand%}}
 
 ### Methods
 * **from**(from: any): `Tween`;
@@ -95,6 +49,54 @@ Fatina.tween(obj)
     .toSequence()
     .prependInterval(150)
     .appendInterval(150)
+    .start();
+```
+{{% /expand%}}
+
+### Properties
+* **elapsed**: `number` number of ms. elapsed for this tween <small>(affected by pause &amp; timescale)</small>
+* **duration**: `number` duration of this tween in ms.
+* **isRunning**: `boolean`
+* **isFinished**: `boolean`
+* **isPaused**: `boolean`
+
+### Controls
+* **start**(): `Tween` By default new tween are not started. Don't forget to call **.start()**
+* **pause**(): `void`
+* **resume**(): `void`
+* **skip**(): `void`
+* **kill**(): `void`
+
+{{%expand "See More" %}}
+```js
+// Create a tween
+let tween = Fatina.tween({}).to({}, 100).start();
+
+// Control this tween
+tween.pause();
+tween.resume();
+tween.kill();
+```
+{{% /expand%}}
+
+### Callbacks
+* **onStart**(cb: () => void): `Tween`
+* **onUpdate**(cb: (dt: number, progress: number) => void): `Tween`
+* **onKilled**(cb: () => void): `Tween`
+* **onComplete**(cb: () => void): `Tween`
+* **onRestart**(cb: () => void): `Tween`
+* **toPromise**(): `Promise<Tween>`: Convert the tween into a promise and let you use async/await API
+
+{{%expand "See More" %}}
+```js
+var obj = { x: 0 };
+
+// Create a tween with few callbacks
+Fatina.tween(obj)
+    .to({ x: 42 }, 100)
+    .onStart(() => console.log('onStart'))
+    .onUpdate((dt, progress) => console.log('onUpdate', dt, progress)) // progress: float between 0 and 1
+    .onComplete(() => console.log('onComplete'))
     .start();
 ```
 {{% /expand%}}

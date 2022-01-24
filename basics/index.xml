@@ -26,11 +26,10 @@
       
       <guid>https://kefniark.github.io/Fatina/basics/download/</guid>
       <description>1. Manual Installation Download the library and include it in your code:
-&amp;lt;script src=&amp;quot;fatina.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;  
+&amp;lt;script src=&amp;quot;fatina.esm.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;  
 1 bis. NPM Installation More advanced users might want to use npm
 npm install fatina  Then include the Fatina module :
-// standard import with typescript import Fatina from &#39;fatina&#39;; // OR // standard node.js require var Fatina = require(&#39;fatina&#39;).default;  2. Done ! Now you can use Fatina properly :
-Fatina.tween( /* etc */ ).</description>
+// standard import with typescript import Fatina from &#39;fatina&#39; // OR standard node.js require const Fatina = require(&#39;fatina&#39;) // OR Deno import Fatina from &#39;https://cdn.skypack.dev/fatina&#39;  2. Done ! Now you can use Fatina properly :</description>
     </item>
     
     <item>

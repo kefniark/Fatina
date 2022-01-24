@@ -9,19 +9,17 @@
   <meta property="og:title" content="Getting Started" />
   <meta name="twitter:title" content="Getting Started" />
   <meta name="description" content="1. Manual Installation Download the library and include it in your code:
-&lt;script src=&quot;fatina.min.js&quot;&gt;&lt;/script&gt;  
+&lt;script src=&quot;fatina.esm.js&quot;&gt;&lt;/script&gt;  
 1 bis. NPM Installation More advanced users might want to use npm
 npm install fatina  Then include the Fatina module :
-// standard import with typescript import Fatina from &#39;fatina&#39;; // OR // standard node.js require var Fatina = require(&#39;fatina&#39;).default;  2. Done ! Now you can use Fatina properly :
-Fatina.tween( /* etc */ ).">
+// standard import with typescript import Fatina from &#39;fatina&#39; // OR standard node.js require const Fatina = require(&#39;fatina&#39;) // OR Deno import Fatina from &#39;https://cdn.skypack.dev/fatina&#39;  2. Done ! Now you can use Fatina properly :">
   <meta property="og:description" content="1. Manual Installation Download the library and include it in your code:
-&lt;script src=&quot;fatina.min.js&quot;&gt;&lt;/script&gt;  
+&lt;script src=&quot;fatina.esm.js&quot;&gt;&lt;/script&gt;  
 1 bis. NPM Installation More advanced users might want to use npm
 npm install fatina  Then include the Fatina module :
-// standard import with typescript import Fatina from &#39;fatina&#39;; // OR // standard node.js require var Fatina = require(&#39;fatina&#39;).default;  2. Done ! Now you can use Fatina properly :
-Fatina.tween( /* etc */ ).">
+// standard import with typescript import Fatina from &#39;fatina&#39; // OR standard node.js require const Fatina = require(&#39;fatina&#39;) // OR Deno import Fatina from &#39;https://cdn.skypack.dev/fatina&#39;  2. Done ! Now you can use Fatina properly :">
   <meta name="twitter:description" content="1. Manual Installation Download the library and include it in your code:
-&lt;script src=&quot;fatina.min.js&quot;&gt;&lt;/script&gt;  
+&lt;script src=&quot;fatina.esm.js&quot;&gt;&lt;/script&gt;  
 1 bis. NPM Installation More advanced users might want to use npm …">
   <meta name="author" content="Kevin Destrem"/>
   <link href='https://kefniark.github.io/Fatina/img/favicon.ico' rel='icon' type='image/x-icon'/>
@@ -102,6 +100,8 @@ Fatina.tween( /* etc */ ).">
                   <a href="/Fatina/api/tween/">Tween</a>
                 
                   <a href="/Fatina/api/sequence/">Sequence</a>
+                
+                  <a href="/Fatina/api/transition/">Transition</a>
                 
               </div>
             </li>
@@ -196,7 +196,7 @@ Fatina.tween( /* etc */ ).">
 
 <p>Download the <a href="https://github.com/kefniark/Fatina/releases">library</a> and include it in your code:</p>
 
-<pre><code class="language-html">&lt;script src=&quot;fatina.min.js&quot;&gt;&lt;/script&gt;
+<pre><code class="language-html">&lt;script src=&quot;fatina.esm.js&quot;&gt;&lt;/script&gt;
 </code></pre>
 
 <p><br></p>
@@ -211,10 +211,13 @@ Fatina.tween( /* etc */ ).">
 <p>Then include the Fatina module :</p>
 
 <pre><code class="language-javascript">// standard import with typescript
-import Fatina from 'fatina';
-// OR
-// standard node.js require
-var Fatina = require('fatina').default;
+import Fatina from 'fatina'
+
+// OR standard node.js require
+const Fatina = require('fatina')
+
+// OR Deno
+import Fatina from 'https://cdn.skypack.dev/fatina'
 </code></pre>
 
 <h3 id="2-done">2. Done !</h3>
@@ -222,6 +225,32 @@ var Fatina = require('fatina').default;
 <p>Now you can use <strong>Fatina</strong> properly :</p>
 
 <pre><code class="language-javascript">Fatina.tween( /* etc */ ).start();
+</code></pre>
+
+<h3 id="3-example-with-tween-docs-fatina-api-tween">3. Example with Tween (<a href="/Fatina/api/tween/">Docs</a>)</h3>
+
+<pre><code class="language-javascript">const yourObj = { x: 0, y: 0 };
+
+// Create a tween to move the object to the wanted position
+Fatina.tween(yourObj)
+  .to({ x: 100 }, 250)
+  .onStart(() =&gt; console.log('animation finished !'))
+  .onComplete(() =&gt; console.log('animation finished !'))
+  .start();
+</code></pre>
+
+<h3 id="4-example-with-transition-syntax-docs-fatina-api-transition">4. Example with Transition Syntax (<a href="/Fatina/api/transition/">Docs</a>)</h3>
+
+<pre><code class="language-javascript">const yourObj = { x: 0, y: 0 };
+
+// Create a transition
+const transition = Fatina.transition(yourObj);
+
+// With Callback: Move the object to the wanted position in 250ms
+transition.to({ x: 100 }, 250); // =&gt; return a tween
+
+// With Async/Await: Move the object to the wanted position in 250ms and wait for the completion
+await transition.promiseTo({ x: 200 }, 250);
 </code></pre>
 
 <p><br>
