@@ -81,4 +81,8 @@ export interface ISequence extends IControl {
    * @param {() => void} cb
    */
   onStepEnd(cb: (index: ITween | IPlayable) => void): ISequence
+  /**
+   * Transform this ISequence into a Promise<ISequence>
+   */
+  toPromise(): Promise<ISequence>
 }

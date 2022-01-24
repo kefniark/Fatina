@@ -1,0 +1,120 @@
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
+        <style>
+            .menu {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                z-index: 5;
+            }
+
+            canvas {
+                margin-top: 50px;
+                margin-left: auto;
+                margin-right: auto;
+                padding-left: 0;
+                padding-right: 0;
+                display: block;
+            }
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+        <script type="module">
+          import Fatina from '../dist/fatina.esm.js'
+          window.Fatina = Fatina;
+          Fatina.init();
+        </script>
+    </head>
+    <body onload="init()">
+        <script>
+            let app
+            let bunny1
+            let bunnyTransition
+
+            function init() {
+                // The application will create a renderer using WebGL, if possible,
+                // with a fallback to a canvas render. It will also setup the ticker
+                // and the root stage PIXI.Container
+                app = new PIXI.Application();
+
+                // The application will create a canvas element for you that you
+                // can then insert into the DOM
+                document.body.appendChild(app.view);
+
+                // This creates a texture from a 'bunny.png' image
+                bunny1 = new PIXI.Sprite.fromImage('https://pixijs.io/examples/examples/assets/bunny.png')
+
+                // Setup the position of the bunny
+                bunny1.x = app.renderer.width / 2;
+                bunny1.y = app.renderer.height / 2;
+
+                // Rotate around the center
+                bunny1.anchor.x = 0.5;
+                bunny1.anchor.y = 0.5;
+
+                bunny1.scale.x = 2;
+                bunny1.scale.y = 2;
+
+                // Add the bunny to the scene we are building
+                app.stage.addChild(bunny1);
+
+                // Create a bunny transition
+                bunnyTransition = Fatina.transition(bunny1)
+            }
+
+            async function move (target, useSpeed) {
+              const method = !useSpeed ? bunnyTransition.to : bunnyTransition.toSpeed
+              switch (target) {
+                case 'left':
+                  method({ x: app.renderer.width * 0.1 })
+                  break;
+                case 'right':
+                  method({ x: app.renderer.width * 0.9 })
+                  break;
+                case 'top':
+                  method({ y: app.renderer.height * 0.1 })
+                  break;
+                case 'bottom':
+                  method({ y: app.renderer.height * 0.9 })
+                  break;
+                case 'center':
+                  method({ x: app.renderer.width * 0.5, y: app.renderer.height * 0.5 }).toPromise().then(() => console.log('The transition is completed !'))
+                  break;
+                case 'animation':
+                  bunnyTransition.kill()
+                  await bunnyTransition.promiseTo({ x: app.renderer.width * 0.5, y: app.renderer.height * 0.9 })
+                  await bunnyTransition.promiseTo({ x: app.renderer.width * 0.75, y: app.renderer.height * 0.25 })
+                  await bunnyTransition.promiseDelay(200)
+                  await bunnyTransition.promiseTo({ x: app.renderer.width * 0.5, y: app.renderer.height * 0.5 })
+                  break;
+              }
+            }
+        </script>
+
+        <div class="menu">
+          By duration:
+          <input class="button" type="button" onclick="move('left')" value="Left"/>
+          <input class="button" type="button" onclick="move('right')" value="Right"/>
+
+          <input class="button" type="button" onclick="move('top')" value="Top"/>
+          <input class="button" type="button" onclick="move('bottom')" value="Bottom"/>
+
+          <input class="button" type="button" onclick="move('center')" value="Center"/>
+
+          ||
+
+          Constant Speed:
+          <input class="button" type="button" onclick="move('left', true)" value="Left"/>
+          <input class="button" type="button" onclick="move('right', true)" value="Right"/>
+
+          <input class="button" type="button" onclick="move('top', true)" value="Top"/>
+          <input class="button" type="button" onclick="move('bottom', true)" value="Bottom"/>
+
+          <input class="button" type="button" onclick="move('center', true)" value="Center"/>
+
+          ||
+          Composite:
+          <input class="button" type="button" onclick="move('animation', true)" value="Animation"/>
+      </div>
+    </body>
+</html>

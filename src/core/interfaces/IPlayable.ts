@@ -69,4 +69,8 @@ export interface IPlayable extends IControl {
    * @param {() => void} cb
    */
   onComplete(cb: () => void): IPlayable
+  /**
+   * Transform this IPlayable into a Promise<IPlayable>
+   */
+  toPromise(): Promise<IPlayable>
 }
