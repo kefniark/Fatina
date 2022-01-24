@@ -341,12 +341,7 @@ export class Fatina {
       const tween = this.tween(obj)
         .to(to, duration)
         .setEasing(EasingType.InOutQuad)
-        .onStart(() => console.log('start'))
-        .onUpdate((dt) => console.log('update', dt))
-        .onComplete(() => {
-          console.log('complete')
-          tweenList.delete(key)
-        })
+        .onComplete(() => tweenList.delete(key))
         .start()
       tweenList.set(key, [to, tween])
       return tween

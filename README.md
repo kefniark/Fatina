@@ -2,7 +2,7 @@
 
 # Fatina
 
-Small & Light tweening library for **Games** / **Web**
+Lighweight Tweening Library for **Games** / **Web**
 
 - **Website**: [Here](https://kefniark.github.io/Fatina/)
 - **API**: [Here](https://kefniark.github.io/Fatina/api/basic/)
@@ -79,26 +79,20 @@ Fatina.tween(sprite).to({ x: 12, y: 25 }, 0.5).start()
 If you want to take a look at the code or help, it's quite easy to get started
 
 ```sh
-npm install
-npm run dev
+yarn
+yarn dev
 ```
 
 This will start a server on http://localhost:8080/ where you can test few samples with the current version
 
 ### Tests
 
-When you are done with your change, just make sure to run tests `npm run test`
+When you are done with your change, just make sure to run tests `yarn test`
 
 ### Other
 
 To make a build (generated in `build/`)
 
 ```sh
-npm run build
-```
-
-To generate the **API docs** (generated in `build/docs/`)
-
-```sh
-npm run docs
+yarn build
 ```
